@@ -1,0 +1,173 @@
+@* 
+    This is the main dashboard component for the Z21Status application.
+    It manages the connection state to the Z21 device and displays
+    relevant information and controls based on that state.
+*@
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IAsyncDisposable
+
+<!-- Global Settings Button -->
+<div style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;">
+    <button class="btn btn-lg btn-secondary" onclick="@OpenSettingsModal" title="Dashboard Settings">
+        &#9881; <!-- Gear Icon -->
+    </button>
+</div>
+
+<div class="container-fluid">
+    <!-- Styling classes to create a visually distinct control area -->
+    <div class="row bg-light border border-secondary rounded p-3 mb-3">
+        <ConnectionView ConnectionState="_connectionState" OnConnect="Connect" OnDisconnect="Disconnect" />
+        <About />
+    </div>
+
+    @if (_connectionState is ConnectionState.Connected)
+    {
+        // The entire static layout has been replaced by our new dynamic Dashboard component.
+        // We pass the HardwareInfo down, so it can be distributed to the child components as needed.
+        <Viewport HardwareInfo="_hardwareInfo" Z21Code="_z21Code" />
+    }
+</div>
+
+<!-- Settings Modal -->
+@if (_isSettingsModalOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Settings</h5>
+                    <button type="button" class="btn-close" onclick="@CloseSettingsModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Our DashboardSettings component is rendered here -->
+                    <DashboardSettings />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="@CloseSettingsModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private BroadcastFlagsChangedEventArgs? _broadcastFlags;
+    private HardwareInfo? _hardwareInfo;
+    private Z21Code? _z21Code;
+    private ConnectionState _connectionState = ConnectionState.Disconnected;
+
+    // --- NEW: State for settings modal ---
+    private bool _isSettingsModalOpen = false;
+
+    private void OpenSettingsModal()
+    {
+        _isSettingsModalOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseSettingsModal()
+    {
+        _isSettingsModalOpen = false;
+        StateHasChanged();
+    }
+    // ------------------------------------
+
+    private async Task Connect(string ipAddress)
+    {
+        _connectionState = ConnectionState.Connecting;
+        _broadcastFlags = null;
+        _hardwareInfo = null;
+
+        SubscribeToEvents();
+        bool success = await Z21Client.ConnectAsync(ipAddress);
+        if (success)
+        {
+            _connectionState = ConnectionState.Connected;
+            await Z21Client.GetSerialNumberAsync();
+            await Z21Client.GetHardwareInfoAsync();
+            await Z21Client.GetZ21CodeAsync();
+        }
+        else
+        {
+            _connectionState = ConnectionState.Disconnected;
+            UnsubscribeFromEvents();
+        }
+    }
+
+    private async Task Disconnect()
+    {
+        await Z21Client.DisconnectAsync();
+        UnsubscribeFromEvents();
+
+        _broadcastFlags = null;
+        _hardwareInfo = null;
+
+        _connectionState = ConnectionState.Disconnected;
+    }
+
+    private void SubscribeToEvents()
+    {
+        Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
+        Z21Client.BroadcastFlagsReceived += OnBroadcastFlagsReceived;
+        Z21Client.HardwareInfoReceived += OnHardwareInfoReceived;
+        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        Z21Client.ConnectionStateChanged -= OnConnectionStateChanged;
+        Z21Client.BroadcastFlagsReceived -= OnBroadcastFlagsReceived;
+        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
+        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
+    }
+
+    private async Task GetBroadcastFlags()
+    {
+        _broadcastFlags = null;
+        await Z21Client.GetBroadcastFlagsAsync();
+    }
+
+    private async void OnConnectionStateChanged(object? sender, ConnectionStateChangedEventArgs e)
+    {
+        _connectionState = e.State;
+        if (_connectionState is ConnectionState.Lost)
+        {
+            UnsubscribeFromEvents();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnBroadcastFlagsReceived(object? sender, BroadcastFlagsChangedEventArgs e)
+    {
+        _broadcastFlags = e;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnHardwareInfoReceived(object? sender, HardwareInfo e)
+    {
+        _hardwareInfo = e;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnZ21CodeReceived(object? sender, Z21Code e)
+    {
+        _z21Code = e;
+        await InvokeAsync(StateHasChanged);
+        // Unsubscribe as we now have the result.
+        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_connectionState is not ConnectionState.Disconnected)
+        {
+            await Disconnect();
+        }
+        UnsubscribeFromEvents();
+    }
+}

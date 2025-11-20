@@ -1,0 +1,73 @@
+@*
+    R-Bus Feedback View Component
+    Displays the status of R-Bus sensors in a grid format.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWindow HeaderTitle="R-Bus Feedback"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="d-flex flex-wrap" style="gap: 10px;">
+            @for (int module = 1; module <= 20; module++)
+            {
+                <div class="module-container">
+                    <h6 class="text-center mb-1" style="font-size: 10pt;">Module @module</h6>
+                    <div class="d-flex justify-content-center border p-1" style="gap: 4px;">
+                        @for (int port = 1; port <= 8; port++)
+                        {
+                            <div class="sensor-box @(IsPortActive(module, port) ? "bg-danger" : "bg-success")"
+                                 title="@($"Sensor {module}:{port}")">
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </Content>
+</DashboardWindow>
+
+@code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private Dictionary<int, RBusData> rBusDataGroups = new();
+
+    protected override void OnInitialized()
+    {
+        Z21Client.RBusDataReceived += OnRBusDataReceived;
+    }
+
+    private async void OnRBusDataReceived(object? sender, RBusData e)
+    {
+        rBusDataGroups[e.GroupIndex] = e;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private bool IsPortActive(int module, int port)
+    {
+        var groupIndex = (module - 1) / 10;
+        if (rBusDataGroups.TryGetValue(groupIndex, out var groupData))
+        {
+            return groupData.IsSensorActive(module, port);
+        }
+        return false;
+    }
+
+    public void Dispose()
+    {
+        Z21Client.RBusDataReceived -= OnRBusDataReceived;
+    }
+}

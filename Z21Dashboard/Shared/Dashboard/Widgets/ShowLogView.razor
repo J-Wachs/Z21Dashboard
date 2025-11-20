@@ -1,0 +1,19 @@
+@using BlazorLogComponent
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Shared.Dashboard.Components
+
+<DashboardWindow HeaderTitle="Show Log"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <LogView MaxVisibleMessages="30"/>
+    </Content>
+</DashboardWindow>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+}

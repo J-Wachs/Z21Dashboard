@@ -1,0 +1,204 @@
+@*
+    Component to display locomotive slot information from the Z21 command station.
+*@
+@using System.Text
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Helpers
+@using Z21Dashboard.Infrastructure.Z21
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWindow HeaderTitle="Locomotive slots"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <HeaderContent>
+        @if (_lastRead is not null)
+        {
+            <span class="badge bg-info">
+                <strong>Last read:</strong>: @_lastRead.Value.ToString("HH:mm:ss")
+            </span>
+        }
+    </HeaderContent>
+    <Content>
+        <button disabled="@_buttonDisable" class="btn btn-primary mb-3" onclick="@GetLocoSlotInfo">
+            @if (_buttonDisable is true)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>&nbsp;</span>
+            }
+            <span>Get Loco Slot Info</span>
+        </button>
+
+        <div class="table-container-sticky-header">
+            <table class="table table-hover table-bordered table-striped table-sm mb-0">
+                <thead class="sticky-top">
+                    <tr>
+                        <th>Slot</th>
+                        <th>Address</th>
+                        @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                        {
+                            <th>Protocol</th>
+                        }
+                        <th><span title="Direction">D</span></th>
+                        <th>Speed</th>
+                        <th>Functions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ActiveLocosForUI.Any())
+                    {
+                        @foreach (var locoDisplay in ActiveLocosForUI)
+                        {
+                            <tr>
+                                <td><strong>@locoDisplay.Info.SlotNumber</strong></td>
+                                <td>@locoDisplay.Info.LocoInfo.Address</td>
+                                @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                                {
+                                    <td>@locoDisplay.DisplayProtocol</td>
+                                }
+                                <td>
+                                    @if (locoDisplay.Info.LocoInfo.Direction is DrivingDirection.Forward)
+                                    {
+                                        <span style="font-weight: bold;" title="Forward">
+                                            &uarr;
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="font-weight: bold;" title="Reverse">
+                                            &darr;
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <SpeedBar CurrentStep="@locoDisplay.CalculatedCurrSpeedStep" MaxSteps="@locoDisplay.CalculatedSpeedSteps" />
+                                </td>
+                                <td>@FormatFunctions(locoDisplay.Info.LocoInfo.Functions)</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Waiting for locomotive data...</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Content>
+</DashboardWindow>
+
+@code {
+    private sealed record DisplayLocoInfo(LocoSlotInfo Info, byte CalculatedSpeedSteps, byte CalculatedCurrSpeedStep, LocoMode? Mode = null, string? DisplayProtocol = null);
+
+    [Parameter]
+    public FirmwareVersion? FirmwareVersion { get; set; }
+
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private readonly object _locosLock = new object();
+
+    private Dictionary<ushort, DisplayLocoInfo> _activeLocos = new();
+    private bool protocolInLocoInfo => FirmwareVersion?.Version >= Z21FirmwareVersions.V1_43;
+    private bool _buttonDisable = false;
+    private DateTime? _lastRead = null;
+
+    private List<DisplayLocoInfo> ActiveLocosForUI
+    {
+        get
+        {
+            lock (_locosLock)
+            {
+                return _activeLocos.Values.OrderBy(l => l.Info.SlotNumber).ToList();
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Z21Client.LocoSlotInfoReceived += OnLocoSlotInfoReceived;
+    }
+
+    private async void OnLocoSlotInfoReceived(object? sender, LocoSlotInfo e)
+    {
+        LocoMode? locoMode = null;
+        string? displayProtocol = null;
+
+        if (protocolInLocoInfo)
+        {
+            locoMode = e.LocoInfo.LocomotiveMode;
+            displayProtocol = e.LocoInfo.DisplayProtocol;
+        }
+
+        lock (_locosLock)
+        {
+            if (_activeLocos.TryGetValue(e.LocoInfo.Address, out var existing))
+            {
+                _activeLocos[e.LocoInfo.Address] = existing with
+                {
+                    Info = e,
+                    CalculatedSpeedSteps = e.LocoInfo.SpeedStepsNumeric,
+                    CalculatedCurrSpeedStep = e.LocoInfo.CurrentSpeed,
+                    Mode = locoMode,
+                    DisplayProtocol = displayProtocol
+                };
+            }
+            else
+            {
+                _activeLocos[e.LocoInfo.Address] = new DisplayLocoInfo(e, e.LocoInfo.SpeedStepsNumeric, e.LocoInfo.CurrentSpeed, locoMode, displayProtocol);
+            }
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string FormatFunctions(bool[] functions)
+    {
+        var activeFunctions = new List<string>();
+        for (int i = 0; i < functions.Length; i++)
+        {
+            if (functions[i])
+            {
+                if (i is 0)
+                {
+                    activeFunctions.Add("\U0001F4A1");
+                }
+                else
+                {
+                    activeFunctions.Add($"F{i}");
+                }
+            }
+        }
+        return activeFunctions.Any() ? string.Join(", ", activeFunctions) : "None";
+    }
+
+    private async Task GetLocoSlotInfo()
+    {
+        _buttonDisable = true;
+        for (byte i = 1; i < 120; i++)
+        {
+            await Z21Client.GetLocoSlotInfoAsync(i);
+            await Task.Delay(25); // Small delay to avoid overwhelming the Z21
+        }
+        _buttonDisable = false;
+        _lastRead = DateTime.Now;
+    }
+
+    public void Dispose()
+    {
+        Z21Client.LocoSlotInfoReceived -= OnLocoSlotInfoReceived;
+    }
+}

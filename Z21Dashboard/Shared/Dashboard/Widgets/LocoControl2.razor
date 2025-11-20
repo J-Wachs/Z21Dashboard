@@ -1,0 +1,442 @@
+@*
+    A component for controlling a single locomotive.
+    It acts as a live monitor and shows the state of functions F0-F31.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Logging
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Helpers
+@using Z21Dashboard.Infrastructure.Z21
+@using Z21Dashboard.Shared.Dashboard.Components
+@implements IDisposable
+@inject IZ21Client Z21Client
+@inject ILocoMetadataService LocoMetadataService
+@inject ILocoOperatingTimeService OperatingTimeService
+@inject ILogger<LocoControl> Logger
+
+<DashboardWindow HeaderTitle="Loco Control 2"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront"
+                 OnSettingsClick="OpenEditDialog">
+    <Content>
+        @if (_lockState is null)
+        {
+            <div class="d-flex align-items-center">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="ms-2">Checking Z21 lock state...</span>
+            </div>
+        }
+        else
+        {
+            <!-- Address Input -->
+            <div class="input-group mb-2">
+                <span class="input-group-text">Address</span>
+                <input type="number" class="form-control" placeholder="Enter Address" @bind="_inputAddress" @oninput="OnAddressInput" />
+                <span class="input-group-text">@_locoName</span>
+            </div>
+
+            <!-- Track Power Controls -->
+            <div class="btn-group w-100 mb-3" role="group">
+                <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
+                        @onclick="SetTrackPowerOn">
+                    Track Power On
+                </button>
+                <button class="btn @(_trackPowerState == TrackPowerState.Off ? "btn-secondary" : "btn-outline-secondary")"
+                        @onclick="SetTrackPowerOff">
+                    Track Power Off
+                </button>
+            </div>
+
+            <!-- Functions Display -->
+            <div class="mb-3">
+                <div class="row g-1">
+                    @for (int i = 0; i < _functionsToShow; i++)
+                    {
+                        var functionIndex = i;
+                        <div class="col-3">
+                            <button class="btn p-1 @(IsFunctionActive(functionIndex) ? "btn-warning" : "btn-outline-warning text-black") w-100"
+                                    disabled="@IsFunctionDisabled(functionIndex)"
+                                    @onclick="() => ToggleFunctionAsync(functionIndex)">
+                                @if (functionIndex == 0)
+                                {
+                                    <span style="font-size: 1.1em;">&#128161;</span>
+                                }
+                                else
+                                {
+                                    @($"F{functionIndex}")
+                                }
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Direction Controls -->
+            <div class="btn-group w-100 mb-3" role="group">
+                <button class="btn @(_direction is DrivingDirection.Forward ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Forward)">Forward</button>
+                <button class="btn @(_direction is DrivingDirection.Reverse ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Reverse)">Reverse</button>
+            </div>
+
+            <!-- Speed Control -->
+            <div class="d-flex align-items-center" style="gap: 1rem;">
+                <span>Speed:</span>
+                <input type="range" class="form-control-range w-100" min="0" max="@_speedSteps" step="1" value="@_currentSpeed" disabled="@_isLocked" @oninput="OnSpeedChanged" />
+                <span>@_currentSpeed</span>
+            </div>
+        }
+    </Content>
+</DashboardWindow>
+
+@* -- Edit Dialog -- *@
+@if (_isDialogOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Settings for Loco @(_selectedLocoForEdit?.Address)</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="locoNameInput" class="form-label">Locomotive Name:</label>
+                        <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="e.g., MY 1103" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="protocolSelect" class="form-label">Protocol and Speed Steps</label>
+                        <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
+                            @foreach (var option in _protocolOptions)
+                            {
+                                <option value="@option.Value" selected="@IsSelected(option)">@option.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                    <hr />
+                    <h6 class="mb-3">Service Interval</h6>
+                    <div class="mb-3">
+                        <label for="serviceIntervalInput" class="form-label">Interval (hours):</label>
+                        <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="e.g., 100" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="timeSinceService" class="form-label">Time since last service:</label>
+                        <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_timeSinceServiceSeconds)" readonly />
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
+                        <label class="form-check-label" for="servicePerformedCheck">
+                            Mark service as performed (resets service timer)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public FirmwareVersion? FirmwareVersion { get; set; }
+
+    [Parameter]
+    public Z21Code? Z21Code { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private Z21LockState? _lockState;
+    private bool _isLocked => _lockState == Z21LockState.Locked || _activeAddress == 0;
+
+    private ushort _activeAddress;
+    private ushort _inputAddress;
+    private string _locoName = "-";
+    private byte _speedSteps = 0;
+    private byte _currentSpeed = 0;
+    private DrivingDirection _direction = DrivingDirection.Forward;
+    private bool[] _activeFunctions = new bool[32];
+
+    private TrackPowerState? _trackPowerState;
+
+    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(500));
+    private readonly Debouncer _speedDebouncer = new(TimeSpan.FromMilliseconds(150));
+
+    // --- Fields for the Edit dialog ---
+    private bool _isDialogOpen = false;
+    private LocoInfo? _selectedLocoForEdit;
+    private LocoMetadata _editableMetadata = new();
+    private long _timeSinceServiceSeconds = 0;
+    private bool _servicePerformed = false;
+    private LocoMode _selectedLocoMode;
+    private NativeSpeedSteps _selectedSpeedSteps;
+    private record ProtocolOption(string Value, string DisplayName, LocoMode LocoMode, NativeSpeedSteps SpeedSteps);
+    private List<ProtocolOption> _protocolOptions = [];
+
+    private int _functionsToShow => FirmwareVersion?.Version >= Z21FirmwareVersions.V1_42 ? 32 : 29;
+
+    protected override void OnInitialized()
+    {
+        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
+        Z21Client.LocoInfoReceived += OnLocoInfoReceived;
+        Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
+        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        LocoMetadataService.OnMetadataUpdated += OnMetadataUpdated;
+        _ = Z21Client.GetZ21CodeAsync();
+        _ = Z21Client.GetSystemStateAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Z21Code is not null)
+        {
+            if (Z21Code.LockState is Z21LockState.Locked)
+            {
+                _protocolOptions =
+                [
+                    new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown),
+                    new("MM",  "MM",  LocoMode.MM,  NativeSpeedSteps.Unknown)
+                ];
+            }
+            else
+            {
+                _protocolOptions =
+                [
+                    new("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
+                    new("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
+                    new("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128),
+                    new("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
+                    new("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
+                    new("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
+                ];
+            }
+        }
+    }
+
+    private async void OnMetadataUpdated()
+    {
+        _locoName = LocoMetadataService.GetMetadata(_activeAddress)?.Name ?? "-";
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnZ21CodeReceived(object? sender, Z21Code e)
+    {
+        _lockState = e.LockState;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    {
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        _trackPowerState = (e.CentralState & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnTrackPowerInfoReceived(object? sender, TrackPowerInfo e)
+    {
+        _trackPowerState = e.State;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnLocoInfoReceived(object? sender, LocoInfo e)
+    {
+        if (e.Address != _activeAddress) return;
+        _selectedLocoForEdit = e;
+        _speedSteps = e.SpeedStepsNumeric;
+        _currentSpeed = e.CurrentSpeed;
+        _direction = e.Direction;
+        UpdateFunctionStates(e.Functions);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OnAddressInput(ChangeEventArgs e)
+    {
+        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress))
+        {
+            _inputAddress = newAddress;
+            _addressDebouncer.Debounce(() => SetActiveAddress(newAddress));
+        }
+    }
+
+    private void SetActiveAddress(ushort address)
+    {
+        if (_activeAddress == address) return;
+        _activeAddress = address;
+        Logger.LogInformation("LocoControl: Active loco address changed to: {Address}", _activeAddress);
+        _speedSteps = 128;
+        _currentSpeed = 0;
+        _direction = DrivingDirection.Forward;
+        _locoName = LocoMetadataService.GetMetadata(_activeAddress)?.Name ?? "-";
+        Array.Clear(_activeFunctions, 0, _activeFunctions.Length);
+        _ = Z21Client.GetLocoInfoAsync(_activeAddress);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnSpeedChanged(ChangeEventArgs e)
+    {
+        if (byte.TryParse(e.Value?.ToString(), out byte newSpeed))
+        {
+            _currentSpeed = newSpeed;
+            _speedDebouncer.Debounce(async () =>
+            {
+                if (_activeAddress > 0 && _selectedLocoForEdit is not null)
+                {
+                    await Z21Client.SetLocoDriveAdaptSpeedAsync(
+                        _activeAddress,
+                        _currentSpeed,
+                        _selectedLocoForEdit.NativeSpeedSteps,
+                        _direction,
+                        _selectedLocoForEdit.LocomotiveMode is null ? LocoMode.DCC : (LocoMode)_selectedLocoForEdit.LocomotiveMode
+                    );
+                }
+            });
+        }
+    }
+
+    private async Task SetDirectionAsync(DrivingDirection newDirection)
+    {
+        if (_activeAddress == 0 || _selectedLocoForEdit is null) return;
+        _direction = newDirection;
+        await Z21Client.SetLocoDriveAdaptSpeedAsync(
+            _activeAddress,
+            _currentSpeed,
+            _selectedLocoForEdit.NativeSpeedSteps,
+            _direction,
+            _selectedLocoForEdit.LocomotiveMode is null ? LocoMode.DCC : (LocoMode)_selectedLocoForEdit.LocomotiveMode
+        );
+        StateHasChanged();
+    }
+
+    private async Task ToggleFunctionAsync(int functionIndex)
+    {
+        if (_activeAddress == 0) return;
+        await Z21Client.SetLocoFunctionAsync(_activeAddress, (byte)functionIndex);
+    }
+
+    private async Task SetTrackPowerOn() => await Z21Client.SetTrackPowerOnAsync();
+    private async Task SetTrackPowerOff() => await Z21Client.SetTrackPowerOffAsync();
+
+    private bool IsFunctionActive(int functionIndex)
+    {
+        if (functionIndex < 0 || functionIndex >= _activeFunctions.Length) return false;
+        return _activeFunctions[functionIndex];
+    }
+
+    private bool IsFunctionDisabled(int functionIndex)
+    {
+        if (_isLocked) return true;
+        if (_selectedLocoForEdit?.LocomotiveMode is LocoMode.MM)
+        {
+            if (_selectedLocoForEdit?.Protocol is LocomotiveProtocol.MM1_14)
+            {
+                return functionIndex != 0;
+            }
+            return functionIndex > 4;
+        }
+        return false;
+    }
+
+    private void UpdateFunctionStates(bool[] functions)
+    {
+        if (functions is null) return;
+        Array.Clear(_activeFunctions, 0, _activeFunctions.Length);
+        int lengthToCopy = Math.Min(functions.Length, _activeFunctions.Length);
+        Array.Copy(functions, _activeFunctions, lengthToCopy);
+    }
+
+    private void OpenEditDialog()
+    {
+        if (_selectedLocoForEdit is null) return;
+
+        _editableMetadata = LocoMetadataService.GetMetadata(_selectedLocoForEdit.Address) ?? new();
+
+        // Find the tracked loco to get the current service time
+        var trackedLoco = OperatingTimeService.GetTrackedLocos().FirstOrDefault(l => l.LocoAddress == _selectedLocoForEdit.Address);
+        _timeSinceServiceSeconds = trackedLoco?.OperatingSecondsSinceService ?? 0;
+
+        _servicePerformed = false;
+        _selectedSpeedSteps = _selectedLocoForEdit.NativeSpeedSteps;
+        _selectedLocoMode = (LocoMode)_selectedLocoForEdit.LocomotiveMode!;
+        _isDialogOpen = true;
+    }
+
+    private void CloseEditDialog()
+    {
+        _isDialogOpen = false;
+        _editableMetadata = new();
+    }
+
+    private async Task SaveSettingsAsync()
+    {
+        if (_selectedLocoForEdit is null) return;
+
+        // Save metadata (Name, ServiceIntervalHours)
+        await LocoMetadataService.SaveMetadata(_selectedLocoForEdit.Address, _editableMetadata);
+
+        // If service was performed, call the dedicated method in the time tracking service.
+        if (_servicePerformed)
+        {
+            OperatingTimeService.ResetServiceCounter(_selectedLocoForEdit.Address);
+        }
+
+        await Z21Client.SetLocoModeAsync(_selectedLocoForEdit.Address, _selectedLocoMode);
+
+        if (Z21Code?.LockState is not Z21LockState.Locked)
+        {
+            await Z21Client.SetLocoDriveAdaptSpeedAsync(
+                _selectedLocoForEdit.Address, 0, _selectedSpeedSteps,
+                _selectedLocoForEdit.Direction, _selectedLocoMode);
+        }
+
+        _selectedLocoForEdit = _selectedLocoForEdit with
+        {
+            LocomotiveMode = _selectedLocoMode,
+            NativeSpeedSteps = _selectedSpeedSteps
+        };
+
+        await Z21Client.GetLocoInfoAsync(_selectedLocoForEdit.Address);
+        CloseEditDialog();
+    }
+
+    private void OnProtocolSelectionChanged(ChangeEventArgs e)
+    {
+        string value = string.IsNullOrEmpty(e.Value?.ToString()) ? string.Empty : e.Value.ToString()!;
+        var selectedOption = _protocolOptions.FirstOrDefault(x => x.Value == value);
+        if (selectedOption is not null)
+        {
+            _selectedLocoMode = selectedOption.LocoMode;
+            _selectedSpeedSteps = selectedOption.SpeedSteps;
+        }
+    }
+
+    private bool IsSelected(ProtocolOption option)
+    {
+        if (Z21Code!.LockState is not Z21LockState.Locked)
+        {
+            return option.LocoMode == _selectedLocoMode && option.SpeedSteps == _selectedSpeedSteps;
+        }
+        return option.LocoMode == _selectedLocoMode;
+    }
+
+    private string FormatOperatingTime(long totalSeconds)
+    {
+        var timeSpan = TimeSpan.FromSeconds(totalSeconds);
+        return $"{(int)timeSpan.TotalHours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+    }
+
+    public void Dispose()
+    {
+        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
+        Z21Client.LocoInfoReceived -= OnLocoInfoReceived;
+        Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        LocoMetadataService.OnMetadataUpdated -= OnMetadataUpdated;
+    }
+}

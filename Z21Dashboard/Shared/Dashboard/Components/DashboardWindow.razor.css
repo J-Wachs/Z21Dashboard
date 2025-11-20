@@ -1,0 +1,26 @@
+/*
+    DashboardWindow.razor.css
+    Styles to make the dashboard window a flexible container.
+*/
+
+/* 
+    This is the main fix. It turns the entire component into a vertical flex container.
+    'height: 100%' is crucial, as it makes the card fill the outer draggable div.
+*/
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* 
+    This rule tells the card-body to grow and take up all available vertical space
+    that the header does not occupy. 'min-height: 0' is a flexbox fix to prevent
+    overflow issues with child elements.
+*/
+.card-body {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 1rem;
+}

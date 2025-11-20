@@ -1,0 +1,79 @@
+@*
+    Component to display RailCom data received from the Z21 command station.
+    Subscribes to RailComDataReceived event from IZ21Client to update the display in real-time.
+
+    Please note: There seems to be a bug in the Z21 firmware 1.43 where RailCom data is not sent even if 
+    you subscribe to them. A workaround has been implemented in the Z21Client to request RailCom data
+    every second. This workaround may be removed in future versions if the firmware issue is resolved.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWindow HeaderTitle="RailCom Data"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Receive Count</th>
+                    <th>Error Count</th>
+                    <th>Speed</th>
+                    <th>QoS</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            @if (activeRailComLocos.Any())
+            {
+                <tbody>
+                    @foreach (var loco in activeRailComLocos.Values.OrderBy(l => l.LocoAddress))
+                    {
+                        <tr>
+                            <td><strong>@loco.LocoAddress</strong></td>
+                            <td>@loco.ReceiveCounter</td>
+                            <td>@loco.ErrorCounter</td>
+                            <td>@(loco.HasSpeed1 || loco.HasSpeed2 ? loco.Speed.ToString() : "N/A")</td>
+                            <td>@(loco.HasQoS? loco.QoS.ToString() : "N/A")</td>
+                            <td>@loco.Options.ToString("b8")</td>
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+    </Content>
+</DashboardWindow>>
+
+@code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private Dictionary<ushort, RailComData> activeRailComLocos = new();
+
+    protected override void OnInitialized()
+    {
+        Z21Client.RailComDataReceived += OnRailComDataReceived;
+    }
+
+    private async void OnRailComDataReceived(object? sender, RailComData e)
+    {
+        activeRailComLocos[e.LocoAddress] = e;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Z21Client.RailComDataReceived -= OnRailComDataReceived;
+    }
+}

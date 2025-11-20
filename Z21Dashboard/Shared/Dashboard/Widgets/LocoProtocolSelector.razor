@@ -1,0 +1,240 @@
+@*
+    Component to select and set the locomotive protocol mode for a given address.
+    If no address is provided, the user can input one.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Logging
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@inject ILogger<LocoProtocolSelector> Logger
+@implements IAsyncDisposable
+
+<DashboardWindow HeaderTitle="Locomotive Protocol Selector"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="input-group mb-3">
+            <input type="number" maxlength="4" class="form-control" value="@_inputAddress" disabled="@(_effectiveAddress != 0)"
+                   oninput="@((ChangeEventArgs e) => _inputAddress = ExtractValue(e))" placeholder="Enter loco address" />
+        </div>
+
+        @if (_effectiveAddress == 0)
+        {
+            <button class="btn btn-primary" onclick="@FetchLocoInfoAsync" disabled="@(_inputAddress == 0)">Get current protocol</button>
+        }
+
+        @if (_effectiveAddress != 0)
+        {
+            @if (_isLoading)
+            {
+                <div class="d-flex align-items-center">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span class="ms-2">Fetching current protocol...</span>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <div class="alert alert-danger">@_errorMessage</div>
+                @* START: ADDED CANCEL BUTTON FOR ERROR STATE *@
+                <button class="btn btn-secondary mt-2" onclick="@CancelSelection">Back</button>
+                @* END: ADDED CANCEL BUTTON FOR ERROR STATE *@
+            }
+            else if (_currentMode.HasValue)
+            {
+                <div class="input-group mb-2">
+                    <label for="protocol-select" class="input-group-text">Set New Protocol:</label>
+                    <select id="protocol-select" class="form-select" @bind-value:event="oninput" @bind-value="_selectedMode">
+                        @foreach (var mode in Enum.GetValues<LocoMode>())
+                        {
+                            <option value="@mode">@mode</option>
+                        }
+                    </select>
+                </div>
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-success" onclick="@SetNewLocoModeAsync" disabled="@(_isSettingMode)">
+                        @if (_isSettingMode)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status"></span>
+                            <span class="ms-1">Setting...</span>
+                        }
+                        else
+                        {
+                            <span>Set protocol</span>
+                        }
+                    </button>
+                    <button class="btn btn-secondary" onclick="@CancelSelection">Cancel</button>
+                </div>
+            }
+        }
+    </Content>
+</DashboardWindow>
+
+@code {
+    [Parameter]
+    public ushort LocoAddress { get; set; }
+
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private ushort _inputAddress;
+    private ushort _effectiveAddress;
+    private LocoMode? _currentMode;
+    private LocoMode _selectedMode;
+    private bool _isLoading = false;
+    private bool _isSettingMode = false;
+    private string? _errorMessage;
+    private TaskCompletionSource<LocoModeChangedEventArgs>? _locoModeTcs;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // This logic handles both initial load and if the parameter changes later.
+        if (LocoAddress > 0 && LocoAddress != _effectiveAddress)
+        {
+            _effectiveAddress = LocoAddress;
+            _inputAddress = LocoAddress;
+            await FetchLocoInfoAsync();
+        }
+        else if (LocoAddress == 0)
+        {
+            // If the component is reused with a zero address, reset it.
+            CancelSelection();
+        }
+    }
+
+    private void CancelSelection()
+    {
+        _effectiveAddress = 0;
+        _inputAddress = 0;
+        _currentMode = null;
+        _errorMessage = null;
+        StateHasChanged();
+    }
+
+    private async Task FetchLocoInfoAsync()
+    {
+        if (_inputAddress == 0)
+        {
+            _errorMessage = "Please enter a valid locomotive address.";
+            return;
+        }
+        _effectiveAddress = _inputAddress;
+        _isLoading = true;
+        _errorMessage = null;
+        _currentMode = null;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            Logger.LogInformation("Requesting loco mode for address {Address}", _effectiveAddress);
+
+            Z21Client.LocoModeReceived += OnLocoModeReceived;
+
+            _locoModeTcs = new TaskCompletionSource<LocoModeChangedEventArgs>();
+            await Z21Client.GetLocoModeAsync(_effectiveAddress);
+
+            // Wait for the event or a timeout
+            var completedTask = await Task.WhenAny(_locoModeTcs.Task, Task.Delay(3000));
+
+            if (completedTask == _locoModeTcs.Task)
+            {
+                var result = await _locoModeTcs.Task;
+                _currentMode = result.Mode;
+                _selectedMode = result.Mode; // Default selection to current mode
+            }
+            else
+            {
+                _errorMessage = "Did not receive a response from Z21 in time. Please check the connection.";
+                Logger.LogWarning("Timeout waiting for LocoModeReceived for address {Address}", _effectiveAddress);
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"An error occurred: {ex.Message}";
+            Logger.LogError(ex, "Exception while fetching loco mode for {Address}", _effectiveAddress);
+        }
+        finally
+        {
+            Z21Client.LocoModeReceived -= OnLocoModeReceived;
+            _isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnLocoModeReceived(object? sender, LocoModeChangedEventArgs e)
+    {
+        // Ensure we only complete the task for the address we are interested in.
+        if (e.Address == _effectiveAddress)
+        {
+            _locoModeTcs?.TrySetResult(e);
+        }
+    }
+
+    private async Task SetNewLocoModeAsync()
+    {
+        if (_effectiveAddress == 0) return;
+
+        _isSettingMode = true;
+        await InvokeAsync(StateHasChanged);
+
+        bool errorOccurred = false;
+        try
+        {
+            await Z21Client.SetLocoModeAsync(_effectiveAddress, _selectedMode);
+            // Optional: Re-fetch to confirm the change
+            await Task.Delay(250); // Give Z21 a moment to process
+            await FetchLocoInfoAsync();
+        }
+        catch (Exception ex)
+        {
+            errorOccurred = true;
+            _errorMessage = $"Failed to set new mode: {ex.Message}";
+            Logger.LogError(ex, "Failed to set loco mode for {Address}", _effectiveAddress);
+        }
+        finally
+        {
+            if (errorOccurred is false)
+            {
+                // Reset the component after successfully setting the mode
+                CancelSelection();
+            }
+
+            _isSettingMode = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private ushort ExtractValue(ChangeEventArgs e)
+    {
+        ushort returnValue = 0;
+
+        switch (e.Value)
+        {
+            case string strValue when ushort.TryParse(strValue, out var parsedValue):
+                returnValue = parsedValue;
+                break;
+            case ushort ushortValue:
+                returnValue = ushortValue;
+                break;
+        }
+        return returnValue;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        // Important: Unsubscribe from the event to prevent memory leaks when the component is removed.
+        Z21Client.LocoModeReceived -= OnLocoModeReceived;
+        _locoModeTcs?.TrySetCanceled();
+        return ValueTask.CompletedTask;
+    }
+}

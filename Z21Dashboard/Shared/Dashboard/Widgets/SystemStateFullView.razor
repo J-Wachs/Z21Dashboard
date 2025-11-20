@@ -1,0 +1,205 @@
+@*
+    Full view of the Z21 system state, including detailed flags decoding.
+*@
+@using System.Text
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure.Z21
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWindow HeaderTitle="System State - Full"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="row">
+            <div class="col-md-3">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Main Current</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_systemState?.MainCurrentmA mA</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Programming Current</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    @if (HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
+                                    {
+                                        <text>@_systemState?.ProgCurrentmA mA</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N/A</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Temperature</td>
+                            <td class="@_alertTemp">
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_systemState?.TemperatureC °C</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Supply voltage</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_supplyVoltageV V</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Internal voltage</td>
+                            <td class="@_alertVolt">
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_vccVoltageV V</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <h5>Central State Flags (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
+                <pre>@if (_systemState is not null)
+                {
+                                                             @DecodeCentralState(_systemState!.CentralState)    
+                }
+            </pre>
+            </div>
+            <div class="col-md-3">
+                <h5>Extended State Flags (@("0x" + _systemState?.CentralStateEx.ToString("X2")))</h5>
+                <pre>@if (_systemState is not null)
+                {
+                                                    @DecodeCentralStateEx(_systemState!.CentralStateEx, HardwareInfo!.FwVersion)
+                    
+                }
+            </pre>
+            </div>
+            @if (HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42)
+            {
+                <div class="col-md-3">
+                    <h5>Capabilities Flags (@("0x" + _systemState?.Capabilities!.Value.ToString("X2")))</h5>
+                    <pre>@if (_systemState is not null)
+                                                    {
+                                                                                            @DecodeCapabilities(_systemState!.Capabilities!.Value)    
+                                                    }
+                                                </pre>
+                </div>
+            }
+        </div>
+    </Content>
+</DashboardWindow>
+
+@code {
+    [Parameter]
+    public HardwareInfo? HardwareInfo { get; set; }
+
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private SystemStateChangedEventArgs? _systemState;
+    private string _supplyVoltageV => _systemState?.SupplyVoltagemV is not null ? ((decimal)_systemState.SupplyVoltagemV / 1000).ToString("0.0") : "-";
+    private string _vccVoltageV => _systemState?.VccVoltagemV is not null ? ((decimal)_systemState.VccVoltagemV / 1000).ToString("0.0") : "-";
+    private string _alertTemp = string.Empty;
+    private string _alertVolt = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        await Z21Client.GetSystemStateAsync();
+    }
+
+    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    {
+        _systemState = e;
+
+        _alertVolt = ((e.CentralState & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
+        _alertTemp = ((e.CentralStateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string DecodeCentralState(byte state)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"Emergency Stop:      {((state & SystemStateChangedEventArgs.CentralStateEmergencyStop) > 0 ? "On" : "Off")}");
+        sb.AppendLine($"Track Voltage:       {((state & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? "Off" : "On")}");
+        sb.AppendLine($"Short Circuit:       {((state & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Programming Mode:    {((state & SystemStateChangedEventArgs.CentralStateProgrammingMode) > 0 ? "On" : "Off")}");
+        return sb.ToString();
+    }
+
+    private string DecodeCentralStateEx(byte stateEx, FirmwareVersion? fw)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"High Temperature:    {((stateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Power Lost:          {((stateEx & SystemStateChangedEventArgs.CentralStateExPowerLost) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Short Circuit (ext): {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitExternal) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Short Circuit (int): {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitInternal) > 0 ? "Yes" : "No")}");
+
+        if (fw?.Version >= Z21FirmwareVersions.V1_42)
+        {
+            sb.AppendLine($"RCN-213 Mode:        {((stateEx & SystemStateChangedEventArgs.CentralStateExRcn213Mode) > 0 ? "Active" : "Inactive")}");
+        }
+        return sb.ToString();
+    }
+
+    private string DecodeCapabilities(byte capabilities)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"Protocols:            {((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "DCC " : "")}{((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "MM" : "")}");
+        sb.AppendLine($"RailCom:              {((capabilities & SystemStateChangedEventArgs.CapabilitiesRailCom) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Accept LAN loco cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesLocoCmds) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Accept LAN acc. cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesAccessoryCmds) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Accept LAN det. cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesDetectorCmds) > 0 ? "Yes" : "No")}");
+        sb.AppendLine($"Needs Unlock Code:    {((capabilities & SystemStateChangedEventArgs.CapabilitiesNeedsUnlockCode) > 0 ? "Yes" : "No")}");
+        return sb.ToString();
+    }
+
+    public void Dispose()
+    {
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+    }
+}

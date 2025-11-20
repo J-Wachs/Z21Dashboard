@@ -1,0 +1,56 @@
+@*
+    A reusable component to display a speed value as a graphical progress bar.
+*@
+
+@* START: CHANGE - Added Bootstrap border classes to the outer div *@
+<div class="progress border border-secondary" style="height: 20px;" title="@TooltipText">
+    @* END: CHANGE *@
+    <div class="progress-bar bg-success"
+         role="progressbar"
+         style="width: @Percentage.ToString("F0", System.Globalization.CultureInfo.InvariantCulture)%;"
+         aria-valuenow="@CurrentStep"
+         aria-valuemin="0"
+         aria-valuemax="@MaxSteps">
+        @CurrentStep
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// The current speed step to display.
+    /// </summary>
+    [Parameter]
+    public int CurrentStep { get; set; }
+
+    /// <summary>
+    /// The maximum number of speed steps for the current mode (e.g., 14, 28, 128).
+    /// </summary>
+    [Parameter]
+    public int MaxSteps { get; set; }
+
+    /// <summary>
+    /// Calculates the fill percentage, capped at 100%.
+    /// </summary>
+    private double Percentage
+    {
+        get
+        {
+            // Avoid division by zero
+            if (MaxSteps == 0)
+            {
+                return 0;
+            }
+
+            // Calculate the raw percentage
+            double rawPercentage = ((double)CurrentStep / MaxSteps) * 100.0;
+
+            // Handle the inconsistency: If current step exceeds max, cap at 100%
+            return Math.Min(rawPercentage, 100.0);
+        }
+    }
+
+    /// <summary>
+    /// Generates the tooltip text.
+    /// </summary>
+    private string TooltipText => $"Step {CurrentStep} of {MaxSteps}";
+}

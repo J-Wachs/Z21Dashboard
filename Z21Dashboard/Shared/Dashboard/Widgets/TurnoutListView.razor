@@ -1,0 +1,202 @@
+@*
+    Displays a list of active turnouts with their current state and allows control and configuration.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure.Z21
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWindow HeaderTitle="Active Turnouts"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="table-container-sticky-header">
+            <table class="table table-hover table-bordered table-striped table-sm">
+                <thead class="sticky-top">
+                    <tr>
+                        <th>Address</th>
+                        <th>Protocol</th>
+                        <th>Direction</th>
+                        <th>Last changed</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (activeTurnouts.Any())
+                    {
+                        @foreach (var turnoutDisplay in activeTurnouts.Values.OrderBy(t => t.Info.Address))
+                        {
+                            <tr>
+                                <td><strong>@(turnoutDisplay.Info.Address + 1)</strong></td>
+                                <td>@turnoutDisplay.Mode</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" disabled="@_isLocked"
+                                                class="btn @(turnoutDisplay.Info.State is TurnoutState.Position2 ? "btn-success" : "btn-outline-success")"
+                                                @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position2)"
+                                                title="Straight/Green">
+                                            &uarr;
+                                        </button>
+                                        <button type="button" disabled="@_isLocked"
+                                                class="btn @(turnoutDisplay.Info.State is TurnoutState.Position1 ? "btn-danger" : "btn-outline-danger")"
+                                                @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position1)"
+                                                title="Divert/Red">
+                                            &#8599;
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>@turnoutDisplay.Timestamp.ToString("HH:mm:ss")</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary p-0"
+                                            style="width: 24px; height: 24px; line-height: 1;"
+                                            @onclick="() => OpenEditDialog(turnoutDisplay)"
+                                            title="Edit Settings">
+                                        &#9881;
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Waiting for turnout data...</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Content>
+</DashboardWindow>
+
+@* -- Edit Dialog -- *@
+@if (_isDialogOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Settings for Turnout @(_selectedTurnoutForEdit?.Info.Address + 1)</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="protocolSelect" class="form-label">Protocol</label>
+                        <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
+                            <option value="@TurnoutMode.DCC">DCC</option>
+                            <option value="@TurnoutMode.MM">MM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private sealed record DisplayTurnoutInfo(TurnoutInfo Info, DateTime Timestamp, TurnoutMode? Mode = null);
+
+    private Dictionary<ushort, DisplayTurnoutInfo> activeTurnouts = new();
+
+    // Fields for the Edit dialog
+    private bool _isDialogOpen = false;
+    private DisplayTurnoutInfo? _selectedTurnoutForEdit;
+    private TurnoutMode _selectedTurnoutMode;
+    private Z21LockState? _lockState;
+    private bool _isLocked => _lockState == Z21LockState.Locked;
+
+    protected override void OnInitialized()
+    {
+        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
+        Z21Client.TurnoutInfoReceived += OnTurnoutInfoReceived;
+        Z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+        _ = Z21Client.GetZ21CodeAsync();
+    }
+
+    private async Task SetTurnoutPositionAsync(ushort address, TurnoutPosition position)
+    {
+        await Z21Client.SetTurnoutPositionAsync(address, position);
+    }
+
+    private void OpenEditDialog(DisplayTurnoutInfo turnoutToEdit)
+    {
+        _selectedTurnoutForEdit = turnoutToEdit;
+        _selectedTurnoutMode = turnoutToEdit.Mode ?? TurnoutMode.DCC; // Default to DCC if mode is unknown
+        _isDialogOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseEditDialog()
+    {
+        _isDialogOpen = false;
+        _selectedTurnoutForEdit = null;
+        StateHasChanged();
+    }
+
+    private async Task SaveSettingsAsync()
+    {
+        if (_selectedTurnoutForEdit is not null)
+        {
+            // Send the command to the Z21
+            await Z21Client.SetTurnoutModeAsync(
+                _selectedTurnoutForEdit.Info.Address,
+                _selectedTurnoutMode
+            );
+
+            // Optimistically update the local state for immediate UI feedback
+            activeTurnouts[_selectedTurnoutForEdit.Info.Address] = _selectedTurnoutForEdit with { Mode = _selectedTurnoutMode };
+        }
+        CloseEditDialog();
+    }
+
+    private async void OnZ21CodeReceived(object? sender, Z21Code e)
+    {
+        _lockState = e.LockState;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnTurnoutInfoReceived(object? sender, TurnoutInfo e)
+    {
+        if (activeTurnouts.TryGetValue(e.Address, out var existing))
+        {
+            activeTurnouts[e.Address] = existing with { Info = e, Timestamp = DateTime.Now };
+        }
+        else
+        {
+            activeTurnouts[e.Address] = new DisplayTurnoutInfo(e, DateTime.Now);
+        }
+
+        await Z21Client.GetTurnoutModeAsync(e.Address);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnTurnoutModeReceived(object? sender, TurnoutModeChangedEventArgs e)
+    {
+        if (activeTurnouts.TryGetValue(e.Address, out var existing))
+        {
+            activeTurnouts[e.Address] = existing with { Mode = e.Mode };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        Z21Client.TurnoutInfoReceived -= OnTurnoutInfoReceived;
+        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+    }
+}

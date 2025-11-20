@@ -1,0 +1,207 @@
+@*
+    A component that subscribes to Z21 SystemStateChanged events, samples the data
+    at a configurable interval to find peak values, and displays the result in a dual-axis line chart.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@implements IDisposable
+@inject IZ21Client Z21Client
+@inject IAppDataService AppDataService
+
+<DashboardWindow HeaderTitle="Power and Voltage Monitor"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront"
+                 OnSettingsClick="OpenSettingsDialog">
+    <Content>
+        @if (_chartData.Any())
+        {
+            <DualLineChart Data="@_chartData" YAxis1Title="Voltage (mV)" YAxis2Title="Current (mA)" />
+        }
+        else
+        {
+            <div class="d-flex align-items-center justify-content-center" style="height: 400px;">
+                <p class="text-muted">Thinking... Waiting for system state data...</p>
+            </div>
+        }
+    </Content>
+</DashboardWindow>
+
+<!-- Settings Dialog -->
+@if (showSettingsDialog)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Settings</h5>
+                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="intervalSelect" class="form-label">Data sampling interval:</label>
+                        <select id="intervalSelect" class="form-select" @onchange="OnIntervalChanged">
+                            @for (int i = 10; i <= 60; i += 10)
+                            {
+                                <option value="@i" selected="@(i == dataCaptureIntervalSeconds)">@i seconds</option>
+                            }
+                        </select>
+                        <div class="form-text">The time between each data point is collected for the chart.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private const int MaxDataPoints = 40;
+
+    private List<DualLineChart.ChartDataPoint> _chartData = new();
+
+    private System.Timers.Timer? _sampleTimer;
+    private readonly object _peakValueLock = new object();
+
+    // Fields for capturing peak values within a single sample interval
+    private int _peakCurrentInInterval = 0;
+    private int _peakVoltageInInterval = 0;
+    private bool _hasNewDataInInterval = false;
+
+    // NEW: Fields to store the last known peak values for continuous plotting
+    private int _lastKnownPeakCurrent = 0;
+    private int _lastKnownPeakVoltage = 0;
+
+    // Fields for the settings dialog
+    private bool showSettingsDialog = false;
+    private int dataCaptureIntervalSeconds;
+    private const string DataCaptureIntervalKey = "PowerChart_DataCaptureIntervalSeconds";
+
+    private bool _isInitialDataPointAdded = false;
+
+    protected override void OnInitialized()
+    {
+        var savedInterval = AppDataService.GetData<int>(DataCaptureIntervalKey);
+        dataCaptureIntervalSeconds = (savedInterval >= 10 && savedInterval <= 60 && savedInterval % 10 == 0) ? savedInterval : 10;
+        if (savedInterval == 0) AppDataService.SaveData(DataCaptureIntervalKey, dataCaptureIntervalSeconds);
+
+        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.GetSystemStateAsync();
+
+        _sampleTimer = new System.Timers.Timer(dataCaptureIntervalSeconds * 1000);
+        _sampleTimer.Elapsed += OnSampleTimerTick;
+        _sampleTimer.AutoReset = true;
+        _sampleTimer.Start();
+    }
+
+    private void OpenSettingsDialog() => showSettingsDialog = true;
+    private void CloseSettingsDialog() => showSettingsDialog = false;
+
+    private async Task OnIntervalChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int newInterval))
+        {
+            dataCaptureIntervalSeconds = newInterval;
+            AppDataService.SaveData(DataCaptureIntervalKey, dataCaptureIntervalSeconds);
+            if (_sampleTimer != null)
+            {
+                _sampleTimer.Interval = dataCaptureIntervalSeconds * 1000;
+            }
+            CloseSettingsDialog();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    {
+        bool needsImmediateUiUpdate = false;
+
+        lock (_peakValueLock)
+        {
+            var totalCurrent = e.MainCurrentmA + e.ProgCurrentmA;
+
+            if (totalCurrent > _peakCurrentInInterval) _peakCurrentInInterval = totalCurrent;
+            if (e.VccVoltagemV > _peakVoltageInInterval) _peakVoltageInInterval = e.VccVoltagemV;
+
+            _hasNewDataInInterval = true;
+
+            if (!_isInitialDataPointAdded)
+            {
+                _isInitialDataPointAdded = true;
+
+                // Set the initial "last known" values
+                _lastKnownPeakCurrent = _peakCurrentInInterval;
+                _lastKnownPeakVoltage = _peakVoltageInInterval;
+
+                _chartData.Add(new DualLineChart.ChartDataPoint(
+                    DateTime.Now.ToString("HH:mm:ss"),
+                    _peakVoltageInInterval,
+                    _peakCurrentInInterval
+                ));
+                needsImmediateUiUpdate = true;
+            }
+        }
+
+        if (needsImmediateUiUpdate)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    /// <summary>
+    /// This method is called by the timer. It updates the last known state if new data
+    /// has arrived, and then plots a point using that last known state, ensuring a
+    /// continuous chart line.
+    /// </summary>
+    private async void OnSampleTimerTick(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        if (!_isInitialDataPointAdded) return;
+
+        lock (_peakValueLock)
+        {
+            // If new data has arrived in this interval, update our "memory"
+            // of the last known peak state.
+            if (_hasNewDataInInterval)
+            {
+                _lastKnownPeakCurrent = _peakCurrentInInterval;
+                _lastKnownPeakVoltage = _peakVoltageInInterval;
+            }
+
+            // Reset the interval trackers for the next sampling period.
+            _peakCurrentInInterval = 0;
+            _peakVoltageInInterval = 0;
+            _hasNewDataInInterval = false;
+        }
+
+        // Always add a data point using the last known values.
+        _chartData.Add(new DualLineChart.ChartDataPoint(
+            DateTime.Now.ToString("HH:mm:ss"),
+            _lastKnownPeakVoltage,
+            _lastKnownPeakCurrent
+        ));
+
+        if (_chartData.Count > MaxDataPoints)
+        {
+            _chartData.RemoveAt(0);
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        _sampleTimer?.Stop();
+        _sampleTimer?.Dispose();
+    }
+}

@@ -1,0 +1,6 @@
+.sensor-box {
+    width: 9px;
+    height: 10px;
+    border: 1px solid #6c757d;
+    border-radius: 2px;
+}

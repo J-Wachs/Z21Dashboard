@@ -1,0 +1,63 @@
+@*
+    This component provides the standard window frame, header, and behavior
+    for all draggable components on the dashboard. It handles drag-and-drop
+    initiation and bringing the component to the front.
+*@
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="card shadow-sm border border-secondary"
+     @onmousedown="HandleBringToFront">
+    <div class="card-header d-flex justify-content-between align-items-center"
+         style="cursor: grab;"
+         @onmousedown="OnHeaderMouseDown"
+         @onmousedown:stopPropagation>
+        <h5 class="mb-0">@HeaderTitle</h5>
+        @if (HeaderContent is not null)
+        {
+            @HeaderContent
+        }
+
+        @if (OnSettingsClick.HasDelegate)
+        {
+            <button class="btn btn-sm btn-outline-secondary p-0"
+                    style="width: 24px; height: 24px; line-height: 1;"
+                    @onclick="OnSettingsClick"
+                    title="Edit Settings"
+                    @onmousedown="HandleBringToFront"
+                    @onmousedown:stopPropagation>
+                &#9881;
+            </button>
+        }
+    </div>
+    <div class="card-body">
+        @Content
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string HeaderTitle { get; set; } = "Component";
+
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? Content { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    [Parameter]
+    public EventCallback OnSettingsClick { get; set; }
+
+    private async Task HandleBringToFront()
+    {
+        if (OnBringToFront.HasDelegate)
+        {
+            await OnBringToFront.InvokeAsync();
+        }
+    }
+}

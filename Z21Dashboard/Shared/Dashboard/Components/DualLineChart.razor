@@ -1,0 +1,159 @@
+@*
+    A self-contained Blazor component for rendering a dual-axis line chart using pure SVG.
+    This component has no external JavaScript dependencies.
+*@
+@using System.Globalization
+@using Microsoft.Extensions.Logging
+@inject ILogger<DualLineChart> logger
+
+<div class="svg-chart-container" style="width: 100%; height: 400px; font-family: sans-serif; font-size: 12px;">
+    <svg width="100%" height="100%" viewBox="0 0 @SvgWidth @SvgHeight">
+
+        <!-- Y-Axis 1 (Left) -->
+        <g class="y-axis y-axis-1">
+            <line x1="@Padding" y1="@Padding" x2="@Padding" y2="@(SvgHeight - Padding)" stroke="#666" stroke-width="1" />
+            <svg:text x="@(-SvgHeight / 2)" y="@(Padding / 4)" transform="rotate(-90)" text-anchor="middle" fill="@YAxis1Color">
+                @YAxis1Title
+            </svg:text>
+            @foreach (var label in _y1AxisLabels)
+            {
+                <line x1="@Padding" y1="@label.Y" x2="@(SvgWidth - Padding)" y2="@label.Y" stroke="#e0e0e0" stroke-width="1" />
+                <svg:text x="@(Padding - 5)" y="@(label.Y + 4)" text-anchor="end" fill="#666">@label.Text</svg:text>
+            }
+        </g>
+
+        <!-- Y-Axis 2 (Right) -->
+        <g class="y-axis y-axis-2">
+            <line x1="@(SvgWidth - Padding)" y1="@Padding" x2="@(SvgWidth - Padding)" y2="@(SvgHeight - Padding)" stroke="#666" stroke-width="1" />
+            <svg:text x="@(SvgHeight / 2)" y="@(-SvgWidth + (Padding / 4))" transform="rotate(90)" text-anchor="middle" fill="@YAxis2Color">
+                @YAxis2Title
+            </svg:text>
+            @foreach (var label in _y2AxisLabels)
+            {
+                <svg:text x="@(SvgWidth - Padding + 5)" y="@(label.Y + 4)" text-anchor="start" fill="#666">@label.Text</svg:text>
+            }
+        </g>
+
+        <!-- X-Axis (Bottom) -->
+        <g class="x-axis">
+            <line x1="@Padding" y1="@(SvgHeight - Padding)" x2="@(SvgWidth - Padding)" y2="@(SvgHeight - Padding)" stroke="#666" stroke-width="1" />
+            @foreach (var label in _xAxisLabels)
+            {
+                // START: CHANGE - Added transform and adjusted text-anchor and y-position for rotated labels
+                <svg:text x="@label.X"
+                          y="@(SvgHeight - Padding + 5)"
+                          text-anchor="end"
+                          transform="rotate(-45, @label.X.ToString(CultureInfo.InvariantCulture), @(SvgHeight - Padding + 5))"
+                          fill="#666">
+                    @label.Text
+                </svg:text>
+                // END: CHANGE
+            }
+        </g>
+
+        <!-- Data Lines -->
+        <polyline fill="none" stroke="@YAxis1Color" stroke-width="2" points="@_y1DataPoints" />
+        <polyline fill="none" stroke="@YAxis2Color" stroke-width="2" points="@_y2DataPoints" />
+
+    </svg>
+</div>
+
+@code {
+    public record ChartDataPoint(string XAxisLabel, double YAxis1Value, double YAxis2Value);
+    private record AxisLabel(double X, double Y, string Text);
+
+    [Parameter] public List<ChartDataPoint> Data { get; set; } = new();
+    [Parameter] public string YAxis1Title { get; set; } = "Primary Y-Axis";
+    [Parameter] public string YAxis2Title { get; set; } = "Secondary Y-Axis";
+    [Parameter] public string YAxis1Color { get; set; } = "#0d6efd";
+    [Parameter] public string YAxis2Color { get; set; } = "#dc3545";
+
+    private const int SvgWidth = 800;
+    private const int SvgHeight = 400;
+    private const int Padding = 50;
+
+    private string _y1DataPoints = "";
+    private string _y2DataPoints = "";
+    private List<AxisLabel> _xAxisLabels = new();
+    private List<AxisLabel> _y1AxisLabels = new();
+    private List<AxisLabel> _y2AxisLabels = new();
+
+    protected override void OnParametersSet()
+    {
+        CalculateChart();
+    }
+
+    private void CalculateChart()
+    {
+        if (Data is null || !Data.Any())
+        {
+            _y1DataPoints = string.Empty;
+            _y2DataPoints = string.Empty;
+            _xAxisLabels.Clear();
+            _y1AxisLabels.Clear();
+            _y2AxisLabels.Clear();
+            return;
+        }
+
+        var y1Min = 0.0;
+        var y2Min = 0.0;
+
+        var y1Max = Data.Max(d => d.YAxis1Value) / 1000.0;
+        var y2Max = Data.Max(d => d.YAxis2Value);
+
+        y1Max += y1Max * 0.05;
+        y2Max += y2Max * 0.05;
+
+        if (y1Max == 0) y1Max = 1;
+        if (y2Max == 0) y2Max = 1;
+
+        var y1Range = y1Max - y1Min;
+        var y2Range = y2Max - y2Min;
+
+        var chartWidth = SvgWidth - (2 * Padding);
+        var chartHeight = SvgHeight - (2 * Padding);
+        var xStep = Data.Count > 1 ? chartWidth / (double)(Data.Count - 1) : 0;
+
+        var y1Points = new List<string>();
+        var y2Points = new List<string>();
+        for (int i = 0; i < Data.Count; i++)
+        {
+            var item = Data[i];
+            var x = Padding + (i * xStep);
+
+            var y1ValueInVolts = item.YAxis1Value / 1000.0;
+            var y1 = SvgHeight - Padding - ((y1ValueInVolts - y1Min) / y1Range * chartHeight);
+            var y2 = SvgHeight - Padding - ((item.YAxis2Value - y2Min) / y2Range * chartHeight);
+
+            y1Points.Add($"{x.ToString(CultureInfo.InvariantCulture)},{y1.ToString(CultureInfo.InvariantCulture)}");
+            y2Points.Add($"{x.ToString(CultureInfo.InvariantCulture)},{y2.ToString(CultureInfo.InvariantCulture)}");
+        }
+        _y1DataPoints = string.Join(" ", y1Points);
+        _y2DataPoints = string.Join(" ", y2Points);
+
+        _xAxisLabels = new List<AxisLabel>();
+        for (int i = 0; i < Data.Count; i++)
+        {
+            _xAxisLabels.Add(new AxisLabel(Padding + (i * xStep), 0, Data[i].XAxisLabel));
+        }
+
+        _y1AxisLabels = GenerateYAxisLabels(y1Min, y1Max, 5, chartHeight);
+        _y2AxisLabels = GenerateYAxisLabels(y2Min, y2Max, 5, chartHeight);
+    }
+
+
+    private List<AxisLabel> GenerateYAxisLabels(double min, double max, int count, double chartHeight)
+    {
+        var labels = new List<AxisLabel>();
+        var range = max - min;
+        if (range <= 0) return labels;
+
+        for (int i = 0; i <= count; i++)
+        {
+            var value = min + (range / count * i);
+            var y = SvgHeight - Padding - ((value - min) / range * chartHeight);
+            labels.Add(new AxisLabel(0, y, value.ToString(max < 100 ? "F1" : "F0")));
+        }
+        return labels;
+    }
+}

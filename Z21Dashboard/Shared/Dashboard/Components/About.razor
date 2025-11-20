@@ -1,0 +1,48 @@
+@*
+    About.razor
+    A simple component that displays the application's assembly version
+    and an optional additional text string.
+*@
+@using System.Reflection
+
+<div class="card shadow-sm border border-secondary col-md-4 ms-lg-2">
+    <div class="card-header d-flex justify-content-between align-items-center"
+         style="cursor: grab;"
+         @onmousedown="OnHeaderMouseDown"
+         @onmousedown:stopPropagation>
+        <h5 class="mb-0">About</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-2">
+            <span>Version: @_appVersion</span>
+            <p></p>
+            <p>Dashboard for your z21, z21Start, Z21 or Z21 XL central station from Roco</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _appVersion = "N/A";
+
+    protected override void OnInitialized()
+    {
+        // Get the currently executing assembly (our application).
+        var assembly = Assembly.GetExecutingAssembly();
+
+        // The AssemblyInformationalVersionAttribute is the best choice as it
+        // often contains the full semantic version string (e.g., 1.0.0-beta).
+        // It corresponds to the <InformationalVersion> tag in the .csproj.
+        string? informationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+        if (!string.IsNullOrEmpty(informationalVersion))
+        {
+            _appVersion = informationalVersion;
+        }
+        else
+        {
+            // If InformationalVersion isn't set, fall back to the AssemblyVersion.
+            // This corresponds to the <AssemblyVersion> tag (e.g., 1.0.0.0).
+            _appVersion = assembly.GetName().Version?.ToString() ?? "N/A";
+        }
+    }
+}

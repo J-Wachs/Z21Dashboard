@@ -1,0 +1,72 @@
+@*
+    A settings component that allows the user to toggle the visibility
+    of individual dashboard components.
+*@
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@implements IDisposable
+@inject IDashboardStateService DashboardStateService
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0">Dashboard Settings</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text text-muted">Select which components to display on the dashboard.</p>
+
+        @if (_allComponents.Any())
+        {
+            <ul class="list-group">
+                @foreach (var componentState in _allComponents)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <!-- Component Name -->
+                        <span>@componentState.Name</span>
+
+                        <!-- Visibility Toggle Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   checked="@componentState.IsVisible"
+                                   onchange="@(async () => await DashboardStateService.ToggleVisibility(componentState.Id))"
+                                   id="@($"switch-{componentState.Id}")" />
+                            <label class="form-check-label" for="@($"switch-{componentState.Id}")"></label>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No configurable dashboard components were found.</p>
+        }
+    </div>
+</div>
+
+@code {
+    private List<DashboardComponentState> _allComponents = new();
+
+    protected override void OnInitialized()
+    {
+        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
+        LoadComponentList();
+    }
+
+    private void LoadComponentList()
+    {
+        _allComponents = DashboardStateService.GetComponentStates();
+    }
+
+    private async void OnLayoutChanged()
+    {
+        await InvokeAsync(() =>
+        {
+            LoadComponentList();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
+    }
+}
