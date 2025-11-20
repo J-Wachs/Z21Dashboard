@@ -1,4 +1,4 @@
-﻿using Z21Dashboard.Application.Models;
+﻿using Z21Client.Models;
 
 namespace Z21Dashboard.Application.Interfaces;
 

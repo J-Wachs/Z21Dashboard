@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-using Z21Dashboard.Application.Interfaces;
-using Z21Dashboard.Infrastructure.Z21;
 using Z21Dashboard.Services;
 using BlazorLogComponent.Interfaces;
-
 using BlazorLogComponent.Services;
 using BlazorLogComponent.Logging;
-
-
+using Z21Client.Interfaces;
+using Z21Dashboard.Application.Interfaces;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -86,7 +83,7 @@ public static class MauiProgram
         // --- SERVICE REGISTRATION SECTION ---
 
         // Register the client for communicating with the Z21 command station.
-        builder.Services.AddSingleton<IZ21Client, Z21Client>();
+        builder.Services.AddSingleton<IZ21Client, Z21Client.Z21Client>();
 
         // Register the generic data persistence service.
         builder.Services.AddSingleton<IAppDataService, AppDataService>();

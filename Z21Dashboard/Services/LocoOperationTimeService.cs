@@ -1,6 +1,7 @@
-﻿using Z21Dashboard.Application.Interfaces;
-using Z21Dashboard.Application.Models;
-using Z21Dashboard.Helpers;
+﻿using Z21Client.Helpers;
+using Z21Client.Interfaces;
+using Z21Client.Models;
+using Z21Dashboard.Application.Interfaces;
 
 namespace Z21Dashboard.Services;
 

@@ -1,4 +1,5 @@
-﻿using Z21Dashboard.Application.Interfaces;
+﻿using Z21Client.Interfaces;
+using Z21Dashboard.Application.Interfaces;
 
 namespace Z21Dashboard;
 
