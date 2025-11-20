@@ -5,6 +5,16 @@ VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Dashboard", "Z21Dashboard\Z21Dashboard.csproj", "{7F891025-2693-41C3-8C4C-AB6B749D2182}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Client", "Z21Client\Z21Client\Z21Client.csproj", "{B1775753-BA89-F2B6-D5D3-5BE4A914158B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorLogComponent", "BlazorLogComponent\BlazorLogComponent\BlazorLogComponent.csproj", "{05075655-2CE8-6D01-79DE-7AE486339BE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,14 @@ Global
 		{7F891025-2693-41C3-8C4C-AB6B749D2182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F891025-2693-41C3-8C4C-AB6B749D2182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F891025-2693-41C3-8C4C-AB6B749D2182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1775753-BA89-F2B6-D5D3-5BE4A914158B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1775753-BA89-F2B6-D5D3-5BE4A914158B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1775753-BA89-F2B6-D5D3-5BE4A914158B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1775753-BA89-F2B6-D5D3-5BE4A914158B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05075655-2CE8-6D01-79DE-7AE486339BE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05075655-2CE8-6D01-79DE-7AE486339BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05075655-2CE8-6D01-79DE-7AE486339BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05075655-2CE8-6D01-79DE-7AE486339BE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
