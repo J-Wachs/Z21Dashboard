@@ -1,0 +1,6 @@
+[submodule "Z21Client"]
+	path = Z21Client
+	url = https://github.com/J-Wachs/Z21Client
+[submodule "BlazorLogComponent"]
+	path = BlazorLogComponent
+	url = https://github.com/J-Wachs/BlazorLogComponent
