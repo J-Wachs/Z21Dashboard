@@ -14,6 +14,7 @@ Z21Client repo findes her:
 
 Z21Dashboard tilbyder en moderne og interaktiv brugerflade med følgende nøglefunktioner:
 
+*   **Sprogversionering:** Afvikles applikationen med sprog sat til dansk, vises danske tekster, ellers engelske.
 *   **Dynamisk "Træk-og-slip"-dashboard:** Brugere kan frit flytte og omarrangere komponent-vinduer på et "frit lærred" for at skabe et personligt layout.
 *   **Brugerkonfigurerbart Layout:** Et centralt indstillingspanel giver brugerne mulighed for at vise eller skjule individuelle komponent-vinduer, så de kan skræddersy dashboardet til deres specifikke behov.
 *   **Permanent Layout:** Brugerens tilpassede layout, inklusiv komponenters positioner og synlighed, gemmes automatisk og gendannes mellem applikationens sessioner.
@@ -109,6 +110,7 @@ The Z21Client repo can be found here:
 
 The Z21Dashboard provides a modern and interactive user interface with the following key features:
 
+*   **Multi language:** If the application is running with the language set to Danish, Danish texts are displayed, otherwise English texts.
 *   **Dynamic, Drag-and-Drop Dashboard:** Users can freely move and rearrange component windows on a "free-form" canvas to create a personalized layout.
 *   **User-Configurable Layout:** A central settings panel allows users to show or hide individual component windows, tailoring the dashboard to their specific needs.
 *   **Persistent Layout:** The user's custom layout, including component positions and visibility, is automatically saved and restored between application sessions.
