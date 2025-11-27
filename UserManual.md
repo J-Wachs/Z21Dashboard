@@ -1,4 +1,4 @@
-﻿# User Guide for Z21Dashboard
+﻿# User manual for Z21Dashboard
 
 # Table of Contents
 *   [Introduction](#introduction)

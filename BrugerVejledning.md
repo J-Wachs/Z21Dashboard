@@ -9,16 +9,16 @@
     *   [z21/z21Start og låst eller ej](#z21z21start-og-låst-eller-ej)
 *   [Første gang du starter](#første-gang-du-starter)
 *   [Dashboardet](#dashboardet)
-    *   [Flyt rundt på vinduer](#flyt-rundt-pa-vinduer)
+    *   [Flyt rundt på vinduer](#flyt-rundt-på-vinduer)
     *   [Tilpas dit dashboard (vis/skjul vinduer)](#tilpas-dit-dashboard-visskjul-vinduer)
     *   [De vigtigste vinduer forklaret](#de-vigtigste-vinduer-forklaret)
 *   [FAQ (OSS)](#faq-oss)
-    *   [Hvad betyder "Låst" (Locked)?](#hvad-betyder-last-locked)
-    *   [Kan navne fra min multiMAUS eller Z21 app overføres til Z21Dashboard?](#kan-navne-fra-min-multimaus-eller-z21-app-overfores-til-z21dashboard)
+    *   [Hvad betyder "Låst" (Locked)?](#hvad-betyder-låst-locked)
+    *   [Kan navne fra min multiMAUS eller Z21 app overføres til Z21Dashboard?](#kan-navne-fra-min-multimaus-eller-z21-app-overføres-til-z21dashboard)
     *   [Z21Dashboard kan ikke forbinde til min Z21](#z21dashboard-kan-ikke-forbinde-til-min-z21)
     *   [Vil du implementere widgets til LocoNet- og CAN-bus-funktionalitet?](#vil-du-implementere-widgets-til-loconet--og-can-bus-funktionalitet)
-    *   [Jeg har fundet en fejl i Z21Dashboard, hvad gør jeg?](#jeg-har-fundet-en-fejl-i-z21dashboard-hvad-gor-jeg)
-    *   [Jeg synes Z21Dashboard er smart men jeg er ikke stærk i netværk etc. så hvad gør jeg?](#jeg-synes-z21dashboard-er-smart-men-jeg-er-ikke-staerk-i-netvaerk-etc-sa-hvad-gør-jeg)
+    *   [Jeg har fundet en fejl i Z21Dashboard, hvad gør jeg?](#jeg-har-fundet-en-fejl-i-z21dashboard-hvad-gør-jeg)
+    *   [Jeg synes Z21Dashboard er smart men jeg er ikke stærk i netværk etc. så hvad gør jeg?](#jeg-synes-z21dashboard-er-smart-men-jeg-er-ikke-stærk-i-netværk-etc-så-hvad-gør-jeg)
 
 # Indledning
 
