@@ -6,7 +6,7 @@
     *   [Lidt om teknikken](#lidt-om-teknikken)
 *   [Z21 familien af centralstationer](#z21-familien-af-centralstationer)
     *   [Brug af protokol](#brug-af-protokol)
-    *   [z21/z21Start og låst eller ej](#z21z21start-og-last-eller-ej)
+    *   [z21/z21Start og låst eller ej](#z21z21start-og-låst-eller-ej)
 *   [Første gang du starter](#første-gang-du-starter)
 *   [Dashboardet](#dashboardet)
     *   [Flyt rundt på vinduer](#flyt-rundt-pa-vinduer)
