@@ -41,7 +41,7 @@ og skjules af brugeren.
 *   **Systemstatus (Simpel & Fuld):** To widgets, der viser tekniske data fra Z21. Den simple visning viser nøgletal som strøm og spænding, mens den fulde visning giver en detaljeret oversigt over alle status-flag.
 *   **R-Bus & RailCom-visninger:** Specialiserede widgets til overvågning af feedback fra R-Bus-moduler og data fra RailCom-udstyrede lokomotiver.
 
-<img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
+<img src="./Z21Dashboard_da.png" alt="Screen shot" style="max-width: 400px;">
 
 ## Hvordan det virker
 

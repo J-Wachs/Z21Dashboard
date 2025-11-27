@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		README.md = README.md
 		UserManual.md = UserManual.md
 		Z21Dashboard.png = Z21Dashboard.png
+		Z21Dashboard_da.png = Z21Dashboard_da.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Client", "Z21Client\Z21Client\Z21Client.csproj", "{B1775753-BA89-F2B6-D5D3-5BE4A914158B}"
