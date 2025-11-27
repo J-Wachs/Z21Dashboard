@@ -3,6 +3,7 @@
 *@
 @using System.Text
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Infrastructure
 @using Z21Client.Interfaces
 @using Z21Client.Models
@@ -12,16 +13,17 @@
 @using Z21Dashboard.Helpers
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<LocoSlotViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="Locomotive slots"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <HeaderContent>
         @if (_lastRead is not null)
         {
             <span class="badge bg-info">
-                <strong>Last read:</strong>: @_lastRead.Value.ToString("HH:mm:ss")
+                <strong>@Localizer["LastRead"]:</strong>: @_lastRead.Value.ToString("HH:mm:ss")
             </span>
         }
     </HeaderContent>
@@ -32,22 +34,22 @@
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <span>&nbsp;</span>
             }
-            <span>Get Loco Slot Info</span>
+            <span>@Localizer["CaptionGetButton"]</span>
         </button>
 
         <div class="table-container-sticky-header">
             <table class="table table-hover table-bordered table-striped table-sm mb-0">
                 <thead class="sticky-top">
                     <tr>
-                        <th>Slot</th>
-                        <th>Address</th>
+                        <th>@Localizer["Slot"]</th>
+                        <th>@Localizer["Address"]</th>
                         @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
                         {
-                            <th>Protocol</th>
+                            <th>@Localizer["Protocol"]</th>
                         }
-                        <th><span title="Direction">D</span></th>
-                        <th>Speed</th>
-                        <th>Functions</th>
+                        <th><span title="@Localizer["DirectionInfoText"]">@Localizer["DirectionShort"]</span></th>
+                        <th>@Localizer["Speed"]</th>
+                        <th>@Localizer["Functions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -184,13 +186,13 @@
                 }
             }
         }
-        return activeFunctions.Any() ? string.Join(", ", activeFunctions) : "None";
+        return activeFunctions.Any() ? string.Join(", ", activeFunctions) : "-";
     }
 
     private async Task GetLocoSlotInfo()
     {
         _buttonDisable = true;
-        for (byte i = 1; i < 120; i++)
+        for (byte i = 1; i <= 120; i++)
         {
             await Z21Client.GetLocoSlotInfoAsync(i);
             await Task.Delay(25); // Small delay to avoid overwhelming the Z21

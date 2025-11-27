@@ -3,6 +3,7 @@
 *@
 @using System.Text
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Infrastructure
 @using Z21Client.Interfaces
 @using Z21Client.Models
@@ -10,9 +11,10 @@
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<SystemStateFullViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="System State - Full"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -21,11 +23,11 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Main Current</td>
+                            <td class="text-nowrap">@Localizer["MainCurrent"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_systemState?.MainCurrentmA mA</text>
+                                    <text>@_systemState?.MainCurrentmA @Localizer["MilliAmpsShort"]</text>
                                 }
                                 else
                                 {
@@ -34,17 +36,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Programming Current</td>
+                            <td class="text-nowrap">@Localizer["ProgrammingCurrent"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
                                     @if (HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
                                     {
-                                        <text>@_systemState?.ProgCurrentmA mA</text>
+                                        <text>@_systemState?.ProgCurrentmA @Localizer["MilliAmpsShort"]</text>
                                     }
                                     else
                                     {
-                                        <text>N/A</text>
+                                        <text>-</text>
                                     }
                                 }
                                 else
@@ -54,8 +56,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Temperature</td>
-                            <td class="@_alertTemp">
+                            <td class="text-nowrap">@Localizer["Temperature"]</td>
+                            <td class="@_alertTemp text-nowrap">
                                 @if (_systemState is not null)
                                 {
                                     <text>@_systemState?.TemperatureC °C</text>
@@ -67,11 +69,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Supply voltage</td>
+                            <td class="text-nowrap">@Localizer["SupplyVoltage"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_supplyVoltageV V</text>
+                                    <text>@_supplyVoltageV @Localizer["VoltShort"]</text>
                                 }
                                 else
                                 {
@@ -80,11 +82,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Internal voltage</td>
+                            <td class="text-nowrap">@Localizer["InternalVoltage"]</td>
                             <td class="@_alertVolt">
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_vccVoltageV V</text>
+                                    <text>@_vccVoltageV @Localizer["VoltShort"]</text>
                                 }
                                 else
                                 {
@@ -96,18 +98,18 @@
                 </table>
             </div>
             <div class="col-md-3">
-                <h5>Central State Flags (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
+                <h5>@Localizer["CentralStateFlags"] (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
                 <pre>@if (_systemState is not null)
                 {
-                                                             @DecodeCentralState(_systemState!.CentralState)    
+                     @DecodeCentralState(_systemState!.CentralState)    
                 }
             </pre>
             </div>
             <div class="col-md-3">
-                <h5>Extended State Flags (@("0x" + _systemState?.CentralStateEx.ToString("X2")))</h5>
+                <h5>@Localizer["ExtendedStateFlags"] (@("0x" + _systemState?.CentralStateEx.ToString("X2")))</h5>
                 <pre>@if (_systemState is not null)
                 {
-                                                    @DecodeCentralStateEx(_systemState!.CentralStateEx, HardwareInfo!.FwVersion)
+                     @DecodeCentralStateEx(_systemState!.CentralStateEx, HardwareInfo!.FwVersion)
                     
                 }
             </pre>
@@ -115,12 +117,12 @@
             @if (HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42)
             {
                 <div class="col-md-3">
-                    <h5>Capabilities Flags (@("0x" + _systemState?.Capabilities!.Value.ToString("X2")))</h5>
+                    <h5>@Localizer["CapabilitiesFlags"] (@("0x" + _systemState?.Capabilities!.Value.ToString("X2")))</h5>
                     <pre>@if (_systemState is not null)
-                                                    {
-                                                                                            @DecodeCapabilities(_systemState!.Capabilities!.Value)    
-                                                    }
-                                                </pre>
+                    {
+                         @DecodeCapabilities(_systemState!.Capabilities!.Value)    
+                    }
+                    </pre>
                 </div>
             }
         </div>
@@ -163,27 +165,52 @@
         await InvokeAsync(StateHasChanged);
     }
 
+    private string MakeFixedLengthString(string text, int len)
+    {
+        if (text.Length < len)
+        {
+            text = text + new String(' ', len - text.Length);
+        }
+        return text;
+    }
+
     private string DecodeCentralState(byte state)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"Emergency Stop:      {((state & SystemStateChangedEventArgs.CentralStateEmergencyStop) > 0 ? "On" : "Off")}");
-        sb.AppendLine($"Track Voltage:       {((state & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? "Off" : "On")}");
-        sb.AppendLine($"Short Circuit:       {((state & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Programming Mode:    {((state & SystemStateChangedEventArgs.CentralStateProgrammingMode) > 0 ? "On" : "Off")}");
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateEmergencyStop) > 0 ? Localizer["On"] : Localizer["Off"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? Localizer["Off"] : Localizer["On"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateProgrammingMode) > 0 ? Localizer["On"] : Localizer["Off"])}"
+        );
         return sb.ToString();
     }
 
     private string DecodeCentralStateEx(byte stateEx, FirmwareVersion? fw)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"High Temperature:    {((stateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Power Lost:          {((stateEx & SystemStateChangedEventArgs.CentralStateExPowerLost) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Short Circuit (ext): {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitExternal) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Short Circuit (int): {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitInternal) > 0 ? "Yes" : "No")}");
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["HighTemperature"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["PowerLost"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExPowerLost) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuitExt"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitExternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuitInt"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitInternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
 
         if (fw?.Version >= Z21FirmwareVersions.V1_42)
         {
-            sb.AppendLine($"RCN-213 Mode:        {((stateEx & SystemStateChangedEventArgs.CentralStateExRcn213Mode) > 0 ? "Active" : "Inactive")}");
+            sb.AppendLine($"{MakeFixedLengthString(Localizer["RCN213Mode"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExRcn213Mode) > 0 ? Localizer["Active"] : Localizer["Inactive"])}");
         }
         return sb.ToString();
     }
@@ -191,12 +218,24 @@
     private string DecodeCapabilities(byte capabilities)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"Protocols:            {((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "DCC " : "")}{((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "MM" : "")}");
-        sb.AppendLine($"RailCom:              {((capabilities & SystemStateChangedEventArgs.CapabilitiesRailCom) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Accept LAN loco cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesLocoCmds) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Accept LAN acc. cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesAccessoryCmds) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Accept LAN det. cmds: {((capabilities & SystemStateChangedEventArgs.CapabilitiesDetectorCmds) > 0 ? "Yes" : "No")}");
-        sb.AppendLine($"Needs Unlock Code:    {((capabilities & SystemStateChangedEventArgs.CapabilitiesNeedsUnlockCode) > 0 ? "Yes" : "No")}");
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["Protocols"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "DCC " : string.Empty)}{((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "MM" : string.Empty)}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["RailCom"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesRailCom) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANLocoCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesLocoCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANAccCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesAccessoryCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANDetCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesDetectorCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["NeedsUnlockCode"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesNeedsUnlockCode) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
         return sb.ToString();
     }
 

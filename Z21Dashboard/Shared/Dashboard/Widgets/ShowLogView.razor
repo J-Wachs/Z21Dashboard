@@ -1,8 +1,10 @@
 @using BlazorLogComponent
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Dashboard.Shared.Dashboard.Components
+@inject IStringLocalizer<ShowLogViewResources> Localizer
 
-<DashboardWindow HeaderTitle="Show Log"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>

@@ -3,15 +3,17 @@
     Displays the status of R-Bus sensors in a grid format.
 *@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<RBusViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="R-Bus Feedback"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -19,12 +21,12 @@
             @for (int module = 1; module <= 20; module++)
             {
                 <div class="module-container">
-                    <h6 class="text-center mb-1" style="font-size: 10pt;">Module @module</h6>
+                    <h6 class="text-center mb-1" style="font-size: 10pt;">@Localizer["Module"] @module</h6>
                     <div class="d-flex justify-content-center border p-1" style="gap: 4px;">
                         @for (int port = 1; port <= 8; port++)
                         {
                             <div class="sensor-box @(IsPortActive(module, port) ? "bg-danger" : "bg-success")"
-                                 title="@($"Sensor {module}:{port}")">
+                                 title="@($"{Localizer["Sensor"]} {module}:{port}")">
                             </div>
                         }
                     </div>

@@ -7,40 +7,42 @@
     every second. This workaround may be removed in future versions if the firmware issue is resolved.
 *@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<RailComViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="RailCom Data"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
         <table class="table table-sm table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Address</th>
-                    <th>Receive Count</th>
-                    <th>Error Count</th>
-                    <th>Speed</th>
-                    <th>QoS</th>
-                    <th>Options</th>
+                    <th>@Localizer["Address"]</th>
+                    <th>@Localizer["ReceiveCount"]</th>
+                    <th>@Localizer["ErrorCount"]</th>
+                    <th>@Localizer["Speed"]</th>
+                    <th>@Localizer["QoS"]</th>
+                    <th>@Localizer["Options"]</th>
                 </tr>
             </thead>
-            @if (activeRailComLocos.Any())
+            @if (ActiveLocosForUI.Any())
             {
                 <tbody>
-                    @foreach (var loco in activeRailComLocos.Values.OrderBy(l => l.LocoAddress))
+                    @foreach (var loco in ActiveLocosForUI)
                     {
                         <tr>
                             <td><strong>@loco.LocoAddress</strong></td>
                             <td>@loco.ReceiveCounter</td>
                             <td>@loco.ErrorCounter</td>
-                            <td>@(loco.HasSpeed1 || loco.HasSpeed2 ? loco.Speed.ToString() : "N/A")</td>
-                            <td>@(loco.HasQoS? loco.QoS.ToString() : "N/A")</td>
+                            <td>@(loco.HasSpeed1 || loco.HasSpeed2 ? loco.Speed.ToString() : Localizer["NA"])</td>
+                            <td>@(loco.HasQoS? loco.QoS.ToString() : Localizer["NA"])</td>
                             <td>@loco.Options.ToString("b8")</td>
                         </tr>
                     }
@@ -48,7 +50,7 @@
             }
         </table>
     </Content>
-</DashboardWindow>>
+</DashboardWindow>
 
 @code {
     /// <summary>
@@ -61,7 +63,24 @@
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
-    private Dictionary<ushort, RailComData> activeRailComLocos = new();
+    // The shared dictionary that needs protection.
+    private readonly Dictionary<ushort, RailComData> activeRailComLocos = new();
+
+    // The lock object to synchronize access.
+    private readonly object _locosLock = new();
+
+    // A thread-safe property for the UI to bind to.
+    private List<RailComData> ActiveLocosForUI
+    {
+        get
+        {
+            lock (_locosLock)
+            {
+                // Return a copy of the data for safe iteration in the UI.
+                return activeRailComLocos.Values.OrderBy(l => l.LocoAddress).ToList();
+            }
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -70,7 +89,13 @@
 
     private async void OnRailComDataReceived(object? sender, RailComData e)
     {
-        activeRailComLocos[e.LocoAddress] = e;
+        lock (_locosLock)
+        {
+            // This write operation is now protected.
+            activeRailComLocos[e.LocoAddress] = e;
+        }
+
+        // The UI update is invoked outside the lock.
         await InvokeAsync(StateHasChanged);
     }
 

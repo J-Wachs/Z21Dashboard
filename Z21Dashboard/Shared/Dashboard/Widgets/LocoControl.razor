@@ -11,13 +11,14 @@
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Helpers
 @using Z21Dashboard.Shared.Dashboard.Components
-@implements IDisposable
+@using Microsoft.Extensions.Localization
 @inject IZ21Client Z21Client
 @inject ILocoMetadataService LocoMetadataService
 @inject ILocoOperatingTimeService OperatingTimeService
-@inject ILogger<LocoControl> Logger
+@inject IStringLocalizer<LocoControlResources> Localizer
+@implements IDisposable
 
-<DashboardWindow HeaderTitle="Loco Control"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenEditDialog">
@@ -26,15 +27,15 @@
         {
             <div class="d-flex align-items-center">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span class="ms-2">Checking Z21 lock state...</span>
+                <span class="ms-2">@Localizer["InfoText"]</span>
             </div>
         }
         else
         {
             <!-- Address Input -->
             <div class="input-group mb-2">
-                <span class="input-group-text">Address</span>
-                <input type="number" class="form-control" placeholder="Enter Address" @bind="_inputAddress" @oninput="OnAddressInput" />
+                <span class="input-group-text">@Localizer["Address"]</span>
+                <input type="number" class="form-control" placeholder="@Localizer["EnterAddress"]" @bind="_inputAddress" @oninput="OnAddressInput" />
                 <span class="input-group-text">@_locoName</span>
             </div>
 
@@ -42,11 +43,11 @@
             <div class="btn-group w-100 mb-3" role="group">
                 <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
                         @onclick="SetTrackPowerOn">
-                    Track Power On
+                    @Localizer["TrackPwrOn"]
                 </button>
                 <button class="btn @(_trackPowerState == TrackPowerState.Off ? "btn-secondary" : "btn-outline-secondary")"
                         @onclick="SetTrackPowerOff">
-                    Track Power Off
+                    @Localizer["TrackPwrOff"]
                 </button>
             </div>
 
@@ -76,13 +77,13 @@
 
             <!-- Direction Controls -->
             <div class="btn-group w-100 mb-3" role="group">
-                <button class="btn @(_direction is DrivingDirection.Forward ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Forward)">Forward</button>
-                <button class="btn @(_direction is DrivingDirection.Reverse ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Reverse)">Reverse</button>
+                <button class="btn @(_direction is DrivingDirection.Forward ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Forward)">@Localizer["Forward"]</button>
+                <button class="btn @(_direction is DrivingDirection.Reverse ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Reverse)">@Localizer["Reverse"]</button>
             </div>
 
             <!-- Speed Control -->
             <div class="d-flex align-items-center" style="gap: 1rem;">
-                <span>Speed:</span>
+                <span>@Localizer["Speed"]:</span>
                 <input type="range" class="form-control-range w-100" min="0" max="@_speedSteps" step="1" value="@_currentSpeed" disabled="@_isLocked" @oninput="OnSpeedChanged" />
                 <span>@_currentSpeed</span>
             </div>
@@ -98,16 +99,16 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Settings for Loco @(_selectedLocoForEdit?.Address)</h5>
-                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="Close"></button>
+                    <h5 class="modal-title">@Localizer["EditSettingsForLoco"] @(_selectedLocoForEdit?.Address)</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="locoNameInput" class="form-label">Locomotive Name:</label>
-                        <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="e.g., MY 1103" />
+                        <label for="locoNameInput" class="form-label">@Localizer["LocomotiveName"]:</label>
+                        <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
                     </div>
                     <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">Protocol and Speed Steps</label>
+                        <label for="protocolSelect" class="form-label">@(Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
                         <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
                             @foreach (var option in _protocolOptions)
                             {
@@ -116,25 +117,23 @@
                         </select>
                     </div>
                     <hr />
-                    <h6 class="mb-3">Service Interval</h6>
+                    <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
                     <div class="mb-3">
-                        <label for="serviceIntervalInput" class="form-label">Interval (hours):</label>
-                        <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="e.g., 100" />
+                        <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalHours"]:</label>
+                        <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="@Localizer["SIPlaceHolder"]" />
                     </div>
                     <div class="mb-3">
-                        <label for="timeSinceService" class="form-label">Time since last service:</label>
+                        <label for="timeSinceService" class="form-label">@Localizer["LastService"]:</label>
                         <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_timeSinceServiceSeconds)" readonly />
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
-                        <label class="form-check-label" for="servicePerformedCheck">
-                            Mark service as performed (resets service timer)
-                        </label>
+                        <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkService"]</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">Cancel</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
                 </div>
             </div>
         </div>
@@ -271,7 +270,6 @@
     {
         if (_activeAddress == address) return;
         _activeAddress = address;
-        Logger.LogInformation("LocoControl: Active loco address changed to: {Address}", _activeAddress);
         _speedSteps = 128;
         _currentSpeed = 0;
         _direction = DrivingDirection.Forward;
@@ -290,7 +288,7 @@
             {
                 if (_activeAddress > 0 && _selectedLocoForEdit is not null)
                 {
-                    await Z21Client.SetLocoDriveAdaptSpeedAsync(
+                    await Z21Client.SetLocoDriveAsync(
                         _activeAddress,
                         _currentSpeed,
                         _selectedLocoForEdit.NativeSpeedSteps,
@@ -304,9 +302,10 @@
 
     private async Task SetDirectionAsync(DrivingDirection newDirection)
     {
-        if (_activeAddress == 0 || _selectedLocoForEdit is null) return;
+        if (_activeAddress == 0 || _selectedLocoForEdit is null)
+            return;
         _direction = newDirection;
-        await Z21Client.SetLocoDriveAdaptSpeedAsync(
+        await Z21Client.SetLocoDriveAsync(
             _activeAddress,
             _currentSpeed,
             _selectedLocoForEdit.NativeSpeedSteps,
@@ -392,7 +391,7 @@
 
         if (Z21Code?.LockState is not Z21LockState.Locked)
         {
-            await Z21Client.SetLocoDriveAdaptSpeedAsync(
+            await Z21Client.SetLocoDriveAsync(
                 _selectedLocoForEdit.Address, 0, _selectedSpeedSteps,
                 _selectedLocoForEdit.Direction, _selectedLocoMode);
         }

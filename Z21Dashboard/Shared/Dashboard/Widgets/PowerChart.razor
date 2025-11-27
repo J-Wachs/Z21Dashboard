@@ -3,28 +3,30 @@
     at a configurable interval to find peak values, and displays the result in a dual-axis line chart.
 *@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
-@implements IDisposable
 @inject IZ21Client Z21Client
 @inject IAppDataService AppDataService
+@inject IStringLocalizer<PowerChartResources> Localizer
+@implements IDisposable
 
-<DashboardWindow HeaderTitle="Power and Voltage Monitor"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenSettingsDialog">
     <Content>
         @if (_chartData.Any())
         {
-            <DualLineChart Data="@_chartData" YAxis1Title="Voltage (mV)" YAxis2Title="Current (mA)" />
+            <DualLineChart Data="@_chartData" YAxis1Title="@Localizer["Voltage"]" YAxis2Title="@Localizer["Current"]" />
         }
         else
         {
             <div class="d-flex align-items-center justify-content-center" style="height: 400px;">
-                <p class="text-muted">Thinking... Waiting for system state data...</p>
+                <p class="text-muted">@Localizer["Thinking"]</p>
             </div>
         }
     </Content>
@@ -38,23 +40,23 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Settings</h5>
-                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="Close"></button>
+                    <h5 class="modal-title">@Localizer["EditSettingsForPower"]</h5>
+                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="intervalSelect" class="form-label">Data sampling interval:</label>
+                        <label for="intervalSelect" class="form-label">@Localizer["SampleInterval"]:</label>
                         <select id="intervalSelect" class="form-select" @onchange="OnIntervalChanged">
                             @for (int i = 10; i <= 60; i += 10)
                             {
-                                <option value="@i" selected="@(i == dataCaptureIntervalSeconds)">@i seconds</option>
+                                <option value="@i" selected="@(i == dataCaptureIntervalSeconds)">@i @Localizer["Seconds"]</option>
                             }
                         </select>
-                        <div class="form-text">The time between each data point is collected for the chart.</div>
+                        <div class="form-text">@Localizer["SampleInfoText"]</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">Close</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">@Localizer["Close"]</button>
                 </div>
             </div>
         </div>
@@ -62,6 +64,9 @@
 }
 
 @code {
+    [Parameter]
+    public HardwareInfo? HardwareInfo { get; set; }
+
     [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
@@ -95,7 +100,10 @@
     {
         var savedInterval = AppDataService.GetData<int>(DataCaptureIntervalKey);
         dataCaptureIntervalSeconds = (savedInterval >= 10 && savedInterval <= 60 && savedInterval % 10 == 0) ? savedInterval : 10;
-        if (savedInterval == 0) AppDataService.SaveData(DataCaptureIntervalKey, dataCaptureIntervalSeconds);
+        if (savedInterval == 0)
+        {
+            AppDataService.SaveData(DataCaptureIntervalKey, dataCaptureIntervalSeconds);
+        }
 
         Z21Client.SystemStateChanged += OnSystemStateChanged;
         Z21Client.GetSystemStateAsync();
@@ -130,10 +138,12 @@
 
         lock (_peakValueLock)
         {
-            var totalCurrent = e.MainCurrentmA + e.ProgCurrentmA;
+            var totalCurrent = e.MainCurrentmA;
 
-            if (totalCurrent > _peakCurrentInInterval) _peakCurrentInInterval = totalCurrent;
-            if (e.VccVoltagemV > _peakVoltageInInterval) _peakVoltageInInterval = e.VccVoltagemV;
+            if (totalCurrent > _peakCurrentInInterval)
+                _peakCurrentInInterval = totalCurrent;
+            if (e.VccVoltagemV > _peakVoltageInInterval)
+                _peakVoltageInInterval = e.VccVoltagemV;
 
             _hasNewDataInInterval = true;
 
@@ -147,7 +157,7 @@
 
                 _chartData.Add(new DualLineChart.ChartDataPoint(
                     DateTime.Now.ToString("HH:mm:ss"),
-                    _peakVoltageInInterval,
+                    _peakVoltageInInterval / 1000.0, // Show in Volts, not in mV.
                     _peakCurrentInInterval
                 ));
                 needsImmediateUiUpdate = true;
@@ -188,7 +198,7 @@
         // Always add a data point using the last known values.
         _chartData.Add(new DualLineChart.ChartDataPoint(
             DateTime.Now.ToString("HH:mm:ss"),
-            _lastKnownPeakVoltage,
+            _lastKnownPeakVoltage / 1000.0, // Show in volts, not mV.
             _lastKnownPeakCurrent
         ));
 

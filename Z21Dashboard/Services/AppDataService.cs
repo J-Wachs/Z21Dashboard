@@ -1,5 +1,8 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Z21Dashboard.Application.Interfaces;
+using Z21Dashboard.Resources.Localization;
 
 namespace Z21Dashboard.Services;
 
@@ -11,13 +14,18 @@ public class AppDataService : IAppDataService
 {
     private readonly string _dataFilePath;
     private readonly object _fileLock = new();
+    private readonly ILogger<AppDataService> _logger;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public AppDataService()
+
+    public AppDataService(ILogger<AppDataService> logger, IStringLocalizer<SharedResources> localizer)
     {
         string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string appFolderPath = Path.Combine(appDataPath, "Z21DashboardApp");
         Directory.CreateDirectory(appFolderPath);
         _dataFilePath = Path.Combine(appFolderPath, "app_data.json");
+        _logger = logger;
+        _localizer = localizer;
     }
 
     public T? GetData<T>(string key)
@@ -42,7 +50,8 @@ public class AppDataService : IAppDataService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading data for key '{key}': {ex.Message}");
+                // "Error reading data for key '{key}': {ex.Message}"
+                _logger.LogCritical(_localizer["Text0002"], key, ex.Message);
             }
 
             return default;
@@ -62,7 +71,7 @@ public class AppDataService : IAppDataService
                     string existingJson = File.ReadAllText(_dataFilePath);
                     if (!string.IsNullOrWhiteSpace(existingJson))
                     {
-                        allData = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(existingJson) ?? new();
+                        allData = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(existingJson) ?? [];
                     }
                 }
 
@@ -79,7 +88,8 @@ public class AppDataService : IAppDataService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving data for key '{key}': {ex.Message}");
+                // $"Error saving data for key '{key}': {ex.Message}"
+                _logger.LogCritical(_localizer["Text0002"], key, ex.Message);
             }
         }
     }

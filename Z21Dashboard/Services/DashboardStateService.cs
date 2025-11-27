@@ -1,5 +1,6 @@
 ﻿using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
+using Z21Dashboard.Resources.Localization;
 using Z21Dashboard.Shared.Dashboard.Widgets;
 
 namespace Z21Dashboard.Services;
@@ -23,20 +24,17 @@ public class DashboardStateService : IDashboardStateService
         // This is the MASTER LIST of component definitions.
         return
         [
-            new() { Name = "Loco controller", Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Loco controller 2", Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Locomotive List", Width = 650, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Locomotive Operating Time", Width = 800, ComponentType = typeof(LocoListOperationTimeView), ComponentTypeName = typeof(LocoListOperationTimeView).AssemblyQualifiedName ?? string.Empty },
-            // new() { Name = "Locomotive Protocol Selector", Width = 250, ComponentType = typeof(LocoProtocolSelector), ComponentTypeName = typeof(LocoProtocolSelector).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Locomotive Slots", Width = 800, ComponentType = typeof(LocoSlotView), ComponentTypeName = typeof(LocoSlotView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Power Monitor", Width = 800, ComponentType = typeof(PowerChart), ComponentTypeName = typeof(PowerChart).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "RailCom", Width = 500, ComponentType = typeof(RailComView), ComponentTypeName = typeof(RailComView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "R-Bus", Width = 530, ComponentType = typeof(RBusView), ComponentTypeName = typeof(RBusView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Show Log", Width = 500, Height = 500, ComponentType = typeof(ShowLogView), ComponentTypeName = typeof(ShowLogView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "System State", Width = 250, ComponentType = typeof(SystemStateView), ComponentTypeName = typeof(SystemStateView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "System State - Full", Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = "Turnout List", Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
-            // new() { Name = "Turnout Protocol Selector", Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty }
+            new() { Name = SharedResources.LocoControl, Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoControl2, Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoListView, Width = 800, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoSlotView, Width = 800, ComponentType = typeof(LocoSlotView), ComponentTypeName = typeof(LocoSlotView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.PowerChart, Width = 800, ComponentType = typeof(PowerChart), ComponentTypeName = typeof(PowerChart).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.RailComView, Width = 500, ComponentType = typeof(RailComView), ComponentTypeName = typeof(RailComView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.RBusView, Width = 530, ComponentType = typeof(RBusView), ComponentTypeName = typeof(RBusView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.ShowLogView, Width = 500, Height = 500, ComponentType = typeof(ShowLogView), ComponentTypeName = typeof(ShowLogView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.SystemStateView, Width = 260, ComponentType = typeof(SystemStateView), ComponentTypeName = typeof(SystemStateView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.TurnoutListView, Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
         ];
     }
 

@@ -1,6 +1,8 @@
+@using Microsoft.Extensions.Localization
 @*
     A reusable component to display a speed value as a graphical progress bar.
 *@
+@inject IStringLocalizer<SpeedBarResources> Localizer
 
 @* START: CHANGE - Added Bootstrap border classes to the outer div *@
 <div class="progress border border-secondary" style="height: 20px;" title="@TooltipText">
@@ -52,5 +54,5 @@
     /// <summary>
     /// Generates the tooltip text.
     /// </summary>
-    private string TooltipText => $"Step {CurrentStep} of {MaxSteps}";
+    private string TooltipText => String.Format(Localizer["StepInfo"], CurrentStep, MaxSteps);
 }

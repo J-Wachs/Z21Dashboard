@@ -7,8 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Dashboard", "Z21Dashboar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
+		BrugerVejledning.md = BrugerVejledning.md
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
+		UserManual.md = UserManual.md
+		Z21Dashboard.png = Z21Dashboard.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Client", "Z21Client\Z21Client\Z21Client.csproj", "{B1775753-BA89-F2B6-D5D3-5BE4A914158B}"

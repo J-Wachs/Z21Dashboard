@@ -1,19 +1,32 @@
 @* 
-    This is the main dashboard component for the Z21Status application.
+    This is the main dashboard component for the Z21Dashboard application.
     It manages the connection state to the Z21 device and displays
     relevant information and controls based on that state.
 *@
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
+@using Z21Status.Application.Interfaces
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<DashboardResources> Localizer
+@inject IDocumentationService DocumentationService
 @implements IAsyncDisposable
 
 <!-- Global Settings Button -->
-<div style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;">
-    <button class="btn btn-lg btn-secondary" onclick="@OpenSettingsModal" title="Dashboard Settings">
+<div class="d-flex" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050; gap: 0.5rem;">
+    <button class="btn btn-lg btn-secondary d-flex align-items-center justify-content-center"
+            onclick="@OpenDocumentation"
+            title="@Localizer["Help"]"
+            style="width: 45px; height: 45px; padding: 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="yellow" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-1.057 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+        </svg>
+    </button>
+
+    <button class="btn btn-lg btn-secondary" onclick="@OpenSettingsModal" title="@Localizer["Settings"]">
         &#9881; <!-- Gear Icon -->
     </button>
 </div>
@@ -41,15 +54,14 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Settings</h5>
-                    <button type="button" class="btn-close" onclick="@CloseSettingsModal" aria-label="Close"></button>
+                    <h5 class="modal-title">@Localizer["EditDashboardSettings"]</h5>
+                    <button type="button" class="btn-close" onclick="@CloseSettingsModal" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Our DashboardSettings component is rendered here -->
                     <DashboardSettings />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="@CloseSettingsModal">Close</button>
+                    <button type="button" class="btn btn-secondary" onclick="@CloseSettingsModal">@Localizer["Close"]</button>
                 </div>
             </div>
         </div>
@@ -162,6 +174,11 @@
         await InvokeAsync(StateHasChanged);
         // Unsubscribe as we now have the result.
         Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
+    }
+
+    private async Task OpenDocumentation()
+    {
+        await DocumentationService.OpenManualAsync();
     }
 
     public async ValueTask DisposeAsync()

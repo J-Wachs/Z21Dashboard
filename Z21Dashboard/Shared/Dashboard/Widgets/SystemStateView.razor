@@ -3,15 +3,17 @@
 *@
 @using System.Text
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<SystemStateViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="System State"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -20,11 +22,11 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td>Main Current</td>
+                            <td class="text-nowrap">@Localizer["MainCurrent"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_systemState?.MainCurrentmA mA</text>
+                                    <text>@_systemState?.MainCurrentmA @Localizer["MilliAmpsShort"]</text>
                                 }
                                 else
                                 {
@@ -33,17 +35,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Programming Current</td>
+                            <td class="text-nowrap">@Localizer["ProgrammingCurrent"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
                                     @if (HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
                                     {
-                                        <text>@_systemState?.ProgCurrentmA mA</text>
+                                        <text>@_systemState?.ProgCurrentmA @Localizer["MilliAmpsShort"]</text>
                                     }
                                     else
                                     {
-                                        <text>N/A</text>
+                                        <text>-</text>
                                     }
                                 }
                                 else
@@ -53,8 +55,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Temperature</td>
-                            <td class="@_alertTemp">
+                            <td class="text-nowrap">@Localizer["Temperature"]</td>
+                            <td class="@_alertTemp text-nowrap">
                                 @if (_systemState is not null)
                                 {
                                     <text>@_systemState?.TemperatureC °C</text>
@@ -66,11 +68,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Supply voltage</td>
+                            <td class="text-nowrap">@Localizer["SupplyVoltage"]</td>
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_supplyVoltageV V</text>
+                                    <text>@_supplyVoltageV @Localizer["VoltShort"]</text>
                                 }
                                 else
                                 {
@@ -79,11 +81,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Internal voltage</td>
+                            <td class="text-nowrap">@Localizer["InternalVoltage"]</td>
                             <td class="@_alertVolt">
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_vccVoltageV V</text>
+                                    <text>@_vccVoltageV @Localizer["VoltShort"]</text>
                                 }
                                 else
                                 {

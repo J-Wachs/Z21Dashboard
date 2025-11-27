@@ -21,10 +21,10 @@
         <Nullable>enable</Nullable>
 
         <!-- Display name -->
-        <ApplicationTitle>Z21Status</ApplicationTitle>
+        <ApplicationTitle>Z21Dashboard</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.z21status</ApplicationId>
+        <ApplicationId>com.companyname.z21dashboard</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -64,6 +64,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
@@ -75,7 +77,189 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\Z21\" />
+      <Compile Update="Resources\Localization\SharedResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SharedResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\AboutResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AboutResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ConnectionViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConnectionViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\DashboardSettingsResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\DashboardWindowResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DashboardWindowResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\DashboardResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DashboardResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\RailComViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RailComViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\SpeedBarResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SpeedBarResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\LocoControl2Resources.Designer.cs">
+        <DependentUpon>LocoControl2Resources.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\LocoControlResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoControlResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\LocoListViewResources.da.Designer.cs">
+        <DependentUpon>LocoListViewResources.da.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\LocoListViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoListViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\LocoSlotViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoSlotViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\PowerChartResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PowerChartResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\RBusViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RBusViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\ShowLogViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ShowLogViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SystemStateFullViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\SystemStateViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SystemStateViewResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\TurnoutListViewResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>TurnoutListViewResources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Localization\SharedResources.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\AboutResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ConnectionViewResources.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConnectionViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardSettingsResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWindowResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DashboardWindowResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\DashboardResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DashboardResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\RailComViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RailComViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\SpeedBarResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SpeedBarResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControl2Resources.resx">
+        <LastGenOutput>LocoControl2Resources.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControlResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoControlResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoListViewResources.da.resx">
+        <LastGenOutput>LocoListViewResources.da.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoListViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoListViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoSlotViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoSlotViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\PowerChartResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PowerChartResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\RBusViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RBusViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\ShowLogViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ShowLogViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SystemStateFullViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SystemStateViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutListViewResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>TurnoutListViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Doc\BrugerVejledning.pdf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Doc\UserManual.pdf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

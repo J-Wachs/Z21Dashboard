@@ -8,8 +8,8 @@
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Widgets
-@implements IDisposable
 @inject IDashboardStateService DashboardStateService
+@implements IDisposable
 
 <div class="dashboard-canvas @DragClass"
      style="position: relative; min-height: 2000px; min-width: 2000px;"
@@ -24,7 +24,6 @@
         </div>
     }
 </div>
-
 
 @code {
     [Parameter]
@@ -146,8 +145,7 @@
             };
 
             // Check for components needing 'FirmwareVersion'.
-            if (state.ComponentType == typeof(LocoListOperationTimeView) ||
-                state.ComponentType == typeof(LocoListView) ||
+            if (state.ComponentType == typeof(LocoListView) ||
                 state.ComponentType == typeof(LocoSlotView) ||
                 state.ComponentType == typeof(LocoControl) ||
                 state.ComponentType == typeof(LocoControl2))
@@ -158,14 +156,15 @@
                 }
             }
             else if (state.ComponentType == typeof(SystemStateView) ||
-                     state.ComponentType == typeof(SystemStateFullView))
+                     state.ComponentType == typeof(SystemStateFullView) ||
+                     state.ComponentType == typeof(PowerChart))
             {
                 if (HardwareInfo is not null)
                 {
                     parameters["HardwareInfo"] = HardwareInfo;
                 }
             }
-            if (state.ComponentType == typeof(LocoListOperationTimeView) ||
+            if (state.ComponentType == typeof(LocoListView) ||
                 state.ComponentType == typeof(LocoControl) ||
                 state.ComponentType == typeof(LocoControl2))
             {
@@ -173,7 +172,6 @@
                 {
                     parameters["Z21Code"] = Z21Code;
                 }
-
             }
 
             state.Parameters = parameters;
@@ -195,6 +193,7 @@
             orderedByZ[i].ZIndex = i + 1;
         }
     }
+
     public void Dispose()
     {
         DashboardStateService.OnLayoutChanged -= OnLayoutChanged;

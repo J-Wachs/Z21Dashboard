@@ -6,6 +6,10 @@ using BlazorLogComponent.Services;
 using BlazorLogComponent.Logging;
 using Z21Client.Interfaces;
 using Z21Dashboard.Application.Interfaces;
+using Z21Status.Application.Interfaces;
+
+using Z21Status.Services;
+
 
 #if WINDOWS
 using Microsoft.UI;
@@ -16,9 +20,41 @@ namespace Z21Dashboard;
 
 public static class MauiProgram
 {
+    private static Mutex? _mutex;
     public static MauiApp CreateMauiApp()
     {
+#if WINDOWS
+        //
+        // The Z21Dashboard application is only allowed to run in one instance.
+        // The JSON settings file will be messed up if several instances are running,
+        // and there is no good reason to run more than one instance.
+        //
+        const string mutexName = "Z21Dashboard_SingleInstance_Mutex";
+        bool createdNew;
+
+        _mutex = new Mutex(true, mutexName, out createdNew);
+        if (!createdNew)
+        {
+            Environment.Exit(0);
+        }
+
+        // Manage the WebView2 folder for temp files:
+        // Find the path to the user's AppData folder
+        var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+        // Create a subfolder for the user
+        var userDataFolder = Path.Combine(appDataPath, "Z21DashboardApp", "WebView2Data");
+
+        // Make sure that this folder exists
+        Directory.CreateDirectory(userDataFolder);
+
+        // Tell WebView2 where to store temp files
+        Environment.SetEnvironmentVariable("WEBVIEW2_USER_DATA_FOLDER", userDataFolder);
+#endif
+
         var builder = MauiApp.CreateBuilder();
+        builder.Services.AddLocalization(options => options.ResourcesPath = string.Empty);
+
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -65,9 +101,6 @@ public static class MauiProgram
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
 #endif
-
-        // --- ADD THE FOLLOWING CODE ---
-
         // 1. Register the singleton logging service from your new component library.
         //    This makes ILoggingService available for injection throughout the app.
         builder.Services.AddSingleton<ILoggingService, LoggingService>();
@@ -96,6 +129,9 @@ public static class MauiProgram
 
         // Register the operating time service. It depends on IAppDataService and IZ21Client.
         builder.Services.AddSingleton<ILocoOperatingTimeService, LocoOperatingTimeService>();
+
+        // Register the service for opening documentation files.
+        builder.Services.AddSingleton<IDocumentationService, DocumentationService>();
 
         // --- END: SERVICE REGISTRATION SECTION ---
 

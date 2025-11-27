@@ -2,15 +2,17 @@
     Displays a list of active turnouts with their current state and allows control and configuration.
 *@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IStringLocalizer<TurnoutListViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="Active Turnouts"
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -18,33 +20,33 @@
             <table class="table table-hover table-bordered table-striped table-sm">
                 <thead class="sticky-top">
                     <tr>
-                        <th>Address</th>
-                        <th>Protocol</th>
-                        <th>Direction</th>
-                        <th>Last changed</th>
+                        <th>@Localizer["Address"]</th>
+                            <th>@Localizer["Protocol"]</th>
+                            <th>@Localizer["Direction"]</th>
+                            <th>@Localizer["LastChanged"]</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (activeTurnouts.Any())
                     {
-                        @foreach (var turnoutDisplay in activeTurnouts.Values.OrderBy(t => t.Info.Address))
-                        {
-                            <tr>
-                                <td><strong>@(turnoutDisplay.Info.Address + 1)</strong></td>
+                    @foreach (var turnoutDisplay in activeTurnouts.Values.OrderBy(t => t.Info.Address))
+                    {
+                        <tr>
+                            <td><strong>@(turnoutDisplay.Info.Address + 1)</strong></td>
                                 <td>@turnoutDisplay.Mode</td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" disabled="@_isLocked"
                                                 class="btn @(turnoutDisplay.Info.State is TurnoutState.Position2 ? "btn-success" : "btn-outline-success")"
                                                 @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position2)"
-                                                title="Straight/Green">
+                                                title="@Localizer["Straight"]">
                                             &uarr;
                                         </button>
                                         <button type="button" disabled="@_isLocked"
                                                 class="btn @(turnoutDisplay.Info.State is TurnoutState.Position1 ? "btn-danger" : "btn-outline-danger")"
                                                 @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position1)"
-                                                title="Divert/Red">
+                                                title="@Localizer["Divert"]">
                                             &#8599;
                                         </button>
                                     </div>
@@ -54,7 +56,7 @@
                                     <button class="btn btn-sm btn-outline-secondary p-0"
                                             style="width: 24px; height: 24px; line-height: 1;"
                                             @onclick="() => OpenEditDialog(turnoutDisplay)"
-                                            title="Edit Settings">
+                                            title="@Localizer["EditSettings"]">
                                         &#9881;
                                     </button>
                                 </td>
@@ -64,7 +66,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Waiting for turnout data...</td>
+                            <td colspan="5" class="text-center text-muted">@Localizer["WaitingForData"]</td>
                         </tr>
                     }
                 </tbody>
@@ -81,12 +83,12 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Settings for Turnout @(_selectedTurnoutForEdit?.Info.Address + 1)</h5>
-                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="Close"></button>
+                    <h5 class="modal-title">@Localizer["EditSettingsForTurnout"] @(_selectedTurnoutForEdit?.Info.Address + 1)</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">Protocol</label>
+                        <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
                         <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
                             <option value="@TurnoutMode.DCC">DCC</option>
                             <option value="@TurnoutMode.MM">MM</option>
@@ -94,8 +96,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">Cancel</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
                 </div>
             </div>
         </div>

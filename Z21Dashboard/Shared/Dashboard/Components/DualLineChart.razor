@@ -72,8 +72,8 @@
     private const int SvgHeight = 400;
     private const int Padding = 50;
 
-    private string _y1DataPoints = "";
-    private string _y2DataPoints = "";
+    private string _y1DataPoints = string.Empty;
+    private string _y2DataPoints = string.Empty;
     private List<AxisLabel> _xAxisLabels = new();
     private List<AxisLabel> _y1AxisLabels = new();
     private List<AxisLabel> _y2AxisLabels = new();
@@ -98,7 +98,7 @@
         var y1Min = 0.0;
         var y2Min = 0.0;
 
-        var y1Max = Data.Max(d => d.YAxis1Value) / 1000.0;
+        var y1Max = Data.Max(d => d.YAxis1Value);
         var y2Max = Data.Max(d => d.YAxis2Value);
 
         y1Max += y1Max * 0.05;
@@ -121,7 +121,7 @@
             var item = Data[i];
             var x = Padding + (i * xStep);
 
-            var y1ValueInVolts = item.YAxis1Value / 1000.0;
+            var y1ValueInVolts = item.YAxis1Value;
             var y1 = SvgHeight - Padding - ((y1ValueInVolts - y1Min) / y1Range * chartHeight);
             var y2 = SvgHeight - Padding - ((item.YAxis2Value - y2Min) / y2Range * chartHeight);
 

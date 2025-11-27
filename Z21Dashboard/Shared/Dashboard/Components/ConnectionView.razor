@@ -3,20 +3,20 @@
 *@
 @using System.Net
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using Z21Client.Interfaces
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
-@inject IZ21Client Z21Client
+@using Z21Dashboard.Shared.Dashboard.Components
 @inject IAppDataService AppDataService
+@inject IStringLocalizer<ConnectionViewResources> Localizer
+@inject IZ21Client Z21Client
 @implements IDisposable
 
 <div class="card shadow-sm border border-secondary col-md-4">
-    <div class="card-header d-flex justify-content-between align-items-center"
-         style="cursor: grab;"
-         @onmousedown="OnHeaderMouseDown"
-         @onmousedown:stopPropagation>
-        <h5 class="mb-0">Connection</h5>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">@Localizer["Title"]</h5>
         <span>
             @if (ConnectionState is ConnectionState.Connected)
             {
@@ -29,15 +29,15 @@
                         }
                         @if (_serialNumber is not null)
                         {
-                            <text>S/N: @_serialNumber.Value, </text>
+                            <text>@Localizer["SN"]: @_serialNumber.Value, </text>
                         }
 
-                        FW: @_hardwareInfo.FwVersion
+                        @Localizer["FW"]: @_hardwareInfo.FwVersion
                     </span>
                     <text>&nbsp;</text>
                 }
             }
-            <span class="badge @GetConnectionStatusClass()">@ConnectionState</span>
+            <span class="badge @GetConnectionStatusClass()">@Localizer[ConnectionState.ToString()]</span>
         </span>
     </div>
     <div class="card-body">
@@ -50,7 +50,7 @@
 
                 @if (ConnectionState == ConnectionState.Connected)
                 {
-                    <button class="btn btn-danger w-100" onclick="@Disconnect">Disconnect</button>
+                    <button class="btn btn-danger w-100" onclick="@Disconnect">@Localizer["Disconnect"]</button>
                 }
                 else
                 {
@@ -58,11 +58,11 @@
                         @if (ConnectionState == ConnectionState.Connecting)
                         {
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span class="ms-1">Connecting</span>
+                            <span class="ms-1">@Localizer["Connecting"]...</span>
                         }
                         else
                         {
-                            <span>Connect</span>
+                            <span>@Localizer["Connect"]</span>
                         }
                     </button>
                 }
@@ -73,16 +73,16 @@
                 <div class="btn-group w-100 mb-2" role="group">
                     <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
                             onclick="@SetTrackPowerOn" disabled="@(ConnectionState != ConnectionState.Connected)">
-                        Track Pwr On
+                        @Localizer["TrackPwrOn"]
                     </button>
                     <button class="btn @(_trackPowerState == TrackPowerState.Off ? "btn-secondary" : "btn-outline-secondary")"
                             onclick="@SetTrackPowerOff" disabled="@(ConnectionState != ConnectionState.Connected)">
-                        Track Pwr Off
+                        @Localizer["TrackPwrOff"]
                     </button>
                 </div>
 
                 <button class="btn btn-danger w-100" onclick="@SetEmergencyStop" disabled="@(ConnectionState != ConnectionState.Connected)">
-                    Emergency Stop
+                    @Localizer["EmergencyStop"]
                 </button>
             </div>
         </div>
@@ -90,7 +90,7 @@
         @if (ConnectionState == ConnectionState.Lost)
         {
             <div class="alert alert-danger mt-3 mb-0" role="alert">
-                Connection Lost.
+                @Localizer["ConnectionLost"]
             </div>
         }
     </div>
@@ -105,9 +105,6 @@
 
     [Parameter]
     public EventCallback OnDisconnect { get; set; }
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
     private const string Z21IpAddressKey = "Z21Connection_IpAddress";
     private string _ipAddress { get; set; } = string.Empty;
@@ -144,9 +141,9 @@
 
     private string Z21CodeText => _z21Code?.LockState switch
     {
-        Z21LockState.NoLock => "No lock",
-        Z21LockState.Locked => "Locked",
-        Z21LockState.Unlocked => "Unlocked",
+        Z21LockState.NoLock => Localizer["Nolock"],
+        Z21LockState.Locked => Localizer["Locked"],
+        Z21LockState.Unlocked => Localizer["Unlocked"],
         _ => string.Empty
     };
 

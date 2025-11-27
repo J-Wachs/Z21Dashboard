@@ -4,15 +4,21 @@
 *@
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
-@implements IDisposable
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IStringLocalizer<DashboardSettingsResources> Localizer
 @inject IDashboardStateService DashboardStateService
+@implements IDisposable
 
 <div class="card shadow-sm">
-    <div class="card-header">
-        <h5 class="mb-0">Dashboard Settings</h5>
+    @*
+        Header removed as the dashboard provdides one.
+        <div class="card-header">
+        <h5 class="mb-0">@Localizer["Title"]</h5>
     </div>
+    *@
     <div class="card-body">
-        <p class="card-text text-muted">Select which components to display on the dashboard.</p>
+        <p class="card-text text-muted">@Localizer["InfoText"]</p>
 
         @if (_allComponents.Any())
         {
@@ -37,7 +43,7 @@
         }
         else
         {
-            <p>No configurable dashboard components were found.</p>
+            <p>@Localizer["NoWidgets"]</p>
         }
     </div>
 </div>
