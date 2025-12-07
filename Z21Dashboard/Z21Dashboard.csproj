@@ -254,15 +254,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Doc\BrugerVejledning.pdf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Doc\UserManual.pdf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="LICENSE.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Doc\" />
     </ItemGroup>
 
 </Project>
