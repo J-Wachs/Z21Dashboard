@@ -1,0 +1,68 @@
+name: Build and Release of Z21Dashboard
+
+on:
+  # Trigger on push of tags matching v*, e.g., v1.0.0
+  push:
+    tags:
+      - 'v*'
+  # Allows you to run this workflow manually from the Actions tab for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+    # 1. Checkout the repository code
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Setup .NET 9 SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    # 3. Run Unit Tests
+    # Automatically finds and runs tests in the solution. Stops the workflow if any test fails.
+    - name: Run Unit Tests
+      run: dotnet test --configuration Release
+
+    # 4. Build and Publish the Application
+    # - Targets the specific .csproj file
+    # - Specifies the Windows framework explicitly
+    # - '--self-contained true' bundles the .NET runtime (users don't need to install .NET)
+    # - Output is directed to the './publish' folder
+    - name: Publish App
+      run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
+
+    # 5. Create ZIP file
+    # Compresses the contents of the './publish' folder into a zip file
+    - name: Create Zip file
+      run: Compress-Archive -Path ./publish/* -DestinationPath ./Z21Dashboard.zip
+
+    # 6. Compile Installer using Inno Setup
+    # - Installs the official Inno Setup compiler via Chocolatey (robust method)
+    # - Runs the compiler (ISCC.exe) on your script
+    # NOTE: Ensure 'Z21Dashboard.iss' matches your actual filename
+    - name: Compile Installer
+      run: |
+        choco install innosetup --no-progress
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Z21Dashboard.iss
+
+    # 7. Create GitHub Release and Upload Assets
+    # - This step ONLY runs if a Tag triggered the workflow (it skips on manual dispatch)
+    # - Uploads both the ZIP file and the EXE installer
+    # NOTE: Ensure 'Output/Z21DashboardSetup.exe' matches the output path defined in your .iss file
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          Z21Dashboard.zip
+          Output/Z21DashboardSetup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
