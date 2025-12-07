@@ -1,11 +1,11 @@
-name: Build and Release of Z21Dashboard
+name: Build and Release
 
 on:
   # Trigger on push of tags matching v*, e.g., v1.0.0
   push:
     tags:
       - 'v*'
-  # Allows you to run this workflow manually from the Actions tab for testing
+  # Allows manual testing via Actions tab
   workflow_dispatch:
 
 permissions:
@@ -16,55 +16,51 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # 1. Checkout the repository code
+    # 1. Checkout code (Fetch submodules recursively)
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    # --- NYT DEBUG TRIN START ---
-    # Dette lister hele mappestrukturen i loggen, så vi kan se hvor filerne er.
-    - name: List files (Debug)
-      run: Get-ChildItem -Recurse
-    # --- NYT DEBUG TRIN SLUT ---
-
-    # 2. Setup .NET 9 SDK
+    # 2. Setup .NET 9
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
     # 3. Run Unit Tests
-    # Automatically finds and runs tests in the solution. Stops the workflow if any test fails.
     - name: Run Unit Tests
       run: dotnet test --configuration Release
 
-    # 4. Build and Publish the Application
-    # - Targets the specific .csproj file
-    # - Specifies the Windows framework explicitly
-    # - '--self-contained true' bundles the .NET runtime (users don't need to install .NET)
-    # - Output is directed to the './publish' folder
+    # 4. Build and Publish App
+    # Output goes to './publish' which is used for Inno Setup
     - name: Publish App
       run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
 
-    # 5. Create ZIP file
-    # Compresses the contents of the './publish' folder into a zip file
+    # 5. Create ZIP file with specific structure (Subfolder + License)
     - name: Create Zip file
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./Z21Dashboard.zip
+      run: |
+        # Create a staging directory
+        New-Item -Path ./TempZip/Z21Dashboard -ItemType Directory -Force
+        
+        # Copy published app files into the subfolder
+        Copy-Item -Path ./publish/* -Destination ./TempZip/Z21Dashboard -Recurse
+        
+        # Copy license file to the root of the staging directory
+        # (Assumes LICENSE.txt exists in the root of your repository)
+        Copy-Item -Path ./LICENSE.txt -Destination ./TempZip/LICENSE.txt
+        
+        # Zip the staging directory contents
+        Compress-Archive -Path ./TempZip/* -DestinationPath ./Z21Dashboard.zip
 
-    # 6. Compile Installer using Inno Setup
-    # - Installs the official Inno Setup compiler via Chocolatey (robust method)
-    # - Runs the compiler (ISCC.exe) on your script
-    # NOTE: Ensure 'Z21Dashboard.iss' matches your actual filename
+    # 6. Compile Installer (Chocolatey method)
+    # Note: We still use 'publish' folder implicitly via the .iss file
     - name: Compile Installer
       run: |
         choco install innosetup --no-progress
-        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Z21Dashboard.iss
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup_script.iss
 
-    # 7. Create GitHub Release and Upload Assets
-    # - This step ONLY runs if a Tag triggered the workflow (it skips on manual dispatch)
-    # - Uploads both the ZIP file and the EXE installer
-    # NOTE: Ensure 'Output/Z21DashboardSetup.exe' matches the output path defined in your .iss file
+    # 7. Create GitHub Release
     - name: Create Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
