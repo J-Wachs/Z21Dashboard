@@ -17,7 +17,6 @@ jobs:
 
     steps:
     # 1. Checkout the repository code
-    # Important: 'submodules: recursive' ensures all submodule code is downloaded too.
     - name: Checkout code
       uses: actions/checkout@v4
       with:
@@ -30,41 +29,33 @@ jobs:
         dotnet-version: '9.0.x'
 
     # 3. Run Unit Tests
-    # Automatically finds and runs tests in the solution. Stops the workflow if any test fails.
     - name: Run Unit Tests
       run: dotnet test --configuration Release
 
     # 4. Build and Publish the Application
-    # - Output is directed to the './publish' folder.
-    # - '--self-contained true' bundles the .NET runtime (users don't need to install .NET).
     - name: Publish App
       run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
 
     # 5. Convert Markdown to PDF
-    # - Installs 'md-to-pdf' tool globally.
-    # - Creates a 'DOC' folder inside './publish'.
-    # - Converts the two MD files and moves them into that folder.
-    # - Because they are in './publish', they will be included in both the ZIP and the Installer automatically.
+    # Added '-Force' to Move-Item to overwrite existing files if they exist
     - name: Convert Markdown to PDF
       run: |
         npm install -g md-to-pdf
         
-        # Create DOC folder
+        # Create DOC folder (Force creates it even if it exists)
         New-Item -Path ./publish/DOC -ItemType Directory -Force
 
         # Convert UserManual
         md-to-pdf UserManual.md
-        Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf
+        # Move and overwrite (-Force) if the file is already there
+        Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf -Force
 
         # Convert Brugervejledning
         md-to-pdf Brugervejledning.md
-        Move-Item -Path Brugervejledning.pdf -Destination ./publish/DOC/Brugervejledning.pdf
+        # Move and overwrite (-Force) if the file is already there
+        Move-Item -Path Brugervejledning.pdf -Destination ./publish/DOC/Brugervejledning.pdf -Force
 
     # 6. Create ZIP file with specific structure
-    # - Creates a staging folder 'TempZip'.
-    # - Copies 'publish' content (including the new DOC folder) into 'TempZip/Z21Dashboard'.
-    # - Copies 'LICENSE.txt' to the root of 'TempZip'.
-    # - Zips the content so the user sees the folder and license immediately upon opening.
     - name: Create Zip file
       run: |
         # Create a staging directory structure
@@ -80,16 +71,12 @@ jobs:
         Compress-Archive -Path ./TempZip/* -DestinationPath ./Z21Dashboard.zip
 
     # 7. Compile Installer using Inno Setup
-    # - Installs Inno Setup via Chocolatey.
-    # - Runs the script which pulls files from './publish' (which now includes PDFs).
     - name: Compile Installer
       run: |
         choco install innosetup --no-progress
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup_script.iss
 
     # 8. Create GitHub Release and Upload Assets
-    # - Only runs if triggered by a Tag.
-    # - Uploads the specific ZIP and the EXE installer.
     - name: Create Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
