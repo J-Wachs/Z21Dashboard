@@ -20,6 +20,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # --- NYT DEBUG TRIN START ---
+    # Dette lister hele mappestrukturen i loggen, så vi kan se hvor filerne er.
+    - name: List files (Debug)
+      run: Get-ChildItem -Recurse
+    # --- NYT DEBUG TRIN SLUT ---
+
     # 2. Setup .NET 9 SDK
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
