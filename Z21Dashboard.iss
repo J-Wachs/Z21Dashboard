@@ -56,44 +56,46 @@ var
   FindRec: TFindRec;
   UsersPath, TargetPath: String;
   SystemDrive: String;
+  DeleteUserSetting: Integer;
 begin
   if CurUninstallStep = usUninstall then
   begin
-    if MsgBox(CustomMessage('DeleteDataPrompt'), mbConfirmation, MB_YESNO) = IDYES then
+    DeleteUserSetting := MsgBox(CustomMessage('DeleteDataPrompt'), mbConfirmation, MB_YESNO);
+    // Find systemdrive
+    SystemDrive := ExpandConstant('{sd}');
+    UsersPath := SystemDrive + '\Users';
+
+    if FindFirst(UsersPath + '\*', FindRec) then
     begin
-        // Find system drive
-        SystemDrive := ExpandConstant('{sd}');
-        UsersPath := SystemDrive + '\Users';
+      try
+        repeat
+          if ((FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0) and
+             (FindRec.Name <> '.') and
+             (FindRec.Name <> '..') then
+          begin
+            // Remove the folder where WebView2 data is stored.
+            TargetPath := UsersPath + '\' + FindRec.Name + '\AppData\Local\Z21DashboardApp';
 
-        if FindFirst(UsersPath + '\*', FindRec) then
-        begin
-          try
-            repeat
-              if ((FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0) and
-                 (FindRec.Name <> '.') and
-                 (FindRec.Name <> '..') then
+            if DirExists(TargetPath) then
+            begin
+              DelTree(TargetPath, True, True, True);
+            end;
+            
+            if (DeleteUserSetting = IDYES) then
+            begin
+              // Remove the folder where the user's widgets and locomotive etc. info.
+              TargetPath := UsersPath + '\' + FindRec.Name + '\AppData\Roaming\Z21DashboardApp';
+              
+              if DirExists(TargetPath) then
               begin
-                // Remove the folder where WebView2 data is stored.
-                TargetPath := UsersPath + '\' + FindRec.Name + '\AppData\Local\Z21DashboardApp';
-
-                if DirExists(TargetPath) then
-                begin
-                  DelTree(TargetPath, True, True, True);
-                end;
-                
-                // Remove the folder where the user's widgets and locomotive info are stored.
-                TargetPath := UsersPath + '\' + FindRec.Name + '\AppData\Roaming\Z21DashboardApp';
-                
-                if DirExists(TargetPath) then
-                begin
-                  DelTree(TargetPath, True, True, True);
-                end;
+                DelTree(TargetPath, True, True, True);
               end;
-            until not FindNext(FindRec);
-          finally
-            FindClose(FindRec);
+            end;
           end;
-        end;
+        until not FindNext(FindRec);
+      finally
+        FindClose(FindRec);
+      end;
     end;
   end;
 end;
