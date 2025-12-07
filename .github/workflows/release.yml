@@ -19,6 +19,8 @@ jobs:
     # 1. Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     # --- NYT DEBUG TRIN START ---
     # Dette lister hele mappestrukturen i loggen, så vi kan se hvor filerne er.
