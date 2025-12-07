@@ -76,6 +76,16 @@ jobs:
         choco install innosetup --no-progress
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Z21Dashboard.iss
 
+    # 7.1. Upload files
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Mine-Test-Filer
+        path: |
+          Z21Dashboard.zip
+          Output/Z21DashboardSetup.exe
+        retention-days: 2
+
     # 8. Create GitHub Release and Upload Assets
     - name: Create Release
       uses: softprops/action-gh-release@v2
