@@ -5,7 +5,7 @@ on:
   push:
     tags:
       - 'v*'
-  # Allows manual testing via Actions tab
+  # Allows you to run this workflow manually from the Actions tab for testing
   workflow_dispatch:
 
 permissions:
@@ -16,51 +16,80 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # 1. Checkout code (Fetch submodules recursively)
+    # 1. Checkout the repository code
+    # Important: 'submodules: recursive' ensures all submodule code is downloaded too.
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    # 2. Setup .NET 9
+    # 2. Setup .NET 9 SDK
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
     # 3. Run Unit Tests
+    # Automatically finds and runs tests in the solution. Stops the workflow if any test fails.
     - name: Run Unit Tests
       run: dotnet test --configuration Release
 
-    # 4. Build and Publish App
-    # Output goes to './publish' which is used for Inno Setup
+    # 4. Build and Publish the Application
+    # - Output is directed to the './publish' folder.
+    # - '--self-contained true' bundles the .NET runtime (users don't need to install .NET).
     - name: Publish App
       run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
 
-    # 5. Create ZIP file with specific structure (Subfolder + License)
+    # 5. Convert Markdown to PDF
+    # - Installs 'md-to-pdf' tool globally.
+    # - Creates a 'DOC' folder inside './publish'.
+    # - Converts the two MD files and moves them into that folder.
+    # - Because they are in './publish', they will be included in both the ZIP and the Installer automatically.
+    - name: Convert Markdown to PDF
+      run: |
+        npm install -g md-to-pdf
+        
+        # Create DOC folder
+        New-Item -Path ./publish/DOC -ItemType Directory -Force
+
+        # Convert UserManual
+        md-to-pdf UserManual.md
+        Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf
+
+        # Convert Brugervejledning
+        md-to-pdf Brugervejledning.md
+        Move-Item -Path Brugervejledning.pdf -Destination ./publish/DOC/Brugervejledning.pdf
+
+    # 6. Create ZIP file with specific structure
+    # - Creates a staging folder 'TempZip'.
+    # - Copies 'publish' content (including the new DOC folder) into 'TempZip/Z21Dashboard'.
+    # - Copies 'LICENSE.txt' to the root of 'TempZip'.
+    # - Zips the content so the user sees the folder and license immediately upon opening.
     - name: Create Zip file
       run: |
-        # Create a staging directory
+        # Create a staging directory structure
         New-Item -Path ./TempZip/Z21Dashboard -ItemType Directory -Force
         
-        # Copy published app files into the subfolder
+        # Copy app files + documentation
         Copy-Item -Path ./publish/* -Destination ./TempZip/Z21Dashboard -Recurse
         
-        # Copy license file to the root of the staging directory
-        # (Assumes LICENSE.txt exists in the root of your repository)
+        # Copy license file to root of zip
         Copy-Item -Path ./LICENSE.txt -Destination ./TempZip/LICENSE.txt
         
-        # Zip the staging directory contents
+        # Create the final zip file
         Compress-Archive -Path ./TempZip/* -DestinationPath ./Z21Dashboard.zip
 
-    # 6. Compile Installer (Chocolatey method)
-    # Note: We still use 'publish' folder implicitly via the .iss file
+    # 7. Compile Installer using Inno Setup
+    # - Installs Inno Setup via Chocolatey.
+    # - Runs the script which pulls files from './publish' (which now includes PDFs).
     - name: Compile Installer
       run: |
         choco install innosetup --no-progress
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup_script.iss
 
-    # 7. Create GitHub Release
+    # 8. Create GitHub Release and Upload Assets
+    # - Only runs if triggered by a Tag.
+    # - Uploads the specific ZIP and the EXE installer.
     - name: Create Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
