@@ -1,5 +1,5 @@
 ﻿using Z21Client.Helpers;
-using Z21Client.Interfaces;
+using Z21Client;
 using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
 
