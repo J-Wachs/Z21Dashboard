@@ -10,6 +10,12 @@ applikation bruger `Z21Client`-biblioteket til at kommunikere med hardwaren.
 Z21Client repo findes her:
 [https://github.com/J-Wachs/Z21Client](https://github.com/J-Wachs/Z21Client)
 
+## Nyheder i denne version 
+
+Version 1.1:
+* Upgraderet til .NET 10. Vær opmærkom på, at du skal bruge Visual Studio 2026 arbejde med denne version.
+ 
+
 ## Egenskaber
 
 Z21Dashboard tilbyder en moderne og interaktiv brugerflade med følgende nøglefunktioner:
@@ -46,7 +52,7 @@ og skjules af brugeren.
 
 ## Hvordan det virker
 
-Z21Dashboard er bygget som en **.NET MAUI Blazor Hybrid**-applikation ved hjælp af **.NET 9**. Denne arkitektur gør
+Z21Dashboard er bygget som en **.NET MAUI Blazor Hybrid**-applikation ved hjælp af **.NET 10**. Denne arkitektur gør
 det muligt for en moderne web-baseret brugerflade (bygget med Blazor-komponenter) at køre som en native
 desktop-applikation på Windows.
 
@@ -63,15 +69,15 @@ betyder, at benytter du Z21 appen, multiMAUS eller wlanMAUS, så afspejles aktivi
 
 ## Kom Godt I Gang
 
-For at køre Z21Dashboard-applikationen skal du have .NET 9 SDK installeret.
+For at køre Z21Dashboard-applikationen skal du have .NET 10 SDK installeret.
 
 Hvis du vil se og lave din egen version af Z21Dashboard, følg punkterne herunder. Vil du blot have selve
 applikationen og bruge den, da skal du downloade den køreklar udgave.
 
-1.  Klon "repository'et" fra GitHub.
-2.  Åbn løsningsfilen (`.sln`) i Visual Studio 2022 (Preview anbefales til .NET 9).
-3.  Sørg for, at `Z21Dashboard`-projektet er sat som opstartsprojekt.
-4.  Kør applikationen (tryk F5).
+1.  Klon "repository'et" fra GitHub
+2.  Åbn løsningsfilen (`.sln`) i Visual Studio 2026
+3.  Sørg for, at `Z21Dashboard`-projektet er sat som opstartsprojekt
+4.  Kør applikationen (tryk F5)
 
 ## Ofte Stillede Spørgsmål (FAQ)
 
@@ -137,9 +143,14 @@ and hidden by the user.
 
 <img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
 
+## What's New in this Version
+
+Version 1.1:
+* Upgraded to .NET 10. Note that you will need Visual Studio 2026 to work with this version
+
 ## How it Works
 
-Z21Dashboard is built as a **.NET MAUI Blazor Hybrid** application using **.NET 9**. This architecture allows a
+Z21Dashboard is built as a **.NET MAUI Blazor Hybrid** application using **.NET 10**. This architecture allows a
 modern web-based UI (built with Blazor components) to run as a native desktop application on Windows.
 
 The Z21Dashboard reveives events from the Z21 central station, and these events is interpreted and reflected
@@ -156,13 +167,13 @@ reflected on the dashboard.
 
 ## Getting Started
 
-To run the Z21Dashboard application, you will need the .NET 9 SDK installed.
+To run the Z21Dashboard application, you will need the .NET 10 SDK installed.
 
 If you want to see and make your own version of Z21Dashboard, follow the steps below. If you just want to run the
 application and use it, then you will have to download the run-able verison.
 
 1.  Clone the repository from GitHub.
-2.  Open the solution file (`.sln`) in Visual Studio 2022 (Preview recommended for .NET 9).
+2.  Open the solution file (`.sln`) in Visual Studio 2026.
 3.  Ensure the `Z21Dashboard` project is set as the startup project.
 4.  Run the application (press F5).
 
