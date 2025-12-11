@@ -167,7 +167,7 @@
 
     private TrackPowerState? _trackPowerState;
 
-    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(500));
+    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(1500));
     private readonly Debouncer _speedDebouncer = new(TimeSpan.FromMilliseconds(150));
 
     // --- Fields for the Edit dialog ---
@@ -259,8 +259,14 @@
 
     private void OnAddressInput(ChangeEventArgs e)
     {
-        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress))
+        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress) && newAddress > 0)
         {
+            if (newAddress > 10239)
+            {
+                _inputAddress = 0;
+                return;
+            }
+
             _inputAddress = newAddress;
             _addressDebouncer.Debounce(() => SetActiveAddress(newAddress));
         }
