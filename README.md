@@ -10,6 +10,8 @@ applikation bruger `Z21Client`-biblioteket til at kommunikere med hardwaren.
 Z21Client repo findes her:
 [https://github.com/J-Wachs/Z21Client](https://github.com/J-Wachs/Z21Client)
 
+Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
+
 ## Nyheder i denne version 
 
 Version 1.1:
@@ -111,6 +113,8 @@ the `Z21Client` library to communicate with the hardware.
 
 The Z21Client repo can be found here:
 [https://github.com/J-Wachs/Z21Client](https://github.com/J-Wachs/Z21Client)
+
+Z21Dashboard (and Z21Client) has been developed using the 'AI Pair Programming' method.
 
 ## Features
 
