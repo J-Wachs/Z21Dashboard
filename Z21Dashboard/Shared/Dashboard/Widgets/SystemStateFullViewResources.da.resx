@@ -130,7 +130,7 @@
     <value>Aktiv</value>
   </data>
   <data name="CapabilitiesFlags" xml:space="preserve">
-    <value>Kapacitetsflag</value>
+    <value>Flag for muligheder</value>
   </data>
   <data name="CentralStateFlags" xml:space="preserve">
     <value>Central tilstandsflag</value>

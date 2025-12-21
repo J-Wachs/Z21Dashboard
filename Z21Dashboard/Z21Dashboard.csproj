@@ -82,17 +82,17 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>SharedResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\AboutResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AboutResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ConnectionViewResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\ConnectionResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>ConnectionViewResources.resx</DependentUpon>
+        <DependentUpon>ConnectionResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\DashboardSettingsResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
@@ -179,15 +179,15 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\AboutResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ConnectionViewResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\ConnectionResources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>ConnectionViewResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>ConnectionResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardSettingsResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>

@@ -101,26 +101,25 @@
                 <h5>@Localizer["CentralStateFlags"] (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
                 <pre>@if (_systemState is not null)
                 {
-                     @DecodeCentralState(_systemState!.CentralState)    
+                     @DecodeCentralState(_systemState.CentralState)
                 }
             </pre>
             </div>
             <div class="col-md-3">
                 <h5>@Localizer["ExtendedStateFlags"] (@("0x" + _systemState?.CentralStateEx.ToString("X2")))</h5>
-                <pre>@if (_systemState is not null)
+                <pre>@if (_systemState is not null && HardwareInfo is not null)
                 {
-                     @DecodeCentralStateEx(_systemState!.CentralStateEx, HardwareInfo!.FwVersion)
-                    
+                     @DecodeCentralStateEx(_systemState.CentralStateEx, HardwareInfo.FwVersion)
                 }
             </pre>
             </div>
-            @if (HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42)
+            @if (HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42 && _systemState is not null && _systemState.Capabilities is not null)
             {
                 <div class="col-md-3">
-                    <h5>@Localizer["CapabilitiesFlags"] (@("0x" + _systemState?.Capabilities!.Value.ToString("X2")))</h5>
+                    <h5>@Localizer["CapabilitiesFlags"] (@("0x" + _systemState.Capabilities.Value.ToString("X2")))</h5>
                     <pre>@if (_systemState is not null)
                     {
-                         @DecodeCapabilities(_systemState!.Capabilities!.Value)    
+                         @DecodeCapabilities(_systemState.Capabilities.Value)    
                     }
                     </pre>
                 </div>

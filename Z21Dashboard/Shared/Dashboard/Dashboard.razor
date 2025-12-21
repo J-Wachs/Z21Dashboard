@@ -3,16 +3,20 @@
     It manages the connection state to the Z21 device and displays
     relevant information and controls based on that state.
 *@
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
+@using Z21Dashboard.Shared.Dashboard.SystemWidgets
+@using Z21Dashboard.Shared.Dashboard.Widgets
 @using Z21Status.Application.Interfaces
 @inject IZ21Client Z21Client
 @inject IStringLocalizer<DashboardResources> Localizer
 @inject IDocumentationService DocumentationService
+@inject IDashboardStateService DashboardStateService
 @implements IAsyncDisposable
 
 <!-- Global Settings Button -->
@@ -32,18 +36,22 @@
 </div>
 
 <div class="container-fluid">
-    <!-- Styling classes to create a visually distinct control area -->
-    <div class="row bg-light border border-secondary rounded p-3 mb-3">
-        <ConnectionView ConnectionState="_connectionState" OnConnect="Connect" OnDisconnect="Disconnect" />
-        <About />
-    </div>
+    <div class="dashboard-canvas @DragClass"
+         style="position: relative; min-height: 2000px; min-width: 2000px;"
+         @onmousemove="HandleMouseMove"
+         @onmouseup="HandleMouseUp">
 
-    @if (_connectionState is ConnectionState.Connected)
-    {
-        // The entire static layout has been replaced by our new dynamic Dashboard component.
-        // We pass the HardwareInfo down, so it can be distributed to the child components as needed.
-        <Viewport HardwareInfo="_hardwareInfo" Z21Code="_z21Code" />
-    }
+        @foreach (var componentState in _widgets)
+        {
+            @if (componentState.IsSystemComponent || _connectionState is ConnectionState.Connected)
+            {
+                <div @key="componentState.Id" class="absolute-item"
+                     style="@GetAbsoluteItemStyle(componentState)">
+                    <DynamicComponent Type="@(componentState.ComponentType!)" Parameters="@componentState.Parameters" />
+                </div>
+            }
+        }
+    </div>
 </div>
 
 <!-- Settings Modal -->
@@ -70,13 +78,175 @@
 
 
 @code {
-    private BroadcastFlagsChangedEventArgs? _broadcastFlags;
     private HardwareInfo? _hardwareInfo;
     private Z21Code? _z21Code;
     private ConnectionState _connectionState = ConnectionState.Disconnected;
+    private List<DashboardComponentState> _widgets { get; set; } = [];
+    private DashboardComponentState? _draggedComponent;
+    private bool _isDragging = false;
+    private double _dragOffsetX = 0;
+    private double _dragOffsetY = 0;
+
+    // A computed property to apply a CSS class only during a drag operation.
+    private string DragClass => _isDragging ? "no-select" : string.Empty;
 
     // --- NEW: State for settings modal ---
     private bool _isSettingsModalOpen = false;
+
+    protected override void OnInitialized()
+    {
+        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
+        LoadVisibleComponents();
+    }
+
+    private async void OnLayoutChanged()
+    {
+        await InvokeAsync(() =>
+        {
+            LoadVisibleComponents();
+            StateHasChanged();
+        });
+    }
+
+    private void LoadVisibleComponents()
+    {
+        _widgets = DashboardStateService.GetVisibleComponentStates();
+        UpdateComponentParameters();
+    }
+
+    private void HandleMouseDown(DashboardComponentState component, MouseEventArgs args)
+    {
+        _isDragging = true;
+        _draggedComponent = component;
+        _dragOffsetX = args.ClientX - component.PositionX;
+        _dragOffsetY = args.ClientY - component.PositionY;
+        BringToFront(component);
+    }
+
+    private void BringToFront(DashboardComponentState component)
+    {
+        if (component.ZIndex >= GetHighestZIndex() && _widgets.Count > 1)
+        {
+            return;
+        }
+
+        component.ZIndex = GetHighestZIndex() + 1;
+        StateHasChanged();
+    }
+
+    private void HandleMouseMove(MouseEventArgs args)
+    {
+        if (!_isDragging || _draggedComponent == null) return;
+        var newX = (int)(args.ClientX - _dragOffsetX);
+        var newY = (int)(args.ClientY - _dragOffsetY);
+        _draggedComponent.PositionX = newX > 0 ? newX : 0;
+        _draggedComponent.PositionY = newY > 0 ? newY : 0;
+        StateHasChanged();
+    }
+
+    private async void HandleMouseUp()
+    {
+        if (!_isDragging || _draggedComponent == null) return;
+        NormalizeZIndexes();
+        var allComponents = DashboardStateService.GetComponentStates();
+        var componentToUpdate = allComponents.FirstOrDefault(c => c.Id == _draggedComponent.Id);
+        if (componentToUpdate != null)
+        {
+            componentToUpdate.PositionX = _draggedComponent.PositionX;
+            componentToUpdate.PositionY = _draggedComponent.PositionY;
+            componentToUpdate.ZIndex = _draggedComponent.ZIndex;
+        }
+        await DashboardStateService.UpdateLayout(allComponents);
+        _isDragging = false;
+        _draggedComponent = null;
+    }
+
+    private string GetAbsoluteItemStyle(DashboardComponentState state)
+    {
+        var style = $"position: absolute; " +
+                    $"left: {state.PositionX}px; " +
+                    $"top: {state.PositionY}px; " +
+                    $"width: {state.Width}px; " +
+                    $"z-index: {state.ZIndex};";
+
+        if (_isDragging && _draggedComponent?.Id == state.Id)
+        {
+            style += " user-select: none; opacity: 0.7; pointer-events: none;";
+        }
+
+        if (state.Height > 0)
+        {
+            style += $" height: {state.Height}px;";
+        }
+        return style;
+    }
+
+    private void UpdateComponentParameters()
+    {
+        foreach (var state in _widgets)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                ["OnHeaderMouseDown"] = new EventCallback<MouseEventArgs>(this, (MouseEventArgs args) => HandleMouseDown(state, args)),
+                ["OnBringToFront"] = new EventCallback(this, () => BringToFront(state))
+            };
+
+            // Check for components needing 'FirmwareVersion'.
+            if (state.ComponentType == typeof(LocoListView) ||
+                state.ComponentType == typeof(LocoSlotView) ||
+                state.ComponentType == typeof(LocoControl) ||
+                state.ComponentType == typeof(LocoControl2))
+            {
+                if (_hardwareInfo?.FwVersion is not null)
+                {
+                    parameters["FirmwareVersion"] = _hardwareInfo.FwVersion;
+                }
+            }
+            else if (state.ComponentType == typeof(SystemStateView) ||
+                     state.ComponentType == typeof(SystemStateFullView) ||
+                     state.ComponentType == typeof(PowerChart))
+            {
+                if (_hardwareInfo is not null)
+                {
+                    parameters["HardwareInfo"] = _hardwareInfo;
+                }
+            }
+            if (state.ComponentType == typeof(LocoListView) ||
+                state.ComponentType == typeof(LocoControl) ||
+                state.ComponentType == typeof(LocoControl2))
+            {
+                if (_z21Code is not null)
+                {
+                    parameters["Z21Code"] = _z21Code;
+                }
+            }
+
+            if (state.ComponentType == typeof(Connection))
+            {
+                parameters["ConnectionState"] = _connectionState;
+                parameters["OnConnect"] = EventCallback.Factory.Create<string>(this, Connect);
+                parameters["OnDisconnect"] = EventCallback.Factory.Create(this, Disconnect);
+            }
+
+            state.Parameters = parameters;
+        }
+    }
+
+    private int GetHighestZIndex()
+    {
+        if (!_widgets.Any())
+            return 1;
+        return _widgets.Max(c => c.ZIndex);
+    }
+
+    private void NormalizeZIndexes()
+    {
+        var orderedByZ = _widgets.OrderBy(c => c.ZIndex).ToList();
+        for (int i = 0; i < orderedByZ.Count; i++)
+        {
+            orderedByZ[i].ZIndex = i + 1;
+        }
+    }
 
     private void OpenSettingsModal()
     {
@@ -89,26 +259,26 @@
         _isSettingsModalOpen = false;
         StateHasChanged();
     }
-    // ------------------------------------
 
     private async Task Connect(string ipAddress)
     {
         _connectionState = ConnectionState.Connecting;
-        _broadcastFlags = null;
+        UpdateComponentParameters();
+
         _hardwareInfo = null;
 
         SubscribeToEvents();
         bool success = await Z21Client.ConnectAsync(ipAddress);
         if (success)
         {
-            _connectionState = ConnectionState.Connected;
-            await Z21Client.GetSerialNumberAsync();
             await Z21Client.GetHardwareInfoAsync();
+            await Task.Delay(200);
             await Z21Client.GetZ21CodeAsync();
         }
         else
         {
             _connectionState = ConnectionState.Disconnected;
+            UpdateComponentParameters();
             UnsubscribeFromEvents();
         }
     }
@@ -118,16 +288,15 @@
         await Z21Client.DisconnectAsync();
         UnsubscribeFromEvents();
 
-        _broadcastFlags = null;
         _hardwareInfo = null;
 
         _connectionState = ConnectionState.Disconnected;
+        UpdateComponentParameters();
     }
 
     private void SubscribeToEvents()
     {
         Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
-        Z21Client.BroadcastFlagsReceived += OnBroadcastFlagsReceived;
         Z21Client.HardwareInfoReceived += OnHardwareInfoReceived;
         Z21Client.Z21CodeReceived += OnZ21CodeReceived;
     }
@@ -135,15 +304,9 @@
     private void UnsubscribeFromEvents()
     {
         Z21Client.ConnectionStateChanged -= OnConnectionStateChanged;
-        Z21Client.BroadcastFlagsReceived -= OnBroadcastFlagsReceived;
         Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
         Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
-    }
-
-    private async Task GetBroadcastFlags()
-    {
-        _broadcastFlags = null;
-        await Z21Client.GetBroadcastFlagsAsync();
+        DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
     }
 
     private async void OnConnectionStateChanged(object? sender, ConnectionStateChangedEventArgs e)
@@ -153,12 +316,7 @@
         {
             UnsubscribeFromEvents();
         }
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async void OnBroadcastFlagsReceived(object? sender, BroadcastFlagsChangedEventArgs e)
-    {
-        _broadcastFlags = e;
+        UpdateComponentParameters();
         await InvokeAsync(StateHasChanged);
     }
 
@@ -166,14 +324,19 @@
     {
         _hardwareInfo = e;
         await InvokeAsync(StateHasChanged);
+        // Unsubscribe as we now have the result.
+        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
+        UpdateComponentParameters();
     }
 
     private async void OnZ21CodeReceived(object? sender, Z21Code e)
     {
         _z21Code = e;
-        await InvokeAsync(StateHasChanged);
         // Unsubscribe as we now have the result.
         Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
+        _connectionState = ConnectionState.Connected;
+        UpdateComponentParameters();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task OpenDocumentation()

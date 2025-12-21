@@ -10,6 +10,12 @@ public class DashboardComponentState
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Used for system widgets (e.g. ConnectionView) that should always be visible
+    /// </summary>
+    public bool IsSystemComponent { get; set; } = false;
+
     public bool IsVisible { get; set; } = true;
 
     // --- NEW: Absolute layout properties ---

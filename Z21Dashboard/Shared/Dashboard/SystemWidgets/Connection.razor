@@ -10,37 +10,37 @@
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IAppDataService AppDataService
-@inject IStringLocalizer<ConnectionViewResources> Localizer
+@inject IStringLocalizer<ConnectionResources> Localizer
 @inject IZ21Client Z21Client
 @implements IDisposable
 
-<div class="card shadow-sm border border-secondary col-md-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">@Localizer["Title"]</h5>
-        <span>
-            @if (ConnectionState is ConnectionState.Connected)
+<DashboardWindow HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <HeaderContent>
+        @if (ConnectionState is ConnectionState.Connected)
+        {
+            if (_hardwareInfo is not null)
             {
-                if (_hardwareInfo is not null)
-                {
-                    <span class="badge bg-info">
-                        @_hardwareInfo.HwType, @if (_z21Code is not null)
-                        {
-                            <text>@Z21CodeText, </text>
-                        }
-                        @if (_serialNumber is not null)
-                        {
-                            <text>@Localizer["SN"]: @_serialNumber.Value, </text>
-                        }
+                <span class="badge bg-info">
+                    @_hardwareInfo.HwType, @if (_z21Code is not null)
+                    {
+                        <text>@Z21CodeText, </text>
+                    }
+                    @if (_serialNumber is not null)
+                    {
+                        <text>@Localizer["SN"]: @_serialNumber.Value, </text>
+                    }
 
-                        @Localizer["FW"]: @_hardwareInfo.FwVersion
-                    </span>
-                    <text>&nbsp;</text>
-                }
+                    @Localizer["FW"]: @_hardwareInfo.FwVersion
+                </span>
+                <text>&nbsp;</text>
             }
-            <span class="badge @GetConnectionStatusClass()">@Localizer[ConnectionState.ToString()]</span>
-        </span>
-    </div>
-    <div class="card-body">
+        }
+        <span class="badge @GetConnectionStatusClass()">@Localizer[ConnectionState.ToString()]</span>
+    </HeaderContent>
+
+    <Content>
         <div class="row g-2">
             <!-- Left Column -->
             <div class="col-6">
@@ -93,10 +93,16 @@
                 @Localizer["ConnectionLost"]
             </div>
         }
-    </div>
-</div>
+    </Content>
+</DashboardWindow>
 
 @code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
     [Parameter]
     public ConnectionState ConnectionState { get; set; } = ConnectionState.Disconnected;
 
@@ -113,6 +119,7 @@
     private HardwareInfo? _hardwareInfo;
     private Z21Code? _z21Code;
     private TrackPowerState? _trackPowerState;
+    private ConnectionState _prevConnectionState = ConnectionState.Disconnected;
 
     protected override void OnInitialized()
     {
@@ -149,22 +156,30 @@
 
     private async Task Connect()
     {
-        // Subscribe to SystemState *before* connecting to ensure we catch the response.
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
-
         await OnConnect.InvokeAsync(_ipAddress);
-        SubscribeToEvents();
+      
+        StateHasChanged();
+    }
 
-        // After connection is confirmed, request the system state.
-        if (ConnectionState == ConnectionState.Connected)
+    protected override async Task OnParametersSetAsync()
+    {
+        // Due to the fact that we in Connect is in the process of connecting, we
+        // do not have information about if we did succeed or not. Therefore, we 
+        // check here for a change in connection state to Connected to perform
+        if (ConnectionState != _prevConnectionState && ConnectionState is ConnectionState.Connected)
         {
+            SubscribeToEvents();
+            
+            await Z21Client.GetZ21CodeAsync();
+            await Z21Client.GetHardwareInfoAsync();
+            await Z21Client.GetSerialNumberAsync();
+            // This call is to trigger the initial state of the track power.
             await Z21Client.GetSystemStateAsync();
+
         }
-        else
-        {
-            // If connection failed, we should clean up the subscription.
-            Z21Client.SystemStateChanged -= OnSystemStateChanged;
-        }
+        _prevConnectionState = ConnectionState;
+
+        await base.OnParametersSetAsync();
     }
 
     private async Task Disconnect()
@@ -192,10 +207,7 @@
         Z21Client.Z21CodeReceived += OnZ21CodeReceived;
         Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
         Z21Client.EmergencyStopReceived += OnEmergencyStopReceived;
-
-        Z21Client.GetZ21CodeAsync();
-        Z21Client.GetHardwareInfoAsync();
-        Z21Client.GetSerialNumberAsync();
+        Z21Client.SystemStateChanged += OnSystemStateChanged;
     }
 
     private void UnsubscribeFromEvents()
@@ -211,16 +223,22 @@
     private async void OnHardwareInfoReceived(object? sender, HardwareInfo e)
     {
         _hardwareInfo = e;
+        // We do not need repeated updates for this event
+        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived; // One-time event
         await InvokeAsync(StateHasChanged);
     }
     private async void OnSerialNumberReceived(object? sender, SerialNumber e)
     {
         _serialNumber = e;
+        // We do not need repeated updates for this event
+        Z21Client.SerialNumberReceived -= OnSerialNumberReceived; // One-time event
         await InvokeAsync(StateHasChanged);
     }
     private async void OnZ21CodeReceived(object? sender, Z21Code e)
     {
         _z21Code = e;
+        // We do not need repeated updates for this event
+        Z21Client.Z21CodeReceived -= OnZ21CodeReceived; // One-time event
         await InvokeAsync(StateHasChanged);
     }
 
@@ -230,10 +248,10 @@
         _trackPowerState = e.State;
         await InvokeAsync(StateHasChanged);
     }
+
     private async void OnEmergencyStopReceived(object? sender, EventArgs e)
     {
-        //_trackPowerState = TrackPowerState.Off;
-        await InvokeAsync(StateHasChanged); 
+        await InvokeAsync(StateHasChanged);
     }
 
     // --- Event handler for initial System State ---
@@ -243,8 +261,8 @@
         Z21Client.SystemStateChanged -= OnSystemStateChanged;
 
         _trackPowerState = (e.CentralState & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0
-            ? TrackPowerState.Off
-            : TrackPowerState.On;
+        ? TrackPowerState.Off
+        : TrackPowerState.On;
 
         await InvokeAsync(StateHasChanged);
     }

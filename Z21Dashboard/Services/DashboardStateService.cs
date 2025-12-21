@@ -1,6 +1,8 @@
 ﻿using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 using Z21Dashboard.Resources.Localization;
+using Z21Dashboard.Shared.Dashboard.Components;
+using Z21Dashboard.Shared.Dashboard.SystemWidgets;
 using Z21Dashboard.Shared.Dashboard.Widgets;
 
 namespace Z21Dashboard.Services;
@@ -24,6 +26,11 @@ public class DashboardStateService : IDashboardStateService
         // This is the MASTER LIST of component definitions.
         return
         [
+            // System widgets. -1 means  :-)
+            new() { Name = SharedResources.Connection, IsSystemComponent = true, PositionX = -1, Width = 500, ComponentType = typeof(Connection), ComponentTypeName = typeof(Connection).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.About, IsSystemComponent = true, PositionX = 600, Width = 500, ComponentType = typeof(About), ComponentTypeName = typeof(About).AssemblyQualifiedName ?? string.Empty },
+
+            // User selectable widgets
             new() { Name = SharedResources.LocoControl, Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoControl2, Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoListView, Width = 800, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
@@ -47,12 +54,23 @@ public class DashboardStateService : IDashboardStateService
         if (storedState == null || storedState.Count == 0)
         {
             // First run: Use default definitions, assign positions, and save.
-            int yPos = 10;
+            int yPos = 130;
             foreach (var comp in defaultDefinitions)
             {
-                comp.PositionX = 10;
-                comp.PositionY = yPos;
-                yPos += 50;
+                if (comp.IsSystemComponent)
+                {
+                    if (comp.PositionX is -1)
+                    {
+                        comp.PositionX = 0;
+                    }
+                }
+                else
+                {
+                    comp.PositionX = 10;
+                    comp.PositionY = yPos;
+                    yPos += 50;
+                }
+
             }
             _componentStates = defaultDefinitions;
             _ = SaveStateAsync();
@@ -75,6 +93,7 @@ public class DashboardStateService : IDashboardStateService
                         Width = defaultComp.Width,
                         Height = defaultComp.Height,
                         ComponentTypeName = defaultComp.ComponentTypeName,
+                        IsSystemComponent = defaultComp.IsSystemComponent,
 
                         Id = userComp.Id,
                         IsVisible = userComp.IsVisible,
@@ -86,8 +105,18 @@ public class DashboardStateService : IDashboardStateService
                 else
                 {
                     // New component: Add it with default layout.
-                    defaultComp.PositionX = 10;
-                    defaultComp.PositionY = 10;
+
+                    defaultComp.PositionX = defaultComp.PositionX switch
+                    {
+                        -1 => 0,
+                        0 => 10,
+                        _ => defaultComp.PositionX
+                    };
+
+                    if (defaultComp.PositionY is 0)
+                    {
+                        defaultComp.PositionY = 10;
+                    }
                     mergedState.Add(defaultComp);
                 }
             }
@@ -134,7 +163,7 @@ public class DashboardStateService : IDashboardStateService
     }
     public List<DashboardComponentState> GetVisibleComponentStates()
     {
-        return [.. _componentStates.Where(s => s.IsVisible).OrderBy(s => s.ZIndex)];
+        return [.. _componentStates.Where(s => s.IsVisible || s.IsSystemComponent).OrderBy(s => s.ZIndex)];
     }
     public async Task ToggleVisibility(Guid componentId)
     {
