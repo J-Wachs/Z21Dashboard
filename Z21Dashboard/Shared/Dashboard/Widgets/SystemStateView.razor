@@ -39,7 +39,7 @@
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    @if (HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
+                                    @if (Z21Client.HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
                                     {
                                         <text>@_systemState?.ProgCurrentmA @Localizer["MilliAmpsShort"]</text>
                                     }
@@ -101,9 +101,6 @@
 </DashboardWindow>
 
 @code {
-    [Parameter]
-    public HardwareInfo? HardwareInfo { get; set; }
-
     /// <summary>
     /// Receives the mousedown event from the parent (Dashboard.razor)
     /// to initiate a drag operation.
@@ -114,7 +111,7 @@
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
-    private SystemStateChangedEventArgs? _systemState;
+    private SystemState? _systemState;
     private string _supplyVoltageV => _systemState?.SupplyVoltagemV is not null ? ((decimal)_systemState.SupplyVoltagemV / 1000).ToString("0.0") : "-";
     private string _vccVoltageV => _systemState?.VccVoltagemV is not null ? ((decimal)_systemState.VccVoltagemV / 1000).ToString("0.0") : "-";
     private string _alertTemp = string.Empty;
@@ -125,12 +122,12 @@
         Z21Client.SystemStateChanged += OnSystemStateChanged;
     }
 
-    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         _systemState = e;
 
-        _alertTemp = ((e.CentralStateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
-        _alertVolt = ((e.CentralState & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
+        _alertTemp = ((e.CentralStateEx & SystemState.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
+        _alertVolt = ((e.CentralState & SystemState.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
 
         await InvokeAsync(StateHasChanged);
     }

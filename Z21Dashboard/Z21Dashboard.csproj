@@ -172,6 +172,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>TurnoutListViewResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>TurnoutProtocolSelectorResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -250,6 +255,10 @@
       <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutListViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>TurnoutListViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>TurnoutProtocolSelectorResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 

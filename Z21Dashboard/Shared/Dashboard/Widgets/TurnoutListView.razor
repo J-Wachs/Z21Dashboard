@@ -90,8 +90,14 @@
                     <div class="mb-3">
                         <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
                         <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
-                            <option value="@TurnoutMode.DCC">DCC</option>
-                            <option value="@TurnoutMode.MM">MM</option>
+                            @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC)
+                            {
+                                <option value="@TurnoutMode.DCC">DCC</option>
+                            }
+                            @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.MM)
+                            {
+                                <option value="@TurnoutMode.MM">MM</option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -188,7 +194,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async void OnTurnoutModeReceived(object? sender, TurnoutModeChangedEventArgs e)
+    private async void OnTurnoutModeReceived(object? sender, TurnoutModeStatus e)
     {
         if (activeTurnouts.TryGetValue(e.Address, out var existing))
         {

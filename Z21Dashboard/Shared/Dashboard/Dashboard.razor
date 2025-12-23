@@ -78,8 +78,6 @@
 
 
 @code {
-    private HardwareInfo? _hardwareInfo;
-    private Z21Code? _z21Code;
     private ConnectionState _connectionState = ConnectionState.Disconnected;
     private List<DashboardComponentState> _widgets { get; set; } = [];
     private DashboardComponentState? _draggedComponent;
@@ -191,36 +189,6 @@
                 ["OnBringToFront"] = new EventCallback(this, () => BringToFront(state))
             };
 
-            // Check for components needing 'FirmwareVersion'.
-            if (state.ComponentType == typeof(LocoListView) ||
-                state.ComponentType == typeof(LocoSlotView) ||
-                state.ComponentType == typeof(LocoControl) ||
-                state.ComponentType == typeof(LocoControl2))
-            {
-                if (_hardwareInfo?.FwVersion is not null)
-                {
-                    parameters["FirmwareVersion"] = _hardwareInfo.FwVersion;
-                }
-            }
-            else if (state.ComponentType == typeof(SystemStateView) ||
-                     state.ComponentType == typeof(SystemStateFullView) ||
-                     state.ComponentType == typeof(PowerChart))
-            {
-                if (_hardwareInfo is not null)
-                {
-                    parameters["HardwareInfo"] = _hardwareInfo;
-                }
-            }
-            if (state.ComponentType == typeof(LocoListView) ||
-                state.ComponentType == typeof(LocoControl) ||
-                state.ComponentType == typeof(LocoControl2))
-            {
-                if (_z21Code is not null)
-                {
-                    parameters["Z21Code"] = _z21Code;
-                }
-            }
-
             if (state.ComponentType == typeof(Connection))
             {
                 parameters["ConnectionState"] = _connectionState;
@@ -265,15 +233,12 @@
         _connectionState = ConnectionState.Connecting;
         UpdateComponentParameters();
 
-        _hardwareInfo = null;
-
         SubscribeToEvents();
         bool success = await Z21Client.ConnectAsync(ipAddress);
         if (success)
         {
-            await Z21Client.GetHardwareInfoAsync();
-            await Task.Delay(200);
-            await Z21Client.GetZ21CodeAsync();
+            _connectionState = ConnectionState.Connected;
+            UpdateComponentParameters();
         }
         else
         {
@@ -288,8 +253,6 @@
         await Z21Client.DisconnectAsync();
         UnsubscribeFromEvents();
 
-        _hardwareInfo = null;
-
         _connectionState = ConnectionState.Disconnected;
         UpdateComponentParameters();
     }
@@ -297,44 +260,21 @@
     private void SubscribeToEvents()
     {
         Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
-        Z21Client.HardwareInfoReceived += OnHardwareInfoReceived;
-        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
     }
 
     private void UnsubscribeFromEvents()
     {
         Z21Client.ConnectionStateChanged -= OnConnectionStateChanged;
-        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
-        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
         DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
     }
 
-    private async void OnConnectionStateChanged(object? sender, ConnectionStateChangedEventArgs e)
+    private async void OnConnectionStateChanged(object? sender, ConnectionStatus e)
     {
         _connectionState = e.State;
         if (_connectionState is ConnectionState.Lost)
         {
             UnsubscribeFromEvents();
         }
-        UpdateComponentParameters();
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async void OnHardwareInfoReceived(object? sender, HardwareInfo e)
-    {
-        _hardwareInfo = e;
-        await InvokeAsync(StateHasChanged);
-        // Unsubscribe as we now have the result.
-        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
-        UpdateComponentParameters();
-    }
-
-    private async void OnZ21CodeReceived(object? sender, Z21Code e)
-    {
-        _z21Code = e;
-        // Unsubscribe as we now have the result.
-        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
-        _connectionState = ConnectionState.Connected;
         UpdateComponentParameters();
         await InvokeAsync(StateHasChanged);
     }

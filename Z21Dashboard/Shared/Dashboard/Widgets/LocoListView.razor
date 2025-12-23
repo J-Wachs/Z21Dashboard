@@ -27,7 +27,7 @@ from a background tracking service. Now includes loco metadata and service inter
                 <thead class="sticky-top">
                     <tr>
                         <th>@Localizer["Address"]</th>
-                        @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                        @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                         {
                             <th>@Localizer["Protocol"]</th>
                         }
@@ -46,7 +46,7 @@ from a background tracking service. Now includes loco metadata and service inter
                         {
                             <tr>
                                 <td><strong>@LocoMetadataService.GetDisplayName(tracker.LocoAddress)</strong></td>
-                                @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                                @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                                 {
                                     <td>@tracker.DisplayProtocol</td>
                                 }
@@ -77,7 +77,7 @@ from a background tracking service. Now includes loco metadata and service inter
                     else
                     {
                         <tr>
-                            <td colspan="@(FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20 ? 8 : 7)" class="text-center text-muted">@Localizer["WaitingForData"]</td>
+                            <td colspan="@(Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20 ? 8 : 7)" class="text-center text-muted">@Localizer["WaitingForData"]</td>
                         </tr>
                     }
                 </tbody>
@@ -103,7 +103,7 @@ from a background tracking service. Now includes loco metadata and service inter
                         <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
                     </div>
                     <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">@(Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
+                        <label for="protocolSelect" class="form-label">@(Z21Client.Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
                         <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
                             @foreach (var option in _protocolOptions)
                             {
@@ -137,12 +137,6 @@ from a background tracking service. Now includes loco metadata and service inter
 
 
 @code {
-    [Parameter, EditorRequired]
-    public FirmwareVersion? FirmwareVersion { get; set; }
-
-    [Parameter]
-    public Z21Code? Z21Code { get; set; }
-
     [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
@@ -169,27 +163,37 @@ from a background tracking service. Now includes loco metadata and service inter
 
     protected override void OnParametersSet()
     {
-        if (Z21Code is not null)
+        if (Z21Client.Z21Code is not null)
         {
-            if (Z21Code.LockState is Z21LockState.Locked)
+            _protocolOptions = [];
+
+            if (Z21Client.Z21Code.LockState is Z21LockState.Locked)
             {
-                _protocolOptions =
-                [
-                    new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown),
-                    new("MM1", "MM", LocoMode.MM, NativeSpeedSteps.Unknown)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown));
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("MM", "MM", LocoMode.MM, NativeSpeedSteps.Unknown));
             }
             else
             {
-                _protocolOptions =
-                [
-                    new("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
-                    new("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
-                    new("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128),
-                    new("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
-                    new("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
-                    new("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
+                        new ProtocolOption("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
+                        new ProtocolOption("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128)
+                    });
+                }
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
+                        new ProtocolOption("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
+                        new ProtocolOption("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
+                    });
+                }
             }
         }
     }
@@ -224,7 +228,7 @@ from a background tracking service. Now includes loco metadata and service inter
 
         await Z21Client.SetLocoModeAsync(_selectedLocoForEdit.LocoAddress, _selectedLocoMode);
 
-        if (Z21Code?.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code?.LockState is not Z21LockState.Locked)
         {
             await Z21Client.SetLocoDriveAsync(
                 _selectedLocoForEdit.LocoAddress,
@@ -297,7 +301,7 @@ from a background tracking service. Now includes loco metadata and service inter
 
     private bool IsSelected(ProtocolOption option)
     {
-        if (Z21Code!.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code?.LockState is not Z21LockState.Locked)
         {
             return option.LocoMode == _selectedLocoMode && option.SpeedSteps == _selectedSpeedSteps;
         }

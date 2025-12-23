@@ -61,6 +61,15 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close list.
+        /// </summary>
+        public static string CloseList {
+            get {
+                return ResourceManager.GetString("CloseList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect.
         /// </summary>
         public static string Connect {
@@ -120,6 +129,15 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         public static string EmergencyStop {
             get {
                 return ResourceManager.GetString("EmergencyStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found devices.
+        /// </summary>
+        public static string FoundDevices {
+            get {
+                return ResourceManager.GetString("FoundDevices", resourceCulture);
             }
         }
         

@@ -165,4 +165,10 @@
   <data name="Unlocked" xml:space="preserve">
     <value>Låst op</value>
   </data>
+  <data name="FoundDevices" xml:space="preserve">
+    <value>Fundende enheder</value>
+  </data>
+  <data name="CloseList" xml:space="preserve">
+    <value>Luk listen</value>
+  </data>
 </root>

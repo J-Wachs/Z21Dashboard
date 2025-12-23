@@ -20,19 +20,19 @@
     <HeaderContent>
         @if (ConnectionState is ConnectionState.Connected)
         {
-            if (_hardwareInfo is not null)
+            if (Z21Client.HardwareInfo is not null)
             {
                 <span class="badge bg-info">
-                    @_hardwareInfo.HwType, @if (_z21Code is not null)
+                    @Z21Client.HardwareInfo.HwType, @if (Z21Client.Z21Code is not null)
                     {
                         <text>@Z21CodeText, </text>
                     }
-                    @if (_serialNumber is not null)
+                    @if (Z21Client.SerialNumber is not null)
                     {
-                        <text>@Localizer["SN"]: @_serialNumber.Value, </text>
+                        <text>@Localizer["SN"]: @Z21Client.SerialNumber.Value, </text>
                     }
 
-                    @Localizer["FW"]: @_hardwareInfo.FwVersion
+                    @Localizer["FW"]: @Z21Client.HardwareInfo.FwVersion
                 </span>
                 <text>&nbsp;</text>
             }
@@ -42,10 +42,50 @@
 
     <Content>
         <div class="row g-2">
-            <!-- Left Column -->
+            @* Left Column *@
             <div class="col-6">
-                <div class="input-group mb-2">
-                    <input class="form-control" value="@_ipAddress" onchange="@OnIpAddressChanged" disabled="@(ConnectionState != ConnectionState.Disconnected)" placeholder="Enter IP" />
+                @* Added position-relative to handle the dropdown positioning correctly *@
+                <div class="input-group mb-2 position-relative">
+                    <input class="form-control"
+                           value="@_ipAddress"
+                           onchange="@OnIpAddressChanged"
+                           disabled="@(ConnectionState != ConnectionState.Disconnected)"
+                           placeholder="Enter IP"
+                           autocomplete="off" /> @* autocomplete="off" prevents browser history from covering the dropdown *@
+
+                    <button class="btn btn-outline-secondary" onclick="@SearchForZ21" disabled="@(ConnectionState != ConnectionState.Disconnected || _isSearching)">
+                        @if (_isSearching)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        }
+                    </button>
+
+                    @if (_foundZ21s.Any())
+                    {
+                        <ul class="dropdown-menu show" style="position: absolute; top: 100%; left: 0; min-width: 100%; width: max-content; z-index: 1050;">
+                            <li class="dropdown-header">@Localizer["FoundDevices"] (@_foundZ21s.Count)</li>
+                            @foreach (var z21 in _foundZ21s)
+                            {
+                                <li>
+                                    <button class="dropdown-item" type="button" @onclick="() => SelectIp(z21.IpAddress)">
+                                        <strong>@z21.ToString()</strong>
+                                    </button>
+                                </li>
+                            }
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item text-danger text-center" type="button" @onclick="ClearSearchResults">
+                                    @Localizer["CloseList"]
+                                </button>
+                            </li>
+                        </ul>
+                    }
                 </div>
 
                 @if (ConnectionState == ConnectionState.Connected)
@@ -68,7 +108,7 @@
                 }
             </div>
 
-            <!-- Right Column -->
+            @* Right Column *@
             <div class="col-6">
                 <div class="btn-group w-100 mb-2" role="group">
                     <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
@@ -115,11 +155,11 @@
     private const string Z21IpAddressKey = "Z21Connection_IpAddress";
     private string _ipAddress { get; set; } = string.Empty;
 
-    private SerialNumber? _serialNumber;
-    private HardwareInfo? _hardwareInfo;
-    private Z21Code? _z21Code;
     private TrackPowerState? _trackPowerState;
     private ConnectionState _prevConnectionState = ConnectionState.Disconnected;
+
+    private bool _isSearching;
+    private List<Z21Info> _foundZ21s = [];
 
     protected override void OnInitialized()
     {
@@ -146,7 +186,7 @@
         }
     }
 
-    private string Z21CodeText => _z21Code?.LockState switch
+    private string Z21CodeText => Z21Client.Z21Code?.LockState switch
     {
         Z21LockState.NoLock => Localizer["Nolock"],
         Z21LockState.Locked => Localizer["Locked"],
@@ -157,22 +197,19 @@
     private async Task Connect()
     {
         await OnConnect.InvokeAsync(_ipAddress);
-      
+
         StateHasChanged();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         // Due to the fact that we in Connect is in the process of connecting, we
-        // do not have information about if we did succeed or not. Therefore, we 
+        // do not have information about if we did succeed or not. Therefore, we
         // check here for a change in connection state to Connected to perform
         if (ConnectionState != _prevConnectionState && ConnectionState is ConnectionState.Connected)
         {
             SubscribeToEvents();
-            
-            await Z21Client.GetZ21CodeAsync();
-            await Z21Client.GetHardwareInfoAsync();
-            await Z21Client.GetSerialNumberAsync();
+
             // This call is to trigger the initial state of the track power.
             await Z21Client.GetSystemStateAsync();
 
@@ -202,9 +239,6 @@
 
     private void SubscribeToEvents()
     {
-        Z21Client.HardwareInfoReceived += OnHardwareInfoReceived;
-        Z21Client.SerialNumberReceived += OnSerialNumberReceived;
-        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
         Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
         Z21Client.EmergencyStopReceived += OnEmergencyStopReceived;
         Z21Client.SystemStateChanged += OnSystemStateChanged;
@@ -212,34 +246,9 @@
 
     private void UnsubscribeFromEvents()
     {
-        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived;
-        Z21Client.SerialNumberReceived -= OnSerialNumberReceived;
-        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
         Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
         Z21Client.EmergencyStopReceived -= OnEmergencyStopReceived;
         Z21Client.SystemStateChanged -= OnSystemStateChanged; // Ensure cleanup here too
-    }
-
-    private async void OnHardwareInfoReceived(object? sender, HardwareInfo e)
-    {
-        _hardwareInfo = e;
-        // We do not need repeated updates for this event
-        Z21Client.HardwareInfoReceived -= OnHardwareInfoReceived; // One-time event
-        await InvokeAsync(StateHasChanged);
-    }
-    private async void OnSerialNumberReceived(object? sender, SerialNumber e)
-    {
-        _serialNumber = e;
-        // We do not need repeated updates for this event
-        Z21Client.SerialNumberReceived -= OnSerialNumberReceived; // One-time event
-        await InvokeAsync(StateHasChanged);
-    }
-    private async void OnZ21CodeReceived(object? sender, Z21Code e)
-    {
-        _z21Code = e;
-        // We do not need repeated updates for this event
-        Z21Client.Z21CodeReceived -= OnZ21CodeReceived; // One-time event
-        await InvokeAsync(StateHasChanged);
     }
 
     // This handler will continue to receive live updates
@@ -255,16 +264,48 @@
     }
 
     // --- Event handler for initial System State ---
-    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         // Unsubscribe immediately as we only need the initial state.
         Z21Client.SystemStateChanged -= OnSystemStateChanged;
 
-        _trackPowerState = (e.CentralState & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0
+        _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0
         ? TrackPowerState.Off
         : TrackPowerState.On;
 
         await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SearchForZ21()
+    {
+        _isSearching = true;
+        // Clear previous results to avoid confusion
+        _foundZ21s.Clear();
+        await InvokeAsync(StateHasChanged);
+
+        _foundZ21s = await Z21Client.QueryForZ21sAsync();
+
+        _isSearching = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // --- New helper methods for the custom dropdown ---
+
+    private void SelectIp(string ip)
+    {
+        _ipAddress = ip;
+        // Save logic repeated from OnIpAddressChanged
+        AppDataService.SaveData(Z21IpAddressKey, _ipAddress);
+
+        // Hide the dropdown by clearing the list
+        _foundZ21s.Clear();
+        StateHasChanged();
+    }
+
+    private void ClearSearchResults()
+    {
+        _foundZ21s.Clear();
+        StateHasChanged();
     }
 
     public void Dispose()

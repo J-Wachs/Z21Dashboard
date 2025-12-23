@@ -1,7 +1,6 @@
 ﻿using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 using Z21Dashboard.Resources.Localization;
-using Z21Dashboard.Shared.Dashboard.Components;
 using Z21Dashboard.Shared.Dashboard.SystemWidgets;
 using Z21Dashboard.Shared.Dashboard.Widgets;
 
@@ -26,7 +25,7 @@ public class DashboardStateService : IDashboardStateService
         // This is the MASTER LIST of component definitions.
         return
         [
-            // System widgets. -1 means  :-)
+            // System widgets. -1 means 0 :-)
             new() { Name = SharedResources.Connection, IsSystemComponent = true, PositionX = -1, Width = 500, ComponentType = typeof(Connection), ComponentTypeName = typeof(Connection).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.About, IsSystemComponent = true, PositionX = 600, Width = 500, ComponentType = typeof(About), ComponentTypeName = typeof(About).AssemblyQualifiedName ?? string.Empty },
 
@@ -41,7 +40,7 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.ShowLogView, Width = 500, Height = 500, ComponentType = typeof(ShowLogView), ComponentTypeName = typeof(ShowLogView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateView, Width = 260, ComponentType = typeof(SystemStateView), ComponentTypeName = typeof(SystemStateView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = SharedResources.TurnoutListView, Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.TurnoutListView, Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty }
         ];
     }
 
