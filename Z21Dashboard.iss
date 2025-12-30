@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{67A5C703-09F1-4489-955B-5ED8F90B78F8}
 AppName=Z21Dashboard
-AppVersion=1.0.0
+AppVersion={#MyAppVersion}
 AppPublisher=Jesper Wachs
 AppPublisherURL=https://github.com/J-Wachs/Z21Dashboard
 AppSupportURL=https://github.com/J-Wachs/Z21Dashboard
