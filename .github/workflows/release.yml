@@ -1,11 +1,13 @@
-name: Build and Release
+name: CI/CD Pipeline
 
 on:
-  # Trigger on push of tags matching v*, e.g., v1.0.0
+  # Run on all pushes to all branches (to test the code)
   push:
-    tags:
-      - 'v*'
-  # Allows you to run this workflow manually from the Actions tab for testing
+    branches: [ "**" ]
+  # Also run on Pull Requests targeting master
+  pull_request:
+    branches: [ "master" ]
+  # Allows manual execution
   workflow_dispatch:
 
 permissions:
@@ -16,81 +18,89 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # 1. Checkout the repository code
+    # 1. Checkout (Fetch code)
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    # 2. Setup .NET 9 SDK
+    # 2. Setup .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
-    # 3. Run Unit Tests
+    # --- NEW STEP: Extract version from .csproj ---
+    # This is necessary because we no longer use Tags to control the version.
+    # It reads <Version>1.0.X</Version> from your project file.
+    - name: Get Version from Project
+      id: get_version
+      run: |
+        [xml]$csproj = Get-Content Z21Dashboard/Z21Dashboard.csproj
+        $ver = $csproj.Project.PropertyGroup.Version
+        if (-not $ver) { $ver = "1.0.0" } # Fallback if version is missing
+        echo "APP_VERSION=v$ver" >> $env:GITHUB_ENV
+        Write-Host "Detected version: v$ver"
+
+    # 3. Run Unit Tests (ALWAYS runs - on all branches)
     - name: Run Unit Tests
       run: dotnet test --configuration Release
 
-    # 4. Build and Publish the Application
+    # 4. Build (ALWAYS runs - to ensure code compiles)
     - name: Publish App
       run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
 
-    # 5. Convert Markdown to PDF
-    # Added '-Force' to Move-Item to overwrite existing files if they exist
+    # ==============================================================================
+    # FROM HERE ON, WE ONLY RUN IF IT IS THE "MASTER" BRANCH
+    # ==============================================================================
+
+    # 5. Convert Markdown to PDF (MASTER ONLY)
     - name: Convert Markdown to PDF
+      if: github.ref == 'refs/heads/master'
       run: |
         npm install -g md-to-pdf
-        
-        # Create DOC folder (Force creates it even if it exists)
         New-Item -Path ./publish/DOC -ItemType Directory -Force
-
-        # Convert UserManual
         md-to-pdf UserManual.md
-        # Move and overwrite (-Force) if the file is already there
         Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf -Force
-
-        # Convert Brugervejledning
         md-to-pdf Brugervejledning.md
-        # Move and overwrite (-Force) if the file is already there
         Move-Item -Path Brugervejledning.pdf -Destination ./publish/DOC/Brugervejledning.pdf -Force
 
-    # 6. Create ZIP file with specific structure
+    # 6. Create ZIP file (MASTER ONLY)
     - name: Create Zip file
+      if: github.ref == 'refs/heads/master'
       run: |
-        # Create a staging directory structure
         New-Item -Path ./TempZip/Z21Dashboard -ItemType Directory -Force
-        
-        # Copy app files + documentation
         Copy-Item -Path ./publish/* -Destination ./TempZip/Z21Dashboard -Recurse
-        
-        # Copy license file to root of zip
         Copy-Item -Path ./LICENSE.txt -Destination ./TempZip/LICENSE.txt
-        
-        # Create the final zip file
         Compress-Archive -Path ./TempZip/* -DestinationPath ./Z21Dashboard.zip
 
-    # 7. Compile Installer using Inno Setup
+    # 7. Compile Installer (MASTER ONLY)
     - name: Compile Installer
+      if: github.ref == 'refs/heads/master'
       run: |
         choco install innosetup --no-progress
-        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Z21Dashboard.iss
+        # We define the version in Inno Setup dynamically based on the .csproj version
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DMyAppVersion=$env:APP_VERSION" Z21Dashboard.iss
 
-    # 7.1. Upload files
+    # 7.1. Upload Artifacts (MASTER ONLY - remove 'if' to allow downloading builds from dev branches)
     - name: Upload Build Artifacts
+      if: github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v4
       with:
-        name: Mine-Test-Filer
+        name: Release-Filer-${{ env.APP_VERSION }}
         path: |
           Z21Dashboard.zip
           Output/Z21DashboardSetup.exe
         retention-days: 2
 
-    # 8. Create GitHub Release and Upload Assets
+    # 8. Create GitHub Release (MASTER ONLY)
+    # Uses the version number from .csproj as "Tag name"
     - name: Create Release
+      if: github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/')
       with:
+        tag_name: ${{ env.APP_VERSION }}
+        name: Release ${{ env.APP_VERSION }}
         draft: true
         files: |
           Z21Dashboard.zip
