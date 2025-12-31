@@ -28,6 +28,12 @@ public interface IDashboardStateService
     List<DashboardComponentState> GetVisibleComponentStates();
 
     /// <summary>
+    /// Gets a list of components that the user can select to show or hide on the dashboard.
+    /// </summary>
+    /// <returns></returns>
+    List<DashboardComponentState> GetUserSelectableComponents();
+
+    /// <summary>
     /// Toggles the visibility of a specific dashboard component.
     /// </summary>
     /// <param name="componentId">The unique ID of the component to toggle.</param>

@@ -1,12 +1,12 @@
 @*
-Component for displaying the operating time and full state of active locomotives
-from a background tracking service. Now includes loco metadata and service interval functionality.
+    Component for displaying the operating time and full state of active locomotives
+    from a background tracking service. Now includes loco metadata and service interval functionality.
 *@
 @using Microsoft.AspNetCore.Components.Web
 @using System.Text
 @using Microsoft.Extensions.Localization
 @using Z21Client.Infrastructure
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application
 @using Z21Dashboard.Application.Interfaces
@@ -18,7 +18,7 @@ from a background tracking service. Now includes loco metadata and service inter
 @inject IStringLocalizer<LocoListViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -27,7 +27,7 @@ from a background tracking service. Now includes loco metadata and service inter
                 <thead class="sticky-top">
                     <tr>
                         <th>@Localizer["Address"]</th>
-                        @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                        @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                         {
                             <th>@Localizer["Protocol"]</th>
                         }
@@ -46,7 +46,7 @@ from a background tracking service. Now includes loco metadata and service inter
                         {
                             <tr>
                                 <td><strong>@LocoMetadataService.GetDisplayName(tracker.LocoAddress)</strong></td>
-                                @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                                @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                                 {
                                     <td>@tracker.DisplayProtocol</td>
                                 }
@@ -77,14 +77,14 @@ from a background tracking service. Now includes loco metadata and service inter
                     else
                     {
                         <tr>
-                            <td colspan="@(FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20 ? 8 : 7)" class="text-center text-muted">@Localizer["WaitingForData"]</td>
+                            <td colspan="@(Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20 ? 8 : 7)" class="text-center text-muted">@Localizer["WaitingForData"]</td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 <!-- Edit Dialog -->
 @if (_isDialogOpen)
@@ -98,37 +98,55 @@ from a background tracking service. Now includes loco metadata and service inter
                     <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="locoNameInput" class="form-label">@Localizer["LocomotiveName"]:</label>
-                        <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">@(Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
-                        <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
-                            @foreach (var option in _protocolOptions)
-                            {
-                                <option value="@option.Value" selected="@IsSelected(option)">@option.DisplayName</option>
-                            }
-                        </select>
-                    </div>
-                    <hr />
-                    <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
-                    <div class="mb-3">
-                        <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalHours"]:</label>
-                        <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="@Localizer["SIPlaceHolder"]" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="timeSinceService" class="form-label">@Localizer["LastService"]:</label>
-                        <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_selectedLocoForEdit?.OperatingSecondsSinceService ?? 0)" readonly />
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
-                        <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkService"]</label>
-                    </div>
+                    @if (!_showDeleteConfirmation)
+                    {
+                        <div class="mb-3">
+                            <label for="locoNameInput" class="form-label">@Localizer["LocomotiveName"]:</label>
+                            <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="protocolSelect" class="form-label">@(Z21Client.Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
+                            <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
+                                @foreach (var option in _protocolOptions)
+                                {
+                                    <option value="@option.Value" selected="@IsSelected(option)">@option.DisplayName</option>
+                                }
+                            </select>
+                        </div>
+                        <hr />
+                        <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
+                        <div class="mb-3">
+                            <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalHours"]:</label>
+                            <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="@Localizer["SIPlaceHolder"]" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="timeSinceService" class="form-label">@Localizer["LastService"]:</label>
+                            <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_selectedLocoForEdit?.OperatingSecondsSinceService ?? 0)" readonly />
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
+                            <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkService"]</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            @Localizer["ConfirmDeleteText"] (@LocoMetadataService.GetDisplayName(_selectedLocoForEdit!.LocoAddress))?
+                        </div>
+                    }
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
+                    @if (!_showDeleteConfirmation)
+                    {
+                        <button type="button" class="btn btn-danger me-auto" @onclick="@(() => _showDeleteConfirmation = true)">@Localizer["Delete"]</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
+                        <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="DeleteLoco">@Localizer["Confirm"]</button>
+                        <button type="button" class="btn btn-secondary" @onclick="@(() => _showDeleteConfirmation = false)">@Localizer["Cancel"]</button>
+                    }
                 </div>
             </div>
         </div>
@@ -137,12 +155,6 @@ from a background tracking service. Now includes loco metadata and service inter
 
 
 @code {
-    [Parameter, EditorRequired]
-    public FirmwareVersion? FirmwareVersion { get; set; }
-
-    [Parameter]
-    public Z21Code? Z21Code { get; set; }
-
     [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
@@ -153,6 +165,7 @@ from a background tracking service. Now includes loco metadata and service inter
 
     // --- Fields for the Edit dialog ---
     private bool _isDialogOpen = false;
+    private bool _showDeleteConfirmation = false;
     private TrackedLocoTime? _selectedLocoForEdit;
     private LocoMetadata _editableMetadata = new();
     private bool _servicePerformed = false;
@@ -165,31 +178,38 @@ from a background tracking service. Now includes loco metadata and service inter
     {
         OperatingTimeService.OnDataUpdated += OnDataUpdated;
         LocoMetadataService.OnMetadataUpdated += OnNamesUpdated;
-    }
 
-    protected override void OnParametersSet()
-    {
-        if (Z21Code is not null)
+        if (Z21Client.Z21Code is not null)
         {
-            if (Z21Code.LockState is Z21LockState.Locked)
+            _protocolOptions = [];
+
+            if (Z21Client.Z21Code.LockState is Z21LockState.Locked)
             {
-                _protocolOptions =
-                [
-                    new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown),
-                    new("MM1", "MM", LocoMode.MM, NativeSpeedSteps.Unknown)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown));
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("MM", "MM", LocoMode.MM, NativeSpeedSteps.Unknown));
             }
             else
             {
-                _protocolOptions =
-                [
-                    new("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
-                    new("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
-                    new("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128),
-                    new("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
-                    new("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
-                    new("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
+                        new ProtocolOption("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
+                        new ProtocolOption("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128)
+                    });
+                }
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
+                        new ProtocolOption("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
+                        new ProtocolOption("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
+                    });
+                }
             }
         }
     }
@@ -199,6 +219,7 @@ from a background tracking service. Now includes loco metadata and service inter
         _selectedLocoForEdit = locoToEdit;
         _editableMetadata = LocoMetadataService.GetMetadata(locoToEdit.LocoAddress) ?? new();
         _servicePerformed = false;
+        _showDeleteConfirmation = false;
         _selectedLocoMode = locoToEdit.Protocol;
         _selectedSpeedSteps = locoToEdit.NativeSpeedSteps;
         _isDialogOpen = true;
@@ -209,6 +230,7 @@ from a background tracking service. Now includes loco metadata and service inter
         _isDialogOpen = false;
         _selectedLocoForEdit = null;
         _editableMetadata = new();
+        _showDeleteConfirmation = false;
     }
 
     private async Task SaveSettingsAsync()
@@ -224,7 +246,7 @@ from a background tracking service. Now includes loco metadata and service inter
 
         await Z21Client.SetLocoModeAsync(_selectedLocoForEdit.LocoAddress, _selectedLocoMode);
 
-        if (Z21Code?.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code?.LockState is not Z21LockState.Locked)
         {
             await Z21Client.SetLocoDriveAsync(
                 _selectedLocoForEdit.LocoAddress,
@@ -236,6 +258,16 @@ from a background tracking service. Now includes loco metadata and service inter
         }
 
         await Z21Client.GetLocoInfoAsync(_selectedLocoForEdit.LocoAddress);
+        CloseEditDialog();
+    }
+
+    private void DeleteLoco()
+    {
+        if (_selectedLocoForEdit is not null)
+        {
+            OperatingTimeService.RemoveLoco(_selectedLocoForEdit.LocoAddress);
+            LocoMetadataService.RemoveMetadata(_selectedLocoForEdit.LocoAddress);
+        }
         CloseEditDialog();
     }
 
@@ -267,7 +299,7 @@ from a background tracking service. Now includes loco metadata and service inter
         var metadata = LocoMetadataService.GetMetadata(tracker.LocoAddress);
         if (metadata?.ServiceIntervalHours is null or <= 0)
         {
-            return string.Empty; // No service interval set, so no tooltip.
+            return string.Empty;
         }
 
         long intervalSeconds = (long)metadata.ServiceIntervalHours.Value * 3600;
@@ -279,7 +311,6 @@ from a background tracking service. Now includes loco metadata and service inter
         }
         else
         {
-            // Make seconds positive for formatting
             return $"{Localizer["ServiceOverdue"]} {FormatOperatingTime(-secondsUntilService)}";
         }
     }
@@ -297,7 +328,7 @@ from a background tracking service. Now includes loco metadata and service inter
 
     private bool IsSelected(ProtocolOption option)
     {
-        if (Z21Code!.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code?.LockState is not Z21LockState.Locked)
         {
             return option.LocoMode == _selectedLocoMode && option.SpeedSteps == _selectedSpeedSteps;
         }

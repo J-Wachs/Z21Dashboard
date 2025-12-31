@@ -42,7 +42,7 @@ public class AppDataService : IAppDataService
                 string json = File.ReadAllText(_dataFilePath);
                 var allData = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
 
-                if (allData != null && allData.TryGetValue(key, out var jsonElement))
+                if (allData is not null && allData.TryGetValue(key, out var jsonElement))
                 {
                     // Deserialize the specific JSON element into the requested type.
                     return jsonElement.Deserialize<T>();

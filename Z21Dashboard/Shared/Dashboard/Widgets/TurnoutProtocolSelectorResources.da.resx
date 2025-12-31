@@ -117,52 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Connect" xml:space="preserve">
-    <value>Connect</value>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
   </data>
-  <data name="Disconnect" xml:space="preserve">
-    <value>Disconnect</value>
+  <data name="EnterAddress" xml:space="preserve">
+    <value>Indtast adresse</value>
   </data>
-  <data name="FW" xml:space="preserve">
-    <value>FW</value>
+  <data name="InfoText" xml:space="preserve">
+    <value>Kontrollerer Z21 låsningstilstand</value>
   </data>
-  <data name="SN" xml:space="preserve">
-    <value>S/N</value>
+  <data name="SelectProtocol" xml:space="preserve">
+    <value>Vælg protokol</value>
+  </data>
+  <data name="SetProtocol" xml:space="preserve">
+    <value>Sæt protokol</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Connection</value>
-  </data>
-  <data name="Connecting" xml:space="preserve">
-    <value>Connecting</value>
-  </data>
-  <data name="TrackPwrOn" xml:space="preserve">
-    <value>Track power on</value>
-  </data>
-  <data name="TrackPwrOff" xml:space="preserve">
-    <value>Track power off</value>
-  </data>
-  <data name="EmergencyStop" xml:space="preserve">
-    <value>Emergency Stop</value>
-  </data>
-  <data name="ConnectionLost" xml:space="preserve">
-    <value>Connection lost</value>
-  </data>
-  <data name="Disconnected" xml:space="preserve">
-    <value>Disconnected</value>
-  </data>
-  <data name="Lost" xml:space="preserve">
-    <value>Lost</value>
-  </data>
-  <data name="Connected" xml:space="preserve">
-    <value>Connected</value>
-  </data>
-  <data name="NoLock" xml:space="preserve">
-    <value>No lock</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="Unlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Sporskifteprotokolvælger</value>
   </data>
 </root>

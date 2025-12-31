@@ -19,7 +19,7 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class TurnoutListViewResources {
@@ -88,6 +88,33 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm that you want to delete this turnout.
+        /// </summary>
+        internal static string ConfirmDeleteText {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Direction.
         /// </summary>
         internal static string Direction {
@@ -124,11 +151,29 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interval of switches before service.
+        /// </summary>
+        internal static string IntervalSwitches {
+            get {
+                return ResourceManager.GetString("IntervalSwitches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last changed.
         /// </summary>
         internal static string LastChanged {
             get {
                 return ResourceManager.GetString("LastChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark service as performed (resets service counter).
+        /// </summary>
+        internal static string MarkServicePerformed {
+            get {
+                return ResourceManager.GetString("MarkServicePerformed", resourceCulture);
             }
         }
         
@@ -151,11 +196,65 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service in.
+        /// </summary>
+        internal static string ServiceIn {
+            get {
+                return ResourceManager.GetString("ServiceIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service interval.
+        /// </summary>
+        internal static string ServiceInterval {
+            get {
+                return ResourceManager.GetString("ServiceInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service overdue by.
+        /// </summary>
+        internal static string ServiceOverdueBy {
+            get {
+                return ResourceManager.GetString("ServiceOverdueBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Straight/Green.
         /// </summary>
         internal static string Straight {
             get {
                 return ResourceManager.GetString("Straight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switches.
+        /// </summary>
+        internal static string Switches {
+            get {
+                return ResourceManager.GetString("Switches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to switches.
+        /// </summary>
+        internal static string SwitchesPostFix {
+            get {
+                return ResourceManager.GetString("SwitchesPostFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switches since service.
+        /// </summary>
+        internal static string SwitchesSinceService {
+            get {
+                return ResourceManager.GetString("SwitchesSinceService", resourceCulture);
             }
         }
         

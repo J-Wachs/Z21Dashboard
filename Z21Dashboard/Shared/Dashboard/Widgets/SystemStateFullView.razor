@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Client.Infrastructure
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
@@ -14,7 +14,7 @@
 @inject IStringLocalizer<SystemStateFullViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -40,7 +40,7 @@
                             <td>
                                 @if (_systemState is not null)
                                 {
-                                    @if (HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
+                                    @if (Z21Client.HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
                                     {
                                         <text>@_systemState?.ProgCurrentmA @Localizer["MilliAmpsShort"]</text>
                                     }
@@ -101,38 +101,34 @@
                 <h5>@Localizer["CentralStateFlags"] (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
                 <pre>@if (_systemState is not null)
                 {
-                     @DecodeCentralState(_systemState!.CentralState)    
+                     @DecodeCentralState(_systemState.CentralState)
                 }
             </pre>
             </div>
             <div class="col-md-3">
                 <h5>@Localizer["ExtendedStateFlags"] (@("0x" + _systemState?.CentralStateEx.ToString("X2")))</h5>
-                <pre>@if (_systemState is not null)
+                <pre>@if (_systemState is not null && Z21Client.HardwareInfo is not null)
                 {
-                     @DecodeCentralStateEx(_systemState!.CentralStateEx, HardwareInfo!.FwVersion)
-                    
+                         @DecodeCentralStateEx(_systemState.CentralStateEx, Z21Client.HardwareInfo.FwVersion)
                 }
             </pre>
             </div>
-            @if (HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42)
+            @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42 && _systemState is not null && _systemState.Capabilities is not null)
             {
                 <div class="col-md-3">
-                    <h5>@Localizer["CapabilitiesFlags"] (@("0x" + _systemState?.Capabilities!.Value.ToString("X2")))</h5>
+                    <h5>@Localizer["CapabilitiesFlags"]</h5>
                     <pre>@if (_systemState is not null)
                     {
-                         @DecodeCapabilities(_systemState!.Capabilities!.Value)    
+                         @DecodeCapabilities(_systemState.Capabilities)
                     }
                     </pre>
                 </div>
             }
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
-    [Parameter]
-    public HardwareInfo? HardwareInfo { get; set; }
-
     /// <summary>
     /// Receives the mousedown event from the parent (Dashboard.razor)
     /// to initiate a drag operation.
@@ -143,7 +139,7 @@
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
-    private SystemStateChangedEventArgs? _systemState;
+    private SystemState? _systemState;
     private string _supplyVoltageV => _systemState?.SupplyVoltagemV is not null ? ((decimal)_systemState.SupplyVoltagemV / 1000).ToString("0.0") : "-";
     private string _vccVoltageV => _systemState?.VccVoltagemV is not null ? ((decimal)_systemState.VccVoltagemV / 1000).ToString("0.0") : "-";
     private string _alertTemp = string.Empty;
@@ -155,12 +151,12 @@
         await Z21Client.GetSystemStateAsync();
     }
 
-    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         _systemState = e;
 
-        _alertVolt = ((e.CentralState & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
-        _alertTemp = ((e.CentralStateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
+        _alertVolt = ((e.CentralState & SystemState.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
+        _alertTemp = ((e.CentralStateEx & SystemState.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
 
         await InvokeAsync(StateHasChanged);
     }
@@ -178,16 +174,16 @@
     {
         var sb = new StringBuilder();
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateEmergencyStop) > 0 ? Localizer["On"] : Localizer["Off"])}"
+            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {((state & SystemState.CentralStateEmergencyStop) > 0 ? Localizer["On"] : Localizer["Off"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? Localizer["Off"] : Localizer["On"])}"
+            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {((state & SystemState.CentralStateTrackVoltageOff) > 0 ? Localizer["Off"] : Localizer["On"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateShortCircuit) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {((state & SystemState.CentralStateShortCircuit) > 0 ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {((state & SystemStateChangedEventArgs.CentralStateProgrammingMode) > 0 ? Localizer["On"] : Localizer["Off"])}"
+            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {((state & SystemState.CentralStateProgrammingMode) > 0 ? Localizer["On"] : Localizer["Off"])}"
         );
         return sb.ToString();
     }
@@ -196,45 +192,45 @@
     {
         var sb = new StringBuilder();
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["HighTemperature"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExHighTemperature) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["HighTemperature"] + ":", 20)} {((stateEx & SystemState.CentralStateExHighTemperature) > 0 ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["PowerLost"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExPowerLost) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["PowerLost"] + ":", 20)} {((stateEx & SystemState.CentralStateExPowerLost) > 0 ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ShortCircuitExt"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitExternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["ShortCircuitExt"] + ":", 20)} {((stateEx & SystemState.CentralStateExShortCircuitExternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ShortCircuitInt"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExShortCircuitInternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["ShortCircuitInt"] + ":", 20)} {((stateEx & SystemState.CentralStateExShortCircuitInternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
         );
 
         if (fw?.Version >= Z21FirmwareVersions.V1_42)
         {
-            sb.AppendLine($"{MakeFixedLengthString(Localizer["RCN213Mode"] + ":", 20)} {((stateEx & SystemStateChangedEventArgs.CentralStateExRcn213Mode) > 0 ? Localizer["Active"] : Localizer["Inactive"])}");
+            sb.AppendLine($"{MakeFixedLengthString(Localizer["RCN213Mode"] + ":", 20)} {((stateEx & SystemState.CentralStateExRcn213Mode) > 0 ? Localizer["Active"] : Localizer["Inactive"])}");
         }
         return sb.ToString();
     }
 
-    private string DecodeCapabilities(byte capabilities)
+    private string DecodeCapabilities(SystemState.Caps capabilities)
     {
         var sb = new StringBuilder();
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["Protocols"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "DCC " : string.Empty)}{((capabilities & SystemStateChangedEventArgs.CapabilitiesDcc) > 0 ? "MM" : string.Empty)}"
+            $"{MakeFixedLengthString(Localizer["Protocols"] + ":", 20)} {(capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC ? "DCC " : string.Empty)}{(capabilities.Protocols is Protocols.DCC_MM or Protocols.MM ? "MM" : string.Empty)}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["RailCom"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesRailCom) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["RailCom"] + ":", 20)} {(capabilities.RailComEnabled ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["AcceptLANLocoCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesLocoCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["AcceptLANLocoCmds"] + ":", 20)} {(capabilities.AcceptLANLocoCmds ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["AcceptLANAccCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesAccessoryCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["AcceptLANAccCmds"] + ":", 20)} {(capabilities.AcceptLANAccCmds ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["AcceptLANDetCmds"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesDetectorCmds) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["AcceptLANDetCmds"] + ":", 20)} {(capabilities.AcceptLANDetCmds ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["NeedsUnlockCode"] + ":", 20)} {((capabilities & SystemStateChangedEventArgs.CapabilitiesNeedsUnlockCode) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["NeedsUnlockCode"] + ":", 20)} {(capabilities.NeedsUnlockCode ? Localizer["Yes"] : Localizer["No"])}"
         );
         return sb.ToString();
     }

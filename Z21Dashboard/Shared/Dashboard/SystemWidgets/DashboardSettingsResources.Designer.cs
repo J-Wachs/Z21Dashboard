@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Z21Dashboard.Shared.Dashboard.Components {
+namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DashboardWindowResources {
+    internal class DashboardSettingsResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DashboardWindowResources() {
+        internal DashboardSettingsResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Components.DashboardWindowResources", typeof(DashboardWindowResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.SystemWidgets.DashboardSettingsResources", typeof(DashboardSettingsResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,20 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit settings.
+        ///   Looks up a localized string similar to Select which components to display on the dashboard.
         /// </summary>
-        internal static string EditSettings {
+        internal static string InfoText {
             get {
-                return ResourceManager.GetString("EditSettings", resourceCulture);
+                return ResourceManager.GetString("InfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No configurable dashboard components were found.
+        /// </summary>
+        internal static string NoWidgets {
+            get {
+                return ResourceManager.GetString("NoWidgets", resourceCulture);
             }
         }
     }

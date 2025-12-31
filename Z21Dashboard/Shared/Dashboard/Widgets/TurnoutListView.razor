@@ -1,18 +1,16 @@
-@*
-    Displays a list of active turnouts with their current state and allows control and configuration.
-*@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject ITurnoutCounterService TurnoutCounterService
 @inject IStringLocalizer<TurnoutListViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -21,41 +19,45 @@
                 <thead class="sticky-top">
                     <tr>
                         <th>@Localizer["Address"]</th>
-                            <th>@Localizer["Protocol"]</th>
-                            <th>@Localizer["Direction"]</th>
-                            <th>@Localizer["LastChanged"]</th>
+                        <th>@Localizer["Protocol"]</th>
+                        <th>@Localizer["Direction"]</th>
+                        <th>@Localizer["Switches"]</th>
+                        <th>@Localizer["LastChanged"]</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (activeTurnouts.Any())
+                    @if (_trackedTurnouts.Any())
                     {
-                    @foreach (var turnoutDisplay in activeTurnouts.Values.OrderBy(t => t.Info.Address))
-                    {
-                        <tr>
-                            <td><strong>@(turnoutDisplay.Info.Address + 1)</strong></td>
-                                <td>@turnoutDisplay.Mode</td>
+                        @foreach (var turnout in _trackedTurnouts)
+                        {
+                            <tr>
+                                <td><strong>@(turnout.Address + 1)</strong></td>
+                                <td>@(turnout.Mode?.ToString() ?? "-")</td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" disabled="@_isLocked"
-                                                class="btn @(turnoutDisplay.Info.State is TurnoutState.Position2 ? "btn-success" : "btn-outline-success")"
-                                                @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position2)"
+                                                class="btn @(turnout.State is TurnoutState.Position2 ? "btn-success" : "btn-outline-success")"
+                                                @onclick="() => SetTurnoutPositionAsync(turnout.Address, TurnoutPosition.Position2)"
                                                 title="@Localizer["Straight"]">
                                             &uarr;
                                         </button>
                                         <button type="button" disabled="@_isLocked"
-                                                class="btn @(turnoutDisplay.Info.State is TurnoutState.Position1 ? "btn-danger" : "btn-outline-danger")"
-                                                @onclick="() => SetTurnoutPositionAsync(turnoutDisplay.Info.Address, TurnoutPosition.Position1)"
+                                                class="btn @(turnout.State is TurnoutState.Position1 ? "btn-danger" : "btn-outline-danger")"
+                                                @onclick="() => SetTurnoutPositionAsync(turnout.Address, TurnoutPosition.Position1)"
                                                 title="@Localizer["Divert"]">
                                             &#8599;
                                         </button>
                                     </div>
                                 </td>
-                                <td>@turnoutDisplay.Timestamp.ToString("HH:mm:ss")</td>
+                                <td class="@GetServiceStatusCssClass(turnout)" title="@GetServiceTooltip(turnout)">
+                                    @turnout.TotalSwitches
+                                </td>
+                                <td>@(turnout.Timestamp == DateTime.MinValue ? "-" : turnout.Timestamp.ToString("HH:mm:ss"))</td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-secondary p-0"
                                             style="width: 24px; height: 24px; line-height: 1;"
-                                            @onclick="() => OpenEditDialog(turnoutDisplay)"
+                                            @onclick="() => OpenEditDialog(turnout)"
                                             title="@Localizer["EditSettings"]">
                                         &#9881;
                                     </button>
@@ -66,16 +68,15 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center text-muted">@Localizer["WaitingForData"]</td>
+                            <td colspan="6" class="text-center text-muted">@Localizer["WaitingForData"]</td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
-@* -- Edit Dialog -- *@
 @if (_isDialogOpen)
 {
     <div class="modal-backdrop fade show"></div>
@@ -83,27 +84,64 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditSettingsForTurnout"] @(_selectedTurnoutForEdit?.Info.Address + 1)</h5>
+                    <h5 class="modal-title">@Localizer["EditSettingsForTurnout"] @(_selectedTurnoutForEdit?.Address + 1)</h5>
                     <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
-                        <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
-                            <option value="@TurnoutMode.DCC">DCC</option>
-                            <option value="@TurnoutMode.MM">MM</option>
-                        </select>
-                    </div>
+                    @if (!_showDeleteConfirmation)
+                    {
+                        <div class="mb-3">
+                            <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
+                            <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
+                                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC)
+                                {
+                                    <option value="@TurnoutMode.DCC">DCC</option>
+                                }
+                                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.MM)
+                                {
+                                    <option value="@TurnoutMode.MM">MM</option>
+                                }
+                            </select>
+                        </div>
+                        <hr />
+                        <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
+                        <div class="mb-3">
+                            <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalSwitches"]:</label>
+                            <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalSwitches" placeholder="@Localizer["IntervalPlaceholder"]" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">@Localizer["SwitchesSinceService"]:</label>
+                            <input type="text" class="form-control" value="@(_selectedTurnoutForEdit?.SwitchesSinceService ?? 0)" readonly />
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
+                            <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkServicePerformed"]</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            @Localizer["ConfirmDeleteText"] (@(_selectedTurnoutForEdit?.Address + 1))?
+                        </div>
+                    }
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
+                    @if (!_showDeleteConfirmation)
+                    {
+                        <button type="button" class="btn btn-danger me-auto" @onclick="@(() => _showDeleteConfirmation = true)">@Localizer["Delete"]</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
+                        <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="DeleteTurnoutAsync">@Localizer["Confirm"]</button>
+                        <button type="button" class="btn btn-secondary" @onclick="@(() => _showDeleteConfirmation = false)">@Localizer["Cancel"]</button>
+                    }
                 </div>
             </div>
         </div>
     </div>
 }
-
 
 @code {
     [Parameter]
@@ -112,23 +150,65 @@
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
-    private sealed record DisplayTurnoutInfo(TurnoutInfo Info, DateTime Timestamp, TurnoutMode? Mode = null);
+    private List<TrackedTurnoutCount> _trackedTurnouts = new();
 
-    private Dictionary<ushort, DisplayTurnoutInfo> activeTurnouts = new();
-
-    // Fields for the Edit dialog
     private bool _isDialogOpen = false;
-    private DisplayTurnoutInfo? _selectedTurnoutForEdit;
+    private bool _showDeleteConfirmation = false;
+    private TrackedTurnoutCount? _selectedTurnoutForEdit;
+    private TurnoutMetadata _editableMetadata = new();
     private TurnoutMode _selectedTurnoutMode;
-    private Z21LockState? _lockState;
-    private bool _isLocked => _lockState == Z21LockState.Locked;
+    private bool _servicePerformed = false;
+    private bool _isLocked => Z21Client.Z21Code?.LockState == Z21LockState.Locked;
 
     protected override void OnInitialized()
     {
-        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
-        Z21Client.TurnoutInfoReceived += OnTurnoutInfoReceived;
-        Z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+        TurnoutCounterService.OnDataUpdated += OnDataUpdated;
+        RefreshTurnoutList();
         _ = Z21Client.GetZ21CodeAsync();
+    }
+
+    private void RefreshTurnoutList()
+    {
+        _trackedTurnouts = TurnoutCounterService.GetTrackedTurnouts().ToList();
+
+        foreach (var item in _trackedTurnouts)
+        {
+            if (item.State == TurnoutState.NotSwitched)
+            {
+                _ = Z21Client.GetTurnoutInfoAsync(item.Address);
+            }
+            if (item.Mode == null)
+            {
+                _ = Z21Client.GetTurnoutModeAsync(item.Address);
+            }
+        }
+    }
+
+    private string GetServiceStatusCssClass(TrackedTurnoutCount turnout)
+    {
+        var metadata = TurnoutCounterService.GetMetadata(turnout.Address);
+        if (metadata?.ServiceIntervalSwitches is null or <= 0) return string.Empty;
+
+        long remaining = metadata.ServiceIntervalSwitches.Value - turnout.SwitchesSinceService;
+
+        if (remaining <= 0) return "bg-danger text-white";
+        if (remaining <= (metadata.ServiceIntervalSwitches.Value * 0.1) || remaining <= 50) return "bg-warning";
+
+        return string.Empty;
+    }
+
+    private string GetServiceTooltip(TrackedTurnoutCount turnout)
+    {
+        var metadata = TurnoutCounterService.GetMetadata(turnout.Address);
+        if (metadata?.ServiceIntervalSwitches is null or <= 0) return string.Empty;
+
+        long remaining = metadata.ServiceIntervalSwitches.Value - turnout.SwitchesSinceService;
+
+        if (remaining <= 0)
+        {
+            return $"{Localizer["ServiceOverdueBy"]} {Math.Abs(remaining)} {Localizer["SwitchesPostFix"]}";
+        }
+        return $"{Localizer["ServiceIn"]} {remaining} {Localizer["SwitchesPostFix"]}";
     }
 
     private async Task SetTurnoutPositionAsync(ushort address, TurnoutPosition position)
@@ -136,70 +216,60 @@
         await Z21Client.SetTurnoutPositionAsync(address, position);
     }
 
-    private void OpenEditDialog(DisplayTurnoutInfo turnoutToEdit)
+    private void OpenEditDialog(TrackedTurnoutCount turnoutToEdit)
     {
         _selectedTurnoutForEdit = turnoutToEdit;
-        _selectedTurnoutMode = turnoutToEdit.Mode ?? TurnoutMode.DCC; // Default to DCC if mode is unknown
+        _editableMetadata = TurnoutCounterService.GetMetadata(turnoutToEdit.Address) ?? new();
+        _selectedTurnoutMode = turnoutToEdit.Mode ?? TurnoutMode.DCC;
+        _servicePerformed = false;
+        _showDeleteConfirmation = false;
         _isDialogOpen = true;
-        StateHasChanged();
     }
 
     private void CloseEditDialog()
     {
         _isDialogOpen = false;
         _selectedTurnoutForEdit = null;
-        StateHasChanged();
+        _editableMetadata = new();
+        _showDeleteConfirmation = false;
     }
 
     private async Task SaveSettingsAsync()
     {
         if (_selectedTurnoutForEdit is not null)
         {
-            // Send the command to the Z21
+            if (_servicePerformed)
+            {
+                TurnoutCounterService.ResetServiceCounter(_selectedTurnoutForEdit.Address);
+            }
+
+            await TurnoutCounterService.SaveMetadata(_selectedTurnoutForEdit.Address, _editableMetadata);
+
             await Z21Client.SetTurnoutModeAsync(
-                _selectedTurnoutForEdit.Info.Address,
+                _selectedTurnoutForEdit.Address,
                 _selectedTurnoutMode
             );
-
-            // Optimistically update the local state for immediate UI feedback
-            activeTurnouts[_selectedTurnoutForEdit.Info.Address] = _selectedTurnoutForEdit with { Mode = _selectedTurnoutMode };
         }
         CloseEditDialog();
     }
 
-    private async void OnZ21CodeReceived(object? sender, Z21Code e)
+    private void DeleteTurnoutAsync()
     {
-        _lockState = e.LockState;
-        await InvokeAsync(StateHasChanged);
+        if (_selectedTurnoutForEdit is not null)
+        {
+            TurnoutCounterService.RemoveTurnout(_selectedTurnoutForEdit.Address);
+        }
+        CloseEditDialog();
     }
 
-    private async void OnTurnoutInfoReceived(object? sender, TurnoutInfo e)
+    private async void OnDataUpdated()
     {
-        if (activeTurnouts.TryGetValue(e.Address, out var existing))
-        {
-            activeTurnouts[e.Address] = existing with { Info = e, Timestamp = DateTime.Now };
-        }
-        else
-        {
-            activeTurnouts[e.Address] = new DisplayTurnoutInfo(e, DateTime.Now);
-        }
-
-        await Z21Client.GetTurnoutModeAsync(e.Address);
+        RefreshTurnoutList();
         await InvokeAsync(StateHasChanged);
-    }
-
-    private async void OnTurnoutModeReceived(object? sender, TurnoutModeChangedEventArgs e)
-    {
-        if (activeTurnouts.TryGetValue(e.Address, out var existing))
-        {
-            activeTurnouts[e.Address] = existing with { Mode = e.Mode };
-            await InvokeAsync(StateHasChanged);
-        }
     }
 
     public void Dispose()
     {
-        Z21Client.TurnoutInfoReceived -= OnTurnoutInfoReceived;
-        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        TurnoutCounterService.OnDataUpdated -= OnDataUpdated;
     }
 }

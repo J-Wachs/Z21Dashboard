@@ -1,0 +1,178 @@
+@*
+    Component to select and set the turnout protocol mode for a given address.
+    If no address is provided, the user can input one.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Helpers
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@inject IStringLocalizer<TurnoutProtocolSelectorResources> Localizer
+@implements IAsyncDisposable
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        @if (Z21Client.Z21Code?.LockState is null)
+        {
+            <div class="d-flex align-items-center">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="ms-2">@Localizer["InfoText"]</span>
+            </div>
+        }
+        else
+        {
+            <div class="input-group mb-2">
+                <span class="input-group-text">@Localizer["Address"]</span>
+                <input type="number" class="form-control" placeholder="@Localizer["EnterAddress"]" @bind="_inputAddress" @oninput="OnAddressInput" />
+            </div>
+        }
+
+        <div class="input-group mb-2">
+            <label for="protocol-select" class="input-group-text">@Localizer["SelectProtocol"]:</label>
+            <select id="protocol-select" class="form-select" @bind-value:event="oninput" @bind-value="_selectedMode" disabled="@_isLocked">
+                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC)
+                {
+                    <option value="@TurnoutMode.DCC">DCC</option>
+                }
+                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.MM)
+                {
+                    <option value="@TurnoutMode.MM">MM</option>
+                }
+            </select>
+        </div>
+        <div class="btn-group w-100" role="group">
+            <button class="btn btn-success" onclick="@SetNewTurnoutModeAsync" disabled="@(_isLocked)">
+                <span>@Localizer["SetProtocol"]</span>
+            </button>
+        </div>
+    </Content>
+</DashboardWidget>
+
+@code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private ushort _inputAddress;
+    //private ushort _activeAddress;
+    private bool _isKeying = false;
+    private bool _isLocked => _inputAddress == 0 || _isKeying;
+    private TurnoutMode? _currentMode;
+    private TurnoutMode _selectedMode;
+    private TaskCompletionSource<TurnoutModeStatus>? _turnoutModeTcs;
+    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(1500));
+
+    private async Task FetchTurnoutInfoAsync()
+    {
+        if (_inputAddress is 0)
+        {
+            _isKeying = false;
+            return;
+        }
+
+        _currentMode = null;
+        await InvokeAsync(StateHasChanged);
+
+        // Convert 1-based user address to 0-based protocol address
+        var protocolAddress = (ushort)(_inputAddress - 1);
+
+        Z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+
+        _turnoutModeTcs = new TaskCompletionSource<TurnoutModeStatus>();
+        await Z21Client.GetTurnoutModeAsync(protocolAddress);
+
+        var completedTask = await Task.WhenAny(_turnoutModeTcs.Task, Task.Delay(3000));
+
+        if (completedTask == _turnoutModeTcs.Task)
+        {
+            var result = await _turnoutModeTcs.Task;
+            _currentMode = result.Mode;
+            _selectedMode = result.Mode;
+        }
+
+        _isKeying = false;
+        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OnTurnoutModeReceived(object? sender, TurnoutModeStatus e)
+    {
+        // Compare with the 0-based protocol address
+        if (e.Address == (_inputAddress - 1))
+        {
+            _turnoutModeTcs?.TrySetResult(e);
+        }
+    }
+
+    private async Task SetNewTurnoutModeAsync()
+    {
+        if (_inputAddress is 0) return;
+
+        await InvokeAsync(StateHasChanged);
+
+        // Convert 1-based user address to 0-based protocol address
+        var protocolAddress = (ushort)(_inputAddress - 1);
+        await Z21Client.SetTurnoutModeAsync(protocolAddress, _selectedMode);
+
+        await Task.Delay(250);
+        await FetchTurnoutInfoAsync();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private ushort ExtractValue(ChangeEventArgs e)
+    {
+        ushort returnValue = 0;
+
+        switch (e.Value)
+        {
+            case string strValue when ushort.TryParse(strValue, out var parsedValue):
+                returnValue = parsedValue;
+                break;
+            case ushort ushortValue:
+                returnValue = ushortValue;
+                break;
+        }
+        return returnValue;
+    }
+
+    private void OnAddressInput(ChangeEventArgs e)
+    {
+        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress))
+        {
+            if (newAddress is 0 or > 9999)
+            {
+                _inputAddress = 0;
+                return;
+            }
+
+            _isKeying = true;
+            _inputAddress = newAddress;
+            _addressDebouncer.Debounce(async () => await FetchTurnoutInfoAsync());
+        }
+        else
+        {
+            _inputAddress = 0;
+        }
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        _turnoutModeTcs?.TrySetCanceled();
+        return ValueTask.CompletedTask;
+    }
+}

@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Logging
 @using Z21Client.Infrastructure
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
@@ -18,12 +18,12 @@
 @inject IStringLocalizer<LocoControlResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenEditDialog">
     <Content>
-        @if (_lockState is null)
+        @if (Z21Client.Z21Code?.LockState is null)
         {
             <div class="d-flex align-items-center">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -89,7 +89,7 @@
             </div>
         }
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @* -- Edit Dialog -- *@
 @if (_isDialogOpen)
@@ -108,7 +108,7 @@
                         <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
                     </div>
                     <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">@(Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
+                        <label for="protocolSelect" class="form-label">@(Z21Client.Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
                         <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
                             @foreach (var option in _protocolOptions)
                             {
@@ -143,19 +143,12 @@
 
 @code {
     [Parameter]
-    public FirmwareVersion? FirmwareVersion { get; set; }
-
-    [Parameter]
-    public Z21Code? Z21Code { get; set; }
-
-    [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
-    private Z21LockState? _lockState;
-    private bool _isLocked => _lockState == Z21LockState.Locked || _activeAddress == 0;
+    private bool _isLocked => Z21Client.Z21Code?.LockState is Z21LockState.Locked || _activeAddress == 0;
 
     private ushort _activeAddress;
     private ushort _inputAddress;
@@ -167,7 +160,7 @@
 
     private TrackPowerState? _trackPowerState;
 
-    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(500));
+    private readonly Debouncer _addressDebouncer = new(TimeSpan.FromMilliseconds(1500));
     private readonly Debouncer _speedDebouncer = new(TimeSpan.FromMilliseconds(150));
 
     // --- Fields for the Edit dialog ---
@@ -181,11 +174,10 @@
     private record ProtocolOption(string Value, string DisplayName, LocoMode LocoMode, NativeSpeedSteps SpeedSteps);
     private List<ProtocolOption> _protocolOptions = [];
 
-    private int _functionsToShow => FirmwareVersion?.Version >= Z21FirmwareVersions.V1_42 ? 32 : 29;
+    private int _functionsToShow => Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42 ? 32 : 29;
 
     protected override void OnInitialized()
     {
-        Z21Client.Z21CodeReceived += OnZ21CodeReceived;
         Z21Client.LocoInfoReceived += OnLocoInfoReceived;
         Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
         Z21Client.SystemStateChanged += OnSystemStateChanged;
@@ -196,27 +188,37 @@
 
     protected override void OnParametersSet()
     {
-        if (Z21Code is not null)
+        if (Z21Client.Z21Code is not null)
         {
-            if (Z21Code.LockState is Z21LockState.Locked)
+            _protocolOptions = [];
+
+            if (Z21Client.Z21Code.LockState is Z21LockState.Locked)
             {
-                _protocolOptions =
-                [
-                    new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown),
-                    new("MM",  "MM",  LocoMode.MM,  NativeSpeedSteps.Unknown)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("DCC", "DCC", LocoMode.DCC, NativeSpeedSteps.Unknown));
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                    _protocolOptions.Add(new("MM", "MM", LocoMode.MM, NativeSpeedSteps.Unknown));
             }
             else
             {
-                _protocolOptions =
-                [
-                    new("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
-                    new("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
-                    new("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128),
-                    new("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
-                    new("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
-                    new("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
-                ];
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("DCC14",  "DCC 14",  LocoMode.DCC, NativeSpeedSteps.Steps14),
+                        new ProtocolOption("DCC28",  "DCC 28",  LocoMode.DCC, NativeSpeedSteps.Steps28),
+                        new ProtocolOption("DCC128", "DCC 128", LocoMode.DCC, NativeSpeedSteps.Steps128)
+                    });
+                }
+                if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.MM or Protocols.DCC_MM)
+                {
+                    _protocolOptions.AddRange(new[]
+                    {
+                        new ProtocolOption("MM114",  "MM1 14",  LocoMode.MM,  NativeSpeedSteps.Steps14),
+                        new ProtocolOption("MM214",  "MM2 14",  LocoMode.MM,  NativeSpeedSteps.Steps28),
+                        new ProtocolOption("MM228",  "MM2 28",  LocoMode.MM,  NativeSpeedSteps.Steps128)
+                    });
+                }
             }
         }
     }
@@ -227,16 +229,10 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async void OnZ21CodeReceived(object? sender, Z21Code e)
-    {
-        _lockState = e.LockState;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         Z21Client.SystemStateChanged -= OnSystemStateChanged;
-        _trackPowerState = (e.CentralState & SystemStateChangedEventArgs.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
+        _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -259,8 +255,14 @@
 
     private void OnAddressInput(ChangeEventArgs e)
     {
-        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress))
+        if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress) && newAddress > 0)
         {
+            if (newAddress > 10239)
+            {
+                _inputAddress = 0;
+                return;
+            }
+
             _inputAddress = newAddress;
             _addressDebouncer.Debounce(() => SetActiveAddress(newAddress));
         }
@@ -389,7 +391,7 @@
 
         await Z21Client.SetLocoModeAsync(_selectedLocoForEdit.Address, _selectedLocoMode);
 
-        if (Z21Code?.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code?.LockState is not Z21LockState.Locked)
         {
             await Z21Client.SetLocoDriveAsync(
                 _selectedLocoForEdit.Address, 0, _selectedSpeedSteps,
@@ -419,7 +421,7 @@
 
     private bool IsSelected(ProtocolOption option)
     {
-        if (Z21Code!.LockState is not Z21LockState.Locked)
+        if (Z21Client.Z21Code!.LockState is not Z21LockState.Locked)
         {
             return option.LocoMode == _selectedLocoMode && option.SpeedSteps == _selectedSpeedSteps;
         }
@@ -434,7 +436,6 @@
 
     public void Dispose()
     {
-        Z21Client.Z21CodeReceived -= OnZ21CodeReceived;
         Z21Client.LocoInfoReceived -= OnLocoInfoReceived;
         Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
         Z21Client.SystemStateChanged -= OnSystemStateChanged;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.26100.0</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
@@ -37,12 +37,14 @@
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
+      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
+      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -64,11 +66,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.11" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -82,25 +84,25 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>SharedResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\AboutResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AboutResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ConnectionViewResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\ConnectionResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>ConnectionViewResources.resx</DependentUpon>
+        <DependentUpon>ConnectionResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\DashboardSettingsResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\DashboardWindowResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\Components\DashboardWidgetResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>DashboardWindowResources.resx</DependentUpon>
+        <DependentUpon>DashboardWidgetResources.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\DashboardResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -172,6 +174,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>TurnoutListViewResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>TurnoutProtocolSelectorResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -179,21 +186,21 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\AboutResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ConnectionViewResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\ConnectionResources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>ConnectionViewResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>ConnectionResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardSettingsResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWindowResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWidgetResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>DashboardWindowResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>DashboardWidgetResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\DashboardResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -250,6 +257,10 @@
       <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutListViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>TurnoutListViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>TurnoutProtocolSelectorResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 

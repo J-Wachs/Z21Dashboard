@@ -117,94 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Address" xml:space="preserve">
-    <value>Adresse</value>
+  <data name="Connect" xml:space="preserve">
+    <value>Forbind</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Annuller</value>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Afbryd forbindelse</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Luk</value>
+  <data name="FW" xml:space="preserve">
+    <value>FW</value>
   </data>
-  <data name="Confirm" xml:space="preserve">
-    <value>Bekræft</value>
-  </data>
-  <data name="ConfirmDeleteText" xml:space="preserve">
-    <value>Bekræft at du vil slette dette lokomotiv</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Slet</value>
-  </data>
-  <data name="DirectionInfoText" xml:space="preserve">
-    <value>Retning</value>
-  </data>
-  <data name="DirectionShort" xml:space="preserve">
-    <value>R</value>
-  </data>
-  <data name="EditSettings" xml:space="preserve">
-    <value>Lokomotiv indstillinger</value>
-  </data>
-  <data name="EditSettingsForLoco" xml:space="preserve">
-    <value>Lokomotiv indstillinger for adresse</value>
-  </data>
-  <data name="Forward" xml:space="preserve">
-    <value>Fremad</value>
-  </data>
-  <data name="Functions" xml:space="preserve">
-    <value>Funktioner</value>
-  </data>
-  <data name="InputPlaceHolder" xml:space="preserve">
-    <value>Fx MY 1103</value>
-  </data>
-  <data name="IntervalHours" xml:space="preserve">
-    <value>Interval (timer)</value>
-  </data>
-  <data name="LastChanged" xml:space="preserve">
-    <value>Senest ændret</value>
-  </data>
-  <data name="LastService" xml:space="preserve">
-    <value>Tid siden seneste service</value>
-  </data>
-  <data name="LocomotiveName" xml:space="preserve">
-    <value>Lokomotivets navn</value>
-  </data>
-  <data name="MarkService" xml:space="preserve">
-    <value>Markér at service er udført (nulstil tid til service)</value>
-  </data>
-  <data name="OperatingTime" xml:space="preserve">
-    <value>Drifts tid</value>
-  </data>
-  <data name="Protocol" xml:space="preserve">
-    <value>Protokol</value>
-  </data>
-  <data name="ProtocolAndSpeedSteps" xml:space="preserve">
-    <value>Protokol og hastighedstrin</value>
-  </data>
-  <data name="Reverse" xml:space="preserve">
-    <value>Baglæns</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Gem</value>
-  </data>
-  <data name="ServiceIn" xml:space="preserve">
-    <value>Service om</value>
-  </data>
-  <data name="ServiceInterval" xml:space="preserve">
-    <value>Serviceinterval</value>
-  </data>
-  <data name="ServiceOverdue" xml:space="preserve">
-    <value>Service mangler med</value>
-  </data>
-  <data name="SIPlaceHolder" xml:space="preserve">
-    <value>Fx 10</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Hastighed</value>
+  <data name="SN" xml:space="preserve">
+    <value>S/N</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Lokomotivers driftstid</value>
+    <value>Forbindelse</value>
   </data>
-  <data name="WaitingForData" xml:space="preserve">
-    <value>Venter på lokomotiv informationer...</value>
+  <data name="Connecting" xml:space="preserve">
+    <value>Forbinder</value>
+  </data>
+  <data name="TrackPwrOn" xml:space="preserve">
+    <value>Banestrøm til</value>
+  </data>
+  <data name="TrackPwrOff" xml:space="preserve">
+    <value>Banestrøm af</value>
+  </data>
+  <data name="EmergencyStop" xml:space="preserve">
+    <value>Nødstop</value>
+  </data>
+  <data name="ConnectionLost" xml:space="preserve">
+    <value>Forbindelse tabt</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Ej forbundet</value>
+  </data>
+  <data name="Lost" xml:space="preserve">
+    <value>Tabt</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Forbundet</value>
+  </data>
+  <data name="NoLock" xml:space="preserve">
+    <value>Ingen lås</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="Unlocked" xml:space="preserve">
+    <value>Låst op</value>
+  </data>
+  <data name="FoundDevices" xml:space="preserve">
+    <value>Fundende enheder</value>
+  </data>
+  <data name="CloseList" xml:space="preserve">
+    <value>Luk listen</value>
+  </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>Ingen enheder fundet</value>
   </data>
 </root>

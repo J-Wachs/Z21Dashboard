@@ -1,0 +1,310 @@
+@*
+    Component for managing and displaying the connection status to a Z21 device.
+*@
+@using System.Net
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IAppDataService AppDataService
+@inject IStringLocalizer<ConnectionResources> Localizer
+@inject IZ21Client Z21Client
+@implements IDisposable
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <HeaderContent>
+        @if (ConnectionState is ConnectionState.Connected)
+        {
+            if (Z21Client.HardwareInfo is not null)
+            {
+                <span class="badge bg-info">
+                    @Z21Client.HardwareInfo.HwType, @if (Z21Client.Z21Code is not null)
+                    {
+                        <text>@Z21CodeText, </text>
+                    }
+                    @if (Z21Client.SerialNumber is not null)
+                    {
+                        <text>@Localizer["SN"]: @Z21Client.SerialNumber.Value, </text>
+                    }
+
+                    @Localizer["FW"]: @Z21Client.HardwareInfo.FwVersion
+                </span>
+                <text>&nbsp;</text>
+            }
+        }
+        <span class="badge @GetConnectionStatusClass()">@Localizer[ConnectionState.ToString()]</span>
+    </HeaderContent>
+
+    <Content>
+        <div class="row g-2">
+            @* Left Column *@
+            <div class="col-6">
+                <div class="input-group mb-2 position-relative">
+                    <input class="form-control"
+                           value="@_ipAddress"
+                           @onchange="OnIpAddressChanged"
+                           disabled="@(ConnectionState != ConnectionState.Disconnected)"
+                           placeholder="Enter IP"
+                           autocomplete="off" />
+
+                    <button class="btn btn-outline-secondary" @onclick="SearchForZ21" disabled="@(ConnectionState != ConnectionState.Disconnected || _isSearching)">
+                        @if (_isSearching)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        }
+                    </button>
+
+                    @if (_showSearchResults)
+                    {
+                        <ul class="dropdown-menu show" style="position: absolute; top: 100%; left: 0; min-width: 100%; width: max-content; z-index: 1050;">
+                            <li class="dropdown-header">@Localizer["FoundDevices"] (@_foundZ21s.Count)</li>
+                            @if (_foundZ21s.Count == 0 && !_isSearching)
+                            {
+                                <li>
+                                    <span class="dropdown-item-text">(@Localizer["NoDevicesFound"])</span>
+                                </li>
+                            }
+                            else
+                            {
+                                @foreach (var z21 in _foundZ21s)
+                                {
+                                    <li>
+                                        <button class="dropdown-item" type="button" @onclick="() => SelectIp(z21.IpAddress)">
+                                            <strong>@z21.ToString()</strong>
+                                        </button>
+                                    </li>
+                                }
+                            }
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="dropdown-item text-danger text-center" type="button" @onclick="ClearSearchResults">
+                                    @Localizer["CloseList"]
+                                </button>
+                            </li>
+                        </ul>
+                    }
+                </div>
+
+                @if (ConnectionState == ConnectionState.Connected)
+                {
+                    <button class="btn btn-danger w-100" @onclick="Disconnect">@Localizer["Disconnect"]</button>
+                }
+                else
+                {
+                    <button class="btn btn-success w-100" @onclick="Connect" disabled="@(ConnectionState == ConnectionState.Connecting || string.IsNullOrWhiteSpace(_ipAddress))">
+                        @if (ConnectionState == ConnectionState.Connecting)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="ms-1">@Localizer["Connecting"]...</span>
+                        }
+                        else
+                        {
+                            <span>@Localizer["Connect"]</span>
+                        }
+                    </button>
+                }
+            </div>
+
+            @* Right Column *@
+            <div class="col-6">
+                <div class="btn-group w-100 mb-2" role="group">
+                    <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
+                            @onclick="SetTrackPowerOn" disabled="@(ConnectionState != ConnectionState.Connected)">
+                        @Localizer["TrackPwrOn"]
+                    </button>
+                    <button class="btn @(_trackPowerState == TrackPowerState.Off ? "btn-secondary" : "btn-outline-secondary")"
+                            @onclick="SetTrackPowerOff" disabled="@(ConnectionState != ConnectionState.Connected)">
+                        @Localizer["TrackPwrOff"]
+                    </button>
+                </div>
+
+                <button class="btn btn-danger w-100" @onclick="SetEmergencyStop" disabled="@(ConnectionState != ConnectionState.Connected)">
+                    @Localizer["EmergencyStop"]
+                </button>
+            </div>
+        </div>
+
+        @if (ConnectionState == ConnectionState.Lost)
+        {
+            <div class="alert alert-danger mt-3 mb-0" role="alert">
+                @Localizer["ConnectionLost"]
+            </div>
+        }
+    </Content>
+</DashboardWidget>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    [Parameter]
+    public ConnectionState ConnectionState { get; set; } = ConnectionState.Disconnected;
+
+    [Parameter]
+    public EventCallback<string> OnConnect { get; set; }
+
+    [Parameter]
+    public EventCallback OnDisconnect { get; set; }
+
+    private const string Z21IpAddressKey = "Z21Connection_IpAddress";
+    private string _ipAddress { get; set; } = string.Empty;
+
+    private TrackPowerState? _trackPowerState;
+    private ConnectionState _prevConnectionState = ConnectionState.Disconnected;
+
+    private bool _isSearching;
+    private bool _showSearchResults;
+    private List<Z21Info> _foundZ21s = [];
+
+    protected override void OnInitialized()
+    {
+        var savedIp = AppDataService.GetData<string>(Z21IpAddressKey);
+
+        if (!string.IsNullOrWhiteSpace(savedIp))
+        {
+            _ipAddress = savedIp;
+        }
+        else
+        {
+            _ipAddress = "192.168.0.111";
+            AppDataService.SaveData(Z21IpAddressKey, _ipAddress);
+        }
+    }
+
+    private void OnIpAddressChanged(ChangeEventArgs e)
+    {
+        var newIp = e.Value?.ToString() ?? string.Empty;
+        if (_ipAddress != newIp)
+        {
+            _ipAddress = newIp;
+            AppDataService.SaveData(Z21IpAddressKey, _ipAddress);
+        }
+    }
+
+    private string Z21CodeText => Z21Client.Z21Code?.LockState switch
+    {
+        Z21LockState.NoLock => Localizer["Nolock"],
+        Z21LockState.Locked => Localizer["Locked"],
+        Z21LockState.Unlocked => Localizer["Unlocked"],
+        _ => string.Empty
+    };
+
+    private async Task Connect()
+    {
+        await OnConnect.InvokeAsync(_ipAddress);
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ConnectionState != _prevConnectionState && ConnectionState is ConnectionState.Connected)
+        {
+            SubscribeToEvents();
+            await Z21Client.GetSystemStateAsync();
+        }
+        _prevConnectionState = ConnectionState;
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task Disconnect()
+    {
+        await OnDisconnect.InvokeAsync();
+        UnsubscribeFromEvents();
+    }
+
+    private async Task SetTrackPowerOn() => await Z21Client.SetTrackPowerOnAsync();
+    private async Task SetTrackPowerOff() => await Z21Client.SetTrackPowerOffAsync();
+    private async Task SetEmergencyStop() => await Z21Client.SetEmergencyStopAsync();
+
+    private string GetConnectionStatusClass() => ConnectionState switch
+    {
+        ConnectionState.Connected => "bg-success",
+        ConnectionState.Connecting => "bg-secondary",
+        ConnectionState.Lost => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private void SubscribeToEvents()
+    {
+        Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
+        Z21Client.EmergencyStopReceived += OnEmergencyStopReceived;
+        Z21Client.SystemStateChanged += OnSystemStateChanged;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
+        Z21Client.EmergencyStopReceived -= OnEmergencyStopReceived;
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+    }
+
+    private async void OnTrackPowerInfoReceived(object? sender, TrackPowerInfo e)
+    {
+        _trackPowerState = e.State;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnEmergencyStopReceived(object? sender, EventArgs e)
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnSystemStateChanged(object? sender, SystemState e)
+    {
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+
+        _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0
+            ? TrackPowerState.Off
+            : TrackPowerState.On;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SearchForZ21()
+    {
+        _isSearching = true;
+        _showSearchResults = true;
+        _foundZ21s.Clear();
+        await InvokeAsync(StateHasChanged);
+
+        _foundZ21s = await Z21Client.QueryForZ21sAsync();
+
+        _isSearching = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void SelectIp(string ip)
+    {
+        _ipAddress = ip;
+        AppDataService.SaveData(Z21IpAddressKey, _ipAddress);
+        _showSearchResults = false;
+        _foundZ21s.Clear();
+        StateHasChanged();
+    }
+
+    private void ClearSearchResults()
+    {
+        _showSearchResults = false;
+        _foundZ21s.Clear();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeFromEvents();
+    }
+}

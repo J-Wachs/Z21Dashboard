@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Z21Dashboard.Shared.Dashboard.Components {
+namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ConnectionViewResources {
+    public class ConnectionResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ConnectionViewResources() {
+        internal ConnectionResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Components.ConnectionViewResources", typeof(ConnectionViewResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.SystemWidgets.ConnectionResources", typeof(ConnectionResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,15 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close list.
+        /// </summary>
+        public static string CloseList {
+            get {
+                return ResourceManager.GetString("CloseList", resourceCulture);
             }
         }
         
@@ -124,6 +133,15 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found devices.
+        /// </summary>
+        public static string FoundDevices {
+            get {
+                return ResourceManager.GetString("FoundDevices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FW.
         /// </summary>
         public static string FW {
@@ -147,6 +165,15 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         public static string Lost {
             get {
                 return ResourceManager.GetString("Lost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No devices found.
+        /// </summary>
+        public static string NoDevicesFound {
+            get {
+                return ResourceManager.GetString("NoDevicesFound", resourceCulture);
             }
         }
         

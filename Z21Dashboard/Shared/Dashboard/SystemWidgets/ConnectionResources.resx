@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Connect" xml:space="preserve">
-    <value>Forbind</value>
+    <value>Connect</value>
   </data>
   <data name="Disconnect" xml:space="preserve">
-    <value>Afbryd forbindelse</value>
+    <value>Disconnect</value>
   </data>
   <data name="FW" xml:space="preserve">
     <value>FW</value>
@@ -130,39 +130,48 @@
     <value>S/N</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Forbindelse</value>
+    <value>Connection</value>
   </data>
   <data name="Connecting" xml:space="preserve">
-    <value>Forbinder</value>
+    <value>Connecting</value>
   </data>
   <data name="TrackPwrOn" xml:space="preserve">
-    <value>Banestrøm til</value>
+    <value>Track power on</value>
   </data>
   <data name="TrackPwrOff" xml:space="preserve">
-    <value>Banestrøm af</value>
+    <value>Track power off</value>
   </data>
   <data name="EmergencyStop" xml:space="preserve">
-    <value>Nødstop</value>
+    <value>Emergency Stop</value>
   </data>
   <data name="ConnectionLost" xml:space="preserve">
-    <value>Forbindelse tabt</value>
+    <value>Connection lost</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
-    <value>Ej forbundet</value>
+    <value>Disconnected</value>
   </data>
   <data name="Lost" xml:space="preserve">
-    <value>Tabt</value>
+    <value>Lost</value>
   </data>
   <data name="Connected" xml:space="preserve">
-    <value>Forbundet</value>
+    <value>Connected</value>
   </data>
   <data name="NoLock" xml:space="preserve">
-    <value>Ingen lås</value>
+    <value>No lock</value>
   </data>
   <data name="Locked" xml:space="preserve">
-    <value>Låst</value>
+    <value>Locked</value>
   </data>
   <data name="Unlocked" xml:space="preserve">
-    <value>Låst op</value>
+    <value>Unlocked</value>
+  </data>
+  <data name="FoundDevices" xml:space="preserve">
+    <value>Found devices</value>
+  </data>
+  <data name="CloseList" xml:space="preserve">
+    <value>Close list</value>
+  </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>No devices found</value>
   </data>
 </root>

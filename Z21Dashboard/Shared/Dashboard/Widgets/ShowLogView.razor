@@ -1,16 +1,19 @@
+@*
+    Show log view widget for the dashboard.
+*@
 @using BlazorLogComponent
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IStringLocalizer<ShowLogViewResources> Localizer
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
         <LogView MaxVisibleMessages="30"/>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     [Parameter]

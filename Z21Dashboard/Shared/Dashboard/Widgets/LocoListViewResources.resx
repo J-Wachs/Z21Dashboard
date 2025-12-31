@@ -126,6 +126,15 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmDeleteText" xml:space="preserve">
+    <value>Confirm that you want to delete this locomotive</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="DirectionInfoText" xml:space="preserve">
     <value>Direction</value>
   </data>

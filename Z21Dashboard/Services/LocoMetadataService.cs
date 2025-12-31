@@ -10,7 +10,7 @@ namespace Z21Dashboard.Services;
 public class LocoMetadataService : ILocoMetadataService
 {
     private readonly IAppDataService _appDataService;
-    private Dictionary<int, LocoMetadata> _locoMetadata = [];
+    private Dictionary<ushort, LocoMetadata> _locoMetadata = [];
     private const string LocoMetadataStorageKey = "LocomotiveMetadata";
 
     /// <summary>
@@ -29,19 +29,19 @@ public class LocoMetadataService : ILocoMetadataService
     /// </summary>
     private void LoadMetadata()
     {
-        var storedMetadata = _appDataService.GetData<Dictionary<int, LocoMetadata>>(LocoMetadataStorageKey);
+        var storedMetadata = _appDataService.GetData<Dictionary<ushort, LocoMetadata>>(LocoMetadataStorageKey);
         _locoMetadata = storedMetadata ?? [];
     }
 
     /// <inheritdoc/>
-    public LocoMetadata? GetMetadata(int locoAddress)
+    public LocoMetadata? GetMetadata(ushort locoAddress)
     {
         _locoMetadata.TryGetValue(locoAddress, out var metadata);
         return metadata;
     }
 
     /// <inheritdoc/>
-    public string GetDisplayName(int locoAddress)
+    public string GetDisplayName(ushort locoAddress)
     {
         var metadata = GetMetadata(locoAddress);
         return string.IsNullOrWhiteSpace(metadata?.Name)
@@ -50,16 +50,13 @@ public class LocoMetadataService : ILocoMetadataService
     }
 
     /// <inheritdoc/>
-    public async Task SaveMetadata(int locoAddress, LocoMetadata metadata)
+    public async Task SaveMetadata(ushort locoAddress, LocoMetadata metadata)
     {
-        // Trim the name before saving
         if (!string.IsNullOrWhiteSpace(metadata.Name))
         {
             metadata.Name = metadata.Name.Trim();
         }
 
-        // Business rule: If a metadata object becomes "empty" (no name, no interval),
-        // we remove it from the dictionary to keep storage clean.
         bool isEffectivelyEmpty = string.IsNullOrWhiteSpace(metadata.Name) &&
                                   (metadata.ServiceIntervalHours is null or <= 0);
 
@@ -73,9 +70,17 @@ public class LocoMetadataService : ILocoMetadataService
         }
 
         _appDataService.SaveData(LocoMetadataStorageKey, _locoMetadata);
-
         OnMetadataUpdated?.Invoke();
-
         await Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public void RemoveMetadata(ushort locoAddress)
+    {
+        if (_locoMetadata.Remove(locoAddress))
+        {
+            _appDataService.SaveData(LocoMetadataStorageKey, _locoMetadata);
+            OnMetadataUpdated?.Invoke();
+        }
     }
 }

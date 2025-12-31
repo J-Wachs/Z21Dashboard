@@ -126,6 +126,15 @@
   <data name="Close" xml:space="preserve">
     <value>Luk</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="ConfirmDeleteText" xml:space="preserve">
+    <value>Bekræft at du vil slette dette sporskifte</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slet</value>
+  </data>
   <data name="Direction" xml:space="preserve">
     <value>Retning</value>
   </data>
@@ -138,8 +147,14 @@
   <data name="EditSettingsForTurnout" xml:space="preserve">
     <value>Redigér indstilling for adresse</value>
   </data>
+  <data name="IntervalSwitches" xml:space="preserve">
+    <value>Antal skift mellem service</value>
+  </data>
   <data name="LastChanged" xml:space="preserve">
-    <value>Seneste ændring</value>
+    <value>Senest ændret</value>
+  </data>
+  <data name="MarkServicePerformed" xml:space="preserve">
+    <value>Markér at service er udført (nulstil antal skift til service)</value>
   </data>
   <data name="Protocol" xml:space="preserve">
     <value>Protokol</value>
@@ -147,8 +162,26 @@
   <data name="Save" xml:space="preserve">
     <value>Gem</value>
   </data>
+  <data name="ServiceIn" xml:space="preserve">
+    <value>Service om</value>
+  </data>
+  <data name="ServiceInterval" xml:space="preserve">
+    <value>Serviceinterval</value>
+  </data>
+  <data name="ServiceOverdueBy" xml:space="preserve">
+    <value>Service mangler med</value>
+  </data>
   <data name="Straight" xml:space="preserve">
     <value>Ligeud/grøn</value>
+  </data>
+  <data name="Switches" xml:space="preserve">
+    <value>Antal skift</value>
+  </data>
+  <data name="SwitchesPostFix" xml:space="preserve">
+    <value>skift</value>
+  </data>
+  <data name="SwitchesSinceService" xml:space="preserve">
+    <value>Antal skift siden service</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Sporskifter</value>

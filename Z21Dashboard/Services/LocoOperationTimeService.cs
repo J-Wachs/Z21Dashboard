@@ -1,5 +1,5 @@
 ﻿using Z21Client.Helpers;
-using Z21Client.Interfaces;
+using Z21Client;
 using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
 
@@ -53,7 +53,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
         _z21Client = z21Client;
         _appDataService = appDataService;
 
-        LoadDataAndRefresh(); // Renamed to reflect new dual responsibility
+        LoadDataAndRefresh();
 
         _z21Client.LocoInfoReceived += OnLocoInfoReceived;
 
@@ -82,6 +82,19 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
             if (_trackedLocos.TryGetValue(locoAddress, out var tracker))
             {
                 tracker.OperatingSecondsSinceService = 0;
+            }
+        }
+        OnDataUpdated?.Invoke();
+    }
+
+    /// <inheritdoc/>
+    public void RemoveLoco(ushort locoAddress)
+    {
+        lock (_locosLock)
+        {
+            if (_trackedLocos.Remove(locoAddress))
+            {
+                SaveData();
             }
         }
         OnDataUpdated?.Invoke();
@@ -158,13 +171,12 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
             }
         }
 
-        // Proactively refresh the data from the Z21 in the background
         Task.Run(async () =>
         {
             foreach (var address in addressesToRefresh)
             {
                 await _z21Client.GetLocoInfoAsync(address);
-                await Task.Delay(200); // Wait 200ms between each request
+                await Task.Delay(200);
             }
         });
     }

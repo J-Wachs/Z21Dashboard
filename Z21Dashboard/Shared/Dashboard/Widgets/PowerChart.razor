@@ -4,7 +4,7 @@
 *@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
@@ -14,7 +14,7 @@
 @inject IStringLocalizer<PowerChartResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenSettingsDialog">
@@ -30,7 +30,7 @@
             </div>
         }
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 <!-- Settings Dialog -->
 @if (showSettingsDialog)
@@ -64,9 +64,6 @@
 }
 
 @code {
-    [Parameter]
-    public HardwareInfo? HardwareInfo { get; set; }
-
     [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
@@ -132,7 +129,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async void OnSystemStateChanged(object? sender, SystemStateChangedEventArgs e)
+    private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         bool needsImmediateUiUpdate = false;
 

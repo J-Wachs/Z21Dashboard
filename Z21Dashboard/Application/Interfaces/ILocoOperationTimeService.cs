@@ -42,4 +42,10 @@ public interface ILocoOperatingTimeService
     /// </summary>
     /// <param name="locoAddress">The address of the locomotive to reset.</param>
     void ResetServiceCounter(ushort locoAddress);
+
+    /// <summary>
+    /// Removes a locomotive from tracking and storage.
+    /// </summary>
+    /// <param name="locoAddress">The address of the locomotive to remove.</param>
+    void RemoveLoco(ushort locoAddress);
 }

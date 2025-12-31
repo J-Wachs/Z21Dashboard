@@ -5,10 +5,39 @@ Danish version:
 
 En .NET MAUI Blazor Hybrid-applikation til Windows. Den fungerer som et funktionsrigt, brugerkonfigurerbart
 dashboard til styring og overvågning af en Roco/Fleischmann Z21-modeljernbane-centralstation. Denne
-applikation bruger `Z21Client`-biblioteket til at kommunikere med hardwaren.
+applikation bruger mit `Z21Client`-biblioteket til at kommunikere med hardwaren.
 
 Z21Client repo findes her:
 [https://github.com/J-Wachs/Z21Client](https://github.com/J-Wachs/Z21Client)
+
+Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
+
+## Nyheder i denne version 
+
+Version 1.1:
+* Upgraderet til .NET 10
+* "Forbind" og "Om" widgets kan nu flyttes rundt på dashboardet
+* Dashboardets canvas fylder nu hele billedet
+* I "Forbind" widget, er nu en søge-knap, så du kan få en liste over alle de Z21 centralstationer, der er fundet på
+netværket
+* Er Z21Dashboard forbundet til en Z21 centralstation med firmware version 1.42 eller nyere, kan du kun vælge den/de
+protokoller (DCC/Märklin Motorola), der understøttes af centralstationen
+* Kode er refactored som resultat af at Z21Client nu udstiller visse egenskaber (serienummer, Z21Code,
+hardwareinformation, etc.)
+* Widget "ConnectionView.razor" er omdøbt til "Connection.razor". Dette har ingen betydning for brugeren,
+men har du nedarvet fra den så skal koden rettes til
+* Forsinkelse under indtasting af lokomotiv-adresse i de to lokomotiv-kørekontroller, er øget til 1,5 sekund
+* Tilføjet setup-script til "Inno Setup"
+* Fjernet de to brugermanualer (dansk og engelsk) fra DOC folderen, da de nu genereres af et GitHub workflow
+* Har man installeret med "Inno Setup", da fjernes de to data foldere, der oprettes i brugerens mappe, korrekt ved
+afinstallation
+* Tilføjet information om antal skift for hvert sporskifte i widget'en "Sporskifter". Der tælles op hvor gang der
+skiftes
+* Tilføjet widget der tillader valg af protokol (DCC/Motorola) for et givent sporskifte
+* Mulighed for at angive antal skift før der skal udføres service på sporskifte
+* Tilføjet mulighed for at slette et lokomotiv fra listen i widget'en "Lokomotiver med driftstid", og et sporskifte
+fra widget "Sporskifter"
+* Omdøbt widget "DashboardWindow.razor" til "DashboardWidget.razor". Tilpasset widgets der benytter denne komponent
 
 ## Egenskaber
 
@@ -25,12 +54,12 @@ Z21Dashboard tilbyder en moderne og interaktiv brugerflade med følgende nøglefun
     *   Sporskifters position.
     *   Overordnet systemstatus, strømforbrug og spænding.
     *   R-Bus feedback og RailCom-data.
-*   **Interaktiv Styring:** Tilbyder en dedikeret `LocoControl`-komponent til realtidsstyring af et valgt lokomotivs hastighed, retning og funktioner.
+*   **Interaktiv Styring:** Tilbyder en dedikeret "LocoControl"-komponent til realtidsstyring af et valgt lokomotivs hastighed, retning og funktioner.
 *   **Lagring af Indstillinger:** Nøgleindstillinger, såsom Z21'ens IP-adresse og brugerdefinerede lokomotivnavne, gemmes lokalt, hvilket giver en gnidningsfri oplevelse ved efterfølgende opstarter.
 
 ## Dashboard-komponenter (Widgets)
 
-Dashboardet er sammensat af flere specialiserede widgets, hver med en specifik funktion. Alle widgets kan flyttes
+Dashboardet er sammensat af specialiserede widgets, hver med en specifik funktion. Alle widgets kan flyttes
 og skjules af brugeren.
 
 *   **Forbindelses-visning:** Hovedkontrolpanelet til at etablere og overvåge forbindelsen til Z21. Tilbyder også hovedkontroller for Skinnestrøm ("Track Power") og Nødstop.
@@ -46,7 +75,7 @@ og skjules af brugeren.
 
 ## Hvordan det virker
 
-Z21Dashboard er bygget som en **.NET MAUI Blazor Hybrid**-applikation ved hjælp af **.NET 9**. Denne arkitektur gør
+Z21Dashboard er bygget som en **.NET MAUI Blazor Hybrid**-applikation ved hjælp af **.NET 10**. Denne arkitektur gør
 det muligt for en moderne web-baseret brugerflade (bygget med Blazor-komponenter) at køre som en native
 desktop-applikation på Windows.
 
@@ -63,21 +92,23 @@ betyder, at benytter du Z21 appen, multiMAUS eller wlanMAUS, så afspejles aktivi
 
 ## Kom Godt I Gang
 
-For at køre Z21Dashboard-applikationen skal du have .NET 9 SDK installeret.
+For at udvikle Z21Dashboard-applikationen skal du have .NET 10 SDK installeret.
 
 Hvis du vil se og lave din egen version af Z21Dashboard, følg punkterne herunder. Vil du blot have selve
 applikationen og bruge den, da skal du downloade den køreklar udgave.
 
-1.  Klon "repository'et" fra GitHub.
-2.  Åbn løsningsfilen (`.sln`) i Visual Studio 2022 (Preview anbefales til .NET 9).
-3.  Sørg for, at `Z21Dashboard`-projektet er sat som opstartsprojekt.
-4.  Kør applikationen (tryk F5).
+1.  Klon "repository'et" fra GitHub
+2.  Åbn løsningsfilen (`.sln`) i Visual Studio 2026
+3.  Sørg for, at `Z21Dashboard`-projektet er sat som opstartsprojekt
+4.  Kør applikationen (tryk F5)
 
 ## Ofte Stillede Spørgsmål (FAQ)
 
 ### Hvorfor bruges en brugerdefineret træk-og-slip-implementering?
 
-Som detaljeret i GitHub-sagen [dotnet/maui#2205](https://github.com/dotnet/maui/issues/2205), bliver standard HTML5 træk-og-slip-events ikke korrekt sendt igennem .NET MAUI Blazor WebView. Den brugerdefinerede implementering via muse-events giver et pålideligt og højtydende alternativ.
+Som beskrevet i GitHub-sagen [dotnet/maui#2205](https://github.com/dotnet/maui/issues/2205), bliver standard HTML5
+træk-og-slip-events ikke korrekt sendt igennem .NET MAUI Blazor WebView. Den brugerdefinerede implementering via
+muse-events giver et pålideligt og højtydende alternativ.
 
 ### Hvordan tilføjer jeg en ny komponent til dashboardet?
 
@@ -89,7 +120,7 @@ Eksisterende brugere vil automatisk se den nye komponent i deres indstillingspan
 
 ### Hvorfor er der ingen widgets til LocoNet og CAN-bus?
 
-Jeg har en z21Start og derfor, ingen LocoNet eller CAN-bus enheder jeg kan upvikle til, og teste med. Du er
+Jeg har en z21Start og derfor ingen LocoNet eller CAN-bus enheder jeg kan upvikle til, og teste med. Du er
 velkommen til at udvikle den nødvendige funktionalitet i Z21Client og i Z21Dashboard.
 
 ## Fundet en fejl?
@@ -101,10 +132,12 @@ Opret venligst en "issue" i "repository'et".
 
 A .NET MAUI Blazor Hybrid application for Windows. It serves as a feature-rich, user-configurable dashboard for
 controlling and monitoring a Roco/Fleischmann Z21 model railroad central station. This application uses
-the `Z21Client` library to communicate with the hardware.
+my `Z21Client` library to communicate with the hardware.
 
 The Z21Client repo can be found here:
 [https://github.com/J-Wachs/Z21Client](https://github.com/J-Wachs/Z21Client)
+
+Z21Dashboard (and Z21Client) has been developed using the 'AI Pair Programming' method.
 
 ## Features
 
@@ -137,9 +170,36 @@ and hidden by the user.
 
 <img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
 
+## What's New in this Version
+
+Version 1.1:
+* Upgraded to .NET 10
+* 'Connect' and 'About' widgets can now be moved around on the dashboard
+* The dashboard canvas now fills the entire screen
+* In the 'Connect' widget, there is now a search button so you can get a list of all Z21 command stations found on
+the network
+* If Z21Dashboard is connected to a Z21 command station with firmware version 1.42 or newer, you can only select the
+protocol(s) (DCC/Märklin Motorola) that are supported by the command station
+* Code has been refactored as a result of Z21Client now exposing certain properties (serial number, Z21Code,
+hardware information, etc.)
+* Widget 'ConnectionView.razor' has been renamed to 'Connection.razor'. This has no impact on the user,
+but if you have inherited from it, then the code must be updated
+* Delay when entering locomotive address in the two locomotive throttles has been increased to 1.5 seconds
+* Added setup script for “Inno Setup”
+* Removed the two user manuals (Danish and English) from the DOC folder, as they are now generated by a GitHub workflow
+* If installed with 'Inno Setup', the two data folders created in the user’s directory are now correctly removed during
+uninstallation
+* Added information about number of switches for each turnout in the 'Turnouts' widget. The counter increases each time
+the turnout is switched
+* Added widget that allows selection of protocol (DCC/Motorola) for a given turnout
+* Option to specify number of switches before maintenance is required for a turnout
+* Added ability to delete a locomotive from the list in the 'Locomotives with operating time' widget, and a turnout
+from the 'Turnouts' widget
+* Renamed widget 'DashboardWindow.razor' to 'DashboardWidget.razor'. Adjusted widgets that use this component
+
 ## How it Works
 
-Z21Dashboard is built as a **.NET MAUI Blazor Hybrid** application using **.NET 9**. This architecture allows a
+Z21Dashboard is built as a **.NET MAUI Blazor Hybrid** application using **.NET 10**. This architecture allows a
 modern web-based UI (built with Blazor components) to run as a native desktop application on Windows.
 
 The Z21Dashboard reveives events from the Z21 central station, and these events is interpreted and reflected
@@ -156,13 +216,13 @@ reflected on the dashboard.
 
 ## Getting Started
 
-To run the Z21Dashboard application, you will need the .NET 9 SDK installed.
+To run the Z21Dashboard application, you will need the .NET 10 SDK installed.
 
 If you want to see and make your own version of Z21Dashboard, follow the steps below. If you just want to run the
 application and use it, then you will have to download the run-able verison.
 
 1.  Clone the repository from GitHub.
-2.  Open the solution file (`.sln`) in Visual Studio 2022 (Preview recommended for .NET 9).
+2.  Open the solution file (`.sln`) in Visual Studio 2026.
 3.  Ensure the `Z21Dashboard` project is set as the startup project.
 4.  Run the application (press F5).
 
@@ -170,7 +230,7 @@ application and use it, then you will have to download the run-able verison.
 
 ### Why use a custom drag-and-drop implementation?
 
-As detailed in the GitHub issue [dotnet/maui#2205](https://github.com/dotnet/maui/issues/2205), the standard
+As described in the GitHub issue [dotnet/maui#2205](https://github.com/dotnet/maui/issues/2205), the standard
 HTML5 drag-and-drop events are not correctly routed through the .NET MAUI Blazor WebView. The custom implementation
 using mouse events provides a reliable and high-performance alternative.
 

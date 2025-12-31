@@ -1,6 +1,7 @@
 ﻿using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 using Z21Dashboard.Resources.Localization;
+using Z21Dashboard.Shared.Dashboard.SystemWidgets;
 using Z21Dashboard.Shared.Dashboard.Widgets;
 
 namespace Z21Dashboard.Services;
@@ -19,11 +20,53 @@ public class DashboardStateService : IDashboardStateService
         LoadAndMergeState();
     }
 
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetComponentStates()
+    {
+        return [.. _componentStates.OrderBy(s => s.Name)];
+    }
+
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetVisibleComponentStates()
+    {
+        return [.. _componentStates.Where(s => s.IsVisible || s.IsSystemComponent).OrderBy(s => s.ZIndex)];
+    }
+
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetUserSelectableComponents()
+    {
+        return [.. _componentStates.Where(s => s.IsSystemComponent is false).OrderBy(s => s.Name)];
+    }
+
+    /// <inheritdoc />
+    public async Task ToggleVisibility(Guid componentId)
+    {
+        var component = _componentStates.FirstOrDefault(s => s.Id == componentId);
+        if (component != null)
+        {
+            component.IsVisible = !component.IsVisible;
+            await SaveStateAsync();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateLayout(List<DashboardComponentState> newLayout)
+    {
+        _componentStates = newLayout;
+        await SaveStateAsync();
+    }
+
+
     private static List<DashboardComponentState> GetDefaultComponentDefinitions()
     {
         // This is the MASTER LIST of component definitions.
         return
         [
+            // System widgets. -1 means 0 :-)
+            new() { Name = SharedResources.Connection, IsSystemComponent = true, PositionX = -1, Width = 525, ComponentType = typeof(Connection), ComponentTypeName = typeof(Connection).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.About, IsSystemComponent = true, PositionX = 600, Width = 500, ComponentType = typeof(About), ComponentTypeName = typeof(About).AssemblyQualifiedName ?? string.Empty },
+
+            // User selectable widgets
             new() { Name = SharedResources.LocoControl, Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoControl2, Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoListView, Width = 800, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
@@ -34,7 +77,8 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.ShowLogView, Width = 500, Height = 500, ComponentType = typeof(ShowLogView), ComponentTypeName = typeof(ShowLogView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateView, Width = 260, ComponentType = typeof(SystemStateView), ComponentTypeName = typeof(SystemStateView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = SharedResources.TurnoutListView, Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.TurnoutListView, Width = 450, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.TurnoutProtocolSelector, Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty }
         ];
     }
 
@@ -47,12 +91,23 @@ public class DashboardStateService : IDashboardStateService
         if (storedState == null || storedState.Count == 0)
         {
             // First run: Use default definitions, assign positions, and save.
-            int yPos = 10;
+            int yPos = 130;
             foreach (var comp in defaultDefinitions)
             {
-                comp.PositionX = 10;
-                comp.PositionY = yPos;
-                yPos += 50;
+                if (comp.IsSystemComponent)
+                {
+                    if (comp.PositionX is -1)
+                    {
+                        comp.PositionX = 0;
+                    }
+                }
+                else
+                {
+                    comp.PositionX = 10;
+                    comp.PositionY = yPos;
+                    yPos += 50;
+                }
+
             }
             _componentStates = defaultDefinitions;
             _ = SaveStateAsync();
@@ -75,6 +130,7 @@ public class DashboardStateService : IDashboardStateService
                         Width = defaultComp.Width,
                         Height = defaultComp.Height,
                         ComponentTypeName = defaultComp.ComponentTypeName,
+                        IsSystemComponent = defaultComp.IsSystemComponent,
 
                         Id = userComp.Id,
                         IsVisible = userComp.IsVisible,
@@ -86,8 +142,18 @@ public class DashboardStateService : IDashboardStateService
                 else
                 {
                     // New component: Add it with default layout.
-                    defaultComp.PositionX = 10;
-                    defaultComp.PositionY = 10;
+
+                    defaultComp.PositionX = defaultComp.PositionX switch
+                    {
+                        -1 => 0,
+                        0 => 10,
+                        _ => defaultComp.PositionX
+                    };
+
+                    if (defaultComp.PositionY is 0)
+                    {
+                        defaultComp.PositionY = 10;
+                    }
                     mergedState.Add(defaultComp);
                 }
             }
@@ -127,27 +193,4 @@ public class DashboardStateService : IDashboardStateService
         await Task.CompletedTask;
     }
 
-    // ... rest of the file (GetComponentStates, etc.) remains the same ...
-    public List<DashboardComponentState> GetComponentStates()
-    {
-        return [.. _componentStates.OrderBy(s => s.Name)];
-    }
-    public List<DashboardComponentState> GetVisibleComponentStates()
-    {
-        return [.. _componentStates.Where(s => s.IsVisible).OrderBy(s => s.ZIndex)];
-    }
-    public async Task ToggleVisibility(Guid componentId)
-    {
-        var component = _componentStates.FirstOrDefault(s => s.Id == componentId);
-        if (component != null)
-        {
-            component.IsVisible = !component.IsVisible;
-            await SaveStateAsync();
-        }
-    }
-    public async Task UpdateLayout(List<DashboardComponentState> newLayout)
-    {
-        _componentStates = newLayout;
-        await SaveStateAsync();
-    }
 }

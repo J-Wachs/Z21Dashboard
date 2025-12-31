@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Client.Infrastructure
-@using Z21Client.Interfaces
+@using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application
 @using Z21Dashboard.Application.Interfaces
@@ -16,7 +16,7 @@
 @inject IStringLocalizer<LocoSlotViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <HeaderContent>
@@ -43,7 +43,7 @@
                     <tr>
                         <th>@Localizer["Slot"]</th>
                         <th>@Localizer["Address"]</th>
-                        @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                        @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                         {
                             <th>@Localizer["Protocol"]</th>
                         }
@@ -60,7 +60,7 @@
                             <tr>
                                 <td><strong>@locoDisplay.Info.SlotNumber</strong></td>
                                 <td>@locoDisplay.Info.LocoInfo.Address</td>
-                                @if (FirmwareVersion?.Version >= Z21FirmwareVersions.V1_20)
+                                @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_20)
                                 {
                                     <td>@locoDisplay.DisplayProtocol</td>
                                 }
@@ -95,14 +95,9 @@
             </table>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
-    private sealed record DisplayLocoInfo(LocoSlotInfo Info, byte CalculatedSpeedSteps, byte CalculatedCurrSpeedStep, LocoMode? Mode = null, string? DisplayProtocol = null);
-
-    [Parameter]
-    public FirmwareVersion? FirmwareVersion { get; set; }
-
     /// <summary>
     /// Receives the mousedown event from the parent (Dashboard.razor)
     /// to initiate a drag operation.
@@ -113,10 +108,12 @@
     [Parameter]
     public EventCallback OnBringToFront { get; set; }
 
+    private sealed record DisplayLocoInfo(LocoSlotInfo Info, byte CalculatedSpeedSteps, byte CalculatedCurrSpeedStep, LocoMode? Mode = null, string? DisplayProtocol = null);
+
     private readonly object _locosLock = new object();
 
     private Dictionary<ushort, DisplayLocoInfo> _activeLocos = new();
-    private bool protocolInLocoInfo => FirmwareVersion?.Version >= Z21FirmwareVersions.V1_43;
+    private bool protocolInLocoInfo => Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_43;
     private bool _buttonDisable = false;
     private DateTime? _lastRead = null;
 
