@@ -120,91 +120,19 @@
   <data name="Address" xml:space="preserve">
     <value>Adresse</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Annuller</value>
+  <data name="EnterAddress" xml:space="preserve">
+    <value>Indtast adresse</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Luk</value>
+  <data name="InfoText" xml:space="preserve">
+    <value>Kontrollerer Z21 låsningstilstand</value>
   </data>
-  <data name="Confirm" xml:space="preserve">
-    <value>Bekræft</value>
+  <data name="SelectProtocol" xml:space="preserve">
+    <value>Vælg protokol</value>
   </data>
-  <data name="ConfirmDeleteText" xml:space="preserve">
-    <value>Bekræft at du vil slette dette lokomotiv</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Slet</value>
-  </data>
-  <data name="DirectionInfoText" xml:space="preserve">
-    <value>Retning</value>
-  </data>
-  <data name="DirectionShort" xml:space="preserve">
-    <value>R</value>
-  </data>
-  <data name="EditSettings" xml:space="preserve">
-    <value>Lokomotiv indstillinger</value>
-  </data>
-  <data name="EditSettingsForLoco" xml:space="preserve">
-    <value>Lokomotiv indstillinger for adresse</value>
-  </data>
-  <data name="Forward" xml:space="preserve">
-    <value>Fremad</value>
-  </data>
-  <data name="Functions" xml:space="preserve">
-    <value>Funktioner</value>
-  </data>
-  <data name="InputPlaceHolder" xml:space="preserve">
-    <value>Fx MY 1103</value>
-  </data>
-  <data name="IntervalHours" xml:space="preserve">
-    <value>Interval (timer)</value>
-  </data>
-  <data name="LastChanged" xml:space="preserve">
-    <value>Senest ændret</value>
-  </data>
-  <data name="LastService" xml:space="preserve">
-    <value>Tid siden seneste service</value>
-  </data>
-  <data name="LocomotiveName" xml:space="preserve">
-    <value>Lokomotivets navn</value>
-  </data>
-  <data name="MarkService" xml:space="preserve">
-    <value>Markér at service er udført (nulstil tid til service)</value>
-  </data>
-  <data name="OperatingTime" xml:space="preserve">
-    <value>Drifts tid</value>
-  </data>
-  <data name="Protocol" xml:space="preserve">
-    <value>Protokol</value>
-  </data>
-  <data name="ProtocolAndSpeedSteps" xml:space="preserve">
-    <value>Protokol og hastighedstrin</value>
-  </data>
-  <data name="Reverse" xml:space="preserve">
-    <value>Baglæns</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Gem</value>
-  </data>
-  <data name="ServiceIn" xml:space="preserve">
-    <value>Service om</value>
-  </data>
-  <data name="ServiceInterval" xml:space="preserve">
-    <value>Serviceinterval</value>
-  </data>
-  <data name="ServiceOverdue" xml:space="preserve">
-    <value>Service mangler med</value>
-  </data>
-  <data name="SIPlaceHolder" xml:space="preserve">
-    <value>Fx 10</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Hastighed</value>
+  <data name="SetProtocol" xml:space="preserve">
+    <value>Sæt protokol</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Lokomotivers driftstid</value>
-  </data>
-  <data name="WaitingForData" xml:space="preserve">
-    <value>Venter på lokomotiv informationer...</value>
+    <value>Sporskifteprotokolvælger</value>
   </data>
 </root>

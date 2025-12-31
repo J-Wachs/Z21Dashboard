@@ -169,6 +169,15 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No devices found.
+        /// </summary>
+        public static string NoDevicesFound {
+            get {
+                return ResourceManager.GetString("NoDevicesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No lock.
         /// </summary>
         public static string NoLock {

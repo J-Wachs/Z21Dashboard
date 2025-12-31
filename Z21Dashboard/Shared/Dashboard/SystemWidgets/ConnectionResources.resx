@@ -171,4 +171,7 @@
   <data name="CloseList" xml:space="preserve">
     <value>Close list</value>
   </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>No devices found</value>
+  </data>
 </root>

@@ -171,4 +171,7 @@
   <data name="CloseList" xml:space="preserve">
     <value>Luk listen</value>
   </data>
+  <data name="NoDevicesFound" xml:space="preserve">
+    <value>Ingen enheder fundet</value>
+  </data>
 </root>

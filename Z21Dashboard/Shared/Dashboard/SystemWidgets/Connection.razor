@@ -14,7 +14,7 @@
 @inject IZ21Client Z21Client
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <HeaderContent>
@@ -44,16 +44,15 @@
         <div class="row g-2">
             @* Left Column *@
             <div class="col-6">
-                @* Added position-relative to handle the dropdown positioning correctly *@
                 <div class="input-group mb-2 position-relative">
                     <input class="form-control"
                            value="@_ipAddress"
-                           onchange="@OnIpAddressChanged"
+                           @onchange="OnIpAddressChanged"
                            disabled="@(ConnectionState != ConnectionState.Disconnected)"
                            placeholder="Enter IP"
-                           autocomplete="off" /> @* autocomplete="off" prevents browser history from covering the dropdown *@
+                           autocomplete="off" />
 
-                    <button class="btn btn-outline-secondary" onclick="@SearchForZ21" disabled="@(ConnectionState != ConnectionState.Disconnected || _isSearching)">
+                    <button class="btn btn-outline-secondary" @onclick="SearchForZ21" disabled="@(ConnectionState != ConnectionState.Disconnected || _isSearching)">
                         @if (_isSearching)
                         {
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -66,17 +65,26 @@
                         }
                     </button>
 
-                    @if (_foundZ21s.Any())
+                    @if (_showSearchResults)
                     {
                         <ul class="dropdown-menu show" style="position: absolute; top: 100%; left: 0; min-width: 100%; width: max-content; z-index: 1050;">
                             <li class="dropdown-header">@Localizer["FoundDevices"] (@_foundZ21s.Count)</li>
-                            @foreach (var z21 in _foundZ21s)
+                            @if (_foundZ21s.Count == 0 && !_isSearching)
                             {
                                 <li>
-                                    <button class="dropdown-item" type="button" @onclick="() => SelectIp(z21.IpAddress)">
-                                        <strong>@z21.ToString()</strong>
-                                    </button>
+                                    <span class="dropdown-item-text">(@Localizer["NoDevicesFound"])</span>
                                 </li>
+                            }
+                            else
+                            {
+                                @foreach (var z21 in _foundZ21s)
+                                {
+                                    <li>
+                                        <button class="dropdown-item" type="button" @onclick="() => SelectIp(z21.IpAddress)">
+                                            <strong>@z21.ToString()</strong>
+                                        </button>
+                                    </li>
+                                }
                             }
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -90,11 +98,11 @@
 
                 @if (ConnectionState == ConnectionState.Connected)
                 {
-                    <button class="btn btn-danger w-100" onclick="@Disconnect">@Localizer["Disconnect"]</button>
+                    <button class="btn btn-danger w-100" @onclick="Disconnect">@Localizer["Disconnect"]</button>
                 }
                 else
                 {
-                    <button class="btn btn-success w-100" onclick="@Connect" disabled="@(ConnectionState == ConnectionState.Connecting || string.IsNullOrWhiteSpace(_ipAddress))">
+                    <button class="btn btn-success w-100" @onclick="Connect" disabled="@(ConnectionState == ConnectionState.Connecting || string.IsNullOrWhiteSpace(_ipAddress))">
                         @if (ConnectionState == ConnectionState.Connecting)
                         {
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -112,16 +120,16 @@
             <div class="col-6">
                 <div class="btn-group w-100 mb-2" role="group">
                     <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
-                            onclick="@SetTrackPowerOn" disabled="@(ConnectionState != ConnectionState.Connected)">
+                            @onclick="SetTrackPowerOn" disabled="@(ConnectionState != ConnectionState.Connected)">
                         @Localizer["TrackPwrOn"]
                     </button>
                     <button class="btn @(_trackPowerState == TrackPowerState.Off ? "btn-secondary" : "btn-outline-secondary")"
-                            onclick="@SetTrackPowerOff" disabled="@(ConnectionState != ConnectionState.Connected)">
+                            @onclick="SetTrackPowerOff" disabled="@(ConnectionState != ConnectionState.Connected)">
                         @Localizer["TrackPwrOff"]
                     </button>
                 </div>
 
-                <button class="btn btn-danger w-100" onclick="@SetEmergencyStop" disabled="@(ConnectionState != ConnectionState.Connected)">
+                <button class="btn btn-danger w-100" @onclick="SetEmergencyStop" disabled="@(ConnectionState != ConnectionState.Connected)">
                     @Localizer["EmergencyStop"]
                 </button>
             </div>
@@ -134,7 +142,7 @@
             </div>
         }
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     [Parameter]
@@ -159,6 +167,7 @@
     private ConnectionState _prevConnectionState = ConnectionState.Disconnected;
 
     private bool _isSearching;
+    private bool _showSearchResults;
     private List<Z21Info> _foundZ21s = [];
 
     protected override void OnInitialized()
@@ -197,25 +206,17 @@
     private async Task Connect()
     {
         await OnConnect.InvokeAsync(_ipAddress);
-
         StateHasChanged();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        // Due to the fact that we in Connect is in the process of connecting, we
-        // do not have information about if we did succeed or not. Therefore, we
-        // check here for a change in connection state to Connected to perform
         if (ConnectionState != _prevConnectionState && ConnectionState is ConnectionState.Connected)
         {
             SubscribeToEvents();
-
-            // This call is to trigger the initial state of the track power.
             await Z21Client.GetSystemStateAsync();
-
         }
         _prevConnectionState = ConnectionState;
-
         await base.OnParametersSetAsync();
     }
 
@@ -248,10 +249,9 @@
     {
         Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
         Z21Client.EmergencyStopReceived -= OnEmergencyStopReceived;
-        Z21Client.SystemStateChanged -= OnSystemStateChanged; // Ensure cleanup here too
+        Z21Client.SystemStateChanged -= OnSystemStateChanged;
     }
 
-    // This handler will continue to receive live updates
     private async void OnTrackPowerInfoReceived(object? sender, TrackPowerInfo e)
     {
         _trackPowerState = e.State;
@@ -263,15 +263,13 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    // --- Event handler for initial System State ---
     private async void OnSystemStateChanged(object? sender, SystemState e)
     {
-        // Unsubscribe immediately as we only need the initial state.
         Z21Client.SystemStateChanged -= OnSystemStateChanged;
 
         _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0
-        ? TrackPowerState.Off
-        : TrackPowerState.On;
+            ? TrackPowerState.Off
+            : TrackPowerState.On;
 
         await InvokeAsync(StateHasChanged);
     }
@@ -279,7 +277,7 @@
     private async Task SearchForZ21()
     {
         _isSearching = true;
-        // Clear previous results to avoid confusion
+        _showSearchResults = true;
         _foundZ21s.Clear();
         await InvokeAsync(StateHasChanged);
 
@@ -289,21 +287,18 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    // --- New helper methods for the custom dropdown ---
-
     private void SelectIp(string ip)
     {
         _ipAddress = ip;
-        // Save logic repeated from OnIpAddressChanged
         AppDataService.SaveData(Z21IpAddressKey, _ipAddress);
-
-        // Hide the dropdown by clearing the list
+        _showSearchResults = false;
         _foundZ21s.Clear();
         StateHasChanged();
     }
 
     private void ClearSearchResults()
     {
+        _showSearchResults = false;
         _foundZ21s.Clear();
         StateHasChanged();
     }

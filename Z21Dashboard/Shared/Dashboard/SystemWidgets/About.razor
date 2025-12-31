@@ -9,7 +9,7 @@
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IStringLocalizer<AboutResources> Localizer
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -19,7 +19,7 @@
             <p>@Localizer["Description"]</p>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     [Parameter]

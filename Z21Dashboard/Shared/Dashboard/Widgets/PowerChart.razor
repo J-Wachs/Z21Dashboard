@@ -14,7 +14,7 @@
 @inject IStringLocalizer<PowerChartResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenSettingsDialog">
@@ -30,7 +30,7 @@
             </div>
         }
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 <!-- Settings Dialog -->
 @if (showSettingsDialog)

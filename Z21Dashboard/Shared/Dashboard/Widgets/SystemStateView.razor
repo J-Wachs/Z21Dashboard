@@ -13,7 +13,7 @@
 @inject IStringLocalizer<SystemStateViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -98,7 +98,7 @@
             </div>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     /// <summary>

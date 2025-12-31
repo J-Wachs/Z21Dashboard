@@ -18,7 +18,7 @@
 @inject IStringLocalizer<LocoControlResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenEditDialog">
@@ -89,7 +89,7 @@
             </div>
         }
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @* -- Edit Dialog -- *@
 @if (_isDialogOpen)

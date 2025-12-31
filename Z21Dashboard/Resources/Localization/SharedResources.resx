@@ -171,4 +171,7 @@
   <data name="TurnoutListView" xml:space="preserve">
     <value>Turnouts</value>
   </data>
+  <data name="TurnoutProtocolSelector" xml:space="preserve">
+    <value>Turnout protocol selector</value>
+  </data>
 </root>

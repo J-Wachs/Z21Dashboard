@@ -221,5 +221,14 @@ namespace Z21Dashboard.Resources.Localization {
                 return ResourceManager.GetString("TurnoutListView", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turnout protocol selector.
+        /// </summary>
+        public static string TurnoutProtocolSelector {
+            get {
+                return ResourceManager.GetString("TurnoutProtocolSelector", resourceCulture);
+            }
+        }
     }
 }

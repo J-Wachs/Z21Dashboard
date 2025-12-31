@@ -16,7 +16,7 @@
 @inject IStringLocalizer<LocoSlotViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <HeaderContent>
@@ -95,7 +95,7 @@
             </table>
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     /// <summary>

@@ -6,10 +6,9 @@ using BlazorLogComponent.Services;
 using BlazorLogComponent.Logging;
 using Z21Client;
 using Z21Dashboard.Application.Interfaces;
+using Z21Dashboard.Application.Services;
 using Z21Status.Application.Interfaces;
-
 using Z21Status.Services;
-
 
 #if WINDOWS
 using Microsoft.UI;
@@ -130,6 +129,9 @@ public static class MauiProgram
 
         // Register the operating time service. It depends on IAppDataService and IZ21Client.
         builder.Services.AddSingleton<ILocoOperatingTimeService, LocoOperatingTimeService>();
+
+        // Register the turnout counter service for tracking turnout activations.
+        builder.Services.AddSingleton<ITurnoutCounterService, TurnoutCounterService>();
 
         // Register the service for opening documentation files.
         builder.Services.AddSingleton<IDocumentationService, DocumentationService>();

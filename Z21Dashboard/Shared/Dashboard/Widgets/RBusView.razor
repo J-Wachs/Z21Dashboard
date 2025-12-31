@@ -13,7 +13,7 @@
 @inject IStringLocalizer<RBusViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -34,7 +34,7 @@
             }
         </div>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     /// <summary>

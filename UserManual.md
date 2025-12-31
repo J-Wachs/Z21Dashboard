@@ -12,6 +12,8 @@
     *   [Move Windows Around](#move-windows-around)
     *   [Customize Your Dashboard (Show/Hide Windows)](#customize-your-dashboard-showhide-windows)
     *   [The Most Important Windows Explained](#the-most-important-windows-explained)
+* [Known issues](#known-issues)
+    * [Z21Dashboard is run in a virtual Windows machine in Virtualbox, but some widgets are not displayed correctly](#z21dashboard-is-run-in-a-virtual-windows-machine-in-virtualbox-but-some-widgets-are-not-displayed-correctly)]
 *   [FAQ](#faq)
     *   [What does 'Locked' mean?](#what-does-locked-mean)
     *   [Can names from my multiMAUS or Z21 app be transferred to Z21Dashboard?](#can-names-from-my-multimaus-or-z21-app-be-transferred-to-z21dashboard)
@@ -37,7 +39,7 @@ Then came all the ideas, and Z21Dashboard was born.
 Z21Dashboard is Open Source software, and it can be found in my Github repository, where both source code and
 binary files are available.
 
-Z21Dashboard is developed in C# and .NET 9. It is developed as a .NET MAUI Blazor Hybrid application.
+Z21Dashboard is developed in C# and .NET 10. It is developed as a .NET MAUI Blazor Hybrid Windows application.
 
 # The Z21 Family of Central Stations
 
@@ -53,31 +55,33 @@ In this guide, the term 'Z21' is used for all of them unless there is something 
 ## Use of Protocol
 
 Normally, the Z21 central stations are connected for controlling 2-rail model railways and the protocol DCC. The
-Z21 central stations are of the multiprotocol type, as they allow the use of both DCC and Märklin Motorola. mfx is
-not supported by the Z21 central stations.
+Z21 central stations are of the multiprotocol type, as they allow the use of both DCC and Märklin Motorola. mfx (M4)
+is not supported by the Z21 central stations.
 
 From new, the Z21 central station is set up to use both DCC and Märklin Motorola. You or others may have changed
 this in the Z21 using Roco's application 'Maintenance Tool', where you can specify which protocols it should
 support.
 
-Although you can switch between protocols in certain Z21Dashboard settings, this cannot overwrite the setting
-in the Z21. I.e., if the Z21 is set to only DCC, choosing Märklin Motorola in Z21Dashboard does not change the
-protocol for a locomotive or turnout.
+Although you can switch between protocols in certain Z21Dashboard settings (based on what version of the firmware
+that is installed on your Z21), this cannot overwrite the setting in the Z21. I.e., if the Z21 is set to only DCC,
+choosing Märklin Motorola in Z21Dashboard does not change the protocol for a locomotive or turnout.
 
 ## z21/z21Start and Locked or Not
 
-Generally, the z21 (white box, where the text on the front is 'z21') is unlocked, though z21 units were
-previously produced that were locked, just as the z21Start (white box, where the text on the front is 'z21Start') is. Two different Roco items with unlock codes can be purchased, item no. 10814 (wifi router and unlock code) and 10818 (unlock code).
+Generally, the z21 (white box, where the text on the front is 'z21', notice the lower case 'z') is unlocked, though
+z21 units were previously produced that were locked, just as the z21Start (white box, where the text on the
+front is 'z21Start') is. Two different Roco items with unlock codes can be purchased, item no. 10814 (wifi router
+and unlock code) and 10818 (unlock code).
 
 If your z21/z21Start is locked, it will not be possible to control locomotives and turnouts in Z21Dashboard.
 However, you can easily view their status as you control them with your multiMAUS.
 
 # First Time You Start
 
-When you open Z21Dashboard, the widget 'Connection' is shown with the last used IP address in the field. The
-first time you open Z21Dashboard, the Z21's default IP address (192.168.0.111) stands in the field. If you have
-changed the IP address in your Z21 central station, you must enter that IP address. When you click the 'Connect'
-button, the IP address is saved and will appear in the field the next time you start Z21Dashboard.
+When you open Z21Dashboard, the widget 'Connection', which allows you to connect to your Z21 central statison, is
+shown. The very first time, the the standard IP address of the Z21s is displayed (192.168.0.111). If your Z21 have
+another IP-address, you must correct the displayed one. C´lick on the button 'Connect' to connect to your Z21. When
+you start Z21Dashboard the next time, the IP address field will be pre-filled wíth the one you entered.
 
 1.  Find the Connection window: At the top of the screen, you will see a window titled 'Connection'.
 2.  Enter IP address: A standard IP address (192.168.0.111) is already entered in the field. If your Z21 has a
@@ -89,6 +93,11 @@ change to 'Connected' and turn green. The rest of your dashboard windows will no
 While Z21Dashboard attempts to connect to your Z21 central station, it will say 'Connecting' in the small gray
 field at the top right of the Connection widget. If a connection is not achieved, it will say 'Not connected' again
 after a few seconds.
+
+## First time you connect
+When you establish connection to your Z21 central station for the first time, Z21Dashboard will show all available 
+widgets. They are slightly offset from each other. You can start by moving them around, and then click on the gear
+icon at the top right to see the overview with widgets. Here you can hide the widgets you do not wish to see.
 
 # The Dashboard
 
@@ -123,7 +132,8 @@ This is your control panel for the connection. From here you can:
 
 Be aware that Emergency Stop is implemented differently in decoders. In some, it means the locomotive stops
 immediately, and in others, it means the speed is set to 0 while braking delay is still active. It is recommended
-that you test your locomotives so you know if you can truly use Emergency Stop.
+that you test your locomotives so you know if you can truly use Emergency Stop. Alternatively, you can always turn
+off the track power. til stop all driving with immediate effect.
 
 ### Locomotive Control
 This is your digital controller for a single locomotive.
@@ -137,22 +147,22 @@ When you have selected a locomotive (address field is not 0), you can click on t
 window will now appear. The options in this window depend on whether your z21/z21Start is locked.
 
 Locked or not, you can:
-*   Give the locomotive a name. This name is then shown in Z21Dashboard together with the address.
-*   Specify a number of operating hours before service is required on the locomotive.
-*   See how long it is until service must be performed.
-*   Reset the service time counters when you have performed service.
+*   Give the locomotive a name. This name is then shown in Z21Dashboard together with the address
+*   Specify a number of operating hours before service is required on the locomotive
+*   See how long it is until service must be performed
+*   Reset the service time counters when you have performed service
 
 Unlocked:
-*   Select protocol and the number of speed steps.
+*   Select protocol and the number of speed steps
 
 Locked:
-*   Select protocol. If you want to change the number of speed steps, you must do so on your multiMAUS.
+*   Select protocol. If you want to change the number of speed steps, you must do so on your multiMAUS
 
 Note, if you have selected the Märklin Motorola version 1 protocol, only the function button for light will be 
 active. If you have selected Märklin Motorola version 2, then the function button for light as well as F1 - F4
 will be active.
 
-### Locomotive Runtime
+### Locomotive operation time
 This window gives a fantastic overview of the locomotives that are in use. It shows a list of all active
 locomotives and keeps track of how long each one has been in operation. It is also here that you can give your
 locomotives personal names.
@@ -161,12 +171,13 @@ Next to each locomotive is a button with a gear. This opens the dialogue with se
 locomotive. The options in this window depend on whether your z21/z21Start is locked.
 
 Locked or not, you can:
-*   Give the locomotive a name. This name is then shown in Z21Dashboard together with the address.
-*   Specify a number of operating hours before service is required on the locomotive. In the overview, the
+* Give the locomotive a name. This name is then shown in Z21Dashboard together with the address
+* Specify a number of operating hours before service is required on the locomotive. In the overview, the
 runtime will have a yellow background when there is less than an hour until service must be performed. The
-background becomes red when service has not been performed.
-*   See how long it is until service must be performed.
-*   Reset the service time counters when you have performed service.
+background becomes red when service has not been performed
+* See how long it is until service must be performed
+* Reset the service time counters when you have performed service
+* Delete a locomotive from the overview
 
 Unlocked:
 *   Select protocol and the number of speed steps.
@@ -185,7 +196,8 @@ This window shows the turnouts where you have changed their position with your m
 Next to each turnout, a button for settings is shown. When you click on it, a popup dialogue opens that lets you
 choose which protocol should be used for the decoder in the turnout.
 
-In the popup, you can choose between 'DCC' and 'MM' for Märklin Motorola.
+In the popup, you can choose between 'DCC' and 'MM' for Märklin Motorola. You can also delete the turnout from the
+overview.
 
 ### Voltage and Current Overview
 
@@ -198,6 +210,15 @@ graph updates.
 Regardless of which interval you choose, Z21Dashboard receives updates continuously from the Z21 central station.
 The widget remembers the highest value received, and when the interval has 'expired', the highest value is written
 to the graph.
+
+# Known issues
+
+## Z21Dashboard is run in a virtual Windows machine in Virtualbox, but some widgets are not displayed correctly
+Typically , it is the two locomotive widgets and turnout protocol widget that are not displayed correctly.
+There is shown a turning arrow along with the text 'Checking Z21 lock state'.
+
+This may be due to the "Pointing device" on the "System" tab in Virtualbox being set to "USB Tablet". Change
+it to "PS/2 Mouse" and try again.
 
 # FAQ
 

@@ -19,17 +19,17 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DashboardWindowResources {
+    internal class DashboardWidgetResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DashboardWindowResources() {
+        internal DashboardWidgetResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Components.DashboardWindowResources", typeof(DashboardWindowResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Components.DashboardWidgetResources", typeof(DashboardWidgetResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -17,7 +17,7 @@
 @inject IStringLocalizer<RailComViewResources> Localizer
 @implements IDisposable
 
-<DashboardWindow HeaderTitle="@Localizer["Title"]"
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
@@ -50,7 +50,7 @@
             }
         </table>
     </Content>
-</DashboardWindow>
+</DashboardWidget>
 
 @code {
     /// <summary>

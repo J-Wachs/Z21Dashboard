@@ -39,10 +39,12 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
+      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
+      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -97,10 +99,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\DashboardWindowResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\Components\DashboardWidgetResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>DashboardWindowResources.resx</DependentUpon>
+        <DependentUpon>DashboardWidgetResources.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\DashboardResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -196,9 +198,9 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWindowResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWidgetResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>DashboardWindowResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>DashboardWidgetResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\DashboardResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

@@ -12,6 +12,8 @@
     *   [Flyt rundt på vinduer](#flyt-rundt-på-vinduer)
     *   [Tilpas dit dashboard (vis/skjul vinduer)](#tilpas-dit-dashboard-visskjul-vinduer)
     *   [De vigtigste vinduer forklaret](#de-vigtigste-vinduer-forklaret)
+*   [Kendte problemer](#kendte-problemer)
+    *   [Z21Dashboard afvikles i en virtuel Windows maskine i Virtual](#z21dashboard-afvikles-i-en-virtuel-windows-maskine-i-virtualbox-men-visse-widgets-vises-ikke-korrekt)
 *   [FAQ (OSS)](#faq-oss)
     *   [Hvad betyder "Låst" (Locked)?](#hvad-betyder-låst-locked)
     *   [Kan navne fra min multiMAUS eller Z21 app overføres til Z21Dashboard?](#kan-navne-fra-min-multimaus-eller-z21-app-overføres-til-z21dashboard)
@@ -38,12 +40,11 @@ Så kom alle ideérne og så blev Z21Dashboard til.
 Z21Dashboard er Open Source software, og det findes i mit Github repository, hvor både kildekode og
 binære filer er tilgængelig.
 
-Z21Dashboard er udviklet i C# og .NET 9. Det er udviklet som en .NET MAUI Blazor Hybrid
-applikation.
+Z21Dashboard er udviklet i C# og .NET 10. Det er udviklet som en .NET MAUI Blazor Hybrid Windows applikation.
 
 # Z21 familien af centralstationer
 
-Du kan forbinde Z21Dashboard til hele familien af 21 centralstationer fra Roco:
+Du kan forbinde Z21Dashboard til hele familien af Z21 centralstationer fra Roco:
 
 * z21
 * z21Start
@@ -56,19 +57,19 @@ I denne vejledning bruges termen "Z21" om dem alle, med mindre der er noget sær
 
 Normalt forbindes Z21 centralstationerne med styring af 2-skinne modeltogsbaner og protokollen
 DCC. Z21 centralstationerne er af typen multiprotokol, da der tillades at benytte både DCC
-og Märklin Motorola. mfx er ikke understøttet af Z21 centralstationerne.
+og Märklin Motorola. mfx (M4) er ikke understøttet af Z21 centralstationerne.
 
 Fra ny er Z21 centralstationen sat op til at benytte både DCC og Märklin Motorola. Du eller andre
 kan have ændret dette i Z21 ved hjælp af Rocos applikation "Maintenance Tool", hvor man kan 
 angive hvilke protokoller den skal understøttet.
 
-Selvom du kan skifte mellem protokoller i visse af Z21Dashboards indstilligner, kan dette
-ikke overskrive indstillingen i Z21. Dvs. hvis Z21 er indstillet til kun DCC, så ænderer det ikke
-protokollen for et lokomotiv eller sporskifte, at du vælger Märklin Motorola i Z21Dashboard.
+Selvom du kan skifte mellem protokoller i visse af Z21Dashboards indstilligner (baseret på hvilken version af firmwaren
+din Z21 har installeret), kan dette ikke overskrive indstillingen i Z21. Dvs. hvis Z21 er indstillet til kun DCC, så
+ænderer det ikke protokollen for et lokomotiv eller sporskifte, at du vælger Märklin Motorola i Z21Dashboard.
 
 ## z21/z21Start og låst eller ej
 
-Generelt er z21 (hvid kasse, hvor teksten på fronten er "z21") låst op, dog blev der tidligere produceret z21 som
+Generelt er z21 (hvid kasse, hvor teksten på fronten er "z21", bemærk det lille "z") låst op, dog blev der tidligere produceret z21 som
 var låst, ligesom z21Start (hvid kasse, hvor teksten på fronten er "z21Start") er det. Der kan købes to forskellige
 Roco varer med oplåstningskoder, hhv. varenr. 10814 (wifi router og oplåsningskode) og 10818 (oplåsningskode).
 
@@ -77,15 +78,15 @@ sagtens se tilstanden på dem, i takt med at du styrer dem med din multiMAUS.
 
 # Første gang du starter
 
-Når du åbner Z21Dashboard vises widget’en ”Forbindelse” med den senest anvendte IP-adresse i feltet. Første gang
-du åbner Z21Dashboard står Z21s standard IP-adresse (192.168.0.111) i feltet. Har du ændret IP-adressen i din Z21
-centralstation, skal du indtaste den IP-adresse. Når du klikker på knappen "Forbind" bliver IP-adressen gemt og
-vil stå i feltet næste gang du starter Z21Dashboard.
+Når Z21Dashboard startes vises widget'en ”Forbindelse”, som lader dig forbinde til din Z21 centralstation. Første gang
+vises Z21s standard IP-adresse (192.168.0.111). Har din Z21 en anden IP-adresse retter du IP adressen til den.
+Klik nu på knappen "Forbind" for at oprette forbindelsen. Når du starter Z21Dashboard næste gang, vil den IP adresse
+du indtastede være gemt og stå i feltet.
 
 1.	Find Forbindelses-vinduet: Øverst på skærmen vil du se et vindue med titlen "Forbindelse"
 2.	Indtast IP-adresse: I feltet er der allerede indtastet en standard-IP-adresse (192.168.0.111). Hvis din Z21 har
 en anden adresse på dit netværk, skal du rette den. Programmet husker den adresse, du indtaster, til næste gang.
-3.	Klik på den grønne "Connect"-knap
+3.	Klik på den grønne "Forbind"-knap
 4.	Hvis Z21Dashboard opnår forbindelse til din Z21, vil status-mærket i øverste højre hjørne af vinduet skifte
 til "Forbundet" og blive grønt. Resten af dine dashboard-vinduer vil nu blive vist.
 
@@ -93,16 +94,21 @@ I mens Z21Dashboard forsøger at forbinde til din Z21 centralstation, vil der st
 øverst til højre i Forbind widget. Hvis der ikke opnås forbindelse, vil der efter nogle sekunder igen stå "Ej
 forbundet".
 
+## Første gang der er forbindelse
+Når du første gang får forbindelse til din Z21 centralstation, vil Z21Dashboard vise alle Widgets. De står lidt forskudt
+for hinanden. Du kan starte med at flytte rundt på dem, og herefter klikke på tandhjulsikonet øverst til højre for få
+vist oversigen med widget. Her kan du skjule de widgets, du ikke ønsker at se.
+
 # Dashboardet
 
-Hele området under "Connection"-vinduet er dit personlige lærred. Her kan du arrangere de forskellige
-informations- og kontrolvinduer (widgets), præcis som du ønsker det.
+Hele skærmbilledet er dit personlige lærred. Her kan du arrangere de forskellige informations- og kontrolvinduer
+(widgets), præcis som du ønsker det.
 
 ## Flyt rundt på vinduer
 
 Det er nemt at flytte et vindue:
 1.	Find headeren: Peg med musen på overskriftslinjen i det vindue, du vil flytte
-(f.eks. på teksten "Power Monitor"). Din musemarkør vil ændre sig til en "gribe-hånd".
+(f.eks. på teksten "Spænding og strøm oversigt"). Din musemarkør vil ændre sig til en "gribe-hånd".
 2.	Klik og Træk: Klik og hold museknappen nede, og træk vinduet til en ny position på skærmen.
 3.	Slip: Slip museknappen for at placere vinduet. Programmet gemmer automatisk dine vinduers positioner,
 så dit layout ser ens ud, næste gang du starter.
@@ -111,22 +117,24 @@ så dit layout ser ens ud, næste gang du starter.
 
 Du behøver ikke have alle vinduer vist på én gang. Du kan nemt tænde og slukke for dem, du har brug for.
 1.	Åbn Indstillinger: Klik på det store tandhjuls-ikon (⚙️) øverst i højre hjørne af programvinduet. En
-popup-menu ved navn "Settings" vil åbne sig.
+popup-menu ved navn "Indstillinger" vil åbne sig.
 2.	Tænd/Sluk: I menuen ser du en liste over alle tilgængelige vinduer med en tænd/sluk-knap ud for hver. Klik
 på knappen for at vise eller skjule et vindue. Ændringen sker med det samme på dit dashboard i baggrunden.
-3.	Luk Indstillinger: Klik på "Close" eller krydset for at lukke indstillingsmenuen.
+3.	Luk Indstillinger: Klik på "Luk" eller krydset for at lukke indstillingsmenuen.
 
 ## De vigtigste vinduer forklaret
 
 ### Forbindelses-vinduet
 Dette er dit kontrolpanel til forbindelsen. Herfra kan du:
+* Søge efter Z21 centralstationer på dit netværk
 * Oprette og afbryde forbindelsen til din Z21
 * Tænde og slukke for skinnestrømmen med "Banestrøm til" og "Banestrøm af"
 * Aktivere Nødstop for at stoppe lokomotiver
 
 Vær opmærkom på, at Nødstop er implementeret forskelligt i dekoderne. I nogle betyder det at lokomotivet stopper
-med det samme, og i andre betyder det at hastigheden sættes til 0 mens bremse-forsinkelse er stadig aktiv. Det kan anbefales
-at du tester dine lokomotiver så du ved, om du reelt kan brugt Nødstop.
+med det samme, og i andre betyder det at hastigheden sættes til 0 mens bremse-forsinkelse er stadig aktiv. Det kan
+anbefales at du tester dine lokomotiver så du ved, om du reelt kan brugt Nødstop. Alternativt kan du bruge "Banestrøm
+af" til at stoppe al kørsel på din modeljernbane.
 
 ### Lokomotivstyring
 Dette er dit digitale kørekontrol for et enkelt lokomotiv.
@@ -142,55 +150,56 @@ Når du har valgt et lokomotiv (adressefelt ikke er 0), kan du klikke på tandhj
 et popup vinudet. Mulighederne i dette vindue afhænger af om din z21/z21Start er låst.
 
 Låst eller ej, så kan du:
-* Give lokomotivet et navn. Dette navn vises herefter i Z21Dashboard sammen med adressen.
-* Angive et antal driftstimer før der skal laves service på lokomotivet.
+* Give lokomotivet et navn. Dette navn vises herefter i Z21Dashboard sammen med adressen
+* Angive et antal driftstimer før der skal laves service på lokomotivet
 * Se hvor lang tid der er til der skal udføres service
-* Nulstille service-tidstællerne, når du har udført serviec.
+* Nulstille service-tidstællerne, når du har udført service
 
 Ej låst:
 * Vælge protokol og antallet af hastighedstrin
 
 Låst:
-* Vælge protokol. Vil du ændre antallet af hastighedstrin, skal du gøre det på din multiMAUS.
+* Vælge protokol. Vil du ændre antallet af hastighedstrin, skal du gøre det på din multiMAUS
 
 Bemærk, hvis du har valgt Märklin Motorola version 1 protokollen, så vil kun
 funktionsknappen for lys være aktiv. Har du valgt Märklin Motorola version 2, så
 vil funktionskanppen for lys samt F1 - F4 være aktive.
 
 ### Lokomotivers driftstid
-Dette vindue giver et fantastisk overblik over de lokomotiver, der er i brug. Det viser en liste over alle aktive
+Dette vindue giver et fantastisk overblik over de lokomotiver, der er i brug. Det viser en liste over alle
 lokomotiver og holder styr på, hvor længe hvert enkelt har været i drift. Det er også her, du kan give dine
 lokomotiver personlige navne.
 
 Ud for hvert lokomotiv er en knap med et tandhjul. Dette åbner dialogen med indstillinger for det pågældende 
-lokomotiv. Når du hMulighederne i dette vindue afhænger af om din z21/z21Start er låst.
+lokomotiv. Mulighederne i dette vindue afhænger af om din z21/z21Start er låst.
 
 Låst eller ej, så kan du:
 * Give lokomotivet et navn. Dette navn vises herefter i Z21Dashboard sammen med adressen.
 * Angive et antal driftstimer før der skal laves service på lokomotivet. I oversigten vil driftstiden have gul
-baggrund når der er mindre end en time til service skal udføres. Baggrunden blier rød når service ikke er udført.
+baggrund når der er mindre end en time til service skal udføres. Baggrunden blier rød når service ikke er udført
 * Se hvor lang tid der er til der skal udføres service
-* Nulstille service-tidstællerne, når du har udført serviec.
+* Nulstille service-tidstællerne, når du har udført service
+* Slette et lokomotiv fra oversigten
 
 Ej låst:
 * Vælge protokol og antallet af hastighedstrin
 
 Låst:
-* Vælge protokol. Vil du ændre antallet af hastighedstrin, skal du gøre det på din multiMAUS.
+* Vælge protokol. Vil du ændre antallet af hastighedstrin, skal du gøre det på din multiMAUS
 
 Bemærk, at drifstiden gemmes på din pc når du afslutter programmet. Så næste gang
-starter programmet og forbinder til din Z21, fortsættes optællingen af drifttiden.
+starter programmet og forbinder til din Z21, fortsættes optællingen af drifttiden. Med andre ord, drifttiden gemmes
+*ikke* i Z21 centralstationen.
 
 Driftstid tæller når hastigheden er forskellig fra 0.
 
 ### Sporskifter
 
-Dette vindue viser de sporskifter, hvor du har skiftet deres potition med din multiMAUS. 
+Dette vindue viser de sporskifter, hvor du har skiftet deres position med din multiMAUS. 
 Ud for hvert sporskifte vises der en knap for indstillinger. Når du klikker på den, åbnes en
-popup dialog, der lader dig vælge hviklen protokol der skal benyttes til dekoderen i 
-sporskiftet.
+popup dialog, der lader dig vælge hviklen protokol der skal benyttes til dekoderen i sporskiftet.
 
-I popup kan du vælge mellem "DCC" og "MM" for Märklin Motorola.
+I popup kan du vælge mellem "DCC" og "MM" for Märklin Motorola. Du kan også slette sporskiftet fra oversigten.
 
 ### Spænding og strøm oversigt
 
@@ -204,6 +213,15 @@ Uanset hvilket interval du vælger, så modtager Z21Dashboard opdateringer løbe
 Widget'en husker den højeste værdi modtaget, og når intervallet er "udløbet" skrives den højest
 værdi til grafen.
 
+# Kendte problemer
+
+## Z21Dashboard afvikles i en virtuel Windows maskine i Virtualbox, men visse widgets vises ikke korrekt
+Typisk er det de to lokomotiv-widgets og sporskifteprotokol-widget, der ikke vises korrekt.Der vises en pil der drejer
+samt teksten "Kontrollerer Z21 låsningstilstand".
+
+Dette kan skyldes at der er valgt at "Pointing device" på fanen "System" i Virtualbox er sat til "USB Tablet".
+Ændr det til "PS/2 Mouse" og prøv igen.
+
 # FAQ (OSS)
 
 ## Hvad betyder "Låst" (Locked)?
@@ -211,9 +229,12 @@ værdi til grafen.
 Hvis du har en z21start (den hvide model), kan den være "låst" fra fabrikken. Det betyder, at
 den ikke tillader kørsel og sporskifte via netværk.
 * Hvis LocoControl viser "Låst": Du kan stadig bruge Z21 Dashboard som et overvågningsværktøj.
-Du kan se live status for dine lokomotiver, men du kan ikke styre dem fra programmet (knapperne vil være deaktiverede). Du kan dog skifte protokol for lokomotover
-* Hvis LocoControl viser "Låst op": Alle funktioner i programmet er tilgængelige, og du kan styre dine lokomotiver direkte.
-For at låse din z21start op, skal du bruge en oplåsningskode fra Roco (varenummer 10818 eller 10814).
+Du kan se live status for dine lokomotiver, men du kan ikke styre dem fra programmet (knapperne vil være deaktiverede). Du
+kan dog skifte protokol for lokomotover
+* Hvis LocoControl viser "Låst op": Alle funktioner i programmet er tilgængelige, og du kan styre dine lokomotiver
+direkte
+
+For at låse din z21start op, skal du bruge en oplåsningskode fra Roco (varenummer 10814 eller 10818).
 
 ## Kan navne fra min multiMAUS eller Z21 app overføres til Z21Dashboard?
 

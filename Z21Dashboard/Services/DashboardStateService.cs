@@ -20,13 +20,50 @@ public class DashboardStateService : IDashboardStateService
         LoadAndMergeState();
     }
 
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetComponentStates()
+    {
+        return [.. _componentStates.OrderBy(s => s.Name)];
+    }
+
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetVisibleComponentStates()
+    {
+        return [.. _componentStates.Where(s => s.IsVisible || s.IsSystemComponent).OrderBy(s => s.ZIndex)];
+    }
+
+    /// <inheritdoc />
+    public List<DashboardComponentState> GetUserSelectableComponents()
+    {
+        return [.. _componentStates.Where(s => s.IsSystemComponent is false).OrderBy(s => s.Name)];
+    }
+
+    /// <inheritdoc />
+    public async Task ToggleVisibility(Guid componentId)
+    {
+        var component = _componentStates.FirstOrDefault(s => s.Id == componentId);
+        if (component != null)
+        {
+            component.IsVisible = !component.IsVisible;
+            await SaveStateAsync();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateLayout(List<DashboardComponentState> newLayout)
+    {
+        _componentStates = newLayout;
+        await SaveStateAsync();
+    }
+
+
     private static List<DashboardComponentState> GetDefaultComponentDefinitions()
     {
         // This is the MASTER LIST of component definitions.
         return
         [
             // System widgets. -1 means 0 :-)
-            new() { Name = SharedResources.Connection, IsSystemComponent = true, PositionX = -1, Width = 500, ComponentType = typeof(Connection), ComponentTypeName = typeof(Connection).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.Connection, IsSystemComponent = true, PositionX = -1, Width = 525, ComponentType = typeof(Connection), ComponentTypeName = typeof(Connection).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.About, IsSystemComponent = true, PositionX = 600, Width = 500, ComponentType = typeof(About), ComponentTypeName = typeof(About).AssemblyQualifiedName ?? string.Empty },
 
             // User selectable widgets
@@ -40,7 +77,8 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.ShowLogView, Width = 500, Height = 500, ComponentType = typeof(ShowLogView), ComponentTypeName = typeof(ShowLogView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateView, Width = 260, ComponentType = typeof(SystemStateView), ComponentTypeName = typeof(SystemStateView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
-            new() { Name = SharedResources.TurnoutListView, Width = 400, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty }
+            new() { Name = SharedResources.TurnoutListView, Width = 450, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.TurnoutProtocolSelector, Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty }
         ];
     }
 
@@ -155,27 +193,4 @@ public class DashboardStateService : IDashboardStateService
         await Task.CompletedTask;
     }
 
-    // ... rest of the file (GetComponentStates, etc.) remains the same ...
-    public List<DashboardComponentState> GetComponentStates()
-    {
-        return [.. _componentStates.OrderBy(s => s.Name)];
-    }
-    public List<DashboardComponentState> GetVisibleComponentStates()
-    {
-        return [.. _componentStates.Where(s => s.IsVisible || s.IsSystemComponent).OrderBy(s => s.ZIndex)];
-    }
-    public async Task ToggleVisibility(Guid componentId)
-    {
-        var component = _componentStates.FirstOrDefault(s => s.Id == componentId);
-        if (component != null)
-        {
-            component.IsVisible = !component.IsVisible;
-            await SaveStateAsync();
-        }
-    }
-    public async Task UpdateLayout(List<DashboardComponentState> newLayout)
-    {
-        _componentStates = newLayout;
-        await SaveStateAsync();
-    }
 }

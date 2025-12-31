@@ -171,4 +171,7 @@
   <data name="TurnoutListView" xml:space="preserve">
     <value>Sporskifter</value>
   </data>
+  <data name="TurnoutProtocolSelector" xml:space="preserve">
+    <value>Sporskifteprotokolvælger</value>
+  </data>
 </root>

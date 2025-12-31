@@ -18,7 +18,7 @@ public interface ILocoMetadataService
     /// </summary>
     /// <param name="locoAddress">The address of the locomotive.</param>
     /// <returns>A LocoMetadata object, or null if no metadata exists.</returns>
-    LocoMetadata? GetMetadata(int locoAddress);
+    LocoMetadata? GetMetadata(ushort locoAddress);
 
     /// <summary>
     /// Gets the formatted display name for a locomotive.
@@ -26,7 +26,7 @@ public interface ILocoMetadataService
     /// </summary>
     /// <param name="locoAddress">The address of the locomotive.</param>
     /// <returns>The formatted display name as a string.</returns>
-    string GetDisplayName(int locoAddress);
+    string GetDisplayName(ushort locoAddress);
 
     /// <summary>
     /// Saves or updates the metadata for a specific locomotive.
@@ -34,5 +34,11 @@ public interface ILocoMetadataService
     /// <param name="locoAddress">The address of the locomotive.</param>
     /// <param name="metadata">The metadata object to save.</param>
     /// <returns>A task representing the save operation.</returns>
-    Task SaveMetadata(int locoAddress, LocoMetadata metadata);
+    Task SaveMetadata(ushort locoAddress, LocoMetadata metadata);
+
+    /// <summary>
+    /// Removes metadata for a specific locomotive.
+    /// </summary>
+    /// <param name="locoAddress">The address of the locomotive.</param>
+    void RemoveMetadata(ushort locoAddress);
 }
