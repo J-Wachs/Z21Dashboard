@@ -19,7 +19,7 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class LocoSlotViewResources {
@@ -97,6 +97,15 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forward.
+        /// </summary>
+        internal static string Forward {
+            get {
+                return ResourceManager.GetString("Forward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Functions.
         /// </summary>
         internal static string Functions {
@@ -120,6 +129,15 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         internal static string Protocol {
             get {
                 return ResourceManager.GetString("Protocol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reverse.
+        /// </summary>
+        internal static string Reverse {
+            get {
+                return ResourceManager.GetString("Reverse", resourceCulture);
             }
         }
         

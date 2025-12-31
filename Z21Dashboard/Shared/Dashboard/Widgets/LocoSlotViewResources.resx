@@ -129,6 +129,9 @@
   <data name="DirectionShort" xml:space="preserve">
     <value>D</value>
   </data>
+  <data name="Forward" xml:space="preserve">
+    <value>Forward</value>
+  </data>
   <data name="Functions" xml:space="preserve">
     <value>Functions</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="Protocol" xml:space="preserve">
     <value>Protocol</value>
+  </data>
+  <data name="Reverse" xml:space="preserve">
+    <value>Reverse</value>
   </data>
   <data name="Slot" xml:space="preserve">
     <value>Slot</value>

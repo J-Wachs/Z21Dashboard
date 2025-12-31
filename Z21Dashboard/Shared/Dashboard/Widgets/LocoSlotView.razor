@@ -67,15 +67,11 @@
                                 <td>
                                     @if (locoDisplay.Info.LocoInfo.Direction is DrivingDirection.Forward)
                                     {
-                                        <span style="font-weight: bold;" title="Forward">
-                                            &uarr;
-                                        </span>
+                                        <span style="font-weight: bold;" title="@Localizer["Forward"]">&uarr;</span>
                                     }
                                     else
                                     {
-                                        <span style="font-weight: bold;" title="Reverse">
-                                            &darr;
-                                        </span>
+                                        <span style="font-weight: bold;" title="@Localizer["Reverse"]">&darr;</span>
                                     }
                                 </td>
                                 <td>
@@ -88,7 +84,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Waiting for locomotive data...</td>
+                            <td colspan="6" class="text-center text-muted">@Localizer["WaitingForData"]</td>
                         </tr>
                     }
                 </tbody>

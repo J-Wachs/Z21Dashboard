@@ -93,7 +93,7 @@
 
     protected override void OnInitialized()
     {
-        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
+        // DashboardStateService.OnLayoutChanged += OnLayoutChanged;
         LoadVisibleComponents();
     }
 
@@ -260,6 +260,7 @@
     private void SubscribeToEvents()
     {
         Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
+        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
     }
 
     private void UnsubscribeFromEvents()
