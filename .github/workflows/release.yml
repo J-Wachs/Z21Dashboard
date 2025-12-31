@@ -37,45 +37,26 @@ jobs:
       id: get_version
       shell: pwsh
       run: |
-        # Load the project file
-        [xml]$xml = Get-Content Z21Dashboard/Z21Dashboard.csproj
-        $versionFound = $null
+        $path = "Z21Dashboard/Z21Dashboard.csproj"
+        
+        Write-Host "--- FILE CONTENT START ---"
+        Get-Content $path
+        Write-Host "--- FILE CONTENT END ---"
 
-        Write-Host "Scanning PropertyGroups..."
-
-        # Loop through ALL PropertyGroups in the file
-        foreach ($group in $xml.Project.PropertyGroup) {
-            
-            # Safely get the 'Condition' attribute
-            $condition = ""
-            if ($group.HasAttribute("Condition")) {
-                $condition = $group.GetAttribute("Condition")
-            }
-            
-            # Get the ApplicationDisplayVersion value
-            $val = $group.ApplicationDisplayVersion
-
-            # Debug info: Log what we find
-            if (-not [string]::IsNullOrWhiteSpace($val)) {
-                Write-Host " -> Found version '$val' in group with Condition: '$condition'"
-            }
-
-            # CHECK: Does the condition contain 'Release' AND do we have a value?
-            if ($condition -like "*Release*" -and -not [string]::IsNullOrWhiteSpace($val)) {
-                $versionFound = $val
-                Write-Host "MATCH! Selected version from Release group: $val"
-                break # Stop searching, we found it
-            }
+        $content = Get-Content $path -Raw
+        $pattern = '(?s)<PropertyGroup\s+Condition="[^"]*Release[^"]*">.*?<ApplicationDisplayVersion>(.*?)</ApplicationDisplayVersion>'
+        
+        if ($content -match $pattern) {
+            # $matches[1] indeholder værdien inde i tags'ne
+            $ver = $matches[1].Trim()
+            Write-Host "MATCH! Found Release version via Regex: $ver"
+            "APP_VERSION=v$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
-
-        # CRITICAL STOP: If no release version was found, fail the build
-        if (-not $versionFound) {
-            Write-Error "CRITICAL ERROR: Could not find 'ApplicationDisplayVersion' in a 'Release' PropertyGroup."
+        else {
+            Write-Error "CRITICAL: Could not find Release version using Regex pattern."
+            Write-Error "Please check the 'FILE CONTENT' log above. Does the file contain a PropertyGroup with Condition='...Release...'?"
             exit 1
         }
-
-        # Set environment variable for next steps (e.g. v1.1.0)
-        "APP_VERSION=v$versionFound" | Out-File -FilePath $env:GITHUB_ENV -Append    
         
     # 3. Run Unit Tests (ALWAYS runs - on all branches)
     - name: Run Unit Tests
