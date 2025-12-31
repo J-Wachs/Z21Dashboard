@@ -36,27 +36,19 @@ jobs:
     - name: Get Version from Project
       id: get_version
       run: |
-        [xml]$csproj = Get-Content Z21Dashboard/Z21Dashboard.csproj
+        # Use 'dotnet msbuild' to evaluate the project file properties
+        # -p:Configuration=Release  <- Simulate a Release build
+        # -getProperty:ApplicationDisplayVersion <- Extract only this field
+        $ver = dotnet msbuild Z21Dashboard/Z21Dashboard.csproj -p:Configuration=Release -getProperty:ApplicationDisplayVersion -nologo
         
-        # 1. Hent ALLE PropertyGroups som en liste
-        $allGroups = $csproj.Project.PropertyGroup
+        # Clean whitespace
+        $ver = $ver.Trim()
         
-        # 2. Find den gruppe, hvor 'Condition' indeholder ordet 'Release'
-        # Vi bruger 'Where-Object' som er PowerShells måde at filtrere lister på
-        $releaseGroup = $allGroups | Where-Object { $_.Condition -like "*Release*" } | Select-Object -First 1
-        
-        # 3. Prøv at hente versionen fra Release-gruppen
-        $ver = $releaseGroup.ApplicationDisplayVersion
-        
-        # 4. Fallback: Hvis den var tom (eller Release gruppen ikke fandtes), så tag den globale version
-        # (Den globale ligger i den første gruppe i din fil, linje 23)
-        if (-not $ver) {
-            Write-Host "Specific Release version not found. Using global version."
-            $ver = $csproj.Project.PropertyGroup.ApplicationDisplayVersion | Select-Object -First 1
+        # STOP the pipeline immediately if version is missing
+        if (-not $ver) { 
+            Write-Error "CRITICAL ERROR: Could not extract 'ApplicationDisplayVersion' from .csproj file. Check the file content."
+            exit 1
         }
-        
-        # 5. Sikkerhedsnet
-        if (-not $ver) { $ver = "1.0.0" }
         
         Write-Host "Detected version: v$ver"
         echo "APP_VERSION=v$ver" >> $env:GITHUB_ENV
