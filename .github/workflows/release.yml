@@ -32,15 +32,28 @@ jobs:
 
     # --- NEW STEP: Extract version from .csproj ---
     # This is necessary because we no longer use Tags to control the version.
-    # It reads <Version>1.0.X</Version> from your project file.
+    # It reads <ApplicationDisplayVersion>1.0.X</Version> from your project file.
     - name: Get Version from Project
       id: get_version
       run: |
         [xml]$csproj = Get-Content Z21Dashboard/Z21Dashboard.csproj
-        $ver = $csproj.Project.PropertyGroup.Version
-        if (-not $ver) { $ver = "1.0.0" } # Fallback if version is missing
+        
+        # XPath søgning:
+        # //PropertyGroup   -> Find alle PropertyGroups
+        # [contains(@Condition, 'Release')] -> Men kun dem hvor Condition indeholder 'Release'
+        # /ApplicationDisplayVersion -> Gå ned i child-elementet
+        $node = $csproj.SelectSingleNode("//PropertyGroup[contains(@Condition, 'Release')]/ApplicationDisplayVersion")
+        
+        if ($node) {
+            $ver = $node.InnerText
+            Write-Host "Success! Found Release version: $ver"
+        } else {
+            Write-Warning "Could not find specific Release version. Fallback to 1.0.0"
+            $ver = "1.0.0"
+        }
+        
+        # Sætter environment variable (f.eks. v1.1.0)
         echo "APP_VERSION=v$ver" >> $env:GITHUB_ENV
-        Write-Host "Detected version: v$ver"
 
     # 3. Run Unit Tests (ALWAYS runs - on all branches)
     - name: Run Unit Tests
