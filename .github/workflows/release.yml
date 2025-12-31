@@ -82,7 +82,7 @@ jobs:
 
     # 4. Build (ALWAYS runs - to ensure code compiles)
     - name: Publish App
-      run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained true -o ./publish
+      run: dotnet publish Z21Dashboard/Z21Dashboard.csproj -f net10.0-windows10.0.26100.0 -c Release -r win-x64 --self-contained true -o ./publish
 
     # ==============================================================================
     # FROM HERE ON, WE ONLY RUN IF IT IS THE "MASTER" BRANCH
