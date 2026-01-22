@@ -51,7 +51,7 @@
 
     protected override void OnInitialized()
     {
-        Z21Client.RBusDataReceived += OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived += OnRBusDataReceived;
     }
 
     private async void OnRBusDataReceived(object? sender, RBusData e)
@@ -72,6 +72,6 @@
 
     public void Dispose()
     {
-        Z21Client.RBusDataReceived -= OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
     }
 }

@@ -38,8 +38,8 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
 
         LoadData();
 
-        _z21Client.TurnoutInfoReceived += OnTurnoutInfoReceived;
-        _z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+        _z21Client.OnTurnoutInfoReceived += OnTurnoutInfoReceived;
+        _z21Client.OnTurnoutModeReceived += OnTurnoutModeReceived;
     }
 
     private void LoadData()
@@ -244,7 +244,7 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
 
     public void Dispose()
     {
-        _z21Client.TurnoutInfoReceived -= OnTurnoutInfoReceived;
-        _z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        _z21Client.OnTurnoutInfoReceived -= OnTurnoutInfoReceived;
+        _z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
     }
 }

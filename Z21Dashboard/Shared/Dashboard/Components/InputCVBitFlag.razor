@@ -1,0 +1,73 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@inherits InputBase<bool?>
+@inject INmraCvService NmraCvService
+@inject IStringLocalizer<InputCVBitFlagResources> Localizer
+
+<select class="@ComputedCssClass" value="@CurrentValueAsString" @onchange="OnChange">
+    <option value="False">@_optionFalseText</option>
+    <option value="True">@_optionTrueText</option>
+    <option value="">@_optionNullText</option>
+</select>
+
+@code {
+    [Parameter, EditorRequired]
+    public required ushort CV {get;set;}
+
+    [Parameter, EditorRequired]
+    public required Bits Bit { get; set; }
+
+    private string _optionTrueText = string.Empty;
+    private string _optionFalseText = string.Empty;
+    private string _optionNullText = string.Empty;
+
+    private string ComputedCssClass => $"{EditContext?.FieldCssClass(FieldIdentifier)} {CssClass}";
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _optionNullText = Localizer["NoChange"];
+        var bitValues = await NmraCvService.GetCVBitValuesDescription(CV, Bit);
+        _optionTrueText = bitValues.OneDescription;
+        _optionFalseText = bitValues.ZeroDescription;
+    }
+
+    protected override string? FormatValueAsString(bool? value)
+    {
+        return value.HasValue ? value.Value.ToString() : string.Empty;
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out bool? result,
+        out string validationErrorMessage)
+    {
+        validationErrorMessage = string.Empty;
+
+        if (string.IsNullOrEmpty(value))
+        {
+            result = null;
+            return true;
+        }
+
+        if (bool.TryParse(value, out var parsed))
+        {
+            result = parsed;
+            return true;
+        }
+
+        // Simple set to null and ignore error.
+        result = null;
+        return true;
+    }
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        var valueStr = e.Value?.ToString() ?? string.Empty;
+        CurrentValueAsString = valueStr;
+    }
+}

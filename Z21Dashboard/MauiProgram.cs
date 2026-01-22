@@ -9,6 +9,8 @@ using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Services;
 using Z21Status.Application.Interfaces;
 using Z21Status.Services;
+using Z21Dashboard.Helpers;
+
 
 #if WINDOWS
 using Microsoft.UI;
@@ -134,7 +136,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<ITurnoutCounterService, TurnoutCounterService>();
 
         // Register the service for opening documentation files.
-        builder.Services.AddSingleton<IDocumentationService, DocumentationService>();
+        builder.Services.AddScoped<IDocumentationService, DocumentationService>();
+
+        builder.Services.AddScoped<IDecoderProgService, DecoderProgService>();
+        builder.Services.AddScoped<IDecoderProgHelperService, DecoderProgHelperService>();
+
+        builder.Services.AddScoped<ISessionStorage, SimpleSessionStorage>();
+        builder.Services.AddScoped<INmraCvService, NmraCvService>();
 
         // --- END: SERVICE REGISTRATION SECTION ---
 

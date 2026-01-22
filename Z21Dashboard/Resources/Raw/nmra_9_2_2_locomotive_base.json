@@ -1,0 +1,1161 @@
+{
+  "meta": {
+    "standard": "NMRA S-9.2.2",
+    "document": "s-9.2.2_decoder_cvs_2012.07",
+    "scope": "locomotive_decoder",
+    "languages": [ "en", "da" ]
+  },
+  "cv_definitions": [
+    {
+      "cv": 1,
+      "status": "mandatory",
+      "name": {
+        "en": "Primary Address",
+        "da": "Primær adresse (kort)"
+      },
+      "description": {
+        "en": "Short DCC address (1–127).",
+        "da": "Kort DCC-adresse (1–127)."
+      },
+      "value_bits": {
+        "min": 1,
+        "max": 127
+      }
+    },
+    {
+      "cv": 2,
+      "status": "recommended",
+      "name": {
+        "en": "Vstart",
+        "da": "Startspænding (Vstart)"
+      },
+      "description": {
+        "en": "Voltage applied at speed step 1.",
+        "da": "Spænding ved køretrin 1."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 3,
+      "status": "recommended",
+      "name": {
+        "en": "Acceleration Rate",
+        "da": "Accelerationshastighed"
+      },
+      "description": {
+        "en": "Rate of acceleration.",
+        "da": "Hvor hurtigt lokomotivet accelererer."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 4,
+      "status": "recommended",
+      "name": {
+        "en": "Deceleration Rate",
+        "da": "Bremseforsinkelse"
+      },
+      "description": {
+        "en": "Rate of deceleration.",
+        "da": "Hvor hurtigt lokomotivet bremser."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 5,
+      "status": "recommended",
+      "name": {
+        "en": "Vhigh",
+        "da": "Tophastighed (Vhigh)"
+      },
+      "description": {
+        "en": "Voltage at maximum speed.",
+        "da": "Spænding ved maksimal hastighed."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 6,
+      "status": "recommended",
+      "name": {
+        "en": "Vmid",
+        "da": "Middelhastighed (Vmid)"
+      },
+      "description": {
+        "en": "Voltage at mid speed.",
+        "da": "Spænding ved mellemhastighed."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 7,
+      "status": "mandatory",
+      "read_only": true,
+      "name": {
+        "en": "Manufacturer Version Number",
+        "da": "Producentens versionsnummer"
+      },
+      "description": {
+        "en": "Decoder software version.",
+        "da": "Dekoderens softwareversion."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 8,
+      "status": "mandatory",
+      "read_only": true,
+      "name": {
+        "en": "Manufacturer ID",
+        "da": "Producent-ID"
+      },
+      "description": {
+        "en": "NMRA-assigned manufacturer identifier.",
+        "da": "NMRA-tildelt producentidentifikation."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 9,
+      "status": "optional",
+      "name": {
+        "en": "PWM Period",
+        "da": "PWM-periode"
+      },
+      "description": {
+        "en": "Motor PWM repetition rate.",
+        "da": "PWM-frekvens for motorstyring."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 10,
+      "status": "optional",
+      "name": {
+        "en": "EMF Feedback Cutout",
+        "da": "EMF-feedback frakobling"
+      },
+      "description": {
+        "en": "Back-EMF cutout configuration.",
+        "da": "Konfiguration af lastregulering."
+      },
+      "value_bits": {
+        "from_bit": 0,
+        "to_bit": 6,
+        "min": 0,
+        "max": 127
+      },
+      "flag_bits": [
+        {
+          "bit": 7,
+          "name": {
+            "en": "Disable Back-EMF",
+            "da": "Deaktiver lastregulering"
+          }
+        }
+      ]
+    },
+    {
+      "cv": 11,
+      "status": "recommended",
+      "name": {
+        "en": "Packet Timeout Value",
+        "da": "Pakke-timeout"
+      },
+      "description": {
+        "en": "Time decoder waits for valid packets before stopping.",
+        "da": "Tid uden gyldige pakker før stop."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 12,
+      "status": "recommended",
+      "name": {
+        "en": "Power Source Conversion",
+        "da": "Strømkilde-konfiguration"
+      },
+      "description": {
+        "en": "Allowed analog power sources.",
+        "da": "Tilladte analoge strømkilder."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 13,
+      "status": "recommended",
+      "name": {
+        "en": "Analog Function Status F1-F8",
+        "da": "Analog Funktion Status F1-F8"
+      },
+      "description": {
+        "en": "Status of functions F1-F8 when in analog mode.",
+        "da": "Status for funktioner F1-F8 ved analog kørsel."
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F1",
+            "da": "F1"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F2",
+            "da": "F2"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F3",
+            "da": "F3"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F4",
+            "da": "F4"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F5",
+            "da": "F5"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F6",
+            "da": "F6"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F7",
+            "da": "F7"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F8",
+            "da": "F8"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 14,
+      "status": "recommended",
+      "name": {
+        "en": "Analog Function Status FL,F9-F12",
+        "da": "Analog Funktion Status FL,F9-F12"
+      },
+      "description": {
+        "en": "Status of functions FL and F9-F12 when in analog mode.",
+        "da": "Status for funktioner FL og F9-F12 ved analog kørsel."
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "FL (Forward)",
+            "da": "FL (Frem)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "FL (Reverse)",
+            "da": "FL (Bak)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F9",
+            "da": "F9"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F10",
+            "da": "F10"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F11",
+            "da": "F11"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F12",
+            "da": "F12"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 15,
+      "status": "recommended",
+      "name": {
+        "en": "Decoder Lock",
+        "da": "Dekoderlås"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 16,
+      "status": "recommended",
+      "name": {
+        "en": "Decoder Lock ID",
+        "da": "Dekoder låse-ID"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 17,
+      "status": "recommended",
+      "name": {
+        "en": "Extended Address High Byte",
+        "da": "Lang adresse Høj byte"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 18,
+      "status": "recommended",
+      "name": {
+        "en": "Extended Address Low Byte",
+        "da": "Lang adresse Lav byte"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 19,
+      "status": "recommended",
+      "name": {
+        "en": "Consist Address",
+        "da": "Multitraktion-adresse"
+      },
+      "value_bits": {
+        "from_bit": 0,
+        "to_bit": 6,
+        "min": 0,
+        "max": 127
+      },
+      "flag_bits": [
+        {
+          "bit": 7,
+          "name": {
+            "en": "Direction",
+            "da": "Retning"
+          },
+          "values": {
+            "0": {
+              "en": "Normal",
+              "da": "Normal"
+            },
+            "1": {
+              "en": "Reverse relative to consist",
+              "da": "Omvendt ift. consist"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 21,
+      "status": "recommended",
+      "name": {
+        "en": "Consist Function Control #1",
+        "da": "Multitraktion funktionskontrol #1"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F0 follows consist",
+            "da": "F0 følger multitraktion"
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F1 follows consist",
+            "da": "F1 følger multitraktion"
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F2 follows consist",
+            "da": "F2 følger multitraktion"
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F3 follows consist",
+            "da": "F3 følger multitraktion"
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F4 follows consist",
+            "da": "F4 følger multitraktion"
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F5 follows consist",
+            "da": "F5 følger multitraktion"
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F6 follows consist",
+            "da": "F6 følger multitraktion"
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F7 follows consist",
+            "da": "F7 følger multitraktion"
+          }
+        }
+      ]
+    },
+    {
+      "cv": 22,
+      "status": "recommended",
+      "name": {
+        "en": "Consist Function Control #2",
+        "da": "Multitraktion funktionskontrol #2"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F8 follows consist",
+            "da": "F8 følger multitraktion"
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F9 follows consist",
+            "da": "F9 følger multitraktion"
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F10 follows consist",
+            "da": "F10 følger multitraktion"
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F11 follows consist",
+            "da": "F11 følger multitraktion"
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F12 follows consist",
+            "da": "F12 følger multitraktion"
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Reserved",
+            "da": "Reserveret"
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Reserved",
+            "da": "Reserveret"
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Reserved",
+            "da": "Reserveret"
+          }
+        }
+      ]
+    },
+    {
+      "cv": 25,
+      "status": "optional",
+      "name": {
+        "en": "Acceleration / Deceleration Adjustment",
+        "da": "Justering af acceleration/bremsning"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 27,
+      "status": "optional",
+      "name": {
+        "en": "Automatic Braking Configuration",
+        "da": "Automatisk bremsning"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 28,
+      "status": "recommended",
+      "name": {
+        "en": "Bi-Directional Communication Config",
+        "da": "RailCom-konfiguration"
+      },
+      "description": {
+        "en": "Configures RailCom channels (requires CV29 bit 3 ON).",
+        "da": "Konfigurerer RailCom kanaler (kræver CV29 bit 3 TÆNDT)."
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Channel 1 (Broadcast)",
+            "da": "Kanal 1 (Broadcast)"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Channel 2 (Data)",
+            "da": "Kanal 2 (Data)"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "RailCom Plus automatic loco recognition",
+            "da": "RailCom Plus automatisk lok. registrering"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 29,
+      "status": "mandatory",
+      "name": {
+        "en": "Configuration Data #1",
+        "da": "Konfigurationsdata #1"
+      },
+      "description": {
+        "en": "Master configuration for direction, steps, analog and addressing.",
+        "da": "Hovedkonfiguration for retning, køretrin, analog og adressering."
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Direction",
+            "da": "Kørselsretning"
+          },
+          "values": {
+            "0": {
+              "en": "Normal",
+              "da": "Normal"
+            },
+            "1": {
+              "en": "Reversed",
+              "da": "Omvendt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Speed Steps",
+            "da": "Køretrin"
+          },
+          "values": {
+            "0": {
+              "en": "14 Steps",
+              "da": "14 Trin"
+            },
+            "1": {
+              "en": "28/128 Steps",
+              "da": "28/128 Trin"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Analog Mode",
+            "da": "Analog Drift"
+          },
+          "values": {
+            "0": {
+              "en": "Digital Only",
+              "da": "Kun Digital"
+            },
+            "1": {
+              "en": "Analog Allowed",
+              "da": "Analog Tilladt"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "RailCom",
+            "da": "RailCom"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Deaktiveret"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Aktiveret"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Speed Curve",
+            "da": "Hastighedskurve"
+          },
+          "values": {
+            "0": {
+              "en": "Basic (CV2,5,6)",
+              "da": "Basis (CV2,5,6)"
+            },
+            "1": {
+              "en": "Table (CV67-94)",
+              "da": "Tabel (CV67-94)"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Address Select",
+            "da": "Adressevalg"
+          },
+          "values": {
+            "0": {
+              "en": "Short (CV1)",
+              "da": "Kort (CV1)"
+            },
+            "1": {
+              "en": "Long (CV17/18)",
+              "da": "Lang (CV17/18)"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Decoder Type",
+            "da": "Dekodertype"
+          },
+          "values": {
+            "0": {
+              "en": "Multifunction (Loco)",
+              "da": "Lokomotiv"
+            },
+            "1": {
+              "en": "Accessory",
+              "da": "Tilbehør"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 30,
+      "status": "optional",
+      "name": {
+        "en": "Error Information",
+        "da": "Fejlinformation"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 31,
+      "status": "mandatory",
+      "name": {
+        "en": "Indexed CV Address High Byte",
+        "da": "Indekseret CV-adresse Høj byte"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 32,
+      "status": "mandatory",
+      "name": {
+        "en": "Indexed CV Address Low Byte",
+        "da": "Indekseret CV-adresse Lav byte"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv_range": {
+        "from": 33,
+        "to": 46
+      },
+      "status": "optional",
+      "name": {
+        "en": "Function Mapping",
+        "da": "Funktionskortlægning"
+      }
+    },
+    {
+      "cv_range": {
+        "from": 47,
+        "to": 64
+      },
+      "status": "manufacturer",
+      "name": {
+        "en": "Manufacturer Specific CVs",
+        "da": "Producent-specifikke CV’er"
+      }
+    },
+    {
+      "cv": 65,
+      "status": "recommended",
+      "name": {
+        "en": "Kick Start",
+        "da": "Kick start"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 66,
+      "status": "recommended",
+      "name": {
+        "en": "Forward Trim",
+        "da": "Forlæns trim"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv_range": {
+        "from": 67,
+        "to": 94
+      },
+      "status": "optional",
+      "name": {
+        "en": "Speed Table",
+        "da": "Hastighedstabel (28 punkter)"
+      },
+      "structure": "table",
+      "table_length": 28
+    },
+    {
+      "cv": 95,
+      "status": "recommended",
+      "name": {
+        "en": "Reverse Trim",
+        "da": "Baglæns trim"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv_range": {
+        "from": 96,
+        "to": 104
+      },
+      "status": "reserved",
+      "name": {
+        "en": "Reserved by NMRA for future use",
+        "da": "Reserveret af NMRA til fremtidig brug"
+      }
+    },
+    {
+      "cv": 105,
+      "status": "optional",
+      "name": {
+        "en": "User identifier #1",
+        "da": "Brugeridentifikation 1"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 106,
+      "status": "optional",
+      "name": {
+        "en": "User identifier #2",
+        "da": "Brugeridentifikation 2"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv_range": {
+        "from": 107,
+        "to": 111
+      },
+      "status": "reserved",
+      "name": {
+        "en": "Reserved by NMRA for future use",
+        "da": "Reserveret af NMRA til fremtidig brug"
+      }
+    },
+    {
+      "cv_range": {
+        "from": 112,
+        "to": 256
+      },
+      "status": "manufacturer",
+      "name": {
+        "en": "Manufacturer Specific CVs",
+        "da": "Producent-specifikke CV’er"
+      }
+    },
+    {
+      "cv_range": {
+        "from": 257,
+        "to": 512
+      },
+      "status": "indexed",
+      "name": {
+        "en": "Indexed CV Data Window",
+        "da": "Indekseret CV-datavindue"
+      }
+    },
+    {
+      "cv_range": {
+        "from": 513,
+        "to": 891
+      },
+      "status": "reserved",
+      "name": {
+        "en": "Reserved by NMRA for future use",
+        "da": "Reserveret af NMRA til fremtidig brug"
+      }
+    },
+    {
+      "cv": 892,
+      "status": "optional",
+      "name": {
+        "en": "Decoder Load",
+        "da": "Dekoder belastning"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 893,
+      "status": "optional",
+      "name": {
+        "en": "Dynamic Flags",
+        "da": "Dynamiske indstillinger"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 894,
+      "status": "optional",
+      "name": {
+        "en": "Fuel/Coal",
+        "da": "Brændstof/kul"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 895,
+      "status": "optional",
+      "name": {
+        "en": "Water",
+        "da": "Vand"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv_range": {
+        "from": 896,
+        "to": 1024
+      },
+      "status": "optional",
+      "name": {
+        "en": "SUSI Sound and Function Modules",
+        "da": "SUSI lyd- og funktionsmoduler"
+      }
+    }
+  ]
+}

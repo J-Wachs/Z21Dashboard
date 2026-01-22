@@ -1,0 +1,539 @@
+﻿{
+  "IDs": [
+    {
+      "Id": 1,
+      "Name": "CML Electronics Limited",
+      "Type": "decoder"
+    },
+    {
+      "Id": 2,
+      "Name": "Train Technology",
+      "Type": "other"
+    },
+    {
+      "Id": 11,
+      "Name": "NCE Corporation",
+      "Type": "decoder"
+    },
+    {
+      "Id": 12,
+      "Name": "Wangrow Electronics",
+      "Type": "other"
+    },
+    {
+      "Id": 13,
+      "Name": "Public Domain & DIY Decoders",
+      "Type": "decoder"
+    },
+    {
+      "Id": 14,
+      "Name": "PSI - Dynatrol",
+      "Type": "other"
+    },
+    {
+      "Id": 15,
+      "Name": "Ramfixx Technologies",
+      "Type": "other"
+    },
+    {
+      "Id": 17,
+      "Name": "Advance IC Engineering",
+      "Type": "decoder"
+    },
+    {
+      "Id": 18,
+      "Name": "JMRI",
+      "Type": "other"
+    },
+    {
+      "Id": 19,
+      "Name": "AMW",
+      "Type": "other"
+    },
+    {
+      "Id": 20,
+      "Name": "T4T - Technology for Trains GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 21,
+      "Name": "Kreischer Datentechnik",
+      "Type": "other"
+    },
+    {
+      "Id": 22,
+      "Name": "KAM Industries",
+      "Type": "other"
+    },
+    {
+      "Id": 23,
+      "Name": "S Helper Service",
+      "Type": "other"
+    },
+    {
+      "Id": 24,
+      "Name": "MoBaTron.de",
+      "Type": "other"
+    },
+    {
+      "Id": 25,
+      "Name": "Team Digital, LLC",
+      "Type": "other"
+    },
+    {
+      "Id": 26,
+      "Name": "MBTronik - PiN GITmBH",
+      "Type": "other"
+    },
+    {
+      "Id": 27,
+      "Name": "MTH Electric Trains, Inc.",
+      "Type": "other"
+    },
+    {
+      "Id": 28,
+      "Name": "Heljan A/S",
+      "Type": "other"
+    },
+    {
+      "Id": 29,
+      "Name": "Mistral Train Models",
+      "Type": "other"
+    },
+    {
+      "Id": 30,
+      "Name": "Digsight",
+      "Type": "other"
+    },
+    {
+      "Id": 31,
+      "Name": "Brelec",
+      "Type": "other"
+    },
+    {
+      "Id": 32,
+      "Name": "Regal Way Co. Ltd",
+      "Type": "other"
+    },
+    {
+      "Id": 33,
+      "Name": "Praecipuus (Silicon Railway)",
+      "Type": "other"
+    },
+    {
+      "Id": 34,
+      "Name": "Aristo-Craft Trains",
+      "Type": "other"
+    },
+    {
+      "Id": 35,
+      "Name": "Elektronik & Modell Produktion",
+      "Type": "other"
+    },
+    {
+      "Id": 36,
+      "Name": "DCCconcepts",
+      "Type": "decoder"
+    },
+    {
+      "Id": 37,
+      "Name": "NAC Services, Inc.",
+      "Type": "other"
+    },
+    {
+      "Id": 38,
+      "Name": "Broadway Limited Imports, LLC",
+      "Type": "decoder"
+    },
+    {
+      "Id": 39,
+      "Name": "Educational Computer, Inc.",
+      "Type": "other"
+    },
+    {
+      "Id": 40,
+      "Name": "KATO Precision Models",
+      "Type": "other"
+    },
+    {
+      "Id": 41,
+      "Name": "Passmann Modellbahnzubehoer",
+      "Type": "other"
+    },
+    {
+      "Id": 42,
+      "Name": "Digirails",
+      "Type": "other"
+    },
+    {
+      "Id": 43,
+      "Name": "Ngineering",
+      "Type": "other"
+    },
+    {
+      "Id": 44,
+      "Name": "SPROG-DCC",
+      "Type": "decoder"
+    },
+    {
+      "Id": 45,
+      "Name": "ANE Model Co., Ltd",
+      "Type": "other"
+    },
+    {
+      "Id": 46,
+      "Name": "GFB Designs",
+      "Type": "other"
+    },
+    {
+      "Id": 47,
+      "Name": "Capecom",
+      "Type": "other"
+    },
+    {
+      "Id": 48,
+      "Name": "Hornby Hobbies Ltd.",
+      "Type": "other"
+    },
+    {
+      "Id": 49,
+      "Name": "Joka Electronic",
+      "Type": "other"
+    },
+    {
+      "Id": 50,
+      "Name": "N & Q Electronics",
+      "Type": "other"
+    },
+    {
+      "Id": 51,
+      "Name": "DCC Supplies, Ltd",
+      "Type": "decoder"
+    },
+    {
+      "Id": 52,
+      "Name": "Krois-Modell",
+      "Type": "other"
+    },
+    {
+      "Id": 53,
+      "Name": "Rautenhaus Digital",
+      "Type": "other"
+    },
+    {
+      "Id": 54,
+      "Name": "TCH Technology",
+      "Type": "other"
+    },
+    {
+      "Id": 55,
+      "Name": "QElectronics GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 56,
+      "Name": "LDH",
+      "Type": "other"
+    },
+    {
+      "Id": 57,
+      "Name": "Rampino Elektronik",
+      "Type": "other"
+    },
+    {
+      "Id": 58,
+      "Name": "KRES GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 59,
+      "Name": "Tam Valley Depot",
+      "Type": "other"
+    },
+    {
+      "Id": 60,
+      "Name": "Bluecher-Elektronik",
+      "Type": "other"
+    },
+    {
+      "Id": 61,
+      "Name": "TrainModules",
+      "Type": "decoder"
+    },
+    {
+      "Id": 62,
+      "Name": "Tams Elektronik GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 63,
+      "Name": "Noarail",
+      "Type": "other"
+    },
+    {
+      "Id": 64,
+      "Name": "Digital Bahn",
+      "Type": "other"
+    },
+    {
+      "Id": 66,
+      "Name": "Railnet Solutions, LLC",
+      "Type": "other"
+    },
+    {
+      "Id": 68,
+      "Name": "MAWE Elektronik",
+      "Type": "other"
+    },
+    {
+      "Id": 69,
+      "Name": "E-Modell",
+      "Type": "other"
+    },
+    {
+      "Id": 71,
+      "Name": "New York Byano Limited",
+      "Type": "other"
+    },
+    {
+      "Id": 72,
+      "Name": "MTB Model",
+      "Type": "other"
+    },
+    {
+      "Id": 73,
+      "Name": "The Electric Railroad Company",
+      "Type": "other"
+    },
+    {
+      "Id": 74,
+      "Name": "PpP Digital",
+      "Type": "other"
+    },
+    {
+      "Id": 75,
+      "Name": "DigiTools Electronics Servicing",
+      "Type": "decoder"
+    },
+    {
+      "Id": 76,
+      "Name": "Auvidel",
+      "Type": "other"
+    },
+    {
+      "Id": 77,
+      "Name": "LS Models Sprl",
+      "Type": "other"
+    },
+    {
+      "Id": 85,
+      "Name": "Uhlenbrock Elektronik GmbH",
+      "Type": "decoder"
+    },
+    {
+      "Id": 87,
+      "Name": "RR-CirKits",
+      "Type": "other"
+    },
+    {
+      "Id": 95,
+      "Name": "Sanda Kan Industrial Ltd.",
+      "Type": "other"
+    },
+    {
+      "Id": 97,
+      "Name": "Doehler & Haas",
+      "Type": "decoder"
+    },
+    {
+      "Id": 99,
+      "Name": "Lenz Elektronik GmbH",
+      "Type": "decoder"
+    },
+    {
+      "Id": 101,
+      "Name": "Bachmann Trains",
+      "Type": "decoder"
+    },
+    {
+      "Id": 103,
+      "Name": "Nagasue System Design Office",
+      "Type": "other"
+    },
+    {
+      "Id": 105,
+      "Name": "Computer Dialysis France",
+      "Type": "other"
+    },
+    {
+      "Id": 109,
+      "Name": "Viessmann Modellspielwaren GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 111,
+      "Name": "Haber & Koenig Electronics GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 113,
+      "Name": "QS Industries",
+      "Type": "decoder"
+    },
+    {
+      "Id": 115,
+      "Name": "Dietz Modellbahntechnik",
+      "Type": "decoder"
+    },
+    {
+      "Id": 117,
+      "Name": "cT Elektronik",
+      "Type": "other"
+    },
+    {
+      "Id": 119,
+      "Name": "W. S. Ataras Engineering",
+      "Type": "other"
+    },
+    {
+      "Id": 123,
+      "Name": "Massoth Elektronik GmbH",
+      "Type": "decoder"
+    },
+    {
+      "Id": 125,
+      "Name": "ProfiLok Modellbahntechnik GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 127,
+      "Name": "Atlas Model Railroad Products",
+      "Type": "decoder"
+    },
+    {
+      "Id": 129,
+      "Name": "Digitrax",
+      "Type": "decoder"
+    },
+    {
+      "Id": 131,
+      "Name": "Trix Modelleisenbahn",
+      "Type": "other"
+    },
+    {
+      "Id": 132,
+      "Name": "ZTC Controls Ltd.",
+      "Type": "other"
+    },
+    {
+      "Id": 133,
+      "Name": "Intelligent Command Control",
+      "Type": "other"
+    },
+    {
+      "Id": 135,
+      "Name": "CVP Products",
+      "Type": "other"
+    },
+    {
+      "Id": 139,
+      "Name": "RealRail Effects",
+      "Type": "decoder"
+    },
+    {
+      "Id": 141,
+      "Name": "Throttle-Up (SoundTraxx)",
+      "Type": "decoder"
+    },
+    {
+      "Id": 143,
+      "Name": "Model Rectifier Corp. (MRC)",
+      "Type": "decoder"
+    },
+    {
+      "Id": 145,
+      "Name": "Zimo Elektronik",
+      "Type": "decoder"
+    },
+    {
+      "Id": 147,
+      "Name": "Umelec Ing. Buero",
+      "Type": "other"
+    },
+    {
+      "Id": 149,
+      "Name": "Rock Junction Controls",
+      "Type": "other"
+    },
+    {
+      "Id": 151,
+      "Name": "Electronic Solutions Ulm (ESU)",
+      "Type": "decoder"
+    },
+    {
+      "Id": 153,
+      "Name": "Train Control Systems (TCS)",
+      "Type": "decoder"
+    },
+    {
+      "Id": 155,
+      "Name": "Gebr. Fleischmann GmbH & Co.",
+      "Type": "other"
+    },
+    {
+      "Id": 157,
+      "Name": "Kuehn Ing.",
+      "Type": "other"
+    },
+    {
+      "Id": 159,
+      "Name": "LGB (Ernst Paul Lehmann Patentwerk)",
+      "Type": "other"
+    },
+    {
+      "Id": 161,
+      "Name": "Modelleisenbahn GmbH (formerly Roco)",
+      "Type": "other"
+    },
+    {
+      "Id": 163,
+      "Name": "WP Railshops",
+      "Type": "other"
+    },
+    {
+      "Id": 165,
+      "Name": "Model Electronic Railway Group",
+      "Type": "other"
+    },
+    {
+      "Id": 170,
+      "Name": "AuroTrains",
+      "Type": "other"
+    },
+    {
+      "Id": 173,
+      "Name": "Arnold - Rivarossi",
+      "Type": "other"
+    },
+    {
+      "Id": 186,
+      "Name": "BRAWA Modellspielwaren GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 204,
+      "Name": "Con-Com GmbH",
+      "Type": "other"
+    },
+    {
+      "Id": 225,
+      "Name": "Elproma Electronics Poland",
+      "Type": "other"
+    },
+    {
+      "Id": 238,
+      "Name": "NMRA Reserved",
+      "Type": "reserved"
+    }
+  ]
+}

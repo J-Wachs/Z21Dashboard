@@ -89,7 +89,7 @@
         // Convert 1-based user address to 0-based protocol address
         var protocolAddress = (ushort)(_inputAddress - 1);
 
-        Z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived += OnTurnoutModeReceived;
 
         _turnoutModeTcs = new TaskCompletionSource<TurnoutModeStatus>();
         await Z21Client.GetTurnoutModeAsync(protocolAddress);
@@ -104,7 +104,7 @@
         }
 
         _isKeying = false;
-        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -171,7 +171,7 @@
 
     public ValueTask DisposeAsync()
     {
-        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
         _turnoutModeTcs?.TrySetCanceled();
         return ValueTask.CompletedTask;
     }

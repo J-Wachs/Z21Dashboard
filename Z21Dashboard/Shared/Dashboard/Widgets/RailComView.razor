@@ -84,7 +84,7 @@
 
     protected override void OnInitialized()
     {
-        Z21Client.RailComDataReceived += OnRailComDataReceived;
+        Z21Client.OnRailComDataReceived += OnRailComDataReceived;
     }
 
     private async void OnRailComDataReceived(object? sender, RailComData e)
@@ -101,6 +101,6 @@
 
     public void Dispose()
     {
-        Z21Client.RailComDataReceived -= OnRailComDataReceived;
+        Z21Client.OnRailComDataReceived -= OnRailComDataReceived;
     }
 }

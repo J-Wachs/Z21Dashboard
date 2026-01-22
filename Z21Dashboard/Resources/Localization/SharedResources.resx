@@ -138,6 +138,9 @@
   <data name="PowerChart" xml:space="preserve">
     <value>Power and Voltage Monitor</value>
   </data>
+  <data name="ProgrammingDecoder" xml:space="preserve">
+    <value>Programming decoder</value>
+  </data>
   <data name="RailComView" xml:space="preserve">
     <value>RailCom data</value>
   </data>

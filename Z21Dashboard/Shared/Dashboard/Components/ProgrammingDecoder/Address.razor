@@ -1,0 +1,207 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Client
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@using Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<Address> Logger
+@inject ISessionStorage SessionStorage
+@inject IStringLocalizer<AddressResource> Localizer
+@inject IZ21Client Z21Client
+
+<DisplayMessages ErrorMessages="_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_successMessage" />
+
+@if (Z21Client.Isz21 is true && !hideZ21Warning)
+{
+    <div class="alert alert-warning py-2 mb-3">
+        <div>@Localizer["z21Warning"]</div>
+
+        <div class="form-check small mt-2">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="hideZ21Warning"
+                   @bind="hideZ21Warning"
+                   @bind:after="SavePreference" />
+            <label class="form-check-label" for="hideZ21Warning">
+                @Localizer["DontShowAgain"]
+            </label>
+        </div>
+    </div>
+}
+
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+
+<div class="row mb-2 align-items-center">
+    <div class="col-5">
+        <label>@Localizer["LocoAddress"]:</label>
+    </div>
+    <div class="col-7">
+        <EditForm Model="this">
+            <InputNumber @bind-Value="_locoAddress"
+                         @oninput="OnInputLocoAddress"
+                         class="form-control form-control-sm"
+                         style="width: 80px;" />
+        </EditForm>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" disabled="@_locoAddressButtonsDisabled"
+                @onclick="@(async () => await WriteLocoAddress())" aria-label="WriteCV">
+            @Localizer["WriteToLocoDecoder"]
+        </button>
+        <button type="button" class="btn btn-primary"
+                @onclick="@(async () => await GetLocoAddress())" aria-label="ReadCV">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+@code {
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _successMessage;
+
+    private bool hideZ21Warning;
+    private bool _locoAddressButtonsDisabled = true;
+    private short? _locoAddress { get; set; }
+    private ushort? LastValidValue = 0;
+
+
+    protected override void OnInitialized()
+    {
+        var value = SessionStorage.GetBool("Address-z21WarningHide", false);
+
+        hideZ21Warning = value == true;
+    }
+
+    /// <summary>
+    /// Event handler for input event on locomotive address field.
+    /// </summary>
+    /// <param name="valueAsString"></param>
+    /// <returns></returns>
+    private async Task OnInputLocoAddress(ChangeEventArgs e)
+    {
+        ushort.TryParse(e.Value?.ToString(), out ushort value);
+
+        if (value == 0 || value > Limits.HighestLongAddress)
+        {
+            // This is a workaround in order to get the UI field updated correctly in MAUI Blazor Hybrid.
+            _locoAddress = (short?)value;
+            await Task.Yield();
+            value = LastValidValue ?? (ushort)0;
+
+            _locoAddress = (short?)value;
+        }
+        else
+        {
+            LastValidValue = value;
+
+            _locoAddress = (short?)value;
+        }
+        _locoAddressButtonsDisabled = ShouldButtonsBeDisabled();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Wtrite the locomotive address to the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteLocoAddress()
+    {
+        await BlankMessages();
+
+        if (_locoAddress is null or 0)
+        {
+            _errorMessages.Add(Localizer["NewLocoAddressMissing"]);
+            return;
+        }
+
+        _locoAddressButtonsDisabled = true;
+
+        _workingMessage = Localizer["CVWriting"];
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.WriteLocoAddressAsync((ushort)_locoAddress);
+        if (result.IsSuccess)
+        {
+            _workingMessage = null;
+            _successMessage = Localizer["CVWritten"];
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                _errorMessages.Add(result.ErrorMessage);
+            }
+            _workingMessage = null;
+            _successMessage = null;
+        }
+    }
+
+    /// <summary>
+    /// Get the locomotive address from the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task GetLocoAddress()
+    {
+        await BlankMessages();
+
+        _locoAddressButtonsDisabled = true;
+
+        _workingMessage = Localizer["CVReading"];
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.ReadLocoAddressAsync();
+        if (result.IsSuccess)
+        {
+            _locoAddress = (short?)result.LocoAddress;
+
+            Logger.LogError("GetLocoAddress-Finished: {locoAddress}", _locoAddress);
+
+            _workingMessage = null;
+            _successMessage = Localizer["CVRead"];
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                _errorMessages.Add(result.ErrorMessage);
+            }
+            _workingMessage = null;
+            _successMessage = null;
+        }
+
+        _locoAddressButtonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Determine if the buttons should be disabled based on current input field values.
+    /// </summary>
+    /// <returns></returns>
+    private bool ShouldButtonsBeDisabled()
+    {
+        return _locoAddress is 0;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessages()
+    {
+        _errorMessages.Clear();
+        _workingMessage = null;
+        _successMessage = null;
+        StateHasChanged();
+    }
+
+    private void SavePreference()
+    {
+        SessionStorage.SetBool("Address-z21WarningHide", hideZ21Warning);
+    }
+}

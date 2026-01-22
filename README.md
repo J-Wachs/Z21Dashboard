@@ -3,6 +3,8 @@
 Danish version:
 # Z21Dashboard applikation til Windows
 
+<img src="./Z21Dashboard_da.png" alt="Screen shot" style="max-width: 400px;">
+
 En .NET MAUI Blazor Hybrid-applikation til Windows. Den fungerer som et funktionsrigt, brugerkonfigurerbart
 dashboard til styring og overvågning af en Roco/Fleischmann Z21-modeljernbane-centralstation. Denne
 applikation bruger mit `Z21Client`-biblioteket til at kommunikere med hardwaren.
@@ -18,8 +20,9 @@ Version 1.2:
 * Z21Dashboard Indstillinger omdøbt til Konfiguration
 * Konfiguration delt op med faneblade
 * Tilføjet faneblad med indstillinger: Temperaturskala og modeltogsskala
-* Ændringer til Systemstatus og Systemstatus - komple widgets til at vise temperatur i valgte temperaturskala
-* Ny widget "Hastighedsmåling" til at måle hastigheden på modeltoget, og omregne til hastighed i 1:1. Målesystem (metrisk/imperial) tages fra Windows' opsætning
+* Ændringer til Systemstatus og Systemstatus - komplet widgets til at vise temperatur i valgte temperaturskala
+* Ny widget "Hastighedsmåling" til at måle hastigheden på modeltoget, og omregne til hastighed i 1:1.
+Målesystem (metrisk/imperial) tages fra Windows' opsætning
 * DashboardStateService udstiller event der trigges når indstillinger ændres
 
 
@@ -115,6 +118,8 @@ Opret venligst en "issue" i "repository'et".
 
 # Z21Dashboard application for Windows
 
+<img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
+
 A .NET MAUI Blazor Hybrid application for Windows. It serves as a feature-rich, user-configurable dashboard for
 controlling and monitoring a Roco/Fleischmann Z21 model railroad central station. This application uses
 my `Z21Client` library to communicate with the hardware.
@@ -153,8 +158,6 @@ and hidden by the user.
 *   **System State (Simple & Full):** Two widgets that display technical data from the Z21. The simple view shows key metrics like current and voltage, while the full view provides a detailed breakdown of all status flags.
 *   **R-Bus & RailCom Views:** Specialized widgets for monitoring feedback from R-Bus modules and data from RailCom-equipped locomotives.
 *   **Spped mearure:** Measures the model train's speed and calculate it to scale 1:1. Measuring system (metric/imperal) is taken from Windows' settings
-
-<img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
 
 ## What's New in this Version
 

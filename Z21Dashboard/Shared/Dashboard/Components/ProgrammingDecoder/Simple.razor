@@ -1,0 +1,521 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using System.ComponentModel.DataAnnotations
+@using System.Globalization
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@using Z21Dashboard.Resources.Localization
+@using Z21Dashboard.Services
+@inject IStringLocalizer<SimpleResource> Localizer
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject INmraCvService NmraCvService
+@inject ISessionStorage SessionStorage
+
+<DisplayMessages ErrorMessages="_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_successMessage" />
+
+<div class="container-fluid p-0">
+    @if (_manualCVInputModel is not null)
+    {
+        <EditForm Editcontext="_editContext" OnInvalidSubmit="OnInvalidSubmit" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="row mb-2 align-items-center">
+                <div class="col-5">
+                    <label class="form-label mb-0">@Localizer["ProgMethod"]:</label>
+                </div>
+                <div class="col-7">
+                    <InputRadioGroup @bind-Value="_manualCVInputModel.ProgrammingTarget" class="form-control">
+                        <InputRadio Value="ProgrammingTarget.POM" @onclick="OnRadioButtonPOMClick" /> <span>@Localizer["POM"]</span>
+                        <InputRadio Value="ProgrammingTarget.ProgTrack" @onclick="OnRadioButtonProgTrackClick" /> <span>@Localizer["ProgTrack"]</span>
+                    </InputRadioGroup>
+                </div>
+            </div>
+
+            @if (_manualCVInputModel.ProgrammingTarget is ProgrammingTarget.POM)
+            {
+                <div class="row mb-2 align-items-center">
+                    <div class="col-5">
+                        <label class="form-label mb-0">@Localizer["LocoAddress"]:</label>
+                    </div>
+                    <div class="col-7">
+                        <InputNumber @bind-Value="_manualCVInputModel.LocoAddress"
+                                     @oninput="OnInputLocoAddress"
+                                     class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <div class="col-5">
+                    </div>
+                    <div class="col-7">
+                        <ValidationMessage For="@(() => _manualCVInputModel.LocoAddress)" />
+                    </div>
+                </div>
+            }
+
+            <div class="row mb-2 align-items-center">
+                <div class="col-5">
+                    <label class="form-label mb-0">@Localizer["CVAddress"]:</label>
+                </div>
+                <div class="col-7">
+                    <InputNumber @bind-value="_manualCVInputModel.CV"
+                                 @oninput="GetBitDescription"
+                                 class="form-control" />
+                </div>
+            </div>
+            <div class="row mb-2 align-items-center">
+                <div class="col-5">
+                </div>
+                <div class="col-7">
+                    <span class="text-muted" style="font-size: 0.8rem;">
+                        @_cvName@if (string.IsNullOrEmpty(_cvDescription) is false)
+                        {
+                            <br />
+                            @_cvDescription
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="row mb-2 align-items-center">
+                <div class="col-5">
+                </div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => _manualCVInputModel.CV)" />
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-start">
+                <div class="col-5">
+                    <label class="form-label mb-0">@Localizer["CVValue"]:</label>
+                </div>
+                <div class="col-2">
+                    <InputNumber @bind-Value="_manualCVInputModel.CVValue"
+                                 @oninput="OnInputCVValue"
+                                 class="form-control" />
+                </div>
+
+                <div class="col-5 border-start">
+                    <div class="d-flex flex-column gap-1 ps-2">
+                        @for (int i = 7; i >= 0; i--)
+                        {
+                            var bitIndex = i;
+                            <div class="d-flex align-items-center" style="font-size: 0.8rem;">
+                                <input type="checkbox"
+                                       class="form-check-input mt-0"
+                                       style="width: 13px; height: 13px;"
+                                       checked="@IsBitSet(bitIndex)"
+                                       @onchange="(e) => OnBitToggled(bitIndex, e.Value)" />
+                                <span class="ms-1 fw-bold text-muted">@bitIndex</span>
+                                <span class="ms-1 text-muted" style="font-size: 0.7rem;">(@Math.Pow(2, i))</span>
+                                <span class="ms-1 text-muted">@_bitDesc[i]</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2 align-items-center">
+                <div class="col-5">
+                </div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => _manualCVInputModel.CVValue)" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-secondary" disabled="@_buttonsDisabled"
+                            @onclick="@(() => _buttonPressed = ButtonPressed.Write)" aria-label="WriteCV">
+                        @Localizer["WriteToLocoDecoder"]
+                    </button>
+                    <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                            @onclick="@(() => _buttonPressed = ButtonPressed.Read)" aria-label="ReadCV">
+                        @Localizer["ReadFromLocoDecoder"]
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _successMessage;
+
+    private Queue<ushort> _cvsToRequest = [];
+    private Queue<CVValue> _cvsToWrite = [];
+    private Queue<CVValue> _cvQueue = [];
+    private List<CVValue> _cvRead = [];
+    private EditContext? _editContext;
+    private ManualCVInput? _manualCVInputModel { get; set; }
+    private bool _buttonsDisabled = true;
+    //private DccStandard? _dccStandard;
+    private bool _isLoading = false;
+    private string _cvName = string.Empty;
+    private string _cvDescription = string.Empty;
+    private string[] _bitDesc = new string[8];
+
+    // Because Blazor does not update the model until after the event is complete,
+    // these variables has been added to keep track of the values in the input fields.
+    // The variables are updated on input events, and allow to test field contents
+    // 'live'. This is used to enable/disable the buttons.
+    private ProgrammingTarget _progTarget = ProgrammingTarget.POM;
+    private ushort _locoAddress = 0;
+    private ushort _cvAddress = 0;
+    private ushort _cvValue = 0;
+
+    // Model for the manual CV input form
+    private class ManualCVInput
+    {
+        public ProgrammingTarget ProgrammingTarget { get; set; } = ProgrammingTarget.POM;
+        // This is actually wrong, as a locomotive address cannot be 0, but it is used as a workaround to allow
+        // the field to be blank when POM is selected, and the validation will catch if the user tries to submit with 0.
+        [Range(0, 9999, ErrorMessageResourceType = typeof(ValidationErrorMessages), ErrorMessageResourceName = "LocoAddressInvalid")]
+        public Int16 LocoAddress { get; set; }
+        [Range(1, 1024, ErrorMessageResourceType = typeof(ValidationErrorMessages), ErrorMessageResourceName = "CVAddressInvalid")]
+        public Int16 CV { get; set; }
+        [Range(0, 255, ErrorMessageResourceType = typeof(ValidationErrorMessages), ErrorMessageResourceName = "CVValueInvalid")]
+        public Int16 CVValue { get; set; }
+    }
+
+
+    // Keep track of which button was pressed (Write or Read).
+    private ButtonPressed _buttonPressed = ButtonPressed.None;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _isLoading = true;
+
+        _manualCVInputModel = new();
+        _editContext = new EditContext(_manualCVInputModel);
+        _editContext.OnFieldChanged += FieldChanged;
+
+        var progTarget = SessionStorage.GetProgTarget("ProgrammingDecoder-ProgTarget");
+        if (progTarget is not null)
+        {
+            _manualCVInputModel.ProgrammingTarget = progTarget.Value;
+            _progTarget = progTarget.Value;
+        }
+
+        var locoAddress = SessionStorage.GetUshort("ProgrammingDecoder-LocoAddress");
+        if (locoAddress is not null)
+        {
+            _manualCVInputModel.LocoAddress = (short)locoAddress.Value;
+            _locoAddress = locoAddress.Value;
+        }
+
+        var cvAddress = SessionStorage.GetUshort("ProgrammingDecoderSimple-CVAddress");
+        if (cvAddress is not null)
+        {
+            _manualCVInputModel.CV = (short)cvAddress.Value;
+            _cvAddress = cvAddress.Value;
+        }
+
+        var cvValue = SessionStorage.GetUshort("ProgrammingDecoderSimple-CVValue");
+        if (cvValue is not null)
+        {
+            _manualCVInputModel.CVValue = (short)cvValue.Value;
+            _cvValue = cvValue.Value;
+        }
+
+        _isLoading = false;
+    }
+
+
+    private async Task OnValidSubmit(EditContext args)
+    {
+        switch (_buttonPressed)
+        {
+            case ButtonPressed.Read:
+                await CVRead();
+                break;
+            case ButtonPressed.Write:
+                await CVWrite();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Used for setting the bit checkboxes according to the CV value.
+    /// </summary>
+    /// <param name="bit"></param>
+    /// <returns></returns>
+    private bool IsBitSet(int bit)
+    {
+        return (_cvValue & (1 << bit)) != 0;
+    }
+
+    /// <summary>
+    /// Used for calculating the CV value from the setting of the bit checkboxes.
+    /// </summary>
+    /// <param name="bit"></param>
+    /// <param name="isChecked"></param>
+    private void OnBitToggled(int bit, object? isChecked)
+    {
+        if (_manualCVInputModel is null)
+        {
+            return;
+        }
+
+        bool set = (bool)(isChecked ?? false);
+        int val = _manualCVInputModel.CVValue;
+        if (set)
+        {
+            val |= (1 << bit);
+        }
+        else
+        {
+            val &= ~(1 << bit);
+        }
+        _manualCVInputModel.CVValue = (Int16)val;
+
+        _buttonsDisabled = ShouldButtonsBeDisabled();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Event handler for input event on CV value field.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private async Task OnInputCVValue(ChangeEventArgs e)
+    {
+        _buttonsDisabled = ShouldButtonsBeDisabled();
+
+        if (short.TryParse(e.Value?.ToString(), out short newVal))
+        {
+            // The valid range for this field.
+            if (newVal >= 0 && newVal <= 255)
+            {
+                _cvValue = (ushort)newVal;
+            }
+        }
+        else
+        {
+            _cvValue = 0;
+        }
+
+        // Trigger recalc of bit checkboxes
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Event handler for input event on Programming Target when POM selected.
+    /// </summary>
+    /// <param name="args"></param>
+    private void OnRadioButtonPOMClick(MouseEventArgs args)
+    {
+        _progTarget = ProgrammingTarget.POM;
+        OnRadioButtonClick(args);
+    }
+
+    /// <summary>
+    /// Event handler for input event on Programming Target when Programming Track selected.
+    /// </summary>
+    /// <param name="args"></param>
+    private void OnRadioButtonProgTrackClick(MouseEventArgs args)
+    {
+        _progTarget = ProgrammingTarget.ProgTrack;
+        OnRadioButtonClick(args);
+    }
+
+    /// <summary>
+    /// Common handler for radio button clicks.
+    /// </summary>
+    /// <param name="args"></param>
+    private void OnRadioButtonClick(MouseEventArgs args)
+    {
+        _buttonsDisabled = ShouldButtonsBeDisabled();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Event handler for input event on locomotive address field.
+    /// </summary>
+    /// <param name="e"></param>
+    private void OnInputLocoAddress(ChangeEventArgs e)
+    {
+        if (short.TryParse(e.Value?.ToString(), out short newVal))
+        {
+            if (newVal is >= 0 and <= (short)Limits.HighestLongAddress)
+            {
+                _locoAddress = (ushort)newVal;
+            }
+        }
+
+        _buttonsDisabled = ShouldButtonsBeDisabled();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Determine if the buttons should be disabled based on current input field values.
+    /// </summary>
+    /// <returns></returns>
+    private bool ShouldButtonsBeDisabled()
+    {
+        return _progTarget is ProgrammingTarget.POM && _locoAddress is 0 || _cvAddress is 0;
+    }
+
+    /// <summary>
+    /// Handle read of CV value from decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task CVRead()
+    {
+        BlankMessages();
+
+        if (_manualCVInputModel is not null)
+        {
+            _cvsToRequest = [];
+            _cvRead.Clear();
+            _workingMessage = Localizer["CVReading"];
+
+            _cvsToRequest.Enqueue((ushort)_manualCVInputModel.CV);
+
+            var result = await DecoderProgHelperService.ReadCVValuesAsync(_manualCVInputModel.ProgrammingTarget,
+                (ushort?)_manualCVInputModel.LocoAddress,
+                _cvsToRequest);
+
+            _workingMessage = null;
+
+            if (result.IsSuccess)
+            {
+                _manualCVInputModel.CVValue = result.CvValues is null || result.CvValues.Count == 0 ? (short)0 : result.CvValues.FirstOrDefault()!.Value;
+                _cvValue = (ushort)_manualCVInputModel.CVValue;
+                _successMessage = Localizer["CVRead"];
+                // Unfortnually the event for fields change in the model, is only triggered when the user
+                // enteres a value, not when it is assigned as above. Hence, I have to call the save to session storage here:
+                SessionStorage.SetUshort("ProgrammingDecoderSimple-CVValue", (ushort?)(_cvValue));
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+                {
+                    _errorMessages.Add(result.ErrorMessage);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handle write of CV value from decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task CVWrite()
+    {
+        BlankMessages();
+
+        if (_manualCVInputModel is not null)
+        {
+            _cvsToWrite = [];
+
+            _workingMessage = Localizer["CVWriting"];
+
+            _cvsToWrite.Enqueue(new((ushort)_manualCVInputModel.CV, (byte)_manualCVInputModel.CVValue));
+
+            var result = await DecoderProgHelperService.WriteCVValuesAsync(
+                _manualCVInputModel.ProgrammingTarget,
+                (ushort?)_manualCVInputModel.LocoAddress,
+                _cvsToWrite);
+
+            _workingMessage = null;
+
+            if (result.IsSuccess)
+            {
+                _successMessage = Localizer["CVWritten"];
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+                {
+                    _errorMessages.Add(result.ErrorMessage);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// When the use enters a CV address, get the description and bit descriptions according
+    /// to NRMA standards.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private async Task GetBitDescription(ChangeEventArgs e)
+    {
+        bool found = false;
+        if (short.TryParse(e.Value?.ToString(), out short cvNumber))
+        {
+            if (cvNumber is >= 0 and <= 1024)
+            {
+                _cvAddress = (ushort)cvNumber;
+                (_cvName, _cvDescription) = await NmraCvService.GetCVNameAndDescription(_cvAddress);
+                //cvDescription = await NmraCvService.GetCVDescription(_cvAddress);
+                _bitDesc[0] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Zero);
+                _bitDesc[1] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.One);
+                _bitDesc[2] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Two);
+                _bitDesc[3] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Three);
+                _bitDesc[4] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Four);
+                _bitDesc[5] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Five);
+                _bitDesc[6] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Six);
+                _bitDesc[7] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Seven);
+                found = true;
+            }
+        }
+        else
+        {
+            _cvAddress = 0;
+        }
+
+        if (found is false)
+        {
+            _cvName = string.Empty;
+            _cvDescription = string.Empty;
+            for (var i = 0; i <= 7; i++)
+            {
+                _bitDesc[i] = string.Empty;
+            }
+        }
+
+        _buttonsDisabled = ShouldButtonsBeDisabled();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Triggered when any field in the form is changed. Used to save the current input values in session storage,
+    /// so they are preserved if the user navigates away from the page and back again.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void FieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (_isLoading is false)
+        {
+            SessionStorage.SetProgTarget("ProgrammingDecoder-ProgTarget", _manualCVInputModel?.ProgrammingTarget ?? ProgrammingTarget.POM);
+            SessionStorage.SetUshort("ProgrammingDecoder-LocoAddress", (ushort?)(_manualCVInputModel?.LocoAddress));
+            SessionStorage.SetUshort("ProgrammingDecoderSimple-CVAddress", (ushort?)(_manualCVInputModel?.CV));
+            SessionStorage.SetUshort("ProgrammingDecoderSimple-CVValue", (ushort?)(_manualCVInputModel?.CVValue));
+        }
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private void BlankMessages()
+    {
+        _errorMessages.Clear();
+        _workingMessage = null;
+        _successMessage = null;
+        StateHasChanged();
+    }
+    private void OnInvalidSubmit(EditContext args)
+    {
+        throw new NotImplementedException();
+    }
+}

@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@inherits InputBase<short>
+
+<input type="number" class="@CssClass" id="@Id" @bind="CurrentValueAsString" @bind:event="oninput" />
+
+<div class="form-control-validation">
+    <ValidationMessage For="@ValueExpression" />
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public short Min { get; set; } = 0;
+
+    [Parameter]
+    public short Max { get; set; } = 255;
+
+    // OnInitialized kan bruges til at sikre start-data er validt
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (CurrentValue > Max) CurrentValue = Max;
+        if (CurrentValue < Min) CurrentValue = Min;
+    }
+
+    // Denne bliver nu kaldt HVER gang brugeren trykker på en tast (pga. oninput)
+    protected override bool TryParseValueFromString(string? value, out short result, out string validationErrorMessage)
+    {
+        // 1. Tjek om det er et tal
+        if (short.TryParse(value, out result))
+        {
+            // 2. Tjek om det er inden for dine grænser (Min/Max)
+            if (result < Min || result > Max)
+            {
+                validationErrorMessage = $"Værdien skal være mellem {Min} og {Max}.";
+                return false; // Dette sætter css class 'invalid' og viser beskeden
+            }
+
+            validationErrorMessage = string.Empty;
+            return true; // Dette opdaterer CurrentValue (modellen)
+        }
+        else
+        {
+            // Håndter tomt felt eller ugyldige tegn
+            validationErrorMessage = "Indtast venligst et tal.";
+            result = 0; // Eller hvad default skal være ved fejl
+            return false;
+        }
+    }
+}

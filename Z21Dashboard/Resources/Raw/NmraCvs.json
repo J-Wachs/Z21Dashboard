@@ -1,0 +1,649 @@
+{
+  "meta": {
+    "standard": "NMRA S-9.2.2",
+    "description": "Standard Configuration Variables for DCC Decoders",
+    "languages": [ "en", "da" ]
+  },
+  "cv_list": [
+    {
+      "cv_number": 1,
+      "status": "Mandatory",
+      "name": {
+        "en": "Primary Address",
+        "da": "Primær adresse (Kort adresse)"
+      },
+      "description": {
+        "en": "Controls the decoder's short address (1-127).",
+        "da": "Styrer dekoderens korte adresse (1-127)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 2,
+      "status": "Recommended",
+      "name": {
+        "en": "V Start",
+        "da": "Startspænding (Vstart)"
+      },
+      "description": {
+        "en": "Voltage drive level at speed step 1. Sets minimum speed.",
+        "da": "Spændingsniveau ved køretrin 1. Bestemmer minimumshastigheden."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 3,
+      "status": "Recommended",
+      "name": {
+        "en": "Acceleration Rate",
+        "da": "Accelerationshastighed"
+      },
+      "description": {
+        "en": "Rate of speed change when accelerating.",
+        "da": "Hvor hurtigt toget accelererer."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 4,
+      "status": "Recommended",
+      "name": {
+        "en": "Deceleration Rate",
+        "da": "Bremseforsinkelse"
+      },
+      "description": {
+        "en": "Rate of speed change when braking.",
+        "da": "Hvor langsomt toget bremser ned."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 5,
+      "status": "Recommended",
+      "name": {
+        "en": "V High",
+        "da": "Tophastighed (Vhigh)"
+      },
+      "description": {
+        "en": "Voltage drive level at maximum speed step (255 = max voltage).",
+        "da": "Spændingsniveau ved højeste køretrin (255 = max spænding)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 6,
+      "status": "Recommended",
+      "name": {
+        "en": "V Mid",
+        "da": "Middelhastighed (Vmid)"
+      },
+      "description": {
+        "en": "Voltage drive level at middle speed step.",
+        "da": "Spændingsniveau ved mellemste køretrin."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 7,
+      "status": "Mandatory",
+      "name": {
+        "en": "Manufacturer Version No",
+        "da": "Producentens versionsnummer"
+      },
+      "description": {
+        "en": "Read-only decoder software version.",
+        "da": "Skrivebeskyttet softwareversion."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 8,
+      "status": "Mandatory",
+      "name": {
+        "en": "Manufacturer ID",
+        "da": "Producent ID"
+      },
+      "description": {
+        "en": "NMRA ID. Writing to this usually resets the decoder.",
+        "da": "NMRA ID. Skrivning til denne nulstiller oftest dekoderen."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 9,
+      "status": "Optional",
+      "name": {
+        "en": "PWM Period (Total)",
+        "da": "PWM Periode (Motorfrekvens)"
+      },
+      "description": {
+        "en": "Determines the repetition rate of the PWM signal driving the motor.",
+        "da": "Bestemmer frekvensen på PWM signalet til motoren."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 10,
+      "status": "Optional",
+      "name": {
+        "en": "EMF Feedback Cutout",
+        "da": "EMF Feedback Cutout"
+      },
+      "description": {
+        "en": "Determines when Back-EMF motor control is turned off.",
+        "da": "Bestemmer hvornår lastreguleringen slås fra."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 11,
+      "status": "Recommended",
+      "name": {
+        "en": "Packet Time-out Value",
+        "da": "Pakke-timeout værdi"
+      },
+      "description": {
+        "en": "Time the decoder waits without valid packets before stopping.",
+        "da": "Tiden dekoderen venter uden gyldige signaler før den stopper."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 12,
+      "status": "Recommended",
+      "name": {
+        "en": "Power Source Conversion",
+        "da": "Strømkilde konvertering"
+      },
+      "description": {
+        "en": "Defines what analog power source is allowed (AC/DC/etc).",
+        "da": "Definerer hvilken analog strømkilde der tillades (AC/DC/osv)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 13,
+      "status": "Recommended",
+      "name": {
+        "en": "Analog Function Status F1-F8",
+        "da": "Analog Funktion Status F1-F8"
+      },
+      "description": {
+        "en": "Status of functions F1-F8 when in analog mode.",
+        "da": "Status for funktioner F1-F8 ved analog kørsel."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "F1: 0=Off, 1=On",
+          "da": "F1: 0=Slukket, 1=Tændt"
+        },
+        "1": {
+          "en": "F2: 0=Off, 1=On",
+          "da": "F2: 0=Slukket, 1=Tændt"
+        },
+        "2": {
+          "en": "F3: 0=Off, 1=On",
+          "da": "F3: 0=Slukket, 1=Tændt"
+        },
+        "3": {
+          "en": "F4: 0=Off, 1=On",
+          "da": "F4: 0=Slukket, 1=Tændt"
+        },
+        "4": {
+          "en": "F5: 0=Off, 1=On",
+          "da": "F5: 0=Slukket, 1=Tændt"
+        },
+        "5": {
+          "en": "F6: 0=Off, 1=On",
+          "da": "F6: 0=Slukket, 1=Tændt"
+        },
+        "6": {
+          "en": "F7: 0=Off, 1=On",
+          "da": "F7: 0=Slukket, 1=Tændt"
+        },
+        "7": {
+          "en": "F8: 0=Off, 1=On",
+          "da": "F8: 0=Slukket, 1=Tændt"
+        }
+      }
+    },
+    {
+      "cv_number": 14,
+      "status": "Recommended",
+      "name": {
+        "en": "Analog Function Status FL,F9-F12",
+        "da": "Analog Funktion Status FL,F9-F12"
+      },
+      "description": {
+        "en": "Status of functions FL and F9-F12 when in analog mode.",
+        "da": "Status for funktioner FL og F9-F12 ved analog kørsel."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "FL (Fwd): 0=Off, 1=On",
+          "da": "FL (Frem): 0=Slukket, 1=Tændt"
+        },
+        "1": {
+          "en": "FL (Rev): 0=Off, 1=On",
+          "da": "FL (Bak): 0=Slukket, 1=Tændt"
+        },
+        "2": {
+          "en": "F9: 0=Off, 1=On",
+          "da": "F9: 0=Slukket, 1=Tændt"
+        },
+        "3": {
+          "en": "F10: 0=Off, 1=On",
+          "da": "F10: 0=Slukket, 1=Tændt"
+        },
+        "4": {
+          "en": "F11: 0=Off, 1=On",
+          "da": "F11: 0=Slukket, 1=Tændt"
+        },
+        "5": {
+          "en": "F12: 0=Off, 1=On",
+          "da": "F12: 0=Slukket, 1=Tændt"
+        }
+      }
+    },
+    {
+      "cv_number": 15,
+      "status": "Recommended",
+      "name": {
+        "en": "Decoder Lock / Unlock",
+        "da": "Dekoder Lås / Lås op"
+      },
+      "description": {
+        "en": "Used to unlock a specific decoder when multiple decoders are installed.",
+        "da": "Bruges til at låse op for en specifik dekoder, når der er flere i samme tog."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 16,
+      "status": "Recommended",
+      "name": {
+        "en": "Decoder Lock ID",
+        "da": "Dekoder Låse-ID"
+      },
+      "description": {
+        "en": "The ID number assigned to this specific decoder for the locking mechanism.",
+        "da": "Det ID-nummer der tildeles denne dekoder til låsesystemet."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 17,
+      "status": "Recommended",
+      "name": {
+        "en": "Extended Address (High Byte)",
+        "da": "Udvidet adresse (Høj byte)"
+      },
+      "description": {
+        "en": "Upper part of the long address (128-10239).",
+        "da": "Øverste del af den lange adresse (128-10239)."
+      },
+      "bit_definitions": {
+        "6": {
+          "en": "Format: Must be 1",
+          "da": "Format: Skal være 1"
+        },
+        "7": {
+          "en": "Format: Must be 1",
+          "da": "Format: Skal være 1"
+        }
+      }
+    },
+    {
+      "cv_number": 18,
+      "status": "Recommended",
+      "name": {
+        "en": "Extended Address (Low Byte)",
+        "da": "Udvidet adresse (Lav byte)"
+      },
+      "description": {
+        "en": "Lower part of the long address.",
+        "da": "Nederste del af den lange adresse."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 19,
+      "status": "Recommended",
+      "name": {
+        "en": "Consist Address",
+        "da": "Consist-adresse (Multitraktion)"
+      },
+      "description": {
+        "en": "Address used for consist control.",
+        "da": "Adresse der bruges til multitraktion."
+      },
+      "bit_definitions": {
+        "7": {
+          "en": "Direction: 0=Normal, 1=Reverse relative to consist",
+          "da": "Retning: 0=Normal, 1=Omvendt ift. consist"
+        }
+      }
+    },
+    {
+      "cv_number": 21,
+      "status": "Recommended",
+      "name": {
+        "en": "Consist Function Group 1",
+        "da": "Consist funktioner gruppe 1"
+      },
+      "description": {
+        "en": "Defines if functions F1-F8 are controlled by consist address.",
+        "da": "Definerer om F1-F8 styres af consist adressen."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "F1 Control: 0=Individual, 1=Consist",
+          "da": "F1 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "1": {
+          "en": "F2 Control: 0=Individual, 1=Consist",
+          "da": "F2 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "2": {
+          "en": "F3 Control: 0=Individual, 1=Consist",
+          "da": "F3 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "3": {
+          "en": "F4 Control: 0=Individual, 1=Consist",
+          "da": "F4 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "4": {
+          "en": "F5 Control: 0=Individual, 1=Consist",
+          "da": "F5 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "5": {
+          "en": "F6 Control: 0=Individual, 1=Consist",
+          "da": "F6 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "6": {
+          "en": "F7 Control: 0=Individual, 1=Consist",
+          "da": "F7 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "7": {
+          "en": "F8 Control: 0=Individual, 1=Consist",
+          "da": "F8 Kontrol: 0=Individuel, 1=Consist"
+        }
+      }
+    },
+    {
+      "cv_number": 22,
+      "status": "Recommended",
+      "name": {
+        "en": "Consist Function Group 2",
+        "da": "Consist funktioner gruppe 2"
+      },
+      "description": {
+        "en": "Defines if functions FL and F9-F12 are controlled by consist address.",
+        "da": "Definerer om FL og F9-F12 styres af consist adressen."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "FL (Fwd) Control: 0=Individual, 1=Consist",
+          "da": "FL (Frem) Kontrol: 0=Individuel, 1=Consist"
+        },
+        "1": {
+          "en": "FL (Rev) Control: 0=Individual, 1=Consist",
+          "da": "FL (Bak) Kontrol: 0=Individuel, 1=Consist"
+        },
+        "2": {
+          "en": "F9 Control: 0=Individual, 1=Consist",
+          "da": "F9 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "3": {
+          "en": "F10 Control: 0=Individual, 1=Consist",
+          "da": "F10 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "4": {
+          "en": "F11 Control: 0=Individual, 1=Consist",
+          "da": "F11 Kontrol: 0=Individuel, 1=Consist"
+        },
+        "5": {
+          "en": "F12 Control: 0=Individual, 1=Consist",
+          "da": "F12 Kontrol: 0=Individuel, 1=Consist"
+        }
+      }
+    },
+    {
+      "cv_number": 23,
+      "status": "Optional",
+      "name": {
+        "en": "Acceleration Adjustment",
+        "da": "Accelerationsjustering"
+      },
+      "description": {
+        "en": "Adds to or subtracts from CV 3. Often used for consist balancing.",
+        "da": "Lægges til eller trækkes fra CV 3. Bruges ofte til at afbalancere multitraktion."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 24,
+      "status": "Optional",
+      "name": {
+        "en": "Deceleration Adjustment",
+        "da": "Bremsejustering"
+      },
+      "description": {
+        "en": "Adds to or subtracts from CV 4.",
+        "da": "Lægges til eller trækkes fra CV 4."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 27,
+      "status": "Optional",
+      "name": {
+        "en": "Brake Configuration",
+        "da": "Bremsekonfiguration (ABC)"
+      },
+      "description": {
+        "en": "Configures automatic braking methods (e.g., ABC braking).",
+        "da": "Konfigurerer automatiske bremsemetoder (f.eks. ABC bremsning/BM1)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 28,
+      "status": "Recommended",
+      "name": {
+        "en": "Bi-Directional Communication Config",
+        "da": "RailCom Konfiguration"
+      },
+      "description": {
+        "en": "Configures RailCom channels (requires CV29 bit 3 ON).",
+        "da": "Konfigurerer RailCom kanaler (kræver CV29 bit 3 TÆNDT)."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "Channel 1 (Broadcast): 0=Disabled, 1=Enabled",
+          "da": "Kanal 1 (Broadcast): 0=Slukket, 1=Tændt"
+        },
+        "1": {
+          "en": "Channel 2 (Data): 0=Disabled, 1=Enabled",
+          "da": "Kanal 2 (Data): 0=Slukket, 1=Tændt"
+        },
+        "7": {
+          "en": "RailCom Plus automatic loco recognition: 0=Disabled, 1=Enabled",
+          "da": "RailCom Plus automatisk lok. registrering: 0=Slukket, 1=Tændt"
+        }
+      }
+    },
+    {
+      "cv_number": 29,
+      "status": "Mandatory",
+      "name": {
+        "en": "Configuration Data #1",
+        "da": "Konfigurationsregister #1"
+      },
+      "description": {
+        "en": "Master configuration for direction, steps, analog and addressing.",
+        "da": "Hovedkonfiguration for retning, køretrin, analog og adressering."
+      },
+      "bit_definitions": {
+        "0": {
+          "en": "Train Direction: 0=Normal, 1=Reversed",
+          "da": "Kørselsretning: 0=Normal, 1=Omvendt"
+        },
+        "1": {
+          "en": "Speed Steps: 0=14 Steps, 1=28/128 Steps",
+          "da": "Køretrin: 0=14 Trin, 1=28/128 Trin"
+        },
+        "2": {
+          "en": "Analog Mode: 0=Digital Only, 1=Analog Allowed",
+          "da": "Analog Drift: 0=Kun Digital, 1=Analog Tilladt"
+        },
+        "3": {
+          "en": "RailCom: 0=Disabled, 1=Enabled",
+          "da": "RailCom: 0=Deaktiveret, 1=Aktiveret"
+        },
+        "4": {
+          "en": "Speed Curve: 0=Basic (CV2,5,6), 1=Table (CV67-94)",
+          "da": "Hastighedskurve: 0=Basis (CV2,5,6), 1=Tabel (CV67-94)"
+        },
+        "5": {
+          "en": "Address Select: 0=Short (CV1), 1=Long (CV17/18)",
+          "da": "Adressevalg: 0=Kort (CV1), 1=Lang (CV17/18)"
+        },
+        "7": {
+          "en": "Decoder Type: 0=Multifunction (Loco), 1=Accessory",
+          "da": "Dekodertype: 0=Lokomotiv, 1=Tilbehør"
+        }
+      }
+    },
+    {
+      "cv_number": 30,
+      "status": "Optional",
+      "name": {
+        "en": "Error Information",
+        "da": "Fejl Information"
+      },
+      "description": {
+        "en": "Used by the decoder to indicate fault conditions.",
+        "da": "Bruges af dekoderen til at indikere fejltilstande."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 31,
+      "status": "Mandatory",
+      "name": {
+        "en": "Index Address High Byte",
+        "da": "Indeks-adresse Høj Byte"
+      },
+      "description": {
+        "en": "High byte for indexed CV access (Used to reach CVs > 256).",
+        "da": "Høj byte for indekseret CV-adgang (Bruges til at nå CV'er > 256)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 32,
+      "status": "Mandatory",
+      "name": {
+        "en": "Index Address Low Byte",
+        "da": "Indeks-adresse Lav Byte"
+      },
+      "description": {
+        "en": "Low byte for indexed CV access.",
+        "da": "Lav byte for indekseret CV-adgang."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 66,
+      "status": "Recommended",
+      "name": {
+        "en": "Forward Trim",
+        "da": "Fremad Trim"
+      },
+      "description": {
+        "en": "Scaling factor for forward speed (Used with CV 67-94).",
+        "da": "Skaleringsfaktor for fremadgående hastighed (Bruges med CV 67-94)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 95,
+      "status": "Recommended",
+      "name": {
+        "en": "Reverse Trim",
+        "da": "Bak Trim"
+      },
+      "description": {
+        "en": "Scaling factor for reverse speed (Used with CV 67-94).",
+        "da": "Skaleringsfaktor for bak-hastighed (Bruges med CV 67-94)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 105,
+      "status": "Optional",
+      "name": {
+        "en": "User Identification #1",
+        "da": "Bruger Identifikation #1"
+      },
+      "description": {
+        "en": "Customer programmable scratchpad.",
+        "da": "Brugerdefineret felt (kan bruges til noter)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 106,
+      "status": "Optional",
+      "name": {
+        "en": "User Identification #2",
+        "da": "Bruger Identifikation #2"
+      },
+      "description": {
+        "en": "Customer programmable scratchpad.",
+        "da": "Brugerdefineret felt (kan bruges til noter)."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 107,
+      "status": "Reserved",
+      "name": {
+        "en": "NMRA Reserved (107-111)",
+        "da": "NMRA Reserveret (107-111)"
+      },
+      "description": {
+        "en": "Reserved for future use by NMRA.",
+        "da": "Reserveret til fremtidig brug af NMRA."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 112,
+      "status": "Manufacturer",
+      "name": {
+        "en": "Manufacturer Unique (112-128)",
+        "da": "Producentspecifik (112-128)"
+      },
+      "description": {
+        "en": "Functionality defined by the individual manufacturer.",
+        "da": "Funktionalitet defineret af den enkelte producent."
+      },
+      "bit_definitions": null
+    },
+    {
+      "cv_number": 257,
+      "status": "Indexed",
+      "name": {
+        "en": "Indexed Data Access (257-512)",
+        "da": "Indekseret Data Adgang (257-512)"
+      },
+      "description": {
+        "en": "Window for reading/writing data based on index set in CV 31/32.",
+        "da": "Vindue for læsning/skrivning af data baseret på indekset sat i CV 31/32."
+      },
+      "bit_definitions": null
+    }
+  ]
+}

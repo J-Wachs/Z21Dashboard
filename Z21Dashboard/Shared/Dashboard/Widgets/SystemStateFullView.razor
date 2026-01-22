@@ -150,7 +150,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
         await Z21Client.GetSystemStateAsync();
 
         _dashboardSettings = await DashboardStateService.GetSettings();
@@ -269,7 +269,7 @@
 
     public void Dispose()
     {
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         DashboardStateService.OnSettingsChanged -= OnSettingsChanged;
     }
 }

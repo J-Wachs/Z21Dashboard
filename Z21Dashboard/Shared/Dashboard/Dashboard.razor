@@ -258,13 +258,13 @@
 
     private void SubscribeToEvents()
     {
-        Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
+        Z21Client.OnConnectionStateChanged += OnConnectionStateChanged;
         DashboardStateService.OnLayoutChanged += OnLayoutChanged;
     }
 
     private void UnsubscribeFromEvents()
     {
-        Z21Client.ConnectionStateChanged -= OnConnectionStateChanged;
+        Z21Client.OnConnectionStateChanged -= OnConnectionStateChanged;
         DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
     }
 

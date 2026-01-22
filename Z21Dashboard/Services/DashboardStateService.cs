@@ -16,7 +16,7 @@ public class DashboardStateService : IDashboardStateService
     public event Action? OnLayoutChanged;
     public event Action<DashboardSettings>? OnSettingsChanged;
 
-    private RegionInfo? _regionInfo;
+    private readonly RegionInfo? _regionInfo;
 
     public DashboardStateService(IAppDataService appDataService)
     {
@@ -67,13 +67,11 @@ public class DashboardStateService : IDashboardStateService
     public async Task<DashboardSettings> GetSettings()
     {
         var settings = _appDataService.GetData<DashboardSettingsStorage>("DashboardSettings");
-        if (settings is null)
+        settings ??= new()
         {
-            settings = new()
-            {
-                TemperatureScale = GetRegionTemperatureScale()
-            };
-        }
+            TemperatureScale = GetRegionTemperatureScale()
+        };
+
         DashboardSettings fullSettings = settings;
         fullSettings.UnitSystem = _regionInfo is null || _regionInfo.IsMetric ? MeasurementUnitSystem.Metric : MeasurementUnitSystem.Imperial;
         return fullSettings;
@@ -120,6 +118,8 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.TurnoutListView, Width = 450, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.TurnoutProtocolSelector, Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty },
+
+            new() { Name = SharedResources.ProgrammingDecoder, Width = 700, ComponentType = typeof(ProgrammingDecoder), ComponentTypeName = typeof(ProgrammingDecoder).AssemblyQualifiedName ?? string.Empty },
         ];
     }
 

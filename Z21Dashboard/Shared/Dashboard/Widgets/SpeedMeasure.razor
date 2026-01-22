@@ -1,11 +1,13 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
 @using System.Timers
 @using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
+@inject ILogger<SpeedMeasure> Logger
 @inject IZ21Client Z21Client
 @inject IAppDataService AppDataService
 @inject IStringLocalizer<SpeedMeasureResources> Localizer
@@ -48,6 +50,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="mt-2">
+            <label class="form-label fw-bold">@Localizer["SimulateSensors"]</label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" @bind="SimS1" />
+                <label class="form-check-label">S1</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" @bind="SimS2" />
+                <label class="form-check-label">S2</label>
+            </div>
+        </div>
+
     </Content>
 </DashboardWidget>
 
@@ -117,10 +132,10 @@
                     </div>
 
                     <div class="mb-4">
-                            <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
-                            <input type="number" class="form-control"
-                                   step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
-                                   @bind="settings.Distance1To2" />
+                        <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+                        <input type="number" class="form-control"
+                               step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                               @bind="settings.Distance1To2" />
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-bold small">@Localizer["Distance2To1"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
@@ -165,6 +180,44 @@
     private Timer? displayTimer;
     private const double TimeoutSeconds = 900;
 
+    // Debounce
+    private const int DebounceMs = 50;
+    private DateTime lastS1Change = DateTime.MinValue;
+    private DateTime lastS2Change = DateTime.MinValue;
+
+    // Neutral zone flag
+    private bool readyForNewMeasurement = true;
+
+    // Simulated checkboxes
+    private bool simS1;
+    private bool simS2;
+
+    private bool SimS1
+    {
+        get => simS1;
+        set
+        {
+            simS1 = value;
+            OnSimulatedSensorChanged();
+        }
+    }
+
+    private bool SimS2
+    {
+        get => simS2;
+        set
+        {
+            simS2 = value;
+            OnSimulatedSensorChanged();
+        }
+    }
+
+    private void OnSimulatedSensorChanged()
+    {
+        Logger.LogInformation($"Simulated sensors changed: S1={simS1}, S2={simS2}");
+        ProcessStates(simS1, simS2);
+    }
+
     protected async override Task OnInitializedAsync()
     {
         _dashboardSettings = await DashboardStateService.GetSettings();
@@ -188,12 +241,12 @@
 
         if (shouldBeSubscribed && !isSubscribed)
         {
-            Z21Client.RBusDataReceived += OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived += OnRBusDataReceived;
             isSubscribed = true;
         }
         else if (!shouldBeSubscribed && isSubscribed)
         {
-            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
             isSubscribed = false;
         }
     }
@@ -212,33 +265,74 @@
     {
         bool s1 = e.IsSensorActive(settings.Sensor1Module, settings.Sensor1Port);
         bool s2 = e.IsSensorActive(settings.Sensor2Module, settings.Sensor2Port);
-        ProcessStates(s1, s2);
+
+        // Only process if S1 or S2 changed to prevent false triggers
+        if (s1 != sensor1State || s2 != sensor2State)
+        {
+            Logger.LogInformation($"RBus event received: S1={s1}, S2={s2}");
+            ProcessStates(s1, s2);
+        }
     }
 
     private void ProcessStates(bool s1Current, bool s2Current)
     {
-        bool s1Rising = s1Current && !sensor1State;
-        bool s2Rising = s2Current && !sensor2State;
-
-        if (!isMeasuring)
+        // Apply debounce to prevent contact-prel effects
+        if (s1Current != sensor1State && (DateTime.Now - lastS1Change).TotalMilliseconds > DebounceMs)
         {
-            if ((s1Rising && !s2Current) || (s2Rising && !s1Current))
+            lastS1Change = DateTime.Now;
+            sensor1State = s1Current;
+            Logger.LogInformation($"S1 state changed to {s1Current}");
+        }
+        if (s2Current != sensor2State && (DateTime.Now - lastS2Change).TotalMilliseconds > DebounceMs)
+        {
+            lastS2Change = DateTime.Now;
+            sensor2State = s2Current;
+            Logger.LogInformation($"S2 state changed to {s2Current}");
+        }
+
+        // Neutral zone: both sensors OFF
+        if (!sensor1State && !sensor2State)
+        {
+            readyForNewMeasurement = true;
+            Logger.LogInformation("Neutral zone reached: ready for new measurement");
+        }
+
+        if (!isMeasuring && readyForNewMeasurement)
+        {
+            // Start measurement: exactly one sensor ON
+            if (sensor1State && !sensor2State)
             {
-                StartMeasurement(s1Rising ? 1 : 2);
+                readyForNewMeasurement = false;
+                Logger.LogInformation("Measurement started by S1");
+                StartMeasurement(1);
+            }
+            else if (sensor2State && !sensor1State)
+            {
+                readyForNewMeasurement = false;
+                Logger.LogInformation("Measurement started by S2");
+                StartMeasurement(2);
             }
         }
-        else
+        else if (isMeasuring)
         {
-            if ((startSensor is 1 && s2Rising) || (startSensor is 2 && s1Rising))
+            // Stop measurement: other sensor becomes ON
+            if (startSensor == 1 && sensor2State)
             {
+                Logger.LogInformation("Measurement stopped: S2 triggered");
+                StopMeasurement();
+            }
+            else if (startSensor == 2 && sensor1State)
+            {
+                Logger.LogInformation("Measurement stopped: S1 triggered");
                 StopMeasurement();
             }
         }
 
-        sensor1State = s1Current;
-        sensor2State = s2Current;
         InvokeAsync(StateHasChanged);
     }
+
+    // The rest of your existing methods (StartMeasurement, StopMeasurement, CalculateResults, etc.)
+    // remain exactly as in your current code
 
     private void StartMeasurement(int sensorIndex)
     {
@@ -372,7 +466,7 @@
     {
         if (isSubscribed)
         {
-            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
         }
         DashboardStateService.OnSettingsChanged -= OnDashboardSettingsUpdate;
         displayTimer?.Stop();

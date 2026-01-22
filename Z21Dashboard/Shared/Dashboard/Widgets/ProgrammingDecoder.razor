@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@using Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder
+@inject IStringLocalizer<ProgrammingDecoderResource> Localizer
+@inject IDecoderProgService DecoderProgService
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="d-flex align-items-center justify-content-center p-2">
+            <TabControl @ref="_tabControl">
+                <TabPage Title="@Localizer["SimpleCVProg"]">
+                    <Simple />
+                </TabPage>
+                <TabPage Title="@Localizer["AdvProg"]">
+                    <Advanced DecoderSettings="_decoderSettings"/>
+                </TabPage>
+                <TabPage Title="@Localizer["Address"]">
+                    <Address />
+                </TabPage>
+            </TabControl>
+        </div>
+    </Content>
+</DashboardWidget>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private TabControl? _tabControl;
+
+    private DecoderSettings _decoderSettings = new();
+}

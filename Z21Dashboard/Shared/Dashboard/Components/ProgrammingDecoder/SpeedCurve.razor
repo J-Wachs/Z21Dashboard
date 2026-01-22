@@ -1,0 +1,336 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@inject IStringLocalizer<MotorResource> Localizer
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<SpeedCurve> Logger
+
+<div class="alert alert-info py-2 mb-3">@Localizer["SpeedCurveInfo"]</div>
+
+<div class="row mb-3 align-items-center">
+    <!-- CurveType label + switch -->
+    <div class="col-auto">
+        <label class="form-check-label fw-bold">@Localizer["CurveType"]:</label>
+    </div>
+    <div class="col-auto">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="curveModeSwitch"
+                   checked="@_cvParameters.UseSpeedTable"
+                   @onchange="OnModeChanged" />
+            <label class="form-check-label" for="curveModeSwitch">
+                @(_cvParameters.UseSpeedTable? Localizer["Advanced28Point"] : Localizer["Simple3Point"])
+            </label>
+        </div>
+    </div>
+
+    <!-- Dropdown til kurvetype på samme linje -->
+    <div class="col-auto">
+        <select class="form-select" style="min-width: 180px"
+                value="@_selectedCurveType.ToString()"
+                @onchange="OnCurveTypeChanged">
+            <option value="Linear">Linær</option>
+            <option value="Exponential">Exponential</option>
+            <option value="Logarithmic">Logaritmisk</option>
+        </select>
+    </div>
+</div>
+
+<!-- SVG Graph Container -->
+<div class="border rounded p-3 bg-light"
+     style="user-select: none; touch-action: none;"
+     @onmousemove="OnMouseMove"
+     @onmouseup="OnMouseUp"
+     @onmouseleave="OnMouseUp">
+
+    <svg width="100%" height="@_svgHeight" viewBox="0 0 @_viewBoxWidth @_svgHeight" preserveAspectRatio="none">
+        <rect x="0" y="0" width="10" height="255"
+              fill="#0d6efd" opacity="0.5" />
+
+        <!-- Grid lines -->
+        @for (int i = 0; i <= 255; i += 64)
+        {
+            <line x1="0" y1="@(MapValueToY((byte)i))" x2="@_viewBoxWidth" y2="@(MapValueToY((byte)i))" stroke="#000000" stroke-width="1" />
+        }
+
+        <!-- Render Bars and Handles -->
+        @{
+            var dataPoints = GetCurrentDataPoints();
+            int stepWidth = (int)(_viewBoxWidth / (double)dataPoints.Count);
+            int barWidth = (int)(stepWidth * 0.6);
+
+            // Polyline
+            string polyPoints = string.Empty;
+            for (int i = 0; i < dataPoints.Count; i++)
+            {
+                int cx = (int)((i * stepWidth) + (stepWidth / 2));
+                int cy = MapValueToY(dataPoints[i]);
+                polyPoints += $"{cx},{cy} ";
+            }
+            <polyline points="@polyPoints" fill="none" stroke="gray" stroke-width="2" />
+
+            for (int i = 0; i < dataPoints.Count; i++)
+            {
+                int index = i;
+                byte val = dataPoints[i];
+                int xCenter = (int)((i * stepWidth) + (stepWidth / 2));
+                int yTop = MapValueToY(val);
+                int barHeight = _svgHeight - yTop;
+
+                <!-- Søjle -->
+                <rect x="@(xCenter - barWidth / 2)" y="@yTop" width="@barWidth" height="@barHeight"
+                      fill="@(_isDragging && _dragIndex == index ? "#0d6efd" : "#6c757d")" opacity="0.5" />
+
+                <!-- Håndtag som firkant -->
+                int handleSize = 14;
+                int half = handleSize / 2;
+                <rect x="@(xCenter - half)" y="@(yTop - half)" width="@handleSize" height="@handleSize"
+                      rx="3" ry="3"
+                      fill="@(_isDragging && _dragIndex == index ? "#0d6efd" : "#0dcaf0")"
+                      stroke="white" stroke-width="2"
+                      style="cursor: ns-resize;"
+                      @onmousedown="@(e => OnMouseDown(e, index))" />
+
+                <!-- Tooltip -->
+                @if (_isDragging && _dragIndex == index)
+                {
+                    @if (yTop < 25)
+                    {
+                        @* Blazor wrapper *@
+                        <text>
+                            @* SVG text *@
+                            <text x="@(xCenter + 10)" y="@(yTop + 15)" font-size="14" fill="black">@val</text>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <text x="@(xCenter + 10)" y="@(yTop - 10)" font-size="14" fill="black">@val</text>
+                        </text>
+                    }
+                }
+            }
+        }
+    </svg>
+</div>
+
+<!-- Trim Controls -->
+@if (_cvParameters.UseSpeedTable)
+{
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">@Localizer["ForwardTrim"] (CV 66):</label>
+            <input type="number" class="form-control" min="0" max="255"
+                   @bind="_cvParameters.CV66_ForwardTrim" />
+            <small class="text-muted">128 = 100%</small>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">@Localizer["ReverseTrim"] (CV 95):</label>
+            <input type="number" class="form-control" min="0" max="255"
+                   @bind="_cvParameters.CV95_ReverseTrim" />
+            <small class="text-muted">128 = 100%</small>
+        </div>
+    </div>
+}
+
+<!-- Action Buttons -->
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button class="btn btn-secondary" disabled="@_buttonsDisabled" @onclick="WriteCVs">
+            @Localizer["WriteToLocoDecoder"]
+        </button>
+        <button class="btn btn-primary" disabled="@_buttonsDisabled" @onclick="ReadCVs">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTarget ProgTarget { get; set; }
+    [Parameter, EditorRequired]
+    public ushort? LocoAddress { get; set; }
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+    [Parameter] public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+    [Parameter, EditorRequired] public string? StatusMessage { get; set; }
+    [Parameter] public EventCallback<string?> StatusMessageChanged { get; set; }
+
+    private CVSpeedCurveParameters _cvParameters = new();
+    private bool _buttonsDisabled = false;
+
+    // SVG
+    private int _svgHeight = 260;
+    private int _viewBoxWidth = 800;
+    private bool _isDragging = false;
+    private int _dragIndex = -1;
+
+    // Dropdown
+    public enum SpeedCurveType { Linear, Exponential, Logarithmic }
+    private SpeedCurveType _selectedCurveType = SpeedCurveType.Linear;
+
+    protected override void OnInitialized()
+    {
+        InitDefaultCurve();
+        ApplyCurve();
+    }
+
+    private void InitDefaultCurve()
+    {
+        _cvParameters.CV2_VStart = 3;
+        _cvParameters.CV6_VMid = 128;
+        _cvParameters.CV5_VHigh = 255;
+        for (int i = 0; i < 28; i++)
+            _cvParameters.SpeedTable[i] = (byte)(8 + (i * (247.0 / 27.0)));
+    }
+
+    private List<byte> GetCurrentDataPoints()
+    {
+        return _cvParameters.UseSpeedTable ? _cvParameters.SpeedTable.ToList()
+                                          : new List<byte> { _cvParameters.CV2_VStart, _cvParameters.CV6_VMid, _cvParameters.CV5_VHigh };
+    }
+
+    private void UpdateDataPoint(int index, byte value)
+    {
+        if (_cvParameters.UseSpeedTable && index >= 0 && index < 28) _cvParameters.SpeedTable[index] = value;
+        else if (!_cvParameters.UseSpeedTable)
+        {
+            if (index == 0) _cvParameters.CV2_VStart = value;
+            else if (index == 1) _cvParameters.CV6_VMid = value;
+            else if (index == 2) _cvParameters.CV5_VHigh = value;
+        }
+    }
+
+    private void OnModeChanged(ChangeEventArgs e)
+    {
+        if (bool.TryParse(e.Value?.ToString(), out bool val))
+        {
+            _cvParameters.UseSpeedTable = val;
+            ApplyCurve();
+        }
+    }
+
+    // --- Dropdown ---
+    private void OnCurveTypeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<SpeedCurveType>(e.Value?.ToString(), out var selected))
+        {
+            _selectedCurveType = selected;
+            ApplyCurve();
+        }
+    }
+
+    private void ApplyCurve()
+    {
+        int pointCount = _cvParameters.UseSpeedTable ? 28 : 3;
+        for (int i = 0; i < pointCount; i++)
+        {
+            double t = pointCount == 1 ? 1.0 : (double)i / (pointCount - 1);
+            byte value = _selectedCurveType switch
+            {
+                SpeedCurveType.Linear => LinearCurve(t),
+                SpeedCurveType.Exponential => ExponentialCurve(t),
+                SpeedCurveType.Logarithmic => LogarithmicCurve(t),
+                _ => LinearCurve(t)
+            };
+            UpdateDataPoint(i, value);
+        }
+    }
+
+    private byte LinearCurve(double t) => (byte)Math.Round(255 * t);
+    private byte ExponentialCurve(double t) => (byte)Math.Round(255 * Math.Pow(t, 2.5));
+    private byte LogarithmicCurve(double t) => (byte)Math.Round(255 * (Math.Log10(1 + t * 8) / Math.Log10(9)));
+
+    // --- Mouse ---
+    private int MapValueToY(byte value)
+    {
+        double padding = 3;
+        double effectiveHeight = _svgHeight - 2 * padding;
+        double percentage = value / 255.0;
+        return (int)(padding + (effectiveHeight - (percentage * effectiveHeight)));
+    }
+
+    private byte MapYToValue(double y)
+    {
+        double padding = 3;
+        double effectiveHeight = _svgHeight - 2 * padding;
+        double posFromBottom = effectiveHeight - (y - padding);
+        double val = (posFromBottom / effectiveHeight) * 255.0;
+        return (byte)Math.Clamp(val, 0, 255);
+    }
+
+    private void OnMouseDown(MouseEventArgs e, int index) { _isDragging = true; _dragIndex = index; }
+    private void OnMouseUp(MouseEventArgs e) { _isDragging = false; _dragIndex = -1; }
+
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        if (!_isDragging || _dragIndex == -1) return;
+        byte newValue = MapYToValue(e.OffsetY);
+        UpdateDataPoint(_dragIndex, newValue);
+
+        var currentPoints = GetCurrentDataPoints();
+        for (int i = _dragIndex - 1; i >= 0; i--) if (currentPoints[i] > newValue) UpdateDataPoint(i, newValue);
+        for (int i = _dragIndex + 1; i < currentPoints.Count; i++) if (currentPoints[i] < newValue) UpdateDataPoint(i, newValue);
+    }
+
+    // --- Read / Write ---
+    private async Task ReadCVs()
+    {
+        await BlankMessages();
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVReading"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+
+        var result = await DecoderProgHelperService.ReadLocoSpeedCurveCVsAsync(ProgTarget, LocoAddress);
+        if (result.IsSuccess && result.CurveParameters != null)
+        {
+            _cvParameters = result.CurveParameters;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        _buttonsDisabled = false;
+    }
+
+    private async Task WriteCVs()
+    {
+        await BlankMessages();
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVWriting"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+
+        var param = new WriteLocoSpeedCurveParams(ProgTarget, LocoAddress, _cvParameters);
+        var result = await DecoderProgHelperService.WriteLocoSpeedCurveCVsAsync(param);
+
+        if (!result.IsSuccess)
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        _buttonsDisabled = false;
+    }
+
+    private async Task BlankMessages()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        StatusMessage = null;
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+    }
+}

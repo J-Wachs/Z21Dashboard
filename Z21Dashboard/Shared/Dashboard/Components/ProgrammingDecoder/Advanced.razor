@@ -1,0 +1,76 @@
+﻿@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IStringLocalizer<AdvancedResource> Localizer
+                                                                                  
+<DisplayMessages ErrorMessages="_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_statusMessage" />
+
+<ProgTarget @bind-ProgrammingTarget="@ProgTarget" @bind-LocoAddress="LocoAddress" />
+
+<TabControl>
+    <TabPage Title="@Localizer["Identify"]">
+        <Identify ProgTarget="ProgTarget" LocoAddress="LocoAddress"
+            @bind-ErrorMessages="_errorMessages"
+            @bind-WorkingMessage="@_workingMessage"
+            @bind-SuccessMessage="@_statusMessage" />
+    </TabPage>
+    <TabPage Title="@Localizer["Motor"]">
+        <Motor ProgTarget="ProgTarget" LocoAddress="LocoAddress" DecoderSettings="DecoderSettings"
+            @bind-ErrorMessages="_errorMessages"
+            @bind-StatusMessage="@_statusMessage" />
+        @* <p>Motor parametre</p>
+
+        <p>CV29 - 2 Analog DC operation</p>
+        <p>CV29 - 1 14 eller 28/128 køretrin. 0: 14 1:28/128</p>
+        <p>CV3 - Acceleration rate</p>
+        <p>CV4 - Deceleration rate</p>
+        <p>CV9 - PWM periode</p>
+        <p>CV65 - Kick start</p> *@
+
+    </TabPage>
+    <TabPage Title="@Localizer["SpeedCurve"]">
+        <SpeedCurve ProgTarget="ProgTarget" LocoAddress="LocoAddress" @bind-ErrorMessages="_errorMessages" @bind-StatusMessage="@_statusMessage" />
+        @* 
+        <p>CheckBox for 3 eller 28</p>
+        <p class="small text-muted">uhu</p>
+        <p>CV29 - 4 Speed curve 256 eller 67-94</p>
+        <p>CV66 Forward trim</p>
+        <p>CV95 reverse trim</p>
+        Hvis CV29 bit 4 er on:<br />
+            28 punkts kurve<br />
+            Else<br />
+            3 punkts kurve.<br />
+        *@
+    </TabPage>
+    <TabPage Title="@Localizer["RailCom"]">
+        <RailCom ProgTarget="ProgTarget" LocoAddress="LocoAddress" @bind-ErrorMessages="_errorMessages" @bind-StatusMessage="@_statusMessage" />
+    </TabPage>
+    <TabPage Title="@Localizer["Functions"]">
+        <p>Mapning af F-taster</p>
+    </TabPage>
+    <TabPage title="Hej">
+        <p>Hej</p>
+    </TabPage>
+    <TabPage title="Hej2">
+        <p>Hej2</p>
+    </TabPage>
+    <TabPage title="Hej3">
+        <p>Hej3</p>
+    </TabPage>
+    <TabPage title="Hej4">
+        <p>Hej4</p>
+    </TabPage>
+
+</TabControl>
+
+@code {
+    [Parameter, EditorRequired]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    private ProgrammingTarget ProgTarget { get; set; }
+    private ushort? LocoAddress;
+
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _statusMessage;
+}
