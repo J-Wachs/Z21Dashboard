@@ -109,6 +109,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\ProgrammingLocoDekoderResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProgrammingLocoDekoderResource.resx</DependentUpon>
+      </Compile>
       <Compile Update="Shared\Dashboard\Widgets\RailComViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -210,6 +215,10 @@
       <EmbeddedResource Update="Shared\Dashboard\DashboardResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\ProgrammingLocoDekoderResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProgrammingLocoDekoderResource.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\RailComViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

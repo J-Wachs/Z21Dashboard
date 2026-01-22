@@ -120,6 +120,8 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.SystemStateFullView, Width = 1100, ComponentType = typeof(SystemStateFullView), ComponentTypeName = typeof(SystemStateFullView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.TurnoutListView, Width = 450, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.TurnoutProtocolSelector, Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty },
+
+            new() { Name = "Programming of loco", Width = 400, ComponentType = typeof(ProgrammingLocoDecoder), ComponentTypeName = typeof(ProgrammingLocoDecoder).AssemblyQualifiedName ?? string.Empty },
         ];
     }
 
