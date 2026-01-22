@@ -211,6 +211,38 @@ Regardless of which interval you choose, Z21Dashboard receives updates continuou
 The widget remembers the highest value received, and when the interval has 'expired', the highest value is written
 to the graph.
 
+### Speed Measurement
+
+This window measures the train's model speed and converts it to real-scale (1:1) speed. Both values are displayed simultaneously.
+
+To measure speed, you need sensors installed on your layout. Sensors can be implemented as blocks, track contacts, or IR sensors. Two sensors are selected to measure a train’s speed. In this widget's settings, choose the two sensors and specify the module and port on the R-Bus they are connected to.
+
+The speed is calculated by measuring the time it takes the train to travel a known distance, then converting  
+the time and distance to 1:1 scale speed based on your model train’s size. The model train’s size is configured in  
+the Z21Dashboard settings.
+
+The term *start* of a sensor refers to the beginning of the sensor in the train’s direction of travel.
+
+Next, measure the distance between the *start* of sensor 1 and the *start* of sensor 2. Repeat the measurement in the opposite direction.  
+Regardless of whether the sensors are blocks, track contacts, or IR sensors, the distance between them may vary depending on the direction of travel.
+
+The distance entered, can have a max of 1 decimal, if the measuresystem is metric and 2 if the measure system is imperial.
+
+The image below shows a section divided into blocks, where the blocks serve as sensors. Note that the distance from  
+the *start* of block 2 to the *start* of block 3 is longer than the distance from the *start* of block 3 to the *start* of block 2.  
+The blocks do not need to be directly adjacent. In the setup shown, blocks B2 and B4 can be used as sensors.
+
+![Block example](./Blocks.png)
+
+**Important!**  
+The measurement works by registering when a sensor is **activated** (either a block occupied or a track contact/IR sensor triggered).  
+The system cannot determine *which* train is passing. If sensors are positioned so that other trains can enter the section,  
+this may result in incorrect measurements.
+
+A timeout is built into the measurement. Once the first sensor is activated, the second sensor must be activated  
+within 15 minutes, or the measurement will be canceled.
+
+
 # Known issues
 
 ## Z21Dashboard is run in a virtual Windows machine in Virtualbox, but some widgets are not displayed correctly

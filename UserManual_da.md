@@ -37,10 +37,11 @@ Så kom alle ideérne og så blev Z21Dashboard til.
 
 ## Lidt om teknikken
 
-Z21Dashboard er Open Source software, og det findes i mit Github repository, hvor både kildekode og
+Z21Dashboard er Open Source software, og det findes i mit GitHub repository, hvor både kildekode og
 binære filer er tilgængelig.
 
-Z21Dashboard er udviklet i C# og .NET 10. Det er udviklet som en .NET MAUI Blazor Hybrid Windows applikation.
+Z21Dashboard er udviklet i C# og .NET 10. Det er udviklet som en .NET MAUI Blazor Hybrid Windows desktop
+applikation.
 
 # Z21 familien af centralstationer
 
@@ -57,7 +58,7 @@ I denne vejledning bruges termen "Z21" om dem alle, med mindre der er noget sær
 
 Normalt forbindes Z21 centralstationerne med styring af 2-skinne modeltogsbaner og protokollen
 DCC. Z21 centralstationerne er af typen multiprotokol, da der tillades at benytte både DCC
-og Märklin Motorola. mfx (M4) er ikke understøttet af Z21 centralstationerne.
+og Märklin Motorola. mfx (M4) understøttes ikke af Z21 centralstationerne.
 
 Fra ny er Z21 centralstationen sat op til at benytte både DCC og Märklin Motorola. Du eller andre
 kan have ændret dette i Z21 ved hjælp af Rocos applikation "Maintenance Tool", hvor man kan 
@@ -188,13 +189,12 @@ Låst:
 * Vælge protokol. Vil du ændre antallet af hastighedstrin, skal du gøre det på din multiMAUS
 
 Bemærk, at drifstiden gemmes på din pc når du afslutter programmet. Så næste gang
-starter programmet og forbinder til din Z21, fortsættes optællingen af drifttiden. Med andre ord, drifttiden gemmes
-*ikke* i Z21 centralstationen.
+starter programmet og forbinder til din Z21, fortsættes optællingen af drifttiden. Kører du med togne uden, at din pc er 
+tændt og Z21Dashboard startet, så tælles drifttiden ikke op. Med andre ord, drifttiden gemmes *ikke* i Z21 centralstationen.
 
-Driftstid tæller når hastigheden er forskellig fra 0.
+Driftstid tælles når hastigheden er forskellig fra 0.
 
 ### Sporskifter
-
 Dette vindue viser de sporskifter, hvor du har skiftet deres position med din multiMAUS. 
 Ud for hvert sporskifte vises der en knap for indstillinger. Når du klikker på den, åbnes en
 popup dialog, der lader dig vælge hviklen protokol der skal benyttes til dekoderen i sporskiftet.
@@ -202,7 +202,6 @@ popup dialog, der lader dig vælge hviklen protokol der skal benyttes til dekode
 I popup kan du vælge mellem "DCC" og "MM" for Märklin Motorola. Du kan også slette sporskiftet fra oversigten.
 
 ### Spænding og strøm oversigt
-
 Dette vindue viser en graf med to linjer; en for spænding og en for strøm, således at du
 kan følge hvordan det udvikler sig over tid.
 
@@ -213,10 +212,48 @@ Uanset hvilket interval du vælger, så modtager Z21Dashboard opdateringer løbe
 Widget'en husker den højeste værdi modtaget, og når intervallet er "udløbet" skrives den højest
 værdi til grafen.
 
+### Hastighedsmåling
+
+Dette vindue måler togets modelhastighed og omregner den til skala 1:1 hastighed. Du kan samtidig se begge værdier.
+
+For at kunne måle hastighed er det nødvendigt, at du har sensorer på din bane. Sensorer kan være implementeret som
+blokke, kontaktskinner eller IR-sensorer. To sensorer udpeges til at måle hastigheden for tog. I denne
+widgets indstillinger skal du vælge de to sensorer samt angive, hvilket modul og hvilken port på R-Bussen de er
+tilsluttet.
+
+Hastigheden beregnes ved at måle den tid, det tager toget at køre en kendt strækning, og herefter omregne  
+tid og afstand til skalahastighed 1:1 ud fra størrelsen på dit modeltog. Modeltogets størrelse angives i  
+Z21Dashboards konfiguration.
+
+Termen *start* af en sensor skal i det følgende forstås som sensorens begyndelse set i togets køreretning.
+
+Herefter skal du måle afstanden mellem *start* af sensor 1 og *start* af sensor 2. Den modsatte køreretning  
+skal også måles. Uanset om sensorerne er blokke, kontaktskinner eller IR-sensorer, kan afstanden mellem de to  
+sensorer være forskellig afhængigt af køreretningen.
+
+Afstanden indtastes med maks 1 decimal, hvis målsystemet er metrisk, og 2 decimaler hvis målsystemet er imperisk.
+
+På billedet vises en strækning inddelt i blokke, hvor blokkene fungerer som sensorer. Bemærk, at afstanden fra  
+*start* af blok 2 til *start* af blok 3 er længere end afstanden fra *start* af blok 3 til *start* af blok 2.  
+De to blokke behøver ikke nødvendigvis at støde op til hinanden. Med opsætningen i billedet kan du anvende  
+blok B2 og B4 som sensorer.
+
+![Blok eksempel](./Blocks.png)
+
+**Bemærk!**  
+Da målingen foregår ved at registrere, hvornår en sensor aktiveres (blok optaget eller kontaktskinne/IR-sensor trigget),  
+kan systemet ikke afgøre, *hvilket* tog der passerer. Hvis sensorerne er placeret således, at andre tog har mulighed for at  
+komme ind på strækningen, vil dette give en forkert måling.
+
+Der er indbygget en timeout i målingen. Når den første sensor aktiveres, skal den anden sensor aktiveres  
+inden for 15 minutter, ellers annulleres målingen.
+
+
+
 # Kendte problemer
 
 ## Z21Dashboard afvikles i en virtuel Windows maskine i Virtualbox, men visse widgets vises ikke korrekt
-Typisk er det de to lokomotiv-widgets og sporskifteprotokol-widget, der ikke vises korrekt.Der vises en pil der drejer
+Typisk er det de to lokomotiv-widgets og sporskifteprotokol-widget, der ikke vises korrekt. Der vises en pil der drejer
 samt teksten "Kontrollerer Z21 låsningstilstand".
 
 Dette kan skyldes at der er valgt at "Pointing device" på fanen "System" i Virtualbox er sat til "USB Tablet".

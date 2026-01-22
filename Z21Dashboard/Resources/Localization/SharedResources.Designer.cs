@@ -151,6 +151,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speed measurement.
+        /// </summary>
+        public static string SpeedMeasurement {
+            get {
+                return ResourceManager.GetString("SpeedMeasurement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System State - Full.
         /// </summary>
         public static string SystemStateFullView {

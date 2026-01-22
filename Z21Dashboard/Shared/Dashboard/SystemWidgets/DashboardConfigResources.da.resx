@@ -117,13 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Close" xml:space="preserve">
-    <value>Luk</value>
+  <data name="WidgetInfoText" xml:space="preserve">
+    <value>Vælg hvilke widgets der skal vises på dashboardet</value>
   </data>
-  <data name="EditDashboardConfig" xml:space="preserve">
-    <value>Redigér dashboard konfiguration</value>
+  <data name="NoWidgets" xml:space="preserve">
+    <value>Der blev ikke fundet nogen widgets til dashboardet</value>
   </data>
-  <data name="Config" xml:space="preserve">
-    <value>Dashboard konfiguration</value>
+  <data name="WidgetsTab" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="SettingsTab" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
+  <data name="SettingsInfoText" xml:space="preserve">
+    <value>Sæt indstillingerne til de ønskede værdier</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Modeltogets skala</value>
+  </data>
+  <data name="TempScale" xml:space="preserve">
+    <value>Temperaturskala</value>
+  </data>
+  <data name="Celsius" xml:space="preserve">
+    <value>Celsius</value>
+  </data>
+  <data name="Fahrenheit" xml:space="preserve">
+    <value>Fahrenheit</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Gem</value>
+  </data>
+  <data name="Reread" xml:space="preserve">
+    <value>Genindlæs</value>
+  </data>
+  <data name="SettingsRereadMessage" xml:space="preserve">
+    <value>Indstillinger er genindlæst.</value>
+  </data>
+  <data name="SettingsSavedMessage" xml:space="preserve">
+    <value>Indstillinger er gemt.</value>
   </data>
 </root>

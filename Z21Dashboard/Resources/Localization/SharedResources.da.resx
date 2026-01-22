@@ -147,6 +147,9 @@
   <data name="ShowLogView" xml:space="preserve">
     <value>Vis log</value>
   </data>
+  <data name="SpeedMeasurement" xml:space="preserve">
+    <value>Hastighedsmåling</value>
+  </data>
   <data name="SystemStateFullView" xml:space="preserve">
     <value>Systemtilstand - komplet</value>
   </data>

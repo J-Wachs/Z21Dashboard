@@ -1,0 +1,135 @@
+@*
+    A settings component that allows the user to toggle the visibility
+    of individual dashboard components and change global settings.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IStringLocalizer<DashboardConfigResources> Localizer
+@inject IDashboardStateService DashboardStateService
+@implements IDisposable
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <TabControl>
+            <TabPage Title="@Localizer["WidgetsTab"]">
+                <p class="card-text text-muted">@Localizer["WidgetInfoText"]</p>
+
+                @if (_allComponents.Any())
+                {
+                    <ul class="list-group">
+                        @foreach (var componentState in _allComponents)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>@componentState.Name</span>
+
+                                <!-- Visibility Toggle Switch -->
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           checked="@componentState.IsVisible"
+                                           onchange="@(async () => await DashboardStateService.ToggleVisibility(componentState.Id))" />
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>@Localizer["NoWidgets"]</p>
+                }
+            </TabPage>
+            <TabPage Title="@Localizer["SettingsTab"]">
+                <p class="card-text text-muted">@Localizer["SettingsInfoText"]</p>
+
+                @if (_settingsMessage is not null)
+                {
+                    <div class="alert alert-info" role="alert">
+                        @_settingsMessage
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">@Localizer["Scale"]</label>
+                    <select class="form-select" @bind="_dashboardSettings.Scale">
+                        @foreach (var scale in Enum.GetValues<ModelScale>())
+                        {
+                            <option value="@scale">@scale.ToString() (1:@((int)scale))</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">@Localizer["TempScale"]</label>
+                    <select class="form-select" @bind="_dashboardSettings.TemperatureScale">
+                        @foreach (var tempScale in Enum.GetValues<TemperatureScale>())
+                        {
+                            <option value="@tempScale">@Localizer[tempScale.ToString()]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="@(() => RereadSettings())">@Localizer["Reread"]</button>
+                    <button type="button" class="btn btn-primary" @onclick="@(() => SaveSettings())">@Localizer["Save"]</button>
+                </div>
+
+            </TabPage>
+        </TabControl>
+    </div>
+
+</div>
+
+@code {
+    private List<DashboardComponentState> _allComponents = new();
+    private DashboardSettings _dashboardSettings = new();
+
+    private string? _settingsMessage;
+
+    protected async override Task OnInitializedAsync()
+    {
+        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
+        LoadComponentList();
+        _dashboardSettings = await DashboardStateService.GetSettings();
+    }
+
+    private void LoadComponentList()
+    {
+        _allComponents = DashboardStateService.GetUserSelectableComponents();
+    }
+
+    private async void OnLayoutChanged()
+    {
+        await InvokeAsync(() =>
+        {
+            LoadComponentList();
+            StateHasChanged();
+        });
+    }
+
+    public async Task RereadSettings()
+    {
+        _dashboardSettings = await DashboardStateService.GetSettings();
+        _settingsMessage = Localizer["SettingsRereadMessage"];
+    }
+
+    public async Task SaveSettings()
+    {
+        await DashboardStateService.SaveSettings(_dashboardSettings);
+        _settingsMessage = Localizer["SettingsSavedMessage"];
+    }
+
+    public void Dispose()
+    {
+        DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
+    }
+
+    private void OnUnitSystemChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<MeasurementUnitSystem>(e.Value?.ToString(), out var newSystem))
+        {
+            _dashboardSettings.UnitSystem = newSystem;
+        }
+    }
+}

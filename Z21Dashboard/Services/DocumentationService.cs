@@ -28,7 +28,7 @@ public class DocumentationService : IDocumentationService
             // 1. Determine the language and select the correct file name.
             string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             string manualFileName = cultureName.Equals("da", StringComparison.OrdinalIgnoreCase)
-                ? "BrugerVejledning.pdf"
+                ? "UserManual_da.pdf"
                 : "UserManual.pdf"; // English is the fallback.
 
             //_logger.LogInformation("Attempting to open manual. Selected file: {FileName}", manualFileName);

@@ -1,0 +1,381 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using System.Timers
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IZ21Client Z21Client
+@inject IAppDataService AppDataService
+@inject IStringLocalizer<SpeedMeasureResources> Localizer
+@inject IDashboardStateService DashboardStateService
+@implements IDisposable
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront"
+                 OnSettingsClick="OpenSettingsDialog">
+    <Content>
+        <div class="d-flex align-items-center justify-content-center p-2">
+            <div class="text-center w-100">
+                <div class="p-3 mb-2 mx-auto" style="border: 2px solid #808080; border-radius: 8px; width: 100%; max-width: 400px;">
+                    <h3 class="display-4 mb-0">
+                        @(isMeasuring || lastScaleSpeed is null ? "--" : lastScaleSpeed?.ToString(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "F1" : "F2"))
+                        <small class="text-muted" style="font-size: 0.5em;">@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? Localizer["kmh"] : Localizer["mph"])</small>
+                    </h3>
+                </div>
+                <div class="text-muted">
+                    <div class="small">
+                        @(isMeasuring || startTime is not null ? elapsedSeconds.ToString("F1") : "--") @Localizer["seconds"]
+                    </div>
+                    <div class="small">
+                        @(isMeasuring || lastPhysicalSpeed is null ? "--" : lastPhysicalSpeed?.ToString(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "F1" : "F2"))
+                        @(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cms" : "ins")
+                    </div>
+                    @if (measurementMessage is not null)
+                    {
+                        <div class="small text-danger fw-bold mt-1">@measurementMessage</div>
+                    }
+                </div>
+                <div class="mt-2 border-top pt-2">
+                    <div class="small text-muted" style="font-size: 0.85em;">
+                        @Localizer["Sensor1"]: @Localizer["Module"] @settings.Sensor1Module, @Localizer["PortLowercase"] @settings.Sensor1Port
+                    </div>
+                    <div class="small text-muted" style="font-size: 0.85em;">
+                        @Localizer["Sensor2"]: @Localizer["Module"] @settings.Sensor2Module, @Localizer["PortLowercase"] @settings.Sensor2Port
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Content>
+</DashboardWidget>
+
+@if (showSettingsDialog)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Localizer["EditSettingsForSpeedMeasure"]</h5>
+                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="@Localizer["Close"]"></button>
+                </div>
+                <div class="modal-body">
+                    @if (errorMessage is not null)
+                    {
+                        <div class="alert alert-danger py-2 mb-3">@errorMessage</div>
+                    }
+                    <div class="alert alert-info py-2 mb-3">@Localizer["ReadGuideText"]</div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold d-block">@Localizer["Sensor1"]</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="small text-muted">@Localizer["Module"]</label>
+                                <select class="form-select" @bind="settings.Sensor1Module">
+                                    @for (int i = 1; i <= 20; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="small text-muted">@Localizer["Port"]</label>
+                                <select class="form-select" @bind="settings.Sensor1Port">
+                                    @for (int i = 1; i <= 8; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold d-block">@Localizer["Sensor2"]</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="small text-muted">@Localizer["Module"]</label>
+                                <select class="form-select" @bind="settings.Sensor2Module">
+                                    @for (int i = 1; i <= 20; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="small text-muted">@Localizer["Port"]</label>
+                                <select class="form-select" @bind="settings.Sensor2Port">
+                                    @for (int i = 1; i <= 8; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                            <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+                            <input type="number" class="form-control"
+                                   step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                                   @bind="settings.Distance1To2" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small">@Localizer["Distance2To1"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+                        <input type="number" class="form-control"
+                               step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                               @bind="settings.Distance2To1" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">@Localizer["Close"]</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveSettings">@Localizer["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private bool showSettingsDialog = false;
+    private string? errorMessage;
+    private string? measurementMessage;
+    private DashboardSettings? _dashboardSettings;
+    private SpeedMeasurementSettings settings = new();
+    private const string SettingsKey = "SpeedMeasurement_Settings";
+
+    private bool sensor1State = false;
+    private bool sensor2State = false;
+    private bool isMeasuring = false;
+    private int? startSensor = null;
+    private DateTime? startTime;
+    private double elapsedSeconds = 0;
+    private decimal? lastScaleSpeed;
+    private decimal? lastPhysicalSpeed;
+    private bool isSubscribed = false;
+
+    private Timer? displayTimer;
+    private const double TimeoutSeconds = 900;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _dashboardSettings = await DashboardStateService.GetSettings();
+        DashboardStateService.OnSettingsChanged += OnDashboardSettingsUpdate;
+        var savedSettings = AppDataService.GetData<SpeedMeasurementSettings>(SettingsKey);
+        if (savedSettings is not null)
+        {
+            settings = savedSettings;
+        }
+
+        UpdateSubscription();
+
+        displayTimer = new Timer(100);
+        displayTimer.Elapsed += OnDisplayTimerTick;
+        displayTimer.AutoReset = true;
+    }
+
+    private void UpdateSubscription()
+    {
+        bool shouldBeSubscribed = IsConfigurationValid();
+
+        if (shouldBeSubscribed && !isSubscribed)
+        {
+            Z21Client.RBusDataReceived += OnRBusDataReceived;
+            isSubscribed = true;
+        }
+        else if (!shouldBeSubscribed && isSubscribed)
+        {
+            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+            isSubscribed = false;
+        }
+    }
+
+    private bool IsConfigurationValid()
+    {
+        decimal factor = _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Imperial ? 2.54m : 1.0m;
+
+        bool distancesValid = (settings.Distance1To2 * factor >= 10.0m) && (settings.Distance2To1 * factor >= 10.0m);
+        bool sensorsUnique = !(settings.Sensor1Module == settings.Sensor2Module && settings.Sensor1Port == settings.Sensor2Port);
+
+        return distancesValid && sensorsUnique;
+    }
+
+    private void OnRBusDataReceived(object? sender, RBusData e)
+    {
+        bool s1 = e.IsSensorActive(settings.Sensor1Module, settings.Sensor1Port);
+        bool s2 = e.IsSensorActive(settings.Sensor2Module, settings.Sensor2Port);
+        ProcessStates(s1, s2);
+    }
+
+    private void ProcessStates(bool s1Current, bool s2Current)
+    {
+        bool s1Rising = s1Current && !sensor1State;
+        bool s2Rising = s2Current && !sensor2State;
+
+        if (!isMeasuring)
+        {
+            if ((s1Rising && !s2Current) || (s2Rising && !s1Current))
+            {
+                StartMeasurement(s1Rising ? 1 : 2);
+            }
+        }
+        else
+        {
+            if ((startSensor is 1 && s2Rising) || (startSensor is 2 && s1Rising))
+            {
+                StopMeasurement();
+            }
+        }
+
+        sensor1State = s1Current;
+        sensor2State = s2Current;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void StartMeasurement(int sensorIndex)
+    {
+        startSensor = sensorIndex;
+        startTime = DateTime.Now;
+        isMeasuring = true;
+        elapsedSeconds = 0;
+        lastScaleSpeed = null;
+        lastPhysicalSpeed = null;
+        measurementMessage = null;
+        displayTimer?.Start();
+    }
+
+    private void StopMeasurement()
+    {
+        if (startTime is not null)
+        {
+            elapsedSeconds = (DateTime.Now - startTime.Value).TotalSeconds;
+            displayTimer?.Stop();
+            isMeasuring = false;
+            CalculateResults(elapsedSeconds);
+        }
+    }
+
+    private void CalculateResults(double totalSeconds)
+    {
+        decimal distance = startSensor is 1 ? settings.Distance1To2 : settings.Distance2To1;
+        if (totalSeconds <= 0 || distance <= 0) return;
+
+        decimal scaleValue = (int)settings.Scale;
+        decimal time = (decimal)totalSeconds;
+
+        if (_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric)
+        {
+            lastPhysicalSpeed = distance / time;
+            lastScaleSpeed = lastPhysicalSpeed * scaleValue * 0.036m;
+        }
+        else
+        {
+            lastPhysicalSpeed = distance / time;
+            lastScaleSpeed = (lastPhysicalSpeed * scaleValue) / 17.6m;
+        }
+    }
+
+    private void OnDisplayTimerTick(object? sender, ElapsedEventArgs e)
+    {
+        if (startTime is not null && isMeasuring)
+        {
+            elapsedSeconds = (DateTime.Now - startTime.Value).TotalSeconds;
+
+            if (elapsedSeconds >= TimeoutSeconds)
+            {
+                HandleTimeout();
+            }
+
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void HandleTimeout()
+    {
+        displayTimer?.Stop();
+        isMeasuring = false;
+        measurementMessage = Localizer["TimeoutError"];
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenSettingsDialog()
+    {
+        errorMessage = null;
+        showSettingsDialog = true;
+    }
+
+    private void CloseSettingsDialog()
+    {
+        var savedSettings = AppDataService.GetData<SpeedMeasurementSettings>(SettingsKey);
+        if (savedSettings is not null)
+        {
+            settings = savedSettings;
+        }
+        showSettingsDialog = false;
+    }
+
+    private void SaveSettings()
+    {
+        if (settings.Sensor1Module == settings.Sensor2Module && settings.Sensor1Port == settings.Sensor2Port)
+        {
+            errorMessage = Localizer["ErrorDuplicateSensors"];
+            return;
+        }
+
+        decimal factor = _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Imperial ? 2.54m : 1.0m;
+
+        if (settings.Distance1To2 * factor < 10.0m || settings.Distance2To1 * factor < 10.0m)
+        {
+            errorMessage = Localizer["ErrorMinDistance"];
+            return;
+        }
+
+        errorMessage = null;
+        AppDataService.SaveData(SettingsKey, settings);
+        UpdateSubscription();
+        showSettingsDialog = false;
+    }
+
+    private void OnUnitSystemChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<MeasurementUnitSystem>(e.Value?.ToString(), out var newSystem))
+        {
+            if (newSystem is MeasurementUnitSystem.Metric && _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Imperial)
+            {
+                settings.Distance1To2 = Math.Round(settings.Distance1To2, 1, MidpointRounding.ToZero);
+                settings.Distance2To1 = Math.Round(settings.Distance2To1, 1, MidpointRounding.ToZero);
+            }
+            else if (newSystem is MeasurementUnitSystem.Imperial && _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric)
+            {
+                settings.Distance1To2 = Math.Round(settings.Distance1To2, 2);
+                settings.Distance2To1 = Math.Round(settings.Distance2To1, 2);
+            }
+            _dashboardSettings!.UnitSystem = newSystem;
+        }
+    }
+
+    private void OnDashboardSettingsUpdate(DashboardSettings dashboardSettings)
+    {
+        _dashboardSettings = dashboardSettings;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        if (isSubscribed)
+        {
+            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+        }
+        DashboardStateService.OnSettingsChanged -= OnDashboardSettingsUpdate;
+        displayTimer?.Stop();
+        displayTimer?.Dispose();
+    }
+}

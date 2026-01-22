@@ -94,10 +94,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ConnectionResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
+        <DependentUpon>DashboardConfigResources.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\Components\DashboardWidgetResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -159,6 +159,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ShowLogViewResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\SpeedMeasureResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SpeedMeasureResources.resx</DependentUpon>
+      </Compile>
       <Compile Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -194,9 +199,9 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>ConnectionResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>DashboardConfigResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWidgetResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -245,6 +250,10 @@
       <EmbeddedResource Update="Shared\Dashboard\Widgets\ShowLogViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ShowLogViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\SpeedMeasureResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SpeedMeasureResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

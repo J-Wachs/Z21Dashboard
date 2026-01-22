@@ -118,12 +118,57 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Close" xml:space="preserve">
-    <value>Luk</value>
+    <value>Close</value>
   </data>
-  <data name="EditDashboardConfig" xml:space="preserve">
-    <value>Redigér dashboard konfiguration</value>
+  <data name="cm" xml:space="preserve">
+    <value>cm</value>
   </data>
-  <data name="Config" xml:space="preserve">
-    <value>Dashboard konfiguration</value>
+  <data name="cms" xml:space="preserve">
+    <value>cm/s</value>
+  </data>
+  <data name="Distance1To2" xml:space="preserve">
+    <value>Distance from start of sensor 1 to start of sensor 2, measured in</value>
+  </data>
+  <data name="Distance2To1" xml:space="preserve">
+    <value>Distance from start of sensor 2 to start of sensor 1, measured in</value>
+  </data>
+  <data name="EditSettingsForSpeedMeasure" xml:space="preserve">
+    <value>Edit settings for speed measure</value>
+  </data>
+  <data name="inch" xml:space="preserve">
+    <value>inch</value>
+  </data>
+  <data name="ins" xml:space="preserve">
+    <value>in/s</value>
+  </data>
+  <data name="kmh" xml:space="preserve">
+    <value>km/h</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="mph" xml:space="preserve">
+    <value>mph</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="PortLowercase" xml:space="preserve">
+    <value>port</value>
+  </data>
+  <data name="ReadGuideText" xml:space="preserve">
+    <value>To setup the sensors needed to measure speed, please read the section about this widget in the user manual.</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>seconds</value>
+  </data>
+  <data name="Sensor1" xml:space="preserve">
+    <value>Sensor 1</value>
+  </data>
+  <data name="Sensor2" xml:space="preserve">
+    <value>Sensor 2</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Speed mesurement</value>
   </data>
 </root>

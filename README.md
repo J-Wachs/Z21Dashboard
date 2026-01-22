@@ -14,30 +14,14 @@ Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
 
 ## Nyheder i denne version 
 
-Version 1.1:
-* Upgraderet til .NET 10
-* "Forbind" og "Om" widgets kan nu flyttes rundt på dashboardet
-* Dashboardets canvas fylder nu hele billedet
-* I "Forbind" widget, er nu en søge-knap, så du kan få en liste over alle de Z21 centralstationer, der er fundet på
-netværket
-* Er Z21Dashboard forbundet til en Z21 centralstation med firmware version 1.42 eller nyere, kan du kun vælge den/de
-protokoller (DCC/Märklin Motorola), der understøttes af centralstationen
-* Kode er refactored som resultat af at Z21Client nu udstiller visse egenskaber (serienummer, Z21Code,
-hardwareinformation, etc.)
-* Widget "ConnectionView.razor" er omdøbt til "Connection.razor". Dette har ingen betydning for brugeren,
-men har du nedarvet fra den så skal koden rettes til
-* Forsinkelse under indtasting af lokomotiv-adresse i de to lokomotiv-kørekontroller, er øget til 1,5 sekund
-* Tilføjet setup-script til "Inno Setup"
-* Fjernet de to brugermanualer (dansk og engelsk) fra DOC folderen, da de nu genereres af et GitHub workflow
-* Har man installeret med "Inno Setup", da fjernes de to data foldere, der oprettes i brugerens mappe, korrekt ved
-afinstallation
-* Tilføjet information om antal skift for hvert sporskifte i widget'en "Sporskifter". Der tælles op hvor gang der
-skiftes
-* Tilføjet widget der tillader valg af protokol (DCC/Motorola) for et givent sporskifte
-* Mulighed for at angive antal skift før der skal udføres service på sporskifte
-* Tilføjet mulighed for at slette et lokomotiv fra listen i widget'en "Lokomotiver med driftstid", og et sporskifte
-fra widget "Sporskifter"
-* Omdøbt widget "DashboardWindow.razor" til "DashboardWidget.razor". Tilpasset widgets der benytter denne komponent
+Version 1.2:
+* Z21Dashboard Indstillinger omdøbt til Konfiguration
+* Konfiguration delt op med faneblade
+* Tilføjet faneblad med indstillinger: Temperaturskala og modeltogsskala
+* Ændringer til Systemstatus og Systemstatus - komple widgets til at vise temperatur i valgte temperaturskala
+* Ny widget "Hastighedsmåling" til at måle hastigheden på modeltoget, og omregne til hastighed i 1:1. Målesystem (metrisk/imperial) tages fra Windows' opsætning
+* DashboardStateService udstiller event der trigges når indstillinger ændres
+
 
 ## Egenskaber
 
@@ -70,6 +54,7 @@ og skjules af brugeren.
 *   **Sporskifter:** En liste, der viser den nuværende position (f.eks. ligeud eller afvigende) for alle sporskifter, der for nylig er blevet betjent.
 *   **Systemstatus (Simpel & Fuld):** To widgets, der viser tekniske data fra Z21. Den simple visning viser nøgletal som strøm og spænding, mens den fulde visning giver en detaljeret oversigt over alle status-flag.
 *   **R-Bus & RailCom-visninger:** Specialiserede widgets til overvågning af feedback fra R-Bus-moduler og data fra RailCom-udstyrede lokomotiver.
+*   **Hastighedsmåling:** Måler modeltogets hastighed og beregner den til skala 1:1
 
 <img src="./Z21Dashboard_da.png" alt="Screen shot" style="max-width: 400px;">
 
@@ -167,35 +152,19 @@ and hidden by the user.
 *   **Loco/Turnout Protocol Selector:** Utility widgets that allow the user to query and set the protocol mode (e.g., DCC or Motorola) for a specific locomotive or turnout address.
 *   **System State (Simple & Full):** Two widgets that display technical data from the Z21. The simple view shows key metrics like current and voltage, while the full view provides a detailed breakdown of all status flags.
 *   **R-Bus & RailCom Views:** Specialized widgets for monitoring feedback from R-Bus modules and data from RailCom-equipped locomotives.
+*   **Spped mearure:** Measures the model train's speed and calculate it to scale 1:1. Measuring system (metric/imperal) is taken from Windows' settings
 
 <img src="./Z21Dashboard.png" alt="Screen shot" style="max-width: 400px;">
 
 ## What's New in this Version
 
-Version 1.1:
-* Upgraded to .NET 10
-* 'Connect' and 'About' widgets can now be moved around on the dashboard
-* The dashboard canvas now fills the entire screen
-* In the 'Connect' widget, there is now a search button so you can get a list of all Z21 command stations found on
-the network
-* If Z21Dashboard is connected to a Z21 command station with firmware version 1.42 or newer, you can only select the
-protocol(s) (DCC/Märklin Motorola) that are supported by the command station
-* Code has been refactored as a result of Z21Client now exposing certain properties (serial number, Z21Code,
-hardware information, etc.)
-* Widget 'ConnectionView.razor' has been renamed to 'Connection.razor'. This has no impact on the user,
-but if you have inherited from it, then the code must be updated
-* Delay when entering locomotive address in the two locomotive throttles has been increased to 1.5 seconds
-* Added setup script for “Inno Setup”
-* Removed the two user manuals (Danish and English) from the DOC folder, as they are now generated by a GitHub workflow
-* If installed with 'Inno Setup', the two data folders created in the user’s directory are now correctly removed during
-uninstallation
-* Added information about number of switches for each turnout in the 'Turnouts' widget. The counter increases each time
-the turnout is switched
-* Added widget that allows selection of protocol (DCC/Motorola) for a given turnout
-* Option to specify number of switches before maintenance is required for a turnout
-* Added ability to delete a locomotive from the list in the 'Locomotives with operating time' widget, and a turnout
-from the 'Turnouts' widget
-* Renamed widget 'DashboardWindow.razor' to 'DashboardWidget.razor'. Adjusted widgets that use this component
+Version 1.2:
+* Z21Dashboard Settings renamed to Configuration
+* Configuration divided into tabs
+* Added a tab with settings: Temperature scale and model train scale
+* Changes to System Status and System Status – complete widgets to display temperature in the selected temperature scale
+* New widget "Speed Measure" to measure the model train’s speed and convert it to full-scale speed
+* DashboardStateService exposes an event triggered when settings are changed
 
 ## How it Works
 

@@ -1,0 +1,27 @@
+@*
+   TabPage.razor
+*@
+@if (Parent.ActivePage == this)
+{
+    @ChildContent
+}
+
+@code {
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [Parameter]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Not translated as this should only happen during development
+        if (Parent is null)
+            throw new ArgumentException("TabPage must be inside a TabControl");
+
+        Parent.AddPage(this);
+    }
+}
