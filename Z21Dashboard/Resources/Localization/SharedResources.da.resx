@@ -138,6 +138,9 @@
   <data name="PowerChart" xml:space="preserve">
     <value>Spænding og strøm oversigt</value>
   </data>
+  <data name="ProgrammingDecoder" xml:space="preserve">
+    <value>Programmering af dekoder</value>
+  </data>
   <data name="RailComView" xml:space="preserve">
     <value>RailCom data</value>
   </data>

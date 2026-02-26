@@ -1,0 +1,151 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@inject IStringLocalizer<ProgTargetResource> Localizer
+@inject ILogger<ProgTarget> Logger
+@inject ISessionStorage SessionStorage
+
+<div class="container-fluid p-2 border-bottom mb-2" style="height: 50px;">
+    <EditForm Model="this">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            @* <div class="d-flex align-items-center gap-2">  *@
+            <div class="d-flex align-items-baseline gap-2">
+                <label class="form-label mb-0 small">@Localizer["ProgTarget"]:</label>
+                <InputRadioGroup @bind-Value="ProgrammingTarget">
+                    <div class="d-flex gap-2">
+                        <div class="form-check mb-0 small">
+                            <InputRadio Value="ProgrammingTarget.POM" class="form-check-input" id="advRadioPOM"
+                            @oninput="@(e => OnRadioButtonClick(e.Value?.ToString() ?? string.Empty))" />
+                            <label class="form-check-label" for="advRadioPOM">@Localizer["POM"]</label>
+                        </div>
+                        <div class="form-check mb-0 small">
+                            <InputRadio Value="ProgrammingTarget.ProgTrack" class="form-check-input" id="advRadioPT"
+                            @oninput="@(e => OnRadioButtonClick(e.Value?.ToString() ?? string.Empty))" />
+                            <label class="form-check-label" for="advRadioPT">@Localizer["ProgTrack"]</label>
+                        </div>
+                    </div>
+                </InputRadioGroup>
+                <label class="form-label mb-0 small" disabled="@(ProgrammingTarget is not ProgrammingTarget.POM)">@Localizer["LocoAddress"]:</label>
+                <InputNumber @bind-Value="_localLocoAddress" disabled="@(ProgrammingTarget is not ProgrammingTarget.POM)"
+                             @oninput="@(e => OnLocoAddressChanged(e.Value?.ToString() ?? "0"))"
+                             class="form-control form-control-sm"
+                             style="width: 80px;" />
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTarget ProgrammingTarget { get; set; }
+
+    [Parameter]
+    public EventCallback<ProgrammingTarget> ProgrammingTargetChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public ushort? LocoAddress { get; set; }
+
+    [Parameter]
+    public EventCallback<ushort?> LocoAddressChanged { get; set; }
+
+    // As the InputNumber component cannot handle ushort?, we need to do a workaround
+    // and that is to use _localLocalAddress as the actial values.
+    private short? _localLocoAddress { get; set; }
+
+    private ushort? _lastValidValue = 0;
+
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _isLoading = true;
+        var progTarget = SessionStorage.GetProgTarget("ProgrammingDecoder-ProgTarget");
+        if (progTarget is not null)
+        {
+            ProgrammingTarget = progTarget.Value;
+        }
+
+        var locoAddress = SessionStorage.GetUshort("ProgrammingDecoder-LocoAddress");
+        if (locoAddress is not null)
+        {
+            LocoAddress = locoAddress.Value;
+            _localLocoAddress = (short)locoAddress.Value;
+        }
+
+        _isLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _localLocoAddress = (short?)LocoAddress;
+
+        if (_isLoading is false)
+        {
+            SessionStorage.SetProgTarget("ProgrammingDecoder-ProgTarget", ProgrammingTarget);
+            SessionStorage.SetUshort("ProgrammingDecoder-LocoAddress", LocoAddress);
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+    /// <summary>
+    /// Handle input changes in the loco address field.
+    /// </summary>
+    /// <param name="valueAsString"></param>
+    /// <returns></returns>
+    private async Task OnLocoAddressChanged(string valueAsString)
+    {
+        ushort.TryParse(valueAsString, out var value);
+
+        if (value > Limits.HighestLongAddress)
+        {
+            // This is a workaround in order to get the UI field updated correctly in MAUI Blazor Hybrid.
+            _localLocoAddress = (short?)value;
+            LocoAddress = value;
+            await Task.Yield();
+            value = (ushort?)_lastValidValue ?? 0;
+
+            _localLocoAddress = (short?)value;
+            LocoAddress = value;
+            await LocoAddressChanged.InvokeAsync(value);
+        }
+        else
+        {
+            _lastValidValue = (ushort?)value;
+
+            _localLocoAddress = (short?)value;
+            LocoAddress = value;
+            await LocoAddressChanged.InvokeAsync(value);
+        }
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Handle radio button clicks.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private async Task OnRadioButtonClick(string value)
+    {
+        var programmingTarget = ProgrammingTarget.POM;
+
+        switch (value)
+        {
+            case nameof(ProgrammingTarget.ProgTrack):
+                programmingTarget = ProgrammingTarget.ProgTrack;
+                break;
+            case nameof(ProgrammingTarget.POM):
+                programmingTarget = ProgrammingTarget.POM;
+                break;
+        }
+        ProgrammingTarget = programmingTarget;
+        await ProgrammingTargetChanged.InvokeAsync(programmingTarget);
+        StateHasChanged();
+    }
+}

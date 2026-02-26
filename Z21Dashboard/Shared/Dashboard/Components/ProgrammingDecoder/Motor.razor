@@ -1,0 +1,405 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop
+@using Microsoft.Maui.Controls
+@using System.ComponentModel.DataAnnotations
+@using System.Globalization
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@using Z21Dashboard.Services
+@inject IStringLocalizer<MotorResource> Localizer
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject INmraCvService NmraCvService
+@inject IJSRuntime JSRuntime
+@inject ILogger<Motor> Logger
+
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+
+@if (_cvMotorParameters is not null)
+{
+
+    <EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@_cvDescription:</label>
+            </div>
+            <div class="col-7">
+                <InputCVBitFlag CV="29" Bit="Bits.Zero"
+                                   @bind-Value="_cvMotorParameters.CV29_0_ForwardDirection"
+                                   class="form-control form-control-sm" />
+            </div>
+            @* <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 29, bit 0">@_fwdDirectionHelp</span>
+            </div> *@
+        </div>
+
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["SpeedSteps"]:</label>
+            </div>
+            <div class="col-7">
+                <InputCVBitFlag CV="29" Bit="Bits.One"
+                                   @bind-Value="_cvMotorParameters.CV29_1_SpeedSteps"
+                                   class="form-control form-control-sm" />
+            </div>
+            @* <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 29, bit 1">@_speedStepsHelp</span>
+            </div> *@
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["DCAnalog"]:</label>
+            </div>
+            <div class="col-7">
+                <InputCVBitFlag CV="29" Bit="Bits.Two"
+                                   @bind-Value="_cvMotorParameters.CV29_2_DCAnalog"
+                                   class="form-control form-control-sm" />
+            </div>
+            @* <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 29, bit 2">@_dcAnalogHelp</span>
+            </div> *@
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["AccelerationRate"]:</label>
+            </div>
+            <div class="col-2">
+                <InputNumber @bind-Value="_cvMotorParameters.CV3_AccRate"
+                             class="form-control form-control-sm" />
+            </div>
+            <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 3">@_accelerationRateHelp</span>
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+            </div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => _cvMotorParameters.CV3_AccRate)" />
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["DeaccelerationRate"]:</label>
+            </div>
+            <div class="col-2">
+                <InputNumber @bind-Value="_cvMotorParameters.CV4_DecRate"
+                             class="form-control form-control-sm" />
+            </div>
+            <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 4">@_deAccelerationRateHelp</span>
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+            </div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => _cvMotorParameters.CV4_DecRate)" />
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["PWMPeriod"]:</label>
+            </div>
+            <div class="col-2">
+                <InputNumber @bind-Value="_cvMotorParameters.CV9_PWMPeriod"
+                             class="form-control form-control-sm" />
+            </div>
+            <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 9">@_pwmPeriodHelp</span>
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+            </div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => _cvMotorParameters.CV9_PWMPeriod)" />
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+                <label>@Localizer["KickStart"]:</label>
+            </div>
+            <div class="col-2">
+                <InputNumber @bind-Value="_cvMotorParameters.CV65_KickStart"
+                             class="form-control form-control-sm" />
+            </div>
+            <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;" title="CV 65">@_kickStartHelp</span>
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-5">
+            </div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => _cvMotorParameters.CV65_KickStart)" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-secondary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Write)" aria-label="WriteCV">
+                    @Localizer["WriteToLocoDecoder"]
+                </button>
+                <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Read)" aria-label="ReadCV">
+                    @Localizer["ReadFromLocoDecoder"]
+                </button>
+            </div>
+        </div>
+    </EditForm>
+}
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTarget ProgTarget { get; set; }
+
+    [Parameter, EditorRequired]
+    public ushort? LocoAddress { get; set; }
+
+    [Parameter, EditorRequired]
+    public DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? StatusMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> StatusMessageChanged { get; set; }
+
+    private EditContext? _editContext;
+    private CVMotorParameters? _cvMotorParameters { get; set; }
+    private bool _isLoading = false;
+
+    private List<string> _errorMessages { get; set; } = [];
+    private string? _statusMessage { get; set; }
+
+    private bool _buttonsDisabled = false;
+    private ButtonPressed _buttonPressed = ButtonPressed.None;
+
+    private string _fwdDirectionHelp = string.Empty;
+    private string _speedStepsHelp = string.Empty;
+    private string _dcAnalogHelp = string.Empty;
+    private string _accelerationRateHelp = string.Empty;
+    private string _deAccelerationRateHelp = string.Empty;
+    private string _pwmPeriodHelp = string.Empty;
+    private string _kickStartHelp = string.Empty;
+
+    private string _cvDescription = string.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await SetCVAndBitDescriptions();
+
+        _isLoading = true;
+
+        _cvMotorParameters = new();
+        _editContext = new EditContext(_cvMotorParameters);
+        _editContext.OnFieldChanged += FieldChanged;
+
+        _cvMotorParameters.CV29_0_ForwardDirection = null;
+        _cvMotorParameters.CV3_AccRate = DecoderSettings.GetCvByte(Cvs.AccelerationRate);
+        _cvMotorParameters.CV4_DecRate = DecoderSettings.GetCvByte(Cvs.DeaccelerationRate);
+        _cvMotorParameters.CV9_PWMPeriod = DecoderSettings.GetCvByte(Cvs.PWMPeriod);
+        _cvMotorParameters.CV65_KickStart = DecoderSettings.GetCvByte(Cvs.KickStart);
+
+
+        _cvDescription = await NmraCvService.GetCVBitName(29, Bits.Zero);
+
+
+
+        _isLoading = false;
+    }
+
+    private async Task OnValidSubmit(EditContext args)
+    {
+        switch (_buttonPressed)
+        {
+            case ButtonPressed.Read:
+                await CVRead();
+                break;
+            case ButtonPressed.Write:
+                await CVWrite();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private async Task CVRead()
+    {
+        await BlankMessages();
+
+        Logger.LogError("GetMotorCVs");
+
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVReading"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.ReadLocoMotorCVsAsync(ProgTarget, LocoAddress);
+        if (result.IsSuccess)
+        {
+            StatusMessage = Localizer["CVRead"];
+            await StatusMessageChanged.InvokeAsync(StatusMessage);
+
+            _cvMotorParameters = result.CVMotorParameters!;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            StatusMessage = null;
+            await StatusMessageChanged.InvokeAsync(StatusMessage);
+        }
+        _buttonsDisabled = false;
+    }
+
+
+    private async Task CVWrite()
+    {
+        await BlankMessages();
+
+        Logger.LogError("SetMotorCVs");
+
+        // Issue a warning if all fields are blank/zero.
+
+        if (await IfFieldAreBlankAskIfCorrect(_cvMotorParameters!) is false)
+        {
+            return;
+        }
+
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVWriting"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        StateHasChanged();
+
+        WriteLocoMotorCVsParams writeLocoMotorCVsParams = new(
+            ProgTarget: ProgTarget,
+            LocoAddress: LocoAddress,
+            CVMotorParameters: _cvMotorParameters!
+        );
+
+        var result = await DecoderProgHelperService.WriteLocoMotorCVsAsync(writeLocoMotorCVsParams);
+        if (result.IsSuccess)
+        {
+            StatusMessage = Localizer["CVWritten"];
+            await StatusMessageChanged.InvokeAsync(StatusMessage);
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            StatusMessage = null;
+            await StatusMessageChanged.InvokeAsync(StatusMessage);
+        }
+        _buttonsDisabled = false;
+    }
+
+
+    /// <summary>
+    /// If all fields are blank/zero, ask the user if they want to proceed with writing to the decoder.
+    /// This is to avoid accidentally writing blank/zero values to the decoder.
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    private async Task<bool> IfFieldAreBlankAskIfCorrect(CVMotorParameters parameters)
+    {
+        if (parameters.CV29_0_ForwardDirection == false
+            && parameters.CV29_1_SpeedSteps == false
+            && parameters.CV29_2_DCAnalog == false
+            && parameters.CV3_AccRate == 0
+            && parameters.CV4_DecRate == 0
+            && parameters.CV9_PWMPeriod == 0
+            && parameters.CV65_KickStart == 0)
+        {
+            var myApplication = Application.Current;
+            var myPage = myApplication?.Windows[0].Page;
+            if (myPage is not null)
+            {
+                return await myPage.DisplayAlertAsync(Localizer["Warning"], Localizer["AllFieldsBlank"], Localizer["OK"], Localizer["Cancel"]);
+            }
+            else
+            {
+                return await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["AllFieldsBlank"]}");
+            }
+        }
+        return true;
+    }
+
+
+    private async Task SetCVAndBitDescriptions()
+    {
+        _fwdDirectionHelp = await NmraCvService.GetCVBitDescription(Cvs.ConfigurationData1, Bits.Zero);
+        _speedStepsHelp = await NmraCvService.GetCVBitDescription(Cvs.ConfigurationData1, Bits.One);
+        _dcAnalogHelp = await NmraCvService.GetCVBitDescription(Cvs.ConfigurationData1, Bits.Two);
+        _accelerationRateHelp = await NmraCvService.GetCVDescription(Cvs.AccelerationRate);
+        _deAccelerationRateHelp = await NmraCvService.GetCVDescription(Cvs.DeaccelerationRate);
+        _pwmPeriodHelp = await NmraCvService.GetCVDescription(Cvs.PWMPeriod);
+        _kickStartHelp = await NmraCvService.GetCVDescription(Cvs.KickStart);
+    }
+
+
+    /// <summary>
+    /// Determine if the buttons should be disabled based on current input field values.
+    /// </summary>
+    /// <returns></returns>
+    private bool ShouldButtonsBeDisabled()
+    {
+        return false;
+    }
+
+
+    private async void FieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (_isLoading is false && _cvMotorParameters is not null)
+        {
+            DecoderSettings.SetCvByte(Cvs.AccelerationRate, _cvMotorParameters.CV3_AccRate);
+            DecoderSettings.SetCvByte(Cvs.DeaccelerationRate, _cvMotorParameters.CV4_DecRate);
+            DecoderSettings.SetCvByte(Cvs.PWMPeriod, _cvMotorParameters.CV9_PWMPeriod);
+            DecoderSettings.SetCvByte(Cvs.KickStart, _cvMotorParameters.CV65_KickStart);
+        }
+    }
+
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessages()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        StatusMessage = null;
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        StateHasChanged();
+    }
+}

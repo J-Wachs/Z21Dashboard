@@ -10,6 +10,7 @@
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Helpers
+@using Z21Dashboard.Infrastructure
 @using Z21Dashboard.Shared.Dashboard.Components
 @using Microsoft.Extensions.Localization
 @inject IZ21Client Z21Client
@@ -178,9 +179,9 @@
 
     protected override void OnInitialized()
     {
-        Z21Client.LocoInfoReceived += OnLocoInfoReceived;
-        Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.OnLocoInfoReceived += OnLocoInfoReceived;
+        Z21Client.OnTrackPowerInfoReceived += OnTrackPowerInfoReceived;
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
         LocoMetadataService.OnMetadataUpdated += OnMetadataUpdated;
         _ = Z21Client.GetZ21CodeAsync();
         _ = Z21Client.GetSystemStateAsync();
@@ -231,7 +232,7 @@
 
     private async void OnSystemStateChanged(object? sender, SystemState e)
     {
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
         await InvokeAsync(StateHasChanged);
     }
@@ -257,7 +258,7 @@
     {
         if (ushort.TryParse(e.Value?.ToString(), out ushort newAddress) && newAddress > 0)
         {
-            if (newAddress > 10239)
+            if (newAddress > Limits.HighestLongAddress)
             {
                 _inputAddress = 0;
                 return;
@@ -436,9 +437,9 @@
 
     public void Dispose()
     {
-        Z21Client.LocoInfoReceived -= OnLocoInfoReceived;
-        Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnLocoInfoReceived -= OnLocoInfoReceived;
+        Z21Client.OnTrackPowerInfoReceived -= OnTrackPowerInfoReceived;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         LocoMetadataService.OnMetadataUpdated -= OnMetadataUpdated;
     }
 }

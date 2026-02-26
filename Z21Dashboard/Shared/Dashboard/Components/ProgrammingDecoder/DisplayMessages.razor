@@ -1,0 +1,31 @@
+@*
+    Format and display error and status messages
+*@
+@if (ErrorMessages is not null && ErrorMessages.Count > 0)
+{
+    @foreach (var oneMessage in ErrorMessages)
+    {
+        <div class="alert alert-danger py-2 mb-3">@oneMessage</div>
+    }
+}
+
+@if (string.IsNullOrEmpty(WorkingMessage) is false)
+{
+    <div class="alert alert-info py-2 mb-3">@WorkingMessage</div>
+}
+
+@if (string.IsNullOrEmpty(SuccessMessage) is false)
+{
+    <div class="alert alert-success py-2 mb-3">@SuccessMessage</div>
+}
+
+@code{
+    [Parameter]
+    public List<string>? ErrorMessages { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+}

@@ -66,6 +66,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Resources\Raw\NmraCvs.json" />
+      <Content Remove="Resources\Raw\NmraManufacturers.json" />
+      <Content Remove="resources\raw\nmra_9_2_2_locomotive_base.json" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.1" />
         <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
@@ -83,6 +89,51 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SharedResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Localization\ValidationErrorMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\InputCVBitFlagResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>InputCVBitFlagResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvancedResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AdvancedResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\IdentifyResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>IdentifyResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AddressResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AddressResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\MotorResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>MotorResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\ProgTargetResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProgTargetResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\SimpleResource.Designer.cs">
+        <DependentUpon>SimpleResource.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\TabControlResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>TabControlResource.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -109,10 +160,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\ProgrammingLocoDekoderResource.Designer.cs">
+      <Compile Update="Shared\Dashboard\Widgets\ProgrammingDecoderResource.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>ProgrammingLocoDekoderResource.resx</DependentUpon>
+        <DependentUpon>ProgrammingDecoderResource.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\Widgets\RailComViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -196,6 +247,42 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Localization\ValidationErrorMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ValidationErrorMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\InputCVBitFlagResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>InputCVBitFlagResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvancedResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AdvancedResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\IdentifyResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>IdentifyResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AddressResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AddressResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\MotorResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>MotorResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\ProgTargetResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProgTargetResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\SimpleResource.resx">
+        <LastGenOutput>SimpleResource.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\TabControlResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>TabControlResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
@@ -216,9 +303,9 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\ProgrammingLocoDekoderResource.resx">
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\ProgrammingDecoderResource.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ProgrammingLocoDekoderResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>ProgrammingDecoderResource.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\RailComViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

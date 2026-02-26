@@ -124,6 +124,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Programming decoder.
+        /// </summary>
+        public static string ProgrammingDecoder {
+            get {
+                return ResourceManager.GetString("ProgrammingDecoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RailCom data.
         /// </summary>
         public static string RailComView {

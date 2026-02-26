@@ -126,7 +126,7 @@
 
     protected override void OnInitialized()
     {
-        Z21Client.LocoSlotInfoReceived += OnLocoSlotInfoReceived;
+        Z21Client.OnLocoSlotInfoReceived += OnLocoSlotInfoReceived;
     }
 
     private async void OnLocoSlotInfoReceived(object? sender, LocoSlotInfo e)
@@ -196,6 +196,6 @@
 
     public void Dispose()
     {
-        Z21Client.LocoSlotInfoReceived -= OnLocoSlotInfoReceived;
+        Z21Client.OnLocoSlotInfoReceived -= OnLocoSlotInfoReceived;
     }
 }

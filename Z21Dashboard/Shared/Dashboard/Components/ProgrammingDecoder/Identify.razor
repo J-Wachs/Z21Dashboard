@@ -1,0 +1,139 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@inject IStringLocalizer<IdentifyResource> Localizer
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<Identify> Logger
+
+<div class="row mb-2 align-items-center">
+    <div class="col-5">
+        <label>@Localizer["ManufacturerCode"]:</label>
+    </div>
+    <div class="col-7">
+        @_manufacturerCode
+    </div>
+</div>
+<div class="row mb-2 align-items-center">
+    <div class="col-5">
+        <label>@Localizer["Manufacturer"]:</label>
+    </div>
+    <div class="col-7">
+        @_manufacturerName
+    </div>
+</div>
+
+<div class="row mb-2 align-items-center">
+    <div class="col-5">
+        <label>@Localizer["VersionNumber"]:</label>
+    </div>
+    <div class="col-7">
+        @_manufacturerVersionNbr
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                @onclick="@(async () => await GetManufacturer())" aria-label="ReadCV">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTarget ProgTarget { get; set; }
+
+    [Parameter, EditorRequired]
+    public ushort? LocoAddress { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    //private List<string> _errorMessages { get; set; } = [];
+    //private string? _statusMessage { get; set; }
+
+    private bool _buttonsDisabled = false;
+
+    private byte _manufacturerCode;
+    private string _manufacturerName = string.Empty;
+    private byte _manufacturerVersionNbr;
+
+    /// <summary>
+    /// Get manufacturer information from decoder and look up manufacturer name
+    /// from the NRMA list of manufacturers.
+    /// </summary>
+    /// <returns></returns>
+    private async Task GetManufacturer()
+    {
+        await BlankMessages();
+
+        Logger.LogError("GetManufacturer");
+
+        if (ProgTarget is ProgrammingTarget.POM && LocoAddress is null or 0)
+        {
+            ErrorMessages.Add(Localizer["LocoAddressMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.ReadLocoDecoderManufacturerAsync(ProgTarget, LocoAddress);
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        if (result.IsSuccess)
+        {
+            SuccessMessage = Localizer["CVRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            _manufacturerCode = result.ManufacturerId;
+            _manufacturerName = result.ManufacturerName;
+            _manufacturerVersionNbr = result.ManufacturerVersionNbr;
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        }
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessages()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        StateHasChanged();
+    }
+}

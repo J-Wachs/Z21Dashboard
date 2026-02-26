@@ -1,0 +1,74 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@inherits InputBase<short>
+
+<input type="number" class="@CssClass" id="@Id" @bind="@CurrentValue" @oninput="@(e => OnEntry(e.Value?.ToString() ?? "0"))" />
+<div class="form-control-validation">
+    Hej
+    <ValidationMessage For="@ValueExpression" />
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public short Min { get; set; } = 0;
+
+    [Parameter]
+    public short Max { get; set; } = 255;
+
+    private short? _lastValidValue;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (CurrentValue > Max)
+        {
+            CurrentValue = Max;
+        }
+        _lastValidValue = CurrentValue;
+    }
+
+    private async Task OnEntry(string valueAsString)
+    {
+        short.TryParse(valueAsString, out var value);
+
+        if (value > Max)
+        {
+            // This is a workaround in order to get the UI field updated correctly in MAUI Blazor Hybrid.
+            CurrentValue = value;
+            await Task.Yield();
+            CurrentValue = _lastValidValue ?? 0;
+        }
+        else
+        {
+            _lastValidValue = value;
+            CurrentValue = value;
+        }
+        StateHasChanged();
+
+        await ValueChanged.InvokeAsync(CurrentValue);
+    }
+
+    protected override bool TryParseValueFromString(string? value, out short result, out string validationErrorMessage)
+    {
+        if (short.TryParse(value, out result))
+        {
+            if (result < Min || result > Max)
+            {
+                validationErrorMessage = $"The {FieldIdentifier.FieldName} field must be between {Min} and {Max}.";
+                return false;
+            }
+
+            validationErrorMessage = string.Empty;
+            return true;
+        }
+        else
+        {
+            validationErrorMessage = $"The {FieldIdentifier.FieldName} field is not valid.";
+            return false;
+        }
+    }
+}

@@ -55,7 +55,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
 
         LoadDataAndRefresh();
 
-        _z21Client.LocoInfoReceived += OnLocoInfoReceived;
+        _z21Client.OnLocoInfoReceived += OnLocoInfoReceived;
 
         _secondTimer = new System.Timers.Timer(1000);
         _secondTimer.Elapsed += OnTimerTick;
@@ -201,7 +201,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
     public void Dispose()
     {
         SaveData();
-        _z21Client.LocoInfoReceived -= OnLocoInfoReceived;
+        _z21Client.OnLocoInfoReceived -= OnLocoInfoReceived;
         _secondTimer?.Stop();
         _secondTimer?.Dispose();
         GC.SuppressFinalize(this);

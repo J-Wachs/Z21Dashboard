@@ -1,0 +1,211 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using System.Globalization
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@using Z21Dashboard.Services
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<RailCom> Logger
+@inject INmraCvService NmraCvService
+@inject IStringLocalizer<SimpleResource> Localizer
+
+<div class="alert alert-info py-2 mb-3">@Localizer["RailComInfo"]</div>
+
+<EditForm Model="_cvRailComParameters" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <!-- CV29 RailCom Enable -->
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["RailComEnabled"]:</label>
+        </div>
+        <div class="col-2">
+            <InputCheckbox @bind-Value="_cvRailComParameters.CV29_3_RailComEnabled" />
+        </div>
+        <div class="col-5">
+            <span class="text-muted" style="font-size:0.8rem;">@_railComEnabledHelp</span>
+        </div>
+    </div>
+
+    <!-- CV28 Bits -->
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Channel1"]:</label>
+        </div>
+        <div class="col-2">
+            <InputCheckbox @bind-Value="_cvRailComParameters.CV28_Bit0_Channel1" />
+        </div>
+        <div class="col-5">
+            <span class="text-muted" style="font-size:0.8rem;">@_channel1Help</span>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Channel2"]:</label>
+        </div>
+        <div class="col-2">
+            <InputCheckbox @bind-Value="_cvRailComParameters.CV28_Bit1_Channel2" />
+        </div>
+        <div class="col-5">
+            <span class="text-muted" style="font-size:0.8rem;">@_channel2Help</span>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["AutoLogin"]:</label>
+        </div>
+        <div class="col-2">
+            <InputCheckbox @bind-Value="_cvRailComParameters.CV28_Bit7_AutoLogin" />
+        </div>
+        <div class="col-5">
+            <span class="text-muted" style="font-size:0.8rem;">@_autoLoginHelp</span>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-secondary" disabled="@_buttonsDisabled"
+                    @onclick="@(() => _buttonPressed = ButtonPressed.Write)">
+                @Localizer["WriteToLocoDecoder"]
+            </button>
+            <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                    @onclick="@(() => _buttonPressed = ButtonPressed.Read)">
+                @Localizer["ReadFromLocoDecoder"]
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTarget ProgTarget { get; set; }
+
+    [Parameter, EditorRequired]
+    public ushort? LocoAddress { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? StatusMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> StatusMessageChanged { get; set; }
+
+    private CVRailComParameters _cvRailComParameters { get; set; } = new();
+
+    private bool _buttonsDisabled = false;
+    private ButtonPressed _buttonPressed = ButtonPressed.None;
+
+    // --- Help text fields ---
+    private string _railComEnabledHelp = string.Empty;
+    private string _channel1Help = string.Empty;
+    private string _channel2Help = string.Empty;
+    private string _autoLoginHelp = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetCVAndBitDescriptions();
+    }
+
+    private async Task SetCVAndBitDescriptions()
+    {
+        // RailCom enable bit (CV29, bit 3)
+        _railComEnabledHelp = await NmraCvService.GetCVBitDescription(Cvs.ConfigurationData1, Bits.Three);
+
+        // CV28 bits
+        _channel1Help = await NmraCvService.GetCVBitDescription(Cvs.RailComConfiguration, Bits.Zero);
+        _channel2Help = await NmraCvService.GetCVBitDescription(Cvs.RailComConfiguration, Bits.One);
+        _autoLoginHelp = await NmraCvService.GetCVBitDescription(Cvs.RailComConfiguration, Bits.Seven);
+    }
+
+    // --- Read/Write CVs ---
+    private async Task OnValidSubmit(EditContext args)
+    {
+        switch (_buttonPressed)
+        {
+            case ButtonPressed.Read:
+                await ReadRailComCVs();
+                break;
+            case ButtonPressed.Write:
+                await WriteRailComCVs();
+                break;
+        }
+    }
+
+    private async Task ReadRailComCVs()
+    {
+        await BlankMessages();
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVReading"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+
+        var result = await DecoderProgHelperService.ReadLocoRailComCVsAsync(ProgTarget, LocoAddress);
+        if (result.IsSuccess && result.CVRailComParameters is not null)
+        {
+            _cvRailComParameters = result.CVRailComParameters;
+            StatusMessage = Localizer["CVRead"];
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            StatusMessage = null;
+        }
+
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        _buttonsDisabled = false;
+    }
+
+    private async Task WriteRailComCVs()
+    {
+        await BlankMessages();
+        _buttonsDisabled = true;
+        StatusMessage = Localizer["CVWriting"];
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+
+        var result = await DecoderProgHelperService.WriteLocoRailComCVsAsync(new WriteLocoRailComCVsParams(
+            ProgTarget: ProgTarget,
+            LocoAddress: LocoAddress,
+            CVRailComParameters: _cvRailComParameters
+        ));
+
+        if (result.IsSuccess)
+        {
+            StatusMessage = Localizer["CVWritten"];
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+            {
+                ErrorMessages.Add(result.ErrorMessage);
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            StatusMessage = null;
+        }
+
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+        _buttonsDisabled = false;
+    }
+
+    private async Task BlankMessages()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        StatusMessage = null;
+        await StatusMessageChanged.InvokeAsync(StatusMessage);
+    }
+}

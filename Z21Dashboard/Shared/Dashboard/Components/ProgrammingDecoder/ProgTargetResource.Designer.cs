@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Z21Dashboard.Shared.Dashboard.Widgets {
+namespace Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ProgrammingLocoDekoderResource {
+    internal class ProgTargetResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProgrammingLocoDekoderResource() {
+        internal ProgTargetResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Widgets.ProgrammingLocoDekoderResource", typeof(ProgrammingLocoDekoderResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder.ProgTargetResource", typeof(ProgTargetResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,42 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loco address.
+        /// </summary>
+        internal static string LocoAddress {
+            get {
+                return ResourceManager.GetString("LocoAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to POM.
+        /// </summary>
+        internal static string POM {
+            get {
+                return ResourceManager.GetString("POM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prog. place.
+        /// </summary>
+        internal static string ProgTarget {
+            get {
+                return ResourceManager.GetString("ProgTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prog. track.
+        /// </summary>
+        internal static string ProgTrack {
+            get {
+                return ResourceManager.GetString("ProgTrack", resourceCulture);
             }
         }
     }
