@@ -191,7 +191,6 @@ connects to your Z21, the counting of runtime continues.
 Runtime counts when the speed is different from 0.
 
 ### Turnouts
-
 This window shows the turnouts where you have changed their position with your multiMAUS.
 Next to each turnout, a button for settings is shown. When you click on it, a popup dialogue opens that lets you
 choose which protocol should be used for the decoder in the turnout.
@@ -200,7 +199,6 @@ In the popup, you can choose between 'DCC' and 'MM' for Märklin Motorola. You c
 overview.
 
 ### Voltage and Current Overview
-
 This window shows a graph with two lines; one for voltage and one for current, so you can follow how it develops
 over time.
 
@@ -212,7 +210,6 @@ The widget remembers the highest value received, and when the interval has 'expi
 to the graph.
 
 ### Speed Measurement
-
 This window measures the train's model speed and converts it to real-scale (1:1) speed. Both values are displayed simultaneously.
 
 To measure speed, you need sensors installed on your layout. Sensors can be implemented as blocks, track contacts, or IR sensors. Two sensors are selected to measure a train’s speed. In this widget's settings, choose the two sensors and specify the module and port on the R-Bus they are connected to.
@@ -240,8 +237,10 @@ The system cannot determine *which* train is passing. If sensors are positioned 
 this may result in incorrect measurements.
 
 A timeout is built into the measurement. Once the first sensor is activated, the second sensor must be activated  
-within 15 minutes, or the measurement will be canceled.
+within 10 minutes, or the measurement will be canceled.
 
+**Please note!**
+If you change the measure system in Windows while Z21Dashboard is running, you must shut it down in order apply the change in Z21Dashboard.
 
 # Known issues
 
@@ -269,7 +268,7 @@ To unlock your z21start, you need an unlock code from Roco (item number 10818 or
 
 Unfortunately, that is not possible.
 
-## Z21Dashboard Cannot Connect to My Z21
+## Z21Dashboard Cannot Connect to my Z21
 
 The obvious one: check that the IP address is entered correctly. Open a command prompt in Windows, and ping your
 Z21. If the ping does not get a reply, then there is a network problem you need to solve first.

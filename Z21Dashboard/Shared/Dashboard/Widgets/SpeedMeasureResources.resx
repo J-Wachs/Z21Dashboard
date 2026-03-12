@@ -135,6 +135,12 @@
   <data name="EditSettingsForSpeedMeasure" xml:space="preserve">
     <value>Edit settings for speed measure</value>
   </data>
+  <data name="ErrorDuplicateSensors" xml:space="preserve">
+    <value>You have selected the same sensor as Sensor 1 and Sensor 2. That is not allowed.</value>
+  </data>
+  <data name="ErrorMinDistance" xml:space="preserve">
+    <value>The minimum distance of a block or between to contact tracke must be at least 10 cm/4 inchs.</value>
+  </data>
   <data name="inch" xml:space="preserve">
     <value>inch</value>
   </data>
@@ -159,6 +165,9 @@
   <data name="ReadGuideText" xml:space="preserve">
     <value>To setup the sensors needed to measure speed, please read the section about this widget in the user manual.</value>
   </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
   <data name="seconds" xml:space="preserve">
     <value>seconds</value>
   </data>
@@ -167,6 +176,9 @@
   </data>
   <data name="Sensor2" xml:space="preserve">
     <value>Sensor 2</value>
+  </data>
+  <data name="TimeoutError" xml:space="preserve">
+    <value>Did not receive signal from the sensor that is to stop the measure of speed</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Speed mesurement</value>

@@ -213,7 +213,6 @@ Widget'en husker den højeste værdi modtaget, og når intervallet er "udløbet"
 værdi til grafen.
 
 ### Hastighedsmåling
-
 Dette vindue måler togets modelhastighed og omregner den til skala 1:1 hastighed. Du kan samtidig se begge værdier.
 
 For at kunne måle hastighed er det nødvendigt, at du har sensorer på din bane. Sensorer kan være implementeret som
@@ -246,9 +245,11 @@ kan systemet ikke afgøre, *hvilket* tog der passerer. Hvis sensorerne er placer
 komme ind på strækningen, vil dette give en forkert måling.
 
 Der er indbygget en timeout i målingen. Når den første sensor aktiveres, skal den anden sensor aktiveres  
-inden for 15 minutter, ellers annulleres målingen.
+inden for 10 minutter, ellers annulleres målingen.
 
-
+**Bemærk!**
+Hvis du ændrer målesystemet i Windows, mens Z21Dashboard er åbent, så skal du lukke det, og starte det igen, for at
+ændringen træder i kraft i Z21Dashboard.
 
 # Kendte problemer
 

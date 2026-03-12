@@ -115,6 +115,24 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have selected the same sensor as Sensor 1 and Sensor 2. That is not allowed..
+        /// </summary>
+        internal static string ErrorDuplicateSensors {
+            get {
+                return ResourceManager.GetString("ErrorDuplicateSensors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The minimum distance of a block or between to contact tracke must be at least 10 cm/4 inchs..
+        /// </summary>
+        internal static string ErrorMinDistance {
+            get {
+                return ResourceManager.GetString("ErrorMinDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to inch.
         /// </summary>
         internal static string inch {
@@ -187,6 +205,15 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        internal static string Scale {
+            get {
+                return ResourceManager.GetString("Scale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to seconds.
         /// </summary>
         internal static string seconds {
@@ -210,6 +237,15 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         internal static string Sensor2 {
             get {
                 return ResourceManager.GetString("Sensor2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Did not receive signal from the sensor that is to stop the measure of speed.
+        /// </summary>
+        internal static string TimeoutError {
+            get {
+                return ResourceManager.GetString("TimeoutError", resourceCulture);
             }
         }
         

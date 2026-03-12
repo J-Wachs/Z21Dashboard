@@ -1,15 +1,26 @@
+@*
+    SpeedMeasure.razor
+    Measure the speed of a locomoive and calculate it to 1:1.
+    If the ddashboard setting 'Scale' is not set, it will default to H0.
+    Measure system (metric or imperial) is taken from Windows setup.
+
+    The measure allows for 'ghost activation' of the sensors, as dirty
+    and bad connecion can give a false signal from the sensors.
+*@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
 @using System.Timers
 @using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
-@inject IZ21Client Z21Client
 @inject IAppDataService AppDataService
-@inject IStringLocalizer<SpeedMeasureResources> Localizer
 @inject IDashboardStateService DashboardStateService
+@inject ILogger<SpeedMeasure> Logger
+@inject IStringLocalizer<SpeedMeasureResources> Localizer
+@inject IZ21Client Z21Client
 @implements IDisposable
 
 <DashboardWidget HeaderTitle="@Localizer["Title"]"
@@ -31,7 +42,7 @@
                     </div>
                     <div class="small">
                         @(isMeasuring || lastPhysicalSpeed is null ? "--" : lastPhysicalSpeed?.ToString(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "F1" : "F2"))
-                        @(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cms" : "ins")
+                        @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cms" : "ins"]
                     </div>
                     @if (measurementMessage is not null)
                     {
@@ -39,6 +50,7 @@
                     }
                 </div>
                 <div class="mt-2 border-top pt-2">
+                    <div class="small text-musted" style="font-size: 0.85em">@Localizer["Scale"]: @_dashboardSettings?.Scale</div>
                     <div class="small text-muted" style="font-size: 0.85em;">
                         @Localizer["Sensor1"]: @Localizer["Module"] @settings.Sensor1Module, @Localizer["PortLowercase"] @settings.Sensor1Port
                     </div>
@@ -117,10 +129,10 @@
                     </div>
 
                     <div class="mb-4">
-                            <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
-                            <input type="number" class="form-control"
-                                   step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
-                                   @bind="settings.Distance1To2" />
+                        <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+                        <input type="number" class="form-control"
+                               step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                               @bind="settings.Distance1To2" />
                     </div>
                     <div class="mb-4">
                         <label class="form-label fw-bold small">@Localizer["Distance2To1"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
@@ -139,6 +151,10 @@
 }
 
 @code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
 
@@ -163,7 +179,15 @@
     private bool isSubscribed = false;
 
     private Timer? displayTimer;
-    private const double TimeoutSeconds = 900;
+    private const double TimeoutSeconds = 600;
+
+    // Debounce
+    private const int DebounceMs = 50;
+    private DateTime lastS1Change = DateTime.MinValue;
+    private DateTime lastS2Change = DateTime.MinValue;
+
+    // Neutral zone flag
+    private bool readyForNewMeasurement = true;
 
     protected async override Task OnInitializedAsync()
     {
@@ -186,18 +210,22 @@
     {
         bool shouldBeSubscribed = IsConfigurationValid();
 
-        if (shouldBeSubscribed && !isSubscribed)
+        if (shouldBeSubscribed && isSubscribed is false)
         {
             Z21Client.RBusDataReceived += OnRBusDataReceived;
             isSubscribed = true;
         }
-        else if (!shouldBeSubscribed && isSubscribed)
+        else if (shouldBeSubscribed is false && isSubscribed)
         {
             Z21Client.RBusDataReceived -= OnRBusDataReceived;
             isSubscribed = false;
         }
     }
 
+    /// <summary>
+    /// We cannot allow measure if the configuration of sensors and distances is not made or incorrect.
+    /// </summary>
+    /// <returns></returns>
     private bool IsConfigurationValid()
     {
         decimal factor = _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Imperial ? 2.54m : 1.0m;
@@ -208,35 +236,72 @@
         return distancesValid && sensorsUnique;
     }
 
+    /// <summary>
+    /// Event call back for when data changes on the RBus.
+    /// Note, that this event gets called for any sencor on the
+    /// RBus. We are only interested in the sensors we have selected.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnRBusDataReceived(object? sender, RBusData e)
     {
         bool s1 = e.IsSensorActive(settings.Sensor1Module, settings.Sensor1Port);
         bool s2 = e.IsSensorActive(settings.Sensor2Module, settings.Sensor2Port);
-        ProcessStates(s1, s2);
+
+        // Only process if S1 or S2 changed to prevent false triggers
+        if (s1 != sensor1State || s2 != sensor2State)
+        {
+            ProcessStates(s1, s2);
+        }
     }
 
     private void ProcessStates(bool s1Current, bool s2Current)
     {
-        bool s1Rising = s1Current && !sensor1State;
-        bool s2Rising = s2Current && !sensor2State;
-
-        if (!isMeasuring)
+        // Apply debounce to prevent contact-prel effects
+        if (s1Current != sensor1State && (DateTime.Now - lastS1Change).TotalMilliseconds > DebounceMs)
         {
-            if ((s1Rising && !s2Current) || (s2Rising && !s1Current))
+            lastS1Change = DateTime.Now;
+            sensor1State = s1Current;
+        }
+        if (s2Current != sensor2State && (DateTime.Now - lastS2Change).TotalMilliseconds > DebounceMs)
+        {
+            lastS2Change = DateTime.Now;
+            sensor2State = s2Current;
+        }
+
+        // Neutral zone: both sensors OFF
+        if (!sensor1State && !sensor2State)
+        {
+            readyForNewMeasurement = true;
+        }
+
+        if (!isMeasuring && readyForNewMeasurement)
+        {
+            // Start measurement: exactly one sensor ON
+            if (sensor1State && !sensor2State)
             {
-                StartMeasurement(s1Rising ? 1 : 2);
+                readyForNewMeasurement = false;
+                StartMeasurement(1);
+            }
+            else if (sensor2State && !sensor1State)
+            {
+                readyForNewMeasurement = false;
+                StartMeasurement(2);
             }
         }
-        else
+        else if (isMeasuring)
         {
-            if ((startSensor is 1 && s2Rising) || (startSensor is 2 && s1Rising))
+            // Stop measurement: other sensor becomes ON
+            if (startSensor == 1 && sensor2State)
+            {
+                StopMeasurement();
+            }
+            else if (startSensor == 2 && sensor1State)
             {
                 StopMeasurement();
             }
         }
 
-        sensor1State = s1Current;
-        sensor2State = s2Current;
         InvokeAsync(StateHasChanged);
     }
 
@@ -263,12 +328,17 @@
         }
     }
 
+    /// <summary>
+    /// Calculate the distance giving the distance in cm or inches per second. Further, the train's 
+    /// speed will be converted to sixe 1:1.
+    /// </summary>
+    /// <param name="totalSeconds"></param>
     private void CalculateResults(double totalSeconds)
     {
         decimal distance = startSensor is 1 ? settings.Distance1To2 : settings.Distance2To1;
         if (totalSeconds <= 0 || distance <= 0) return;
 
-        decimal scaleValue = (int)settings.Scale;
+        decimal scaleValue = _dashboardSettings is null ? (int)ModelScale.H0 : (int)_dashboardSettings.Scale;
         decimal time = (decimal)totalSeconds;
 
         if (_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric)
@@ -344,24 +414,11 @@
         showSettingsDialog = false;
     }
 
-    private void OnUnitSystemChanged(ChangeEventArgs e)
-    {
-        if (Enum.TryParse<MeasurementUnitSystem>(e.Value?.ToString(), out var newSystem))
-        {
-            if (newSystem is MeasurementUnitSystem.Metric && _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Imperial)
-            {
-                settings.Distance1To2 = Math.Round(settings.Distance1To2, 1, MidpointRounding.ToZero);
-                settings.Distance2To1 = Math.Round(settings.Distance2To1, 1, MidpointRounding.ToZero);
-            }
-            else if (newSystem is MeasurementUnitSystem.Imperial && _dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric)
-            {
-                settings.Distance1To2 = Math.Round(settings.Distance1To2, 2);
-                settings.Distance2To1 = Math.Round(settings.Distance2To1, 2);
-            }
-            _dashboardSettings!.UnitSystem = newSystem;
-        }
-    }
-
+    /// <summary>
+    /// Call back event that is triggered when the user saves settings in the
+    /// dashboard settings.
+    /// </summary>
+    /// <param name="dashboardSettings"></param>
     private void OnDashboardSettingsUpdate(DashboardSettings dashboardSettings)
     {
         _dashboardSettings = dashboardSettings;

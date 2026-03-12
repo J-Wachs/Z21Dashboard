@@ -17,9 +17,6 @@ public class SpeedMeasurementSettings
     public int Sensor2Port { get; set; } = 2;
 
     [Required]
-    public ModelScale Scale { get; set; } = ModelScale.H0;
-
-    [Required]
     public decimal Distance1To2 { get; set; } = 0.0m;
 
     [Required]
