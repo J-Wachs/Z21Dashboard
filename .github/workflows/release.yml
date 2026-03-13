@@ -99,8 +99,8 @@ jobs:
         New-Item -Path ./publish/DOC -ItemType Directory -Force
         md-to-pdf UserManual.md
         Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf -Force
-        md-to-pdf Brugervejledning.md
-        Move-Item -Path Brugervejledning.pdf -Destination ./publish/DOC/Brugervejledning.pdf -Force
+        md-to-pdf UserManual_da.md
+        Move-Item -Path UserManual_da.pdf -Destination ./publish/DOC/UserManual_da.pdf -Force
 
     # 6. Create ZIP file (MASTER ONLY)
     - name: Create Zip file

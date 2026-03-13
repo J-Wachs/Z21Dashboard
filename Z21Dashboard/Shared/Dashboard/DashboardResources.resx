@@ -120,10 +120,10 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
-  <data name="EditDashboardSettings" xml:space="preserve">
-    <value>Edit dashboard settings</value>
+  <data name="EditDashboardConfig" xml:space="preserve">
+    <value>Edit dashboard configuration</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Dashboard settings</value>
+  <data name="Config" xml:space="preserve">
+    <value>Dashboard config</value>
   </data>
 </root>

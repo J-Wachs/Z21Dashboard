@@ -1,0 +1,52 @@
+@*
+   TabControl.razor
+*@
+<div class="tabs-container">
+    <ul class="nav-tabs">
+        @foreach (var onePage in Pages)
+        {
+            <li class="@(ActivePage == onePage ? "active" : string.Empty)" 
+                onclick="@(() => ActivatePage(onePage))">
+                @onePage.Title
+            </li>
+        }
+    </ul>
+
+    <div class="tab-content">
+        <CascadingValue Value="this">
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<ushort>? OnPageChange { get; set; }
+
+    public TabPage? ActivePage { get; set; }
+    private List<TabPage> Pages = new List<TabPage>();
+
+    public void AddPage(TabPage page)
+    {
+        Pages.Add(page);
+        if (Pages.Count == 1)
+        {
+            ActivePage = page;
+        }
+        StateHasChanged();
+    }
+
+    private void ActivatePage(TabPage page)
+    {
+        ActivePage = page;
+
+        // Find the number of the page
+        var index = Pages.FindIndex(p => p == page);
+        OnPageChange?.InvokeAsync((ushort)index);
+
+        StateHasChanged();
+    }
+}

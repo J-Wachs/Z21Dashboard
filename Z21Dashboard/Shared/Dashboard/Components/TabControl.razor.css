@@ -1,0 +1,28 @@
+.nav-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 2px solid #dee2e6;
+}
+
+    .nav-tabs li {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-bottom: none;
+        margin-bottom: -2px;
+    }
+
+        .nav-tabs li.active {
+            background-color: #fff;
+            border-color: #dee2e6;
+            border-bottom: 2px solid #fff;
+            font-weight: bold;
+        }
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-top: none;
+}

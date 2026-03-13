@@ -1,16 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z21Dashboard", "Z21Dashboard\Z21Dashboard.csproj", "{7F891025-2693-41C3-8C4C-AB6B749D2182}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		BrugerVejledning.md = BrugerVejledning.md
+		Blocks.PNG = Blocks.PNG
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 		UserManual.md = UserManual.md
+		UserManual_da.md = UserManual_da.md
+		Versions.txt = Versions.txt
 		Z21Dashboard.iss = Z21Dashboard.iss
 		Z21Dashboard.png = Z21Dashboard.png
 		Z21Dashboard_da.png = Z21Dashboard_da.png

@@ -117,10 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InfoText" xml:space="preserve">
+  <data name="WidgetInfoText" xml:space="preserve">
     <value>Select which components to display on the dashboard</value>
   </data>
   <data name="NoWidgets" xml:space="preserve">
     <value>No configurable dashboard components were found</value>
+  </data>
+  <data name="WidgetsTab" xml:space="preserve">
+    <value>Widgets</value>
+  </data>
+  <data name="SettingsTab" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsInfoText" xml:space="preserve">
+    <value>Set the settings to the desired value</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Model train scale</value>
+  </data>
+  <data name="TempScale" xml:space="preserve">
+    <value>Temperature scale</value>
+  </data>
+  <data name="Celsius" xml:space="preserve">
+    <value>Celsius</value>
+  </data>
+  <data name="Fahrenheit" xml:space="preserve">
+    <value>Fahrenheit</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Reread" xml:space="preserve">
+    <value>Reread</value>
+  </data>
+  <data name="SettingsRereadMessage" xml:space="preserve">
+    <value>Settings has been reread.</value>
+  </data>
+  <data name="SettingsSavedMessage" xml:space="preserve">
+    <value>Settings are saved.</value>
   </data>
 </root>

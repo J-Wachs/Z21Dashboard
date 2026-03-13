@@ -14,11 +14,25 @@ public interface IDashboardStateService
     event Action? OnLayoutChanged;
 
     /// <summary>
+    /// Occurs when the dashboard settings have changed.
+    /// </summary>
+    /// <remarks>Subscribe to this event to be notified whenever the dashboard settings are updated. The event
+    /// provides the new settings as a parameter to the event handler.</remarks>
+    event Action<DashboardSettings>? OnSettingsChanged;
+
+    /// <summary>
     /// Gets the full list of all available dashboard components, including hidden ones,
     /// sorted for display in a settings list.
     /// </summary>
     /// <returns>A list of DashboardComponentState objects.</returns>
     List<DashboardComponentState> GetComponentStates();
+
+    /// <summary>
+    /// Gets the Z21Dashboard settings. Please note that some of the settings are set in the 
+    /// settings dialog and others are retrieved from Windows (e.g. measure system).
+    /// </summary>
+    /// <returns>A settings object.</returns>
+    Task<DashboardSettings> GetSettings();
 
     /// <summary>
     /// Gets a filtered list of components that are currently visible,
@@ -46,4 +60,11 @@ public interface IDashboardStateService
     /// <param name="newLayout">A list representing the complete new layout of the dashboard.</param>
     /// <returns>A task that represents the asynchronous save operation.</returns>
     Task UpdateLayout(List<DashboardComponentState> newLayout);
+
+    /// <summary>
+    /// Saves the specified dashboard settings to persistent storage.
+    /// </summary>
+    /// <param name="dashboardSettings">The dashboard settings to be saved. Cannot be null.</param>
+    /// <returns>A task that represents the asynchronous save operation.</returns>
+    Task SaveSettings(DashboardSettingsStorage dashboardSettings);
 }

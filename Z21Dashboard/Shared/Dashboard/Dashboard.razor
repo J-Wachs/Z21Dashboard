@@ -30,7 +30,7 @@
         </svg>
     </button>
 
-    <button class="btn btn-lg btn-secondary" onclick="@OpenSettingsModal" title="@Localizer["Settings"]">
+    <button class="btn btn-lg btn-secondary" onclick="@OpenConfigModal" title="@Localizer["Config"]">
         &#9881; <!-- Gear Icon -->
     </button>
 </div>
@@ -54,22 +54,22 @@
     </div>
 </div>
 
-<!-- Settings Modal -->
-@if (_isSettingsModalOpen)
+
+@if (_isConfigModalOpen)
 {
     <div class="modal-backdrop fade show"></div>
     <div class="modal fade show" tabindex="-1" style="display: block;">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditDashboardSettings"]</h5>
-                    <button type="button" class="btn-close" onclick="@CloseSettingsModal" aria-label="@Localizer["Close"]"></button>
+                    <h5 class="modal-title">@Localizer["EditDashboardConfig"]</h5>
+                    <button type="button" class="btn-close" onclick="@CloseConfigModal" aria-label="@Localizer["Close"]"></button>
                 </div>
-                <div class="modal-body">
-                    <DashboardSettings />
+                <div class="modal-body" style="height: 670px;">
+                    <DashboardConfig />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="@CloseSettingsModal">@Localizer["Close"]</button>
+                    <button type="button" class="btn btn-secondary" onclick="@CloseConfigModal">@Localizer["Close"]</button>
                 </div>
             </div>
         </div>
@@ -88,12 +88,11 @@
     // A computed property to apply a CSS class only during a drag operation.
     private string DragClass => _isDragging ? "no-select" : string.Empty;
 
-    // --- NEW: State for settings modal ---
-    private bool _isSettingsModalOpen = false;
+    // --- State for config modal ---
+    private bool _isConfigModalOpen = false;
 
     protected override void OnInitialized()
     {
-        // DashboardStateService.OnLayoutChanged += OnLayoutChanged;
         LoadVisibleComponents();
     }
 
@@ -216,15 +215,15 @@
         }
     }
 
-    private void OpenSettingsModal()
+    private void OpenConfigModal()
     {
-        _isSettingsModalOpen = true;
+        _isConfigModalOpen = true;
         StateHasChanged();
     }
 
-    private void CloseSettingsModal()
+    private void CloseConfigModal()
     {
-        _isSettingsModalOpen = false;
+        _isConfigModalOpen = false;
         StateHasChanged();
     }
 
