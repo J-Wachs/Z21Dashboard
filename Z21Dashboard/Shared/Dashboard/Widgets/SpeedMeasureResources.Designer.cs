@@ -61,11 +61,11 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Close.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Close {
+        internal static string Cancel {
             get {
-                return ResourceManager.GetString("Close", resourceCulture);
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
@@ -201,6 +201,15 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         internal static string ReadGuideText {
             get {
                 return ResourceManager.GetString("ReadGuideText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

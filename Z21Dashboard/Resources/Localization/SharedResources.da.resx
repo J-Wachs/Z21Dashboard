@@ -124,10 +124,16 @@
     <value>Forbindelse</value>
   </data>
   <data name="LocoControl" xml:space="preserve">
-    <value>Lokomotivstyring</value>
+    <value>Lokomotivstyring 1</value>
   </data>
   <data name="LocoControl2" xml:space="preserve">
     <value>Lokomotivstyring 2</value>
+  </data>
+  <data name="LocoControl3" xml:space="preserve">
+    <value>Lokomotivstyring 3</value>
+  </data>
+  <data name="LocoControl4" xml:space="preserve">
+    <value>Lokomotivstyring 4</value>
   </data>
   <data name="LocoListView" xml:space="preserve">
     <value>Lokomotivers driftstid</value>

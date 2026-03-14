@@ -117,25 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Acknowledgements" xml:space="preserve">
-    <value>Acknowledgements</value>
-  </data>
-  <data name="AckText" xml:space="preserve">
-    <value>This application makes use of the following third party products:</value>
-  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Dashboard for your z21, z21Start, Z21 or Z21 XL central station from Roco</value>
-  </data>
-  <data name="TheFont" xml:space="preserve">
-    <value>The font</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Version</value>
   </data>
 </root>

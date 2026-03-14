@@ -9,6 +9,10 @@ using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Services;
 using Z21Status.Application.Interfaces;
 using Z21Status.Services;
+using WinRT.Interop;
+using Z21Dashboard.Helpers;
+
+
 
 #if WINDOWS
 using Microsoft.UI;
@@ -59,6 +63,7 @@ public static class MauiProgram
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("FluentSystemIcons-Regular.ttf", "FluentSystemIcons");
             })
             .ConfigureLifecycleEvents(events =>
             {
@@ -68,26 +73,69 @@ public static class MauiProgram
                 events.AddWindows(windows => windows
                     .OnWindowCreated(window =>
                     {
-                        IntPtr nativeWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+                        IntPtr nativeWindowHandle = WindowNative.GetWindowHandle(window);
                         WindowId nativeWindowId = Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
                         AppWindow appWindow = AppWindow.GetFromWindowId(nativeWindowId);
 
-                        // Restore window state using the simple Preferences API.
-                        var isMaximized = Preferences.Get("IsWindowMaximized", false);
-                        if (isMaximized)
+                        const string KeyIsMaximized = "IsWindowMaximized";
+                        const string KeyLeft = "WindowLeft";
+                        const string KeyTop = "WindowTop";
+                        const string KeyWidth = "WindowWidth";
+                        const string KeyHeight = "WindowHeight";
+
+                        // --- Restore window state ---
+                        bool isMaximized = Preferences.Get(KeyIsMaximized, false);
+                        if (appWindow.Presenter is OverlappedPresenter presenter)
                         {
-                            if (appWindow.Presenter is OverlappedPresenter p)
+                            if (isMaximized)
                             {
-                                p.Maximize();
+                                presenter.Maximize();
+                            }
+                            else
+                            {
+                                // Restore previous size and position if saved
+                                var left = Preferences.Get(KeyLeft, double.NaN);
+                                var top = Preferences.Get(KeyTop, double.NaN);
+                                var width = Preferences.Get(KeyWidth, double.NaN);
+                                var height = Preferences.Get(KeyHeight, double.NaN);
+
+                                if (!double.IsNaN(left) && !double.IsNaN(top) &&
+                                !double.IsNaN(width) && !double.IsNaN(height))
+                                {
+                                    var superMaxBounds = SuperMaximizeForWindows.GetSuperMaxBounds();
+                                    // If match between saved coordinates/size and superMaxBounds, we assume
+                                    // that the windows was super maximized at time of close.
+                                    if ((int)left == superMaxBounds.Value.X &&
+                                        (int)top == superMaxBounds.Value.Y &&
+                                        (int)width == superMaxBounds.Value.Width &&
+                                        (int)height == superMaxBounds.Value.Height)
+                                    {
+                                        SuperMaximizeForWindows.SetInternalSuperMaxBounds();
+                                    }
+
+                                    presenter.Restore(); // ensure state is normal
+                                    appWindow.MoveAndResize(new Windows.Graphics.RectInt32(
+                                        (int)left, (int)top, (int)width, (int)height));
+                                }
                             }
                         }
 
-                        // Handle window closing to save the state.
+                        // --- Save state when window closes ---
                         window.Closed += (sender, args) =>
                         {
                             if (appWindow.Presenter is OverlappedPresenter p)
                             {
-                                Preferences.Set("IsWindowMaximized", p.State == OverlappedPresenterState.Maximized);
+                                Preferences.Set(KeyIsMaximized, p.State == OverlappedPresenterState.Maximized);
+
+                                // Save position and size only if restored
+                                if (p.State == OverlappedPresenterState.Restored)
+                                {
+                                    var bounds = appWindow.Position;
+                                    Preferences.Set(KeyLeft, bounds.X);
+                                    Preferences.Set(KeyTop, bounds.Y);
+                                    Preferences.Set(KeyWidth, appWindow.Size.Width);
+                                    Preferences.Set(KeyHeight, appWindow.Size.Height);
+                                }
                             }
                         };
                     }));
@@ -136,7 +184,11 @@ public static class MauiProgram
         // Register the service for opening documentation files.
         builder.Services.AddSingleton<IDocumentationService, DocumentationService>();
 
+        // Register the TitleBarService for managing title bar text
+        builder.Services.AddSingleton<ITitleBarService, TitleBarService>();
+
         // --- END: SERVICE REGISTRATION SECTION ---
+
 
         return builder.Build();
     }

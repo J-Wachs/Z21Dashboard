@@ -2,6 +2,7 @@
 
 # Indholdsfortegnelse
 *   [Indledning](#indledning)
+    *   [Nyheder i version 1.20](#nyheder-i-version-1.20)
     *   [Hvorfor Z21Dashboard?](#hvorfor-z21dashboard)
     *   [Lidt om teknikken](#lidt-om-teknikken)
 *   [Z21 familien af centralstationer](#z21-familien-af-centralstationer)
@@ -9,6 +10,7 @@
     *   [z21/z21Start og låst eller ej](#z21z21start-og-låst-eller-ej)
 *   [Første gang du starter](#første-gang-du-starter)
 *   [Dashboardet](#dashboardet)
+    *   [Supermaksimer af dashboardet](#supermaksimer-af-dashboardet)
     *   [Flyt rundt på vinduer](#flyt-rundt-på-vinduer)
     *   [Tilpas dit dashboard (vis/skjul vinduer)](#tilpas-dit-dashboard-visskjul-vinduer)
     *   [De vigtigste vinduer forklaret](#de-vigtigste-vinduer-forklaret)
@@ -26,6 +28,20 @@
 
 Velkommen til Z21Dashboard. Denne vejledning hjælper dig med at komme i gang med at bruge programmet til at overvåge
 og styre din modeljernbane via din Roco/Fleischmann Z21 centralstation.
+
+## Nyheder i version 1.20
+
+* Z21Dashboard Settings er omdøbt til Konfiguration
+* Konfiguration er opdelt i faner
+* Tilføjet en fane med indstillinger: temperaturskala og modeltogsskala
+* Ændringer i widgets System Status og System Status – Complete, så temperaturen vises i den valgte temperaturskala
+* Ny widget “Hastighedsmåling” til måling af modeltogets hastighed og konvertering til hastighed i fuld skala
+* Tilføjet knappen “Super Maximize” i titellinjen på dashboardets hovedvindue for at maksimere dashboardet til fuld skærm (på tværs af skærme)
+* Tilføjet en “Anerkendelser”-knap og dialog i "Om" widgetten til at anerkende brugen af tredjepartsbiblioteker og -værktøjer i udviklingen af Z21Dashboard
+* Tilføjet to ekstra lokomotivstyringer, så der i alt er fire lokomotivstyringer
+* DashboardStateService eksponerer nu en hændelse, som udløses, når indstillinger ændres
+* Fejlrettelse: "RBus" widgetten anmodede ikke om RBus’ indledende tilstand
+* Fejlrettelse: I "Lokomotivstyring" widgets blev pladsholderteksten for serviceinterval ikke vist korrekt, når værdien ikke var angivet
 
 ## Hvorfor Z21Dashboard?
 
@@ -104,6 +120,22 @@ vist oversigen med widget. Her kan du skjule de widgets, du ikke ønsker at se.
 
 Hele skærmbilledet er dit personlige lærred. Her kan du arrangere de forskellige informations- og kontrolvinduer
 (widgets), præcis som du ønsker det.
+
+## Supermaksimer af dashboardet
+I dashboardets titellinje, øverst til venstre, er der fire knapper:
+
+* Supermaksimer
+* Minimer
+* Maksimer
+* Luk
+
+De tre sidste er standard Windows-knapper, og de fungerer som du forventer. Supermaksimér knappen maksimerer dashboardet
+til fuld skærm, på tværs af alle dine skærme. Når dashboard vinduet er supermaksimeret, vil et klik på Supermaksimér knappen igen gendanne
+det til den størrelse og position, det havde før supermaksimeringen.
+
+Hvis dashboardvinduet er supermaksiteret når du lukker applikationen, og du starter applikationen igen, så vil dashboardet starte i supermaksimeret
+tilstand. Ønsker du herefter at bringe vinduet tilbage til normal størrelse, er du nødt til at gøre det ved at trække i vinduets kanter, da Supermaksimér
+knappen ikke længere kender den tidligere størrelse på vinduet.
 
 ## Flyt rundt på vinduer
 

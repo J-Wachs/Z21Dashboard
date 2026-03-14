@@ -63,92 +63,83 @@
     </Content>
 </DashboardWidget>
 
-@if (showSettingsDialog)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditSettingsForSpeedMeasure"]</h5>
-                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="@Localizer["Close"]"></button>
+<DraggableModal IsOpen="@showSettingsDialog"
+                Title="@Localizer["EditSettingsForSpeedMeasure"]"
+                OnClose="CancelSettingsDialog">
+    <ChildContent>
+        @if (errorMessage is not null)
+        {
+            <div class="alert alert-danger py-2 mb-3">@errorMessage</div>
+        }
+        <div class="alert alert-info py-2 mb-3">@Localizer["ReadGuideText"]</div>
+
+        <div class="mb-4">
+            <label class="form-label fw-bold d-block">@Localizer["Sensor1"]</label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <label class="small text-muted">@Localizer["Module"]</label>
+                    <select class="form-select" @bind="settings.Sensor1Module">
+                        @for (int i = 1; i <= 20; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
                 </div>
-                <div class="modal-body">
-                    @if (errorMessage is not null)
-                    {
-                        <div class="alert alert-danger py-2 mb-3">@errorMessage</div>
-                    }
-                    <div class="alert alert-info py-2 mb-3">@Localizer["ReadGuideText"]</div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold d-block">@Localizer["Sensor1"]</label>
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <label class="small text-muted">@Localizer["Module"]</label>
-                                <select class="form-select" @bind="settings.Sensor1Module">
-                                    @for (int i = 1; i <= 20; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="small text-muted">@Localizer["Port"]</label>
-                                <select class="form-select" @bind="settings.Sensor1Port">
-                                    @for (int i = 1; i <= 8; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold d-block">@Localizer["Sensor2"]</label>
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <label class="small text-muted">@Localizer["Module"]</label>
-                                <select class="form-select" @bind="settings.Sensor2Module">
-                                    @for (int i = 1; i <= 20; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="small text-muted">@Localizer["Port"]</label>
-                                <select class="form-select" @bind="settings.Sensor2Port">
-                                    @for (int i = 1; i <= 8; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
-                        <input type="number" class="form-control"
-                               step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
-                               @bind="settings.Distance1To2" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-bold small">@Localizer["Distance2To1"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
-                        <input type="number" class="form-control"
-                               step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
-                               @bind="settings.Distance2To1" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">@Localizer["Close"]</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettings">@Localizer["Save"]</button>
+                <div class="col-6">
+                    <label class="small text-muted">@Localizer["Port"]</label>
+                    <select class="form-select" @bind="settings.Sensor1Port">
+                        @for (int i = 1; i <= 8; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
-}
+
+        <div class="mb-4">
+            <label class="form-label fw-bold d-block">@Localizer["Sensor2"]</label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <label class="small text-muted">@Localizer["Module"]</label>
+                    <select class="form-select" @bind="settings.Sensor2Module">
+                        @for (int i = 1; i <= 20; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="small text-muted">@Localizer["Port"]</label>
+                    <select class="form-select" @bind="settings.Sensor2Port">
+                        @for (int i = 1; i <= 8; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-bold small">@Localizer["Distance1To2"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+            <input type="number" class="form-control"
+                   step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                   @bind="settings.Distance1To2" />
+        </div>
+        <div class="mb-4">
+            <label class="form-label fw-bold small">@Localizer["Distance2To1"] @Localizer[_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "cm" : "inch"]</label>
+            <input type="number" class="form-control"
+                   step="@(_dashboardSettings?.UnitSystem is MeasurementUnitSystem.Metric ? "0.1" : "0.01")"
+                   @bind="settings.Distance2To1" />
+        </div>
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-secondary" @onclick="CancelSettingsDialog" aria-label="@Localizer["Cancel"]">@Localizer["Cancel"]</button>
+        <button type="button" class="btn btn-primary" @onclick="SaveSettings" aria-label="@Localizer["Save"]">@Localizer["Save"]</button>
+    </FooterContent>
+</DraggableModal>
+
 
 @code {
     /// <summary>
@@ -329,7 +320,7 @@
     }
 
     /// <summary>
-    /// Calculate the distance giving the distance in cm or inches per second. Further, the train's 
+    /// Calculate the distance giving the distance in cm or inches per second. Further, the train's
     /// speed will be converted to sixe 1:1.
     /// </summary>
     /// <param name="totalSeconds"></param>
@@ -382,7 +373,7 @@
         showSettingsDialog = true;
     }
 
-    private void CloseSettingsDialog()
+    private void CancelSettingsDialog()
     {
         var savedSettings = AppDataService.GetData<SpeedMeasurementSettings>(SettingsKey);
         if (savedSettings is not null)

@@ -84,6 +84,16 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>SharedResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="AppXamlResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AppXamlResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\DraggableModalResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DraggableModalResource.resx</DependentUpon>
+      </Compile>
       <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -118,11 +128,6 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SpeedBarResources.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoControl2Resources.Designer.cs">
-        <DependentUpon>LocoControl2Resources.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
       </Compile>
       <Compile Update="Shared\Dashboard\Widgets\LocoControlResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -191,6 +196,14 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="AppXamlResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>AppXamlResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\DraggableModalResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DraggableModalResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
@@ -218,10 +231,6 @@
       <EmbeddedResource Update="Shared\Dashboard\Components\SpeedBarResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SpeedBarResources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControl2Resources.resx">
-        <LastGenOutput>LocoControl2Resources.Designer.cs</LastGenOutput>
-        <Generator>ResXFileCodeGenerator</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControlResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
   <data name="cm" xml:space="preserve">
     <value>cm</value>
@@ -164,6 +164,9 @@
   </data>
   <data name="ReadGuideText" xml:space="preserve">
     <value>To setup the sensors needed to measure speed, please read the section about this widget in the user manual.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Scale" xml:space="preserve">
     <value>Scale</value>

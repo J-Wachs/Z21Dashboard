@@ -17,14 +17,19 @@ Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
 ## Nyheder i denne version 
 
 Version 1.2:
-* Z21Dashboard Indstillinger omdøbt til Konfiguration
-* Konfiguration delt op med faneblade
-* Tilføjet faneblad med indstillinger: Temperaturskala og modeltogsskala
-* Ændringer til Systemstatus og Systemstatus - komple widgets til at vise temperatur i valgte temperaturskala
-* Ny widget "Hastighedsmåling" til at måle hastigheden på modeltoget, og omregne til hastighed i 1:1. Målesystem (metrisk/imperial) tages fra Windows' opsætning
-* DashboardStateService udstiller event der trigges når indstillinger ændres
-* Rettet fejl, at RBus widget ikke viste den korrekte tilstand ved opstart
-
+* Z21Dashboard Settings er omdøbt til Konfiguration
+* Konfiguration er opdelt i faner
+* Tilføjet en fane med indstillinger: temperaturskala og modeltogsskala
+* Ændringer i widgets System Status og System Status – Complete, så temperaturen vises i den valgte temperaturskala
+* Ny widget “Hastighedsmåling” til måling af modeltogets hastighed og konvertering til hastighed i fuld skala
+* Tilføjet knappen “Super Maximize” i titellinjen på dashboardets hovedvindue for at maksimere dashboardet til fuld skærm (på tværs af skærme)
+* Tilføjet en “Anerkendelser”-knap og dialog i "Om" widgetten til at anerkende brugen af tredjepartsbiblioteker og -værktøjer i udviklingen af Z21Dashboard
+* Tilføjet to ekstra lokomotivstyringer, så der i alt er fire lokomotivstyringer
+* DashboardStateService eksponerer nu en hændelse, som udløses, når indstillinger ændres
+* Ny Blazor-komponent DraggableModal.razor til oprettelse af modale dialoger, der kan trækkes. Komponenten anvendes nu i alle widgets med modale dialoger (LocoController, Settings, Speed Measure osv.)
+* Som en del af tilføjelsen af to ekstra lokomotivstyringer er koden for lokomotivstyringer blevet refaktoreret til at bruge ét sæt ressourcefiler
+* Fejlrettelse: RBus-widgetten anmodede ikke om RBus’ indledende tilstand
+* Fejlrettelse: I "Lokomotivstyring" widgets blev pladsholderteksten for serviceinterval ikke vist korrekt, når værdien ikke var angivet
 
 ## Egenskaber
 
@@ -165,8 +170,18 @@ Version 1.2:
 * Added a tab with settings: Temperature scale and model train scale
 * Changes to System Status and System Status – complete widgets to display temperature in the selected temperature scale
 * New widget "Speed Measure" to measure the model train’s speed and convert it to full-scale speed
+* Added button 'Super Maximize' to the title bar of the dashboard's main window to maximize the dashboard to the full
+  screen size (across monitors)
+* A 'Acknowledgement' button and dialog was added to the 'About' widget to acknowledge the use of third-party
+  libraries and tools in the development of Z21Dashboard
+* Added two more locomotive controllers, giving four locomotive controllers in total
 * DashboardStateService exposes an event triggered when settings are changed
-* Fixed a bug in the RBus widget. It did not show the correc inital state
+* New Blazor component 'DraggableModal.razor' for creating draggable modals. The component has been applied to all 
+  widgets having a modal dialog (LocoController, Settings, Speed Measure, etc.)
+* As a part of adding two more locomotive controllers, the code for locomotive controllers has been refactored to
+  use one set of resource files
+* Bug fix: The RBus widget did not request the initial state of the RBus
+* Bug fix: In the Loco Control widgets, the place holder text for service interval was not displayed correctly when the value was not set
 
 ## How it Works
 

@@ -124,10 +124,16 @@
     <value>Connection</value>
   </data>
   <data name="LocoControl" xml:space="preserve">
-    <value>Loco controller</value>
+    <value>Loco controller 1</value>
   </data>
   <data name="LocoControl2" xml:space="preserve">
     <value>Loco controller 2</value>
+  </data>
+  <data name="LocoControl3" xml:space="preserve">
+    <value>Loco controller 3</value>
+  </data>
+  <data name="LocoControl4" xml:space="preserve">
+    <value>Loco controller 4</value>
   </data>
   <data name="LocoListView" xml:space="preserve">
     <value>Locomotives' Operating Time</value>

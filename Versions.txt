@@ -1,9 +1,22 @@
 Version 1.20 of 2026-??-??
 --------------------------
+For users:
 * Z21Dashboard Settings renamed to Configuration
 * Configuration divided into tabs
 * Added a tab with settings: Temperature scale and model train scale
 * Changes to System Status and System Status – complete widgets to display temperature in the selected temperature scale
 * New widget "Speed Measure" to measure the model train’s speed and convert it to full-scale speed
+* Added button 'Super Maximize' to the title bar of the dashboard's main window to maximize the dashboard to the full
+  screen size (across monitors)
+* A 'Acknowledgement' button and dialog was added to the 'About' widget to acknowledge the use of third-party
+  libraries and tools in the development of Z21Dashboard
+* Added two more locomotive controllers, giving four locomotive controllers in total
+For developers:
 * DashboardStateService exposes an event triggered when settings are changed
+* New Blazor component 'DraggableModal.razor' for creating draggable modals. The component has been applied to all 
+  widgets having a modal dialog (LocoController, Settings, Speed Measure, etc.)
+* As a part of adding two more locomotive controllers, the code for locomotive controllers has been refactored to
+  use one set of resource files
+Bug fixes:
 * Bug fix: The RBus widget did not request the initial state of the RBus
+* Bug fix: In the Loco Control widgets, the place holder text for service interval was not displayed correctly when the value was not set

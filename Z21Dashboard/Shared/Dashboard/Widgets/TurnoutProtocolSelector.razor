@@ -1,4 +1,5 @@
 @*
+    TurnoutProtocolSelector.razor
     Component to select and set the turnout protocol mode for a given address.
     If no address is provided, the user can input one.
 *@
@@ -48,7 +49,7 @@
             </select>
         </div>
         <div class="btn-group w-100" role="group">
-            <button class="btn btn-success" onclick="@SetNewTurnoutModeAsync" disabled="@(_isLocked)">
+            <button class="btn btn-success" onclick="@SetNewTurnoutModeAsync" disabled="@(_isLocked)" aria-label="@Localizer["SetProtocol"]">
                 <span>@Localizer["SetProtocol"]</span>
             </button>
         </div>
