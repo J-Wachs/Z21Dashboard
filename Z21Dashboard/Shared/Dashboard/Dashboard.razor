@@ -30,8 +30,8 @@
         </svg>
     </button>
 
-    <button class="btn btn-lg btn-secondary" onclick="@OpenConfigModal" title="@Localizer["Config"]">
-        &#9881; <!-- Gear Icon -->
+    <button class="btn btn-lg btn-secondary" onclick="@OpenConfigModal" title="@Localizer["Config"]" aria-label="@Localizer["Config"]">
+        &#9881;
     </button>
 </div>
 
@@ -54,28 +54,18 @@
     </div>
 </div>
 
-
-@if (_isConfigModalOpen)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditDashboardConfig"]</h5>
-                    <button type="button" class="btn-close" onclick="@CloseConfigModal" aria-label="@Localizer["Close"]"></button>
-                </div>
-                <div class="modal-body" style="height: 670px;">
-                    <DashboardConfig />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="@CloseConfigModal">@Localizer["Close"]</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
+<DraggableModal IsOpen="_isConfigModalOpen"
+                Title="@Localizer["EditDashboardConfig"]"
+                Size="DraggableModal.ModalSize.Large"
+                Height="800px"
+                OnClose="CloseConfigModal">
+    <ChildContent>
+        <DashboardConfig />
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" onclick="@CloseConfigModal" aria-label="@Localizer["Close"]">@Localizer["Close"]</button>
+    </FooterContent>
+</DraggableModal>
 
 @code {
     private ConnectionState _connectionState = ConnectionState.Disconnected;

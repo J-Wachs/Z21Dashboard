@@ -1,0 +1,128 @@
+@*
+    DraggableModal.razor
+    Component that does all the work for the draggable modal dialog.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<DraggableModalResource> Localizer
+
+@if (IsOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" tabindex="-1"
+         @onmousemove="OnDrag"
+         @onmouseup="StopDrag"
+         @onmouseleave="StopDrag">
+        
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable @GetSizeClass()"
+             style="transform: translate(@(_offsetX)px, @(_offsetY)px); transition: none;">
+            
+            <div class="modal-content shadow" style="@(Height is not null ? $"height: {Height};" : string.Empty)">
+                <div class="modal-header bg-light"
+                     style="cursor: grab;"
+                     @onmousedown="StartDrag">
+                    <h5 class="modal-title user-select-none">@Title</h5>
+                    <button type="button" class="btn-close" @onclick="Close" @onmousedown:stopPropagation aria-label="@Localizer["Close"]"></button>
+                </div>
+                <div class="modal-body text-break">
+                    @ChildContent
+                </div>
+                @if (FooterContent != null)
+                {
+                    <div class="modal-footer">
+                        @FooterContent
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public bool IsOpen { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
+    public string? Height { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    
+    // ChildContent is the main content inside the dialog
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    // FooterContent represents the buttons/content at the bottom
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+
+    public enum ModalSize
+    {
+        Small,
+        Default,
+        Large,
+        ExtraLarge
+    }
+
+    private bool _isDragging = false;
+    private double _startX, _startY;
+    private double _offsetX = 0, _offsetY = 0;
+    private bool _wasOpen = false;
+
+    // Ensures the position is reset (centering the window) each time it is opened
+    protected override void OnParametersSet()
+    {
+        if (IsOpen && !_wasOpen)
+        {
+            _offsetX = 0;
+            _offsetY = 0;
+        }
+        _wasOpen = IsOpen;
+    }
+
+    private string GetSizeClass()
+    {
+        return Size switch
+        {
+            ModalSize.Small => "modal-sm",
+            ModalSize.Large => "modal-lg",
+            ModalSize.ExtraLarge => "modal-xl",
+            _ => string.Empty,
+        };
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync();
+        }
+    }
+
+    private void StartDrag(MouseEventArgs e)
+    {
+        _isDragging = true;
+        _startX = e.ClientX - _offsetX;
+        _startY = e.ClientY - _offsetY;
+    }
+
+    private void OnDrag(MouseEventArgs e)
+    {
+        if (_isDragging)
+        {
+            _offsetX = e.ClientX - _startX;
+            _offsetY = e.ClientY - _startY;
+        }
+    }
+
+    private void StopDrag(MouseEventArgs e)
+    {
+        _isDragging = false;
+    }
+}

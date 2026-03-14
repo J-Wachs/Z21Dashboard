@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
+namespace Z21Dashboard {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AboutResources {
+    public class AppXamlResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AboutResources() {
+        internal AppXamlResource() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.Shared.Dashboard.SystemWidgets.AboutResources", typeof(AboutResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Z21Dashboard.AppXamlResource", typeof(AppXamlResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,65 +61,20 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Acknowledgements.
+        ///   Looks up a localized string similar to Your layout, your overview.
         /// </summary>
-        internal static string Acknowledgements {
+        public static string SuperMaxSubTitle {
             get {
-                return ResourceManager.GetString("Acknowledgements", resourceCulture);
+                return ResourceManager.GetString("SuperMaxSubTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application makes use of the following third party products:.
+        ///   Looks up a localized string similar to Super Maximize the window.
         /// </summary>
-        internal static string AckText {
+        public static string SuperMaxToolTip {
             get {
-                return ResourceManager.GetString("AckText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Close.
-        /// </summary>
-        internal static string Close {
-            get {
-                return ResourceManager.GetString("Close", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dashboard for your z21, z21Start, Z21 or Z21 XL central station from Roco.
-        /// </summary>
-        internal static string Description {
-            get {
-                return ResourceManager.GetString("Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The font.
-        /// </summary>
-        internal static string TheFont {
-            get {
-                return ResourceManager.GetString("TheFont", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string Title {
-            get {
-                return ResourceManager.GetString("Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Version.
-        /// </summary>
-        internal static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
+                return ResourceManager.GetString("SuperMaxToolTip", resourceCulture);
             }
         }
     }

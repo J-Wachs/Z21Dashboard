@@ -1,21 +1,64 @@
-﻿using Z21Client;
+﻿using Microsoft.Extensions.Localization;
+using Z21Client;
 using Z21Dashboard.Application.Interfaces;
+using Z21Dashboard.Helpers;
 
 namespace Z21Dashboard;
 
 public partial class App : Microsoft.Maui.Controls.Application
 {
-    public App()
+    private IStringLocalizer _localizer;
+    public App(IStringLocalizer<AppXamlResource> localizer)
     {
+        _localizer = localizer;
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Creates the WinUI3 window for the application.
+    /// If the system supports title bar customization, it sets up a custom title bar with
+    /// "Super Maximize" functionality.
+    /// </summary>
+    /// <param name="activationState"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        var window = new Window(new MainPage())
+        Window? window = null;
+        string winTitle = "Z21Dashboard";
+
+        if (Microsoft.UI.Windowing.AppWindowTitleBar.IsCustomizationSupported())
         {
-            Title = "Z21Dashboard"
-        };
+#if WINDOWS
+            string subTitle = _localizer["SuperMaxSubTitle"];
+            string superMaximizeToolTip = _localizer["SuperMaxToolTip"];
+            var titleBar = SuperMaximizeForWindows.BuildTitleBar(winTitle, subTitle, superMaximizeToolTip);
+
+            window = new Window(new MainPage())
+            {
+                TitleBar = titleBar
+            };
+
+            // Listener for the Created event to get the native window
+            // as we need the position and size that Windows has set
+            window.Created += (sender, eventArgs) =>
+            {
+                var mauiWindow = sender as Window;
+                if (mauiWindow?.Handler?.PlatformView is Microsoft.UI.Xaml.Window nativeWindow)
+                {
+                    SuperMaximizeForWindows.Initialize(nativeWindow);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Failed to get native window for Super Maximize initialization.");
+                }
+            };
+#else
+            window = new Window(new MainPage()) { Title = winTitle };
+#endif
+        }
+        else
+            window = new Window(new MainPage()) { Title = winTitle };
 
         // Subscribe to the window's Destroying event.
         // This is the correct, robust lifecycle event to handle application shutdown logic.

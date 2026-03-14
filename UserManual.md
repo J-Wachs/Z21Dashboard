@@ -2,6 +2,7 @@
 
 # Table of Contents
 *   [Introduction](#introduction)
+    *   [New in version 1.20](#new-in-version-1.20)]
     *   [Why Z21Dashboard?](#why-z21dashboard)
     *   [A Bit About the Technology](#a-bit-about-the-technology)
 *   [The Z21 Family of Central Stations](#the-z21-family-of-central-stations)
@@ -9,6 +10,7 @@
     *   [z21/z21Start and Locked or Not](#z21z21start-and-locked-or-not)
 *   [First Time You Start](#first-time-you-start)
 *   [The Dashboard](#the-dashboard)
+    *   [Super Maximize the Dashboard](#super-maximize-the-dashboard)
     *   [Move Windows Around](#move-windows-around)
     *   [Customize Your Dashboard (Show/Hide Windows)](#customize-your-dashboard-showhide-windows)
     *   [The Most Important Windows Explained](#the-most-important-windows-explained)
@@ -26,6 +28,20 @@
 
 Welcome to Z21Dashboard. This guide helps you get started with using the program to monitor and control your model
 railway via your Roco/Fleischmann Z21 central station.
+
+## New in version 1.20
+
+* Z21Dashboard Settings has been renamed to Configuration
+* Configuration is now divided into tabs
+* Added a tab with settings for temperature scale and model train scale
+* Changes to the System Status and System Status – Complete widgets so that temperature is displayed in the selected temperature scale
+* New widget “Speed Measurement” for measuring the model train’s speed and converting it to full-scale speed
+* Added a “Super Maximize” button to the title bar of the dashboard’s main window to maximize the dashboard to full screen (across monitors)
+* Added an “Acknowledgements” button and dialog to the "About" widget to acknowledge the use of third-party libraries and tools in the development of Z21Dashboard
+* Added two additional locomotive controllers, bringing the total to four locomotive controllers
+* DashboardStateService now exposes an event that is triggered when settings are changed
+* Bug fix: The "RBus" widget did not request the initial state of the RBus
+* Bug fix: In the "Locomotive Control" widgets, the placeholder text for the service interval was not displayed correctly when the value was not set
 
 ## Why Z21Dashboard?
 
@@ -103,6 +119,24 @@ icon at the top right to see the overview with widgets. Here you can hide the wi
 
 The entire area under the 'Connection' window is your personal canvas. Here you can arrange the various information
 and control windows (widgets) exactly as you wish.
+
+## Super Maximize the Dashboard
+
+In the dashboard’s title bar, at the top left, there are four buttons:
+
+* Super Maximize
+* Minimize
+* Maximize
+* Close
+
+The last three are standard Windows buttons and behave as you would expect. The Super Maximize button maximizes the
+dashboard to full screen across all your monitors. When the dashboard window is super maximized, clicking the Super
+Maximize button again will restore it to the size and position it had before it was super maximized.
+
+If the dashboard window is super maximized when you close the application and you start the application again, the
+dashboard will start in super maximized mode. If you then want to return the window to its normal size, you must do
+so by dragging the edges of the window, since the Super Maximize button no longer knows the previous size of the
+window.
 
 ## Move Windows Around
 

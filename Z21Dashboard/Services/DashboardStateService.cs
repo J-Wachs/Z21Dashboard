@@ -109,6 +109,8 @@ public class DashboardStateService : IDashboardStateService
             // User selectable widgets
             new() { Name = SharedResources.LocoControl, Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoControl2, Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoControl3, Width = 300, ComponentType = typeof(LocoControl3), ComponentTypeName = typeof(LocoControl3).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoControl4, Width = 300, ComponentType = typeof(LocoControl4), ComponentTypeName = typeof(LocoControl4).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoListView, Width = 800, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoSlotView, Width = 800, ComponentType = typeof(LocoSlotView), ComponentTypeName = typeof(LocoSlotView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.PowerChart, Width = 800, ComponentType = typeof(PowerChart), ComponentTypeName = typeof(PowerChart).AssemblyQualifiedName ?? string.Empty },
