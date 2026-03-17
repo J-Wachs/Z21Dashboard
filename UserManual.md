@@ -2,8 +2,9 @@
 
 # Table of Contents
 *   [Introduction](#introduction)
-    *   [New in version 1.20](#new-in-version-1.20)]
+    *   [New in version 1.20](#new-in-version-1.20)
     *   [Why Z21Dashboard?](#why-z21dashboard)
+    *   [Target Audience for the Application](#target-audience-for-the-application)
     *   [A Bit About the Technology](#a-bit-about-the-technology)
 *   [The Z21 Family of Central Stations](#the-z21-family-of-central-stations)
     *   [Use of Protocol](#use-of-protocol)
@@ -17,6 +18,7 @@
 * [Known issues](#known-issues)
     * [Z21Dashboard is run in a virtual Windows machine in Virtualbox, but some widgets are not displayed correctly](#z21dashboard-is-run-in-a-virtual-windows-machine-in-virtualbox-but-some-widgets-are-not-displayed-correctly)]
 *   [FAQ](#faq)
+    *   [When I call the QueryForZ21s method, my Z21 is not shown](#when-i-call-the-queryforz21s-method-my-z21-is-not-shown)
     *   [What does 'Locked' mean?](#what-does-locked-mean)
     *   [Can names from my multiMAUS or Z21 app be transferred to Z21Dashboard?](#can-names-from-my-multimaus-or-z21-app-be-transferred-to-z21dashboard)
     *   [Z21Dashboard Cannot Connect to My Z21](#z21dashboard-cannot-connect-to-my-z21)
@@ -39,9 +41,10 @@ railway via your Roco/Fleischmann Z21 central station.
 * Added a “Super Maximize” button to the title bar of the dashboard’s main window to maximize the dashboard to full screen (across monitors)
 * Added an “Acknowledgements” button and dialog to the "About" widget to acknowledge the use of third-party libraries and tools in the development of Z21Dashboard
 * Added two additional locomotive controllers, bringing the total to four locomotive controllers
-* DashboardStateService now exposes an event that is triggered when settings are changed
-* Bug fix: The "RBus" widget did not request the initial state of the RBus
-* Bug fix: In the "Locomotive Control" widgets, the placeholder text for the service interval was not displayed correctly when the value was not set
+
+Bug fixes:
+* The "RBus" widget did not request the initial state of the RBus
+* In the "Locomotive Control" widgets, the placeholder text for the service interval was not displayed correctly when the value was not set
 
 ## Why Z21Dashboard?
 
@@ -49,6 +52,19 @@ Z21Dashboard started as a 'just for fun project'. I am an IT-developer, and I th
 program for my z21Start so I could see which locomotives and turnouts I was controlling on my layout.
 
 Then came all the ideas, and Z21Dashboard was born.
+
+## Target Audience for the Application
+
+There are two target groups for Z21Dashboard:
+
+* The model train enthusiast who wants an overview not provided by multiMAUS,
+  wlanMAUS, or the official Z21 app, but does not want a more complex solution
+  such as software for automating model railway operations.
+* The model train enthusiast who, in addition to the above, wants to develop
+  software for the Z21, and can therefore draw inspiration from Z21Dashboard or
+  use it as a starting point for a new application. One goal could be to expand
+  with CAN-bus and LocoNet functionality for Z21 (black cabinet models) central
+  stations.
 
 ## A Bit About the Technology
 
@@ -263,7 +279,7 @@ The image below shows a section divided into blocks, where the blocks serve as s
 the *start* of block 2 to the *start* of block 3 is longer than the distance from the *start* of block 3 to the *start* of block 2.  
 The blocks do not need to be directly adjacent. In the setup shown, blocks B2 and B4 can be used as sensors.
 
-![Block example](./Blocks.png)
+![Block example](./TwoBlocks.png)
 
 **Important!**  
 The measurement works by registering when a sensor is **activated** (either a block occupied or a track contact/IR sensor triggered).  
@@ -286,6 +302,24 @@ This may be due to the "Pointing device" on the "System" tab in Virtualbox being
 it to "PS/2 Mouse" and try again.
 
 # FAQ
+
+## When I call the QueryForZ21s method, my Z21 is not shown
+
+The list returned by the method is empty, and no error is raised. You can still connect with Z21Client to your Z21
+central station (all models), send commands, and receive data. The method typically returns an empty list when the
+PC is connected to the network wirelessly.
+
+To discover Z21 devices on the network, QueryForZ21s sends a UDP broadcast that the Z21 central stations must respond
+to. Many access points and routers block UDP broadcasts, which may prevent your Z21 from receiving the broadcast and
+responding. It is also possible that your PC does not receive the response from the Z21.
+
+Check the configuration of your access point or router to see if there is a setting that blocks UDP broadcasts. If so,
+disable this setting. Some routers and access points also have a setting to block UDP broadcasts on the wireless
+network only. Other routers and access points do not expose such a setting but block UDP broadcasts on the wireless
+network by default.
+
+In that case, try connecting your PC to the network using a cable to see if that resolves the problem. If it does,
+it is likely that your access point or router blocks UDP broadcasts on the wireless network.
 
 ## What does 'Locked' mean?
 

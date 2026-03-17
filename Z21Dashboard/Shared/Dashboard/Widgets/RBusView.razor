@@ -51,7 +51,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Z21Client.RBusDataReceived += OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived += OnRBusDataReceived;
         await Z21Client.GetRBusDataAsync(0);
         await Task.Delay(100);
         await Z21Client.GetRBusDataAsync(1);
@@ -75,6 +75,6 @@
 
     public void Dispose()
     {
-        Z21Client.RBusDataReceived -= OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
     }
 }

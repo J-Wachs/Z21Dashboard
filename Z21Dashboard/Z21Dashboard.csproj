@@ -39,12 +39,12 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>

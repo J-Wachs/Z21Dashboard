@@ -9,7 +9,7 @@ namespace Z21Dashboard.Services;
 /// A singleton service that continuously tracks the operating time of locomotives in the background.
 /// It persists its own state using the IAppDataService.
 /// </summary>
-public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
+public partial class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
 {
     // This internal tracker holds both live state AND persistent time counters.
     private sealed record LocoTimeTracker
@@ -42,7 +42,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
     private readonly IZ21Client _z21Client;
     private readonly IAppDataService _appDataService;
     private readonly System.Timers.Timer _secondTimer;
-    private readonly object _locosLock = new();
+    private readonly Lock _locosLock = new();
     private readonly Dictionary<ushort, LocoTimeTracker> _trackedLocos = [];
     private const string AppDataKey = "OperatingTimes";
 
@@ -55,7 +55,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
 
         LoadDataAndRefresh();
 
-        _z21Client.LocoInfoReceived += OnLocoInfoReceived;
+        _z21Client.OnLocoInfoReceived += OnLocoInfoReceived;
 
         _secondTimer = new System.Timers.Timer(1000);
         _secondTimer.Elapsed += OnTimerTick;
@@ -67,11 +67,11 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
     {
         lock (_locosLock)
         {
-            return _trackedLocos.Values.Select(t => new TrackedLocoTime(
+            return [.. _trackedLocos.Values.Select(t => new TrackedLocoTime(
                 t.LocoAddress, t.CurrentSpeedStep, t.NativeSpeedSteps, t.SpeedSteps,
                 t.SpeedStepsNumeric, t.TotalOperatingSeconds, t.OperatingSecondsSinceService,
                 t.DisplayProtocol, t.Protocol, t.Direction, t.Functions, t.Timestamp
-            )).OrderBy(l => l.LocoAddress).ToList();
+            )).OrderBy(l => l.LocoAddress).ToList()];
         }
     }
 
@@ -150,7 +150,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
         var persistentData = _appDataService.GetData<List<PersistentLocoTime>>(AppDataKey);
         if (persistentData == null) return;
 
-        List<ushort> addressesToRefresh = new();
+        List<ushort> addressesToRefresh = [];
         lock (_locosLock)
         {
             foreach (var item in persistentData)
@@ -186,14 +186,14 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
         List<PersistentLocoTime> dataToSave;
         lock (_locosLock)
         {
-            dataToSave = _trackedLocos.Values.Select(t =>
+            dataToSave = [.. _trackedLocos.Values.Select(t =>
                 new PersistentLocoTime(
                     t.LocoAddress,
                     t.TotalOperatingSeconds,
                     t.OperatingSecondsSinceService,
                     t.Protocol,
                     t.NativeSpeedSteps
-                )).ToList();
+                ))];
         }
         _appDataService.SaveData(AppDataKey, dataToSave);
     }
@@ -201,7 +201,7 @@ public class LocoOperatingTimeService : ILocoOperatingTimeService, IDisposable
     public void Dispose()
     {
         SaveData();
-        _z21Client.LocoInfoReceived -= OnLocoInfoReceived;
+        _z21Client.OnLocoInfoReceived -= OnLocoInfoReceived;
         _secondTimer?.Stop();
         _secondTimer?.Dispose();
         GC.SuppressFinalize(this);

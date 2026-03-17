@@ -1,4 +1,4 @@
-﻿namespace Z21Status.Application.Interfaces;
+﻿namespace Z21Dashboard.Application.Interfaces;
 
 /// <summary>
 /// Defines a service for handling application documentation.

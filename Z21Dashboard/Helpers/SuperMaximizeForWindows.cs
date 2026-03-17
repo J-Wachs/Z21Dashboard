@@ -24,21 +24,17 @@ public static class SuperMaximizeForWindows
         public int Bottom;
     }
 
-    [DllImport("user32.dll")]
-    private static extern int GetSystemMetrics(int nIndex);
-
-    [DllImport("user32.dll")]
-    private static extern uint GetDpiForWindow(IntPtr hWnd);
-
     [DllImport("dwmapi.dll")]
     private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
 
     private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
-
+    private const int SM_CXSIZEFRAME = 32;
+    private const int SM_CXPADDEDBORDER = 92;
+    
     private static nint _windowHandle;
     private static AppWindow? _appWindow;
     private static RectInt32 _originalBounds;
-    private static RectInt32 superMaxBounds;
+    private static RectInt32 _superMaxBounds;
 
     /// <summary>
     /// Creates a new title bar with the specified title, subtitle, and a trailing button for toggling the super
@@ -98,7 +94,8 @@ public static class SuperMaximizeForWindows
     /// <returns></returns>
     public static RectInt32? GetSuperMaxBounds()
     {
-        if (_appWindow is null){
+        if (_appWindow is null)
+        {
             return null;
         }
 
@@ -126,31 +123,12 @@ public static class SuperMaximizeForWindows
         int offsetBottom = (_appWindow.Position.Y + _appWindow.Size.Height) - frame.Bottom;
 
         // The final bounds are calcualted and set
-        superMaxBounds = new RectInt32(screenVirtualSpace.X - offsetLeft,
+        _superMaxBounds = new RectInt32(screenVirtualSpace.X - offsetLeft,
             screenVirtualSpace.Y - offsetTop,
             screenVirtualSpace.Width + offsetLeft + offsetRight,
             screenVirtualSpace.Height + offsetTop + offsetBottom);
 
-        return superMaxBounds;
-    }
-
-    /// <summary>
-    /// Sets the internal super maximum bounds to the current value returned by GetSuperMaxBounds, if available.
-    /// </summary>
-    /// <remarks>The reason for this method is that 'Super Maximise' is not a build-in method in Windows, hence it must
-    /// be handled manually. By calling this metode the Super Maximize functionality will handle going back to 
-    /// 'normal' (Restored mode) as expected.
-    /// 
-    /// This method updates the internal super maximum bounds only if GetSuperMaxBounds returns a
-    /// non-null value. It does not throw exceptions if the value is null, and leaves the existing bounds unchanged in
-    /// that case.</remarks>
-    public static void SetInternalSuperMaxBounds()
-    {
-        var localSuperMaxBounds = GetSuperMaxBounds();
-        if (localSuperMaxBounds is not null)
-        {
-            superMaxBounds = (RectInt32)localSuperMaxBounds;
-        }
+        return _superMaxBounds;
     }
 
     /// <summary>
@@ -168,11 +146,16 @@ public static class SuperMaximizeForWindows
             return;
         }
 
+        // We call to set the SuperMaxBounds, as we do not know if the user has changed their monitor setup since the last
+        // time we calculated it, and we want to make sure we have the correct values before we check if we are currently
+        // super maximized or not.
+        _ = GetSuperMaxBounds();
+
         // Figure out if we are maximized or not
-        if (superMaxBounds.X != _appWindow.Position.X ||
-            superMaxBounds.Y != _appWindow.Position.Y ||
-            superMaxBounds.Width != _appWindow.Size.Width ||
-            superMaxBounds.Height != _appWindow.Size.Height)
+        if (_superMaxBounds.X != _appWindow.Position.X ||
+            _superMaxBounds.Y != _appWindow.Position.Y ||
+            _superMaxBounds.Width != _appWindow.Size.Width ||
+            _superMaxBounds.Height != _appWindow.Size.Height)
         {
             SuperMaximize();
         }
@@ -201,7 +184,7 @@ public static class SuperMaximizeForWindows
         var localSuperMaxBounds = GetSuperMaxBounds();
         if (localSuperMaxBounds is not null)
         {
-            superMaxBounds = (RectInt32)localSuperMaxBounds;
+            _superMaxBounds = (RectInt32)localSuperMaxBounds;
         }
         else
         {
@@ -209,7 +192,7 @@ public static class SuperMaximizeForWindows
         }
 
         // Move and resize the window
-        _appWindow.MoveAndResize(superMaxBounds);
+        _appWindow.MoveAndResize(_superMaxBounds);
     }
 
     /// <summary>
