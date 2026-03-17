@@ -117,10 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InfoText" xml:space="preserve">
-    <value>Vælg hvilke widgets der skal vises på dashboardet</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuller</value>
   </data>
-  <data name="NoWidgets" xml:space="preserve">
-    <value>Der blev ikke fundet nogen widgets til dashboardet</value>
+  <data name="cm" xml:space="preserve">
+    <value>cm</value>
+  </data>
+  <data name="cms" xml:space="preserve">
+    <value>cm/s</value>
+  </data>
+  <data name="Distance1To2" xml:space="preserve">
+    <value>Afstand fra start af sensor 1 til start af sensor 2, målt i</value>
+  </data>
+  <data name="Distance2To1" xml:space="preserve">
+    <value>Afstand fra start af sensor 2 til start af sensor 1, målt i</value>
+  </data>
+  <data name="EditSettingsForSpeedMeasure" xml:space="preserve">
+    <value>Indstillinger for hastighedsmåling</value>
+  </data>
+  <data name="ErrorDuplicateSensors" xml:space="preserve">
+    <value>Du har valgt den samme sensor som Sensor 1 og Sensor 2. Det er ikke tilladt.</value>
+  </data>
+  <data name="ErrorMinDistance" xml:space="preserve">
+    <value>Minimumslængden af en blok eller mellem to kontaktskinner skal være 10 cm/4 tommer.</value>
+  </data>
+  <data name="inch" xml:space="preserve">
+    <value>tommer</value>
+  </data>
+  <data name="ins" xml:space="preserve">
+    <value>tommer/s</value>
+  </data>
+  <data name="kmh" xml:space="preserve">
+    <value>km/t</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Modul</value>
+  </data>
+  <data name="mph" xml:space="preserve">
+    <value>m/t</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="PortLowercase" xml:space="preserve">
+    <value>port</value>
+  </data>
+  <data name="ReadGuideText" xml:space="preserve">
+    <value>For at opsætte sensorerne til at måle hastighed, læs venligst afsnittet om denne widget i brugervejledningen.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Gem</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Skala</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>sekunder</value>
+  </data>
+  <data name="Sensor1" xml:space="preserve">
+    <value>Sensor 1</value>
+  </data>
+  <data name="Sensor2" xml:space="preserve">
+    <value>Sensor 2</value>
+  </data>
+  <data name="TimeoutError" xml:space="preserve">
+    <value>Fik ikke signal fra den sensor der skal stoppe tidstagningen</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Hastighedsmåling</value>
   </data>
 </root>

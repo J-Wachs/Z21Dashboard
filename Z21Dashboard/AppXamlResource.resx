@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InfoText" xml:space="preserve">
-    <value>Select which components to display on the dashboard</value>
+  <data name="SuperMaxSubTitle" xml:space="preserve">
+    <value>Your layout, your overview</value>
   </data>
-  <data name="NoWidgets" xml:space="preserve">
-    <value>No configurable dashboard components were found</value>
+  <data name="SuperMaxToolTip" xml:space="preserve">
+    <value>Super Maximize the window</value>
   </data>
 </root>

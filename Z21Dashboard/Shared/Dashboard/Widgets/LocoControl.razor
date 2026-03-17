@@ -17,8 +17,10 @@
 @inject ILocoOperatingTimeService OperatingTimeService
 @inject IStringLocalizer<LocoControlResources> Localizer
 @implements IDisposable
-
-<DashboardWidget HeaderTitle="@Localizer["Title"]"
+@{
+    var headerTitle = Localizer["Title"] + " 1";
+}
+<DashboardWidget HeaderTitle="@headerTitle"
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront"
                  OnSettingsClick="OpenEditDialog">
@@ -32,14 +34,12 @@
         }
         else
         {
-            <!-- Address Input -->
             <div class="input-group mb-2">
                 <span class="input-group-text">@Localizer["Address"]</span>
                 <input type="number" class="form-control" placeholder="@Localizer["EnterAddress"]" @bind="_inputAddress" @oninput="OnAddressInput" />
                 <span class="input-group-text">@_locoName</span>
             </div>
 
-            <!-- Track Power Controls -->
             <div class="btn-group w-100 mb-3" role="group">
                 <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
                         @onclick="SetTrackPowerOn">
@@ -51,7 +51,6 @@
                 </button>
             </div>
 
-            <!-- Functions Display -->
             <div class="mb-3">
                 <div class="row g-1">
                     @for (int i = 0; i < _functionsToShow; i++)
@@ -75,13 +74,11 @@
                 </div>
             </div>
 
-            <!-- Direction Controls -->
             <div class="btn-group w-100 mb-3" role="group">
                 <button class="btn @(_direction is DrivingDirection.Forward ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Forward)">@Localizer["Forward"]</button>
                 <button class="btn @(_direction is DrivingDirection.Reverse ? "btn-primary" : "btn-outline-primary")" disabled="@_isLocked" @onclick="() => SetDirectionAsync(DrivingDirection.Reverse)">@Localizer["Reverse"]</button>
             </div>
 
-            <!-- Speed Control -->
             <div class="d-flex align-items-center" style="gap: 1rem;">
                 <span>@Localizer["Speed"]:</span>
                 <input type="range" class="form-control-range w-100" min="0" max="@_speedSteps" step="1" value="@_currentSpeed" disabled="@_isLocked" @oninput="OnSpeedChanged" />
@@ -91,54 +88,46 @@
     </Content>
 </DashboardWidget>
 
-@* -- Edit Dialog -- *@
-@if (_isDialogOpen)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditSettingsForLoco"] @(_selectedLocoForEdit?.Address)</h5>
-                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="locoNameInput" class="form-label">@Localizer["LocomotiveName"]:</label>
-                        <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="protocolSelect" class="form-label">@(Z21Client.Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
-                        <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
-                            @foreach (var option in _protocolOptions)
-                            {
-                                <option value="@option.Value" selected="@IsSelected(option)">@option.DisplayName</option>
-                            }
-                        </select>
-                    </div>
-                    <hr />
-                    <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
-                    <div class="mb-3">
-                        <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalHours"]:</label>
-                        <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="@Localizer["SIPlaceHolder"]" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="timeSinceService" class="form-label">@Localizer["LastService"]:</label>
-                        <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_timeSinceServiceSeconds)" readonly />
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
-                        <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkService"]</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
-                    <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
-                </div>
-            </div>
-        </div>
-    </div>
+@{
+    var modalTitle = @Localizer["EditSettingsForLoco"] + " " + _selectedLocoForEdit?.Address;
 }
+<DraggableModal IsOpen="_isDialogOpen"
+                Title="@modalTitle"
+                OnClose="CloseEditDialog">
+    <ChildContent>
+        <div class="mb-3">
+            <label for="locoNameInput" class="form-label">@Localizer["LocomotiveName"]:</label>
+            <input type="text" id="locoNameInput" class="form-control" @bind="_editableMetadata.Name" placeholder="@Localizer["InputPlaceHolder"]" />
+        </div>
+        <div class="mb-3">
+            <label for="protocolSelect" class="form-label">@(Z21Client.Z21Code?.LockState is Z21LockState.Locked ? Localizer["Protocol"] : Localizer["ProtoColAndSpeedSteps"])</label>
+            <select id="protocolSelect" class="form-select" @onchange="OnProtocolSelectionChanged">
+                @foreach (var option in _protocolOptions)
+                {
+                    <option value="@option.Value" selected="@IsSelected(option)">@option.DisplayName</option>
+                }
+            </select>
+        </div>
+        <hr />
+        <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
+        <div class="mb-3">
+            <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalHours"]:</label>
+            <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalHours" placeholder="@Localizer["SIPlaceHolder"]" />
+        </div>
+        <div class="mb-3">
+            <label for="timeSinceService" class="form-label">@Localizer["LastService"]:</label>
+            <input type="text" id="timeSinceService" class="form-control" value="@FormatOperatingTime(_timeSinceServiceSeconds)" readonly />
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
+            <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkService"]</label>
+        </div>
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
+        <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
+    </FooterContent>
+</DraggableModal>
 
 
 @code {
@@ -178,9 +167,9 @@
 
     protected override void OnInitialized()
     {
-        Z21Client.LocoInfoReceived += OnLocoInfoReceived;
-        Z21Client.TrackPowerInfoReceived += OnTrackPowerInfoReceived;
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.OnLocoInfoReceived += OnLocoInfoReceived;
+        Z21Client.OnTrackPowerInfoReceived += OnTrackPowerInfoReceived;
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
         LocoMetadataService.OnMetadataUpdated += OnMetadataUpdated;
         _ = Z21Client.GetZ21CodeAsync();
         _ = Z21Client.GetSystemStateAsync();
@@ -231,7 +220,7 @@
 
     private async void OnSystemStateChanged(object? sender, SystemState e)
     {
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
         await InvokeAsync(StateHasChanged);
     }
@@ -436,9 +425,9 @@
 
     public void Dispose()
     {
-        Z21Client.LocoInfoReceived -= OnLocoInfoReceived;
-        Z21Client.TrackPowerInfoReceived -= OnTrackPowerInfoReceived;
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnLocoInfoReceived -= OnLocoInfoReceived;
+        Z21Client.OnTrackPowerInfoReceived -= OnTrackPowerInfoReceived;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         LocoMetadataService.OnMetadataUpdated -= OnMetadataUpdated;
     }
 }

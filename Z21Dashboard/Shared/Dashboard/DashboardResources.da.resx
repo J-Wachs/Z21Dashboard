@@ -120,10 +120,10 @@
   <data name="Close" xml:space="preserve">
     <value>Luk</value>
   </data>
-  <data name="EditDashboardSettings" xml:space="preserve">
-    <value>Redigér dashboard indstillinger</value>
+  <data name="EditDashboardConfig" xml:space="preserve">
+    <value>Redigér dashboard konfiguration</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Dashboard indstillinger</value>
+  <data name="Config" xml:space="preserve">
+    <value>Dashboard konfiguration</value>
   </data>
 </root>

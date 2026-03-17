@@ -19,7 +19,7 @@ namespace Z21Dashboard.Shared.Dashboard {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class DashboardResources {
@@ -70,20 +70,20 @@ namespace Z21Dashboard.Shared.Dashboard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit dashboard settings.
+        ///   Looks up a localized string similar to Dashboard config.
         /// </summary>
-        internal static string EditDashboardSettings {
+        internal static string Config {
             get {
-                return ResourceManager.GetString("EditDashboardSettings", resourceCulture);
+                return ResourceManager.GetString("Config", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dashboard settings.
+        ///   Looks up a localized string similar to Edit dashboard configuration.
         /// </summary>
-        internal static string Settings {
+        internal static string EditDashboardConfig {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("EditDashboardConfig", resourceCulture);
             }
         }
     }

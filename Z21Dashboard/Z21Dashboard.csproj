@@ -39,12 +39,12 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -84,6 +84,16 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>SharedResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="AppXamlResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AppXamlResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Dashboard\Components\DraggableModalResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DraggableModalResource.resx</DependentUpon>
+      </Compile>
       <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -94,10 +104,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ConnectionResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.Designer.cs">
+      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>DashboardSettingsResources.resx</DependentUpon>
+        <DependentUpon>DashboardConfigResources.resx</DependentUpon>
       </Compile>
       <Compile Update="Shared\Dashboard\Components\DashboardWidgetResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -118,11 +128,6 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SpeedBarResources.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoControl2Resources.Designer.cs">
-        <DependentUpon>LocoControl2Resources.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
       </Compile>
       <Compile Update="Shared\Dashboard\Widgets\LocoControlResources.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -159,6 +164,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ShowLogViewResources.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shared\Dashboard\Widgets\SpeedMeasureResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SpeedMeasureResources.resx</DependentUpon>
+      </Compile>
       <Compile Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -186,6 +196,14 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="AppXamlResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>AppXamlResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Components\DraggableModalResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DraggableModalResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
@@ -194,9 +212,9 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>ConnectionResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardSettingsResources.resx">
+      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>DashboardSettingsResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>DashboardConfigResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWidgetResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -213,10 +231,6 @@
       <EmbeddedResource Update="Shared\Dashboard\Components\SpeedBarResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SpeedBarResources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControl2Resources.resx">
-        <LastGenOutput>LocoControl2Resources.Designer.cs</LastGenOutput>
-        <Generator>ResXFileCodeGenerator</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControlResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
@@ -245,6 +259,10 @@
       <EmbeddedResource Update="Shared\Dashboard\Widgets\ShowLogViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ShowLogViewResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Dashboard\Widgets\SpeedMeasureResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SpeedMeasureResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

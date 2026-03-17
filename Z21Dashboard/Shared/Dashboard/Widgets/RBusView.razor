@@ -9,8 +9,8 @@
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
-@inject IZ21Client Z21Client
 @inject IStringLocalizer<RBusViewResources> Localizer
+@inject IZ21Client Z21Client
 @implements IDisposable
 
 <DashboardWidget HeaderTitle="@Localizer["Title"]"
@@ -49,9 +49,12 @@
 
     private Dictionary<int, RBusData> rBusDataGroups = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Z21Client.RBusDataReceived += OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived += OnRBusDataReceived;
+        await Z21Client.GetRBusDataAsync(0);
+        await Task.Delay(100);
+        await Z21Client.GetRBusDataAsync(1);
     }
 
     private async void OnRBusDataReceived(object? sender, RBusData e)
@@ -72,6 +75,6 @@
 
     public void Dispose()
     {
-        Z21Client.RBusDataReceived -= OnRBusDataReceived;
+        Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
     }
 }

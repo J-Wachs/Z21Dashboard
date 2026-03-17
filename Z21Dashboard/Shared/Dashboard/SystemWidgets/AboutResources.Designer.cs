@@ -61,11 +61,47 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Acknowledgements.
+        /// </summary>
+        internal static string Acknowledgements {
+            get {
+                return ResourceManager.GetString("Acknowledgements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application makes use of the following third party products:.
+        /// </summary>
+        internal static string AckText {
+            get {
+                return ResourceManager.GetString("AckText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard for your z21, z21Start, Z21 or Z21 XL central station from Roco.
         /// </summary>
         internal static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The font.
+        /// </summary>
+        internal static string TheFont {
+            get {
+                return ResourceManager.GetString("TheFont", resourceCulture);
             }
         }
         

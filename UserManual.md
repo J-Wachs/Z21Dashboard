@@ -2,19 +2,23 @@
 
 # Table of Contents
 *   [Introduction](#introduction)
+    *   [New in version 1.20](#new-in-version-1.20)
     *   [Why Z21Dashboard?](#why-z21dashboard)
+    *   [Target Audience for the Application](#target-audience-for-the-application)
     *   [A Bit About the Technology](#a-bit-about-the-technology)
 *   [The Z21 Family of Central Stations](#the-z21-family-of-central-stations)
     *   [Use of Protocol](#use-of-protocol)
     *   [z21/z21Start and Locked or Not](#z21z21start-and-locked-or-not)
 *   [First Time You Start](#first-time-you-start)
 *   [The Dashboard](#the-dashboard)
+    *   [Super Maximize the Dashboard](#super-maximize-the-dashboard)
     *   [Move Windows Around](#move-windows-around)
     *   [Customize Your Dashboard (Show/Hide Windows)](#customize-your-dashboard-showhide-windows)
     *   [The Most Important Windows Explained](#the-most-important-windows-explained)
 * [Known issues](#known-issues)
     * [Z21Dashboard is run in a virtual Windows machine in Virtualbox, but some widgets are not displayed correctly](#z21dashboard-is-run-in-a-virtual-windows-machine-in-virtualbox-but-some-widgets-are-not-displayed-correctly)]
 *   [FAQ](#faq)
+    *   [When I call the QueryForZ21s method, my Z21 is not shown](#when-i-call-the-queryforz21s-method-my-z21-is-not-shown)
     *   [What does 'Locked' mean?](#what-does-locked-mean)
     *   [Can names from my multiMAUS or Z21 app be transferred to Z21Dashboard?](#can-names-from-my-multimaus-or-z21-app-be-transferred-to-z21dashboard)
     *   [Z21Dashboard Cannot Connect to My Z21](#z21dashboard-cannot-connect-to-my-z21)
@@ -27,12 +31,40 @@
 Welcome to Z21Dashboard. This guide helps you get started with using the program to monitor and control your model
 railway via your Roco/Fleischmann Z21 central station.
 
+## New in version 1.20
+
+* Z21Dashboard Settings has been renamed to Configuration
+* Configuration is now divided into tabs
+* Added a tab with settings for temperature scale and model train scale
+* Changes to the System Status and System Status – Complete widgets so that temperature is displayed in the selected temperature scale
+* New widget “Speed Measurement” for measuring the model train’s speed and converting it to full-scale speed
+* Added a “Super Maximize” button to the title bar of the dashboard’s main window to maximize the dashboard to full screen (across monitors)
+* Added an “Acknowledgements” button and dialog to the "About" widget to acknowledge the use of third-party libraries and tools in the development of Z21Dashboard
+* Added two additional locomotive controllers, bringing the total to four locomotive controllers
+
+Bug fixes:
+* The "RBus" widget did not request the initial state of the RBus
+* In the "Locomotive Control" widgets, the placeholder text for the service interval was not displayed correctly when the value was not set
+
 ## Why Z21Dashboard?
 
 Z21Dashboard started as a 'just for fun project'. I am an IT-developer, and I thought it would be fun to write a
 program for my z21Start so I could see which locomotives and turnouts I was controlling on my layout.
 
 Then came all the ideas, and Z21Dashboard was born.
+
+## Target Audience for the Application
+
+There are two target groups for Z21Dashboard:
+
+* The model train enthusiast who wants an overview not provided by multiMAUS,
+  wlanMAUS, or the official Z21 app, but does not want a more complex solution
+  such as software for automating model railway operations.
+* The model train enthusiast who, in addition to the above, wants to develop
+  software for the Z21, and can therefore draw inspiration from Z21Dashboard or
+  use it as a starting point for a new application. One goal could be to expand
+  with CAN-bus and LocoNet functionality for Z21 (black cabinet models) central
+  stations.
 
 ## A Bit About the Technology
 
@@ -103,6 +135,24 @@ icon at the top right to see the overview with widgets. Here you can hide the wi
 
 The entire area under the 'Connection' window is your personal canvas. Here you can arrange the various information
 and control windows (widgets) exactly as you wish.
+
+## Super Maximize the Dashboard
+
+In the dashboard’s title bar, at the top left, there are four buttons:
+
+* Super Maximize
+* Minimize
+* Maximize
+* Close
+
+The last three are standard Windows buttons and behave as you would expect. The Super Maximize button maximizes the
+dashboard to full screen across all your monitors. When the dashboard window is super maximized, clicking the Super
+Maximize button again will restore it to the size and position it had before it was super maximized.
+
+If the dashboard window is super maximized when you close the application and you start the application again, the
+dashboard will start in super maximized mode. If you then want to return the window to its normal size, you must do
+so by dragging the edges of the window, since the Super Maximize button no longer knows the previous size of the
+window.
 
 ## Move Windows Around
 
@@ -191,7 +241,6 @@ connects to your Z21, the counting of runtime continues.
 Runtime counts when the speed is different from 0.
 
 ### Turnouts
-
 This window shows the turnouts where you have changed their position with your multiMAUS.
 Next to each turnout, a button for settings is shown. When you click on it, a popup dialogue opens that lets you
 choose which protocol should be used for the decoder in the turnout.
@@ -200,7 +249,6 @@ In the popup, you can choose between 'DCC' and 'MM' for Märklin Motorola. You c
 overview.
 
 ### Voltage and Current Overview
-
 This window shows a graph with two lines; one for voltage and one for current, so you can follow how it develops
 over time.
 
@@ -210,6 +258,39 @@ graph updates.
 Regardless of which interval you choose, Z21Dashboard receives updates continuously from the Z21 central station.
 The widget remembers the highest value received, and when the interval has 'expired', the highest value is written
 to the graph.
+
+### Speed Measurement
+This window measures the train's model speed and converts it to real-scale (1:1) speed. Both values are displayed simultaneously.
+
+To measure speed, you need sensors installed on your layout. Sensors can be implemented as blocks, track contacts, or IR sensors. Two sensors are selected to measure a train’s speed. In this widget's settings, choose the two sensors and specify the module and port on the R-Bus they are connected to.
+
+The speed is calculated by measuring the time it takes the train to travel a known distance, then converting  
+the time and distance to 1:1 scale speed based on your model train’s size. The model train’s size is configured in  
+the Z21Dashboard settings.
+
+The term *start* of a sensor refers to the beginning of the sensor in the train’s direction of travel.
+
+Next, measure the distance between the *start* of sensor 1 and the *start* of sensor 2. Repeat the measurement in the opposite direction.  
+Regardless of whether the sensors are blocks, track contacts, or IR sensors, the distance between them may vary depending on the direction of travel.
+
+The distance entered, can have a max of 1 decimal, if the measuresystem is metric and 2 if the measure system is imperial.
+
+The image below shows a section divided into blocks, where the blocks serve as sensors. Note that the distance from  
+the *start* of block 2 to the *start* of block 3 is longer than the distance from the *start* of block 3 to the *start* of block 2.  
+The blocks do not need to be directly adjacent. In the setup shown, blocks B2 and B4 can be used as sensors.
+
+![Block example](./TwoBlocks.png)
+
+**Important!**  
+The measurement works by registering when a sensor is **activated** (either a block occupied or a track contact/IR sensor triggered).  
+The system cannot determine *which* train is passing. If sensors are positioned so that other trains can enter the section,  
+this may result in incorrect measurements.
+
+A timeout is built into the measurement. Once the first sensor is activated, the second sensor must be activated  
+within 10 minutes, or the measurement will be canceled.
+
+**Please note!**
+If you change the measure system in Windows while Z21Dashboard is running, you must shut it down in order apply the change in Z21Dashboard.
 
 # Known issues
 
@@ -221,6 +302,24 @@ This may be due to the "Pointing device" on the "System" tab in Virtualbox being
 it to "PS/2 Mouse" and try again.
 
 # FAQ
+
+## When I call the QueryForZ21s method, my Z21 is not shown
+
+The list returned by the method is empty, and no error is raised. You can still connect with Z21Client to your Z21
+central station (all models), send commands, and receive data. The method typically returns an empty list when the
+PC is connected to the network wirelessly.
+
+To discover Z21 devices on the network, QueryForZ21s sends a UDP broadcast that the Z21 central stations must respond
+to. Many access points and routers block UDP broadcasts, which may prevent your Z21 from receiving the broadcast and
+responding. It is also possible that your PC does not receive the response from the Z21.
+
+Check the configuration of your access point or router to see if there is a setting that blocks UDP broadcasts. If so,
+disable this setting. Some routers and access points also have a setting to block UDP broadcasts on the wireless
+network only. Other routers and access points do not expose such a setting but block UDP broadcasts on the wireless
+network by default.
+
+In that case, try connecting your PC to the network using a cable to see if that resolves the problem. If it does,
+it is likely that your access point or router blocks UDP broadcasts on the wireless network.
 
 ## What does 'Locked' mean?
 
@@ -237,7 +336,7 @@ To unlock your z21start, you need an unlock code from Roco (item number 10818 or
 
 Unfortunately, that is not possible.
 
-## Z21Dashboard Cannot Connect to My Z21
+## Z21Dashboard Cannot Connect to my Z21
 
 The obvious one: check that the IP address is entered correctly. Open a command prompt in Windows, and ping your
 Z21. If the ping does not get a reply, then there is a network problem you need to solve first.

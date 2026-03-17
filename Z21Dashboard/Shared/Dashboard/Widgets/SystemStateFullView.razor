@@ -11,6 +11,7 @@
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IZ21Client Z21Client
+@inject IDashboardStateService DashboardStateService
 @inject IStringLocalizer<SystemStateFullViewResources> Localizer
 @implements IDisposable
 
@@ -60,7 +61,7 @@
                             <td class="@_alertTemp text-nowrap">
                                 @if (_systemState is not null)
                                 {
-                                    <text>@_systemState?.TemperatureC °C</text>
+                                    <text>@GetTemperature()</text>
                                 }
                                 else
                                 {
@@ -145,10 +146,15 @@
     private string _alertTemp = string.Empty;
     private string _alertVolt = string.Empty;
 
+    private DashboardSettings? _dashboardSettings = null;
+
     protected override async Task OnInitializedAsync()
     {
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
         await Z21Client.GetSystemStateAsync();
+
+        _dashboardSettings = await DashboardStateService.GetSettings();
+        DashboardStateService.OnSettingsChanged += OnSettingsChanged;
     }
 
     private async void OnSystemStateChanged(object? sender, SystemState e)
@@ -160,6 +166,32 @@
 
         await InvokeAsync(StateHasChanged);
     }
+
+    private async void OnSettingsChanged(DashboardSettings dashbordSettings)
+    {
+        _dashboardSettings = dashbordSettings;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetTemperature()
+    {
+        string tempString;
+        if (_systemState is null)
+        {
+            tempString = "-";
+        }
+        else if (_dashboardSettings?.TemperatureScale is TemperatureScale.Fahrenheit)
+        {
+            tempString = (_systemState.TemperatureC * 9.0d / 5.0d + 32).ToString("F0");
+        }
+        else
+        {
+            tempString = _systemState.TemperatureC.ToString();
+        }
+
+        return $"{tempString} °{(_dashboardSettings?.TemperatureScale is TemperatureScale.Fahrenheit ? "F" : "C")}";
+    }
+
 
     private string MakeFixedLengthString(string text, int len)
     {
@@ -237,6 +269,7 @@
 
     public void Dispose()
     {
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
+        DashboardStateService.OnSettingsChanged -= OnSettingsChanged;
     }
 }

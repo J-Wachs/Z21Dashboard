@@ -1,4 +1,5 @@
 @*
+    TurnoutProtocolSelector.razor
     Component to select and set the turnout protocol mode for a given address.
     If no address is provided, the user can input one.
 *@
@@ -48,7 +49,7 @@
             </select>
         </div>
         <div class="btn-group w-100" role="group">
-            <button class="btn btn-success" onclick="@SetNewTurnoutModeAsync" disabled="@(_isLocked)">
+            <button class="btn btn-success" onclick="@SetNewTurnoutModeAsync" disabled="@(_isLocked)" aria-label="@Localizer["SetProtocol"]">
                 <span>@Localizer["SetProtocol"]</span>
             </button>
         </div>
@@ -89,7 +90,7 @@
         // Convert 1-based user address to 0-based protocol address
         var protocolAddress = (ushort)(_inputAddress - 1);
 
-        Z21Client.TurnoutModeReceived += OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived += OnTurnoutModeReceived;
 
         _turnoutModeTcs = new TaskCompletionSource<TurnoutModeStatus>();
         await Z21Client.GetTurnoutModeAsync(protocolAddress);
@@ -104,7 +105,7 @@
         }
 
         _isKeying = false;
-        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -171,7 +172,7 @@
 
     public ValueTask DisposeAsync()
     {
-        Z21Client.TurnoutModeReceived -= OnTurnoutModeReceived;
+        Z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
         _turnoutModeTcs?.TrySetCanceled();
         return ValueTask.CompletedTask;
     }

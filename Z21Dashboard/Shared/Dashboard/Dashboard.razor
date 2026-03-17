@@ -12,7 +12,6 @@
 @using Z21Dashboard.Shared.Dashboard.Components
 @using Z21Dashboard.Shared.Dashboard.SystemWidgets
 @using Z21Dashboard.Shared.Dashboard.Widgets
-@using Z21Status.Application.Interfaces
 @inject IZ21Client Z21Client
 @inject IStringLocalizer<DashboardResources> Localizer
 @inject IDocumentationService DocumentationService
@@ -30,8 +29,8 @@
         </svg>
     </button>
 
-    <button class="btn btn-lg btn-secondary" onclick="@OpenSettingsModal" title="@Localizer["Settings"]">
-        &#9881; <!-- Gear Icon -->
+    <button class="btn btn-lg btn-secondary" onclick="@OpenConfigModal" title="@Localizer["Config"]" aria-label="@Localizer["Config"]">
+        &#9881;
     </button>
 </div>
 
@@ -54,28 +53,18 @@
     </div>
 </div>
 
-<!-- Settings Modal -->
-@if (_isSettingsModalOpen)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditDashboardSettings"]</h5>
-                    <button type="button" class="btn-close" onclick="@CloseSettingsModal" aria-label="@Localizer["Close"]"></button>
-                </div>
-                <div class="modal-body">
-                    <DashboardSettings />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="@CloseSettingsModal">@Localizer["Close"]</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
+<DraggableModal IsOpen="_isConfigModalOpen"
+                Title="@Localizer["EditDashboardConfig"]"
+                Size="DraggableModal.ModalSize.Large"
+                Height="800px"
+                OnClose="CloseConfigModal">
+    <ChildContent>
+        <DashboardConfig />
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" onclick="@CloseConfigModal" aria-label="@Localizer["Close"]">@Localizer["Close"]</button>
+    </FooterContent>
+</DraggableModal>
 
 @code {
     private ConnectionState _connectionState = ConnectionState.Disconnected;
@@ -88,12 +77,11 @@
     // A computed property to apply a CSS class only during a drag operation.
     private string DragClass => _isDragging ? "no-select" : string.Empty;
 
-    // --- NEW: State for settings modal ---
-    private bool _isSettingsModalOpen = false;
+    // --- State for config modal ---
+    private bool _isConfigModalOpen = false;
 
     protected override void OnInitialized()
     {
-        // DashboardStateService.OnLayoutChanged += OnLayoutChanged;
         LoadVisibleComponents();
     }
 
@@ -216,15 +204,15 @@
         }
     }
 
-    private void OpenSettingsModal()
+    private void OpenConfigModal()
     {
-        _isSettingsModalOpen = true;
+        _isConfigModalOpen = true;
         StateHasChanged();
     }
 
-    private void CloseSettingsModal()
+    private void CloseConfigModal()
     {
-        _isSettingsModalOpen = false;
+        _isConfigModalOpen = false;
         StateHasChanged();
     }
 
@@ -259,13 +247,13 @@
 
     private void SubscribeToEvents()
     {
-        Z21Client.ConnectionStateChanged += OnConnectionStateChanged;
+        Z21Client.OnConnectionStateChanged += OnConnectionStateChanged;
         DashboardStateService.OnLayoutChanged += OnLayoutChanged;
     }
 
     private void UnsubscribeFromEvents()
     {
-        Z21Client.ConnectionStateChanged -= OnConnectionStateChanged;
+        Z21Client.OnConnectionStateChanged -= OnConnectionStateChanged;
         DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
     }
 

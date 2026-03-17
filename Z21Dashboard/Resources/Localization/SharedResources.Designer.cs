@@ -79,7 +79,7 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loco controller.
+        ///   Looks up a localized string similar to Loco controller 1.
         /// </summary>
         public static string LocoControl {
             get {
@@ -93,6 +93,24 @@ namespace Z21Dashboard.Resources.Localization {
         public static string LocoControl2 {
             get {
                 return ResourceManager.GetString("LocoControl2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loco controller 3.
+        /// </summary>
+        public static string LocoControl3 {
+            get {
+                return ResourceManager.GetString("LocoControl3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loco controller 4.
+        /// </summary>
+        public static string LocoControl4 {
+            get {
+                return ResourceManager.GetString("LocoControl4", resourceCulture);
             }
         }
         
@@ -147,6 +165,15 @@ namespace Z21Dashboard.Resources.Localization {
         public static string ShowLogView {
             get {
                 return ResourceManager.GetString("ShowLogView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed measurement.
+        /// </summary>
+        public static string SpeedMeasurement {
+            get {
+                return ResourceManager.GetString("SpeedMeasurement", resourceCulture);
             }
         }
         
