@@ -18,6 +18,8 @@ public class DashboardStateService : IDashboardStateService
 
     private RegionInfo? _regionInfo;
 
+    #region Exposed methods
+
     public DashboardStateService(IAppDataService appDataService)
     {
         var cultureInfo = CultureInfo.CurrentUICulture;
@@ -66,14 +68,8 @@ public class DashboardStateService : IDashboardStateService
     /// <inheritdoc  />
     public async Task<DashboardSettings> GetSettings()
     {
-        var settings = _appDataService.GetData<DashboardSettingsStorage>("DashboardSettings");
-        if (settings is null)
-        {
-            settings = new()
-            {
-                TemperatureScale = GetRegionTemperatureScale()
-            };
-        }
+        var settings = _appDataService.GetData<DashboardSettingsStorage>("DashboardSettings") ?? new() { TemperatureScale = GetRegionTemperatureScale() };
+
         DashboardSettings fullSettings = settings;
         fullSettings.UnitSystem = _regionInfo is null || _regionInfo.IsMetric ? MeasurementUnitSystem.Metric : MeasurementUnitSystem.Imperial;
         return fullSettings;
@@ -87,6 +83,7 @@ public class DashboardStateService : IDashboardStateService
         await Task.CompletedTask;
     }
 
+    #endregion Exposed methods
 
     /// <summary>
     /// Retrieves the default set of dashboard component definitions used to initialize the dashboard layout.
@@ -139,7 +136,7 @@ public class DashboardStateService : IDashboardStateService
         var storedState = _appDataService.GetData<List<DashboardComponentStorage>>(DashboardLayoutKey);
         var defaultDefinitions = GetDefaultComponentDefinitions();
 
-        if (storedState == null || storedState.Count == 0)
+        if (storedState is null || storedState.Count == 0)
         {
             // First run: Use default definitions, assign positions, and save.
             int yPos = 130;
@@ -170,9 +167,12 @@ public class DashboardStateService : IDashboardStateService
 
             foreach (var defaultComp in defaultDefinitions)
             {
-                var userComp = storedState.FirstOrDefault(s => s.ComponentTypeName == defaultComp.ComponentTypeName);
+                // We just want to test on the widget name, not the entire type name, as the version will
+                // change for each release.
+                var expectedTypePrefix = $"{defaultComp.ComponentType?.FullName},";
+                var userComp = storedState.FirstOrDefault(s => s.ComponentTypeName.StartsWith(expectedTypePrefix));
 
-                if (userComp != null)
+                if (userComp is not null)
                 {
                     // Component exists: merge properties.
                     mergedState.Add(new DashboardComponentState

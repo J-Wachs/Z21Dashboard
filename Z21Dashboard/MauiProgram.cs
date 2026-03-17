@@ -1,18 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.LifecycleEvents;
-using Z21Dashboard.Services;
-using BlazorLogComponent.Interfaces;
+﻿using BlazorLogComponent.Interfaces;
 using BlazorLogComponent.Services;
 using BlazorLogComponent.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 using Z21Client;
 using Z21Dashboard.Application.Interfaces;
-using Z21Dashboard.Application.Services;
-using Z21Status.Application.Interfaces;
-using Z21Status.Services;
-using WinRT.Interop;
 using Z21Dashboard.Helpers;
-
-
+using Z21Dashboard.Services;
+using WinRT.Interop;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -33,9 +28,8 @@ public static class MauiProgram
         // and there is no good reason to run more than one instance.
         //
         const string mutexName = "Z21Dashboard_SingleInstance_Mutex";
-        bool createdNew;
 
-        _mutex = new Mutex(true, mutexName, out createdNew);
+        _mutex = new Mutex(true, mutexName, out bool createdNew);
         if (!createdNew)
         {
             Environment.Exit(0);
@@ -99,19 +93,14 @@ public static class MauiProgram
                                 var width = Preferences.Get(KeyWidth, double.NaN);
                                 var height = Preferences.Get(KeyHeight, double.NaN);
 
-                                if (!double.IsNaN(left) && !double.IsNaN(top) &&
-                                !double.IsNaN(width) && !double.IsNaN(height))
+                                if (!double.IsNaN(left) &&
+                                    !double.IsNaN(top) &&
+                                    !double.IsNaN(width) &&
+                                    !double.IsNaN(height))
                                 {
-                                    var superMaxBounds = SuperMaximizeForWindows.GetSuperMaxBounds();
-                                    // If match between saved coordinates/size and superMaxBounds, we assume
-                                    // that the windows was super maximized at time of close.
-                                    if ((int)left == superMaxBounds.Value.X &&
-                                        (int)top == superMaxBounds.Value.Y &&
-                                        (int)width == superMaxBounds.Value.Width &&
-                                        (int)height == superMaxBounds.Value.Height)
-                                    {
-                                        SuperMaximizeForWindows.SetInternalSuperMaxBounds();
-                                    }
+                                    // We ignore the result, as it is not needed. The purpose is to get the 
+                                    // Super Maximize logic to calculate the correct bounds for the current monitor configuration.
+                                    _ = SuperMaximizeForWindows.GetSuperMaxBounds();
 
                                     presenter.Restore(); // ensure state is normal
                                     appWindow.MoveAndResize(new Windows.Graphics.RectInt32(

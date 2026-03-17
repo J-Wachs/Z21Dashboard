@@ -203,12 +203,12 @@
 
         if (shouldBeSubscribed && isSubscribed is false)
         {
-            Z21Client.RBusDataReceived += OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived += OnRBusDataReceived;
             isSubscribed = true;
         }
         else if (shouldBeSubscribed is false && isSubscribed)
         {
-            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
             isSubscribed = false;
         }
     }
@@ -420,7 +420,7 @@
     {
         if (isSubscribed)
         {
-            Z21Client.RBusDataReceived -= OnRBusDataReceived;
+            Z21Client.OnRBusDataReceived -= OnRBusDataReceived;
         }
         DashboardStateService.OnSettingsChanged -= OnDashboardSettingsUpdate;
         displayTimer?.Stop();

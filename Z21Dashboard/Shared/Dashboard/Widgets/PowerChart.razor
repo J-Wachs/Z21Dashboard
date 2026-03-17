@@ -92,7 +92,7 @@
             AppDataService.SaveData(DataCaptureIntervalKey, dataCaptureIntervalSeconds);
         }
 
-        Z21Client.SystemStateChanged += OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
         Z21Client.GetSystemStateAsync();
 
         _sampleTimer = new System.Timers.Timer(dataCaptureIntervalSeconds * 1000);
@@ -199,7 +199,7 @@
 
     public void Dispose()
     {
-        Z21Client.SystemStateChanged -= OnSystemStateChanged;
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
         _sampleTimer?.Stop();
         _sampleTimer?.Dispose();
     }

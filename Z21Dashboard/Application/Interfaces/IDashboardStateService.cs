@@ -44,27 +44,27 @@ public interface IDashboardStateService
     /// <summary>
     /// Gets a list of components that the user can select to show or hide on the dashboard.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>An ordered list of visible DashboardComponentState objects.</returns>
     List<DashboardComponentState> GetUserSelectableComponents();
 
     /// <summary>
     /// Toggles the visibility of a specific dashboard component.
     /// </summary>
     /// <param name="componentId">The unique ID of the component to toggle.</param>
-    /// <returns>A task that represents the asynchronous save operation.</returns>
+    /// <returns></returns>
     Task ToggleVisibility(Guid componentId);
 
     /// <summary>
     /// Updates and saves the entire dashboard layout, including positions and sizes.
     /// </summary>
     /// <param name="newLayout">A list representing the complete new layout of the dashboard.</param>
-    /// <returns>A task that represents the asynchronous save operation.</returns>
+    /// <returns></returns>
     Task UpdateLayout(List<DashboardComponentState> newLayout);
 
     /// <summary>
     /// Saves the specified dashboard settings to persistent storage.
     /// </summary>
     /// <param name="dashboardSettings">The dashboard settings to be saved. Cannot be null.</param>
-    /// <returns>A task that represents the asynchronous save operation.</returns>
+    /// <returns></returns>
     Task SaveSettings(DashboardSettingsStorage dashboardSettings);
 }
