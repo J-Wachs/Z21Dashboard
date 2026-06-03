@@ -174,4 +174,20 @@
   <data name="NoDevicesFound" xml:space="preserve">
     <value>No devices found</value>
   </data>
+  <data name="Z21New" xml:space="preserve">
+    <value>Z21 New</value>
+  </data>
+  <data name="Z21Old" xml:space="preserve">
+    <value>Z21</value>
+  </data>
+  <data name="z21Small" xml:space="preserve">
+    <value>z21</value>
+  </data>
+  <data name="z21Start" xml:space="preserve">
+    <value>z21 Start</value>
+  </data>
+  <data name="Z21XL" xml:space="preserve">
+    <value />
+    <comment>Z21 XL</comment>
+  </data>
 </root>

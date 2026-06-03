@@ -1,0 +1,63 @@
+﻿@*
+    Advanced.razor
+    The Advanced tab allows for programming loco decoders by groups of functionality such
+    as Motor, Analog etc.
+*@
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Shared.Dashboard.Components
+@inject IStringLocalizer<AdvancedResource> Localizer
+
+<p>@Localizer["Decoder"]: @(DecoderSettings.DecoderFile is not null ? $"{Path.GetFileNameWithoutExtension(DecoderSettings.DecoderFile)} ({GetDecoderLocation()})" : "-")</p>
+<DisplayMessages ErrorMessages="@_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_statusMessage" />
+
+<ProgTarget @bind-ProgTargetAddr="@ProgTargetAddr" />
+
+<CascadingValue Value="@ProgTargetAddr">
+    <CascadingValue Value="@DecoderSettings">
+        <TabControl OnNotifyStateChange="OnTimeToRefresh">
+            <TabPage Title="@Localizer["Locomotives"]">
+                <Locomotives @bind-ErrorMessages="@_errorMessages"
+                             @bind-WorkingMessage="@_workingMessage"
+                             @bind-SuccessMessage="@_statusMessage" />
+            </TabPage>
+            <TabPage Title="@Localizer["Identify"]">
+                <Identify @bind-ErrorMessages="@_errorMessages"
+                          @bind-WorkingMessage="@_workingMessage"
+                          @bind-SuccessMessage="@_statusMessage" />
+            </TabPage>
+            <TabPage Title="@Localizer["Address"]">
+                <Address @bind-ErrorMessages="@_errorMessages"
+                         @bind-WorkingMessage="@_workingMessage"
+                         @bind-SuccessMessage="@_statusMessage" />
+            </TabPage>
+        </TabControl>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [Parameter, EditorRequired]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    private ProgrammingTargetAddr ProgTargetAddr { get; set; } = new();
+
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _statusMessage;
+
+    private async Task OnTimeToRefresh()
+    {
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private string GetDecoderLocation()
+    {
+        if (DecoderSettings.DecoderFile is null)
+            return "?";
+
+        ProgTargetAddr.LocoAddress = DecoderSettings.GetLocoAddress();
+
+        return DecoderSettings.DecoderFileLocation is DecoderFileLocation.Application ? Localizer["SystemDef"] : Localizer["UserDef"];
+    }
+}

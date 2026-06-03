@@ -138,11 +138,16 @@ public static class MauiProgram
         // Register the service for opening documentation files.
         builder.Services.AddScoped<IDocumentationService, DocumentationService>();
 
+        // Services for decoder programming functionality.
+        builder.Services.AddScoped<IDecoderDefinitionService, DecoderDefinitionService>();
         builder.Services.AddScoped<IDecoderProgService, DecoderProgService>();
         builder.Services.AddScoped<IDecoderProgHelperService, DecoderProgHelperService>();
-
-        builder.Services.AddScoped<ISessionStorage, SimpleSessionStorage>();
+        builder.Services.AddScoped<IDecoderUIPageBuilder, DecoderUIPageBuilder>();
+        builder.Services.AddScoped<IFileAndFolderService, FileAndFolderService>();
+        builder.Services.AddScoped<ILanguageSupportService, LanguageSupportService>();
+        builder.Services.AddScoped<IManufacturerService, ManufacturerService>();
         builder.Services.AddScoped<INmraCvService, NmraCvService>();
+        builder.Services.AddScoped<ISessionStorage, SimpleSessionStorage>();
 
         // --- END: SERVICE REGISTRATION SECTION ---
 

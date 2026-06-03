@@ -121,7 +121,7 @@
     <value>CV-address</value>
   </data>
   <data name="CVRead" xml:space="preserve">
-    <value>CV read from decoder</value>
+    <value>CV-value read from decoder</value>
   </data>
   <data name="CVReading" xml:space="preserve">
     <value>Reading CV value from decoder</value>

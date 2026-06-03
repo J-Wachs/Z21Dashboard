@@ -117,11 +117,77 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorSavingDecoderDef" xml:space="preserve">
+    <value>Error saving decoder definition '{0}' to location '{1}'. Error: '{2}'</value>
+  </data>
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="BitOutOfRange" xml:space="preserve">
+    <value>Input bit {0} must not be in range '{1}' to '{2}'</value>
+  </data>
+  <data name="CannotDeserialize" xml:space="preserve">
+    <value>Cannot not understand the JSON content in the decoder definition file</value>
+  </data>
   <data name="Connection" xml:space="preserve">
     <value>Connection</value>
+  </data>
+  <data name="CV1718NoValue" xml:space="preserve">
+    <value>Returned CV17 or CV18 does not contain a value</value>
+  </data>
+  <data name="CvMetadataNotFound" xml:space="preserve">
+    <value>Information about cv-address {0} was not found. Operation aborted</value>
+  </data>
+  <data name="CvMetadataValueBitsMissing" xml:space="preserve">
+    <value>Information about ValueBits are missing for cv {0}</value>
+  </data>
+  <data name="CVSyncError" xml:space="preserve">
+    <value>Sync error: Requested CV {0}, received {1}</value>
+  </data>
+  <data name="CvValueOutsideRange" xml:space="preserve">
+    <value>The value '{0}' of cv {1} is outside the valid range '{2}' to '{3}'</value>
+  </data>
+  <data name="DecoderfileDoesNotExist" xml:space="preserve">
+    <value>The decoder definition file '{0}' does not exist</value>
+  </data>
+  <data name="DecoderFileNoCvDefinitions" xml:space="preserve">
+    <value>Decoder file '{0}' from '{1}' has no CV definitions</value>
+  </data>
+  <data name="ErrorLoadingDecoderDef" xml:space="preserve">
+    <value>Failed to load decoder definition for {0} from {1}. Error: '{2}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoderFile" xml:space="preserve">
+    <value>Error loading local decoder file '{0}'. Error: '{1}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoders" xml:space="preserve">
+    <value>Error during load of decoder file from local folder '{0}'</value>
+  </data>
+  <data name="ErrorLoadingNmraStandard" xml:space="preserve">
+    <value>Cannot load NMRA standard file</value>
+  </data>
+  <data name="ErrorReadingAppResource" xml:space="preserve">
+    <value>Error reading app resource: '{0}'. Error: '{1}'</value>
+  </data>
+  <data name="ErrorReadingDecoderFile" xml:space="preserve">
+    <value>Failed to load decoder definition for {0} from {1}. Error: '{2}'</value>
+  </data>
+  <data name="ErrorReadingFromDecoder" xml:space="preserve">
+    <value>Failed to read CV from decoder. Error: '{0}'</value>
+  </data>
+  <data name="ErrorWritingToDecoder" xml:space="preserve">
+    <value>Failed to write CV to decoder. Error: '{0}'</value>
+  </data>
+  <data name="FailedToRetrieveSystemStatus" xml:space="preserve">
+    <value>Failed to retrieve system state. Cannot proceed with POM CV reading</value>
+  </data>
+  <data name="LocalDecoderFolderNotFound" xml:space="preserve">
+    <value>Local folder for decoder files does not exist. The folder is '{0}'</value>
+  </data>
+  <data name="LocoAddressMustNotBeNull" xml:space="preserve">
+    <value>Loco address must not be 'null'</value>
+  </data>
+  <data name="LocoAddressOutOfRange" xml:space="preserve">
+    <value>The locomotive address must have a value betweeen 1 and {0} in order to communicate on the main track</value>
   </data>
   <data name="LocoControl" xml:space="preserve">
     <value>Loco controller</value>
@@ -135,17 +201,44 @@
   <data name="LocoSlotView" xml:space="preserve">
     <value>Locomotive slots</value>
   </data>
+  <data name="MissingPageId" xml:space="preserve">
+    <value>Cannot find page with id {0}</value>
+  </data>
+  <data name="MoreThanOneCV" xml:space="preserve">
+    <value>More than one CV value was returned from Z21</value>
+  </data>
+  <data name="NewLocoAddressOutOfRange" xml:space="preserve">
+    <value>New locomotive address must be between 1 and {0}</value>
+  </data>
+  <data name="NoCVValueNoError" xml:space="preserve">
+    <value>No CV values returned but no errors was reported</value>
+  </data>
+  <data name="NoPagesInDecoderFiles" xml:space="preserve">
+    <value>The selected decoder '{0}', file '{1}' from manufacturer '{2}', does not have any pages defined. Pages are needed</value>
+  </data>
+  <data name="PageTypeInDecoderFileUnknown" xml:space="preserve">
+    <value>In decoder file '{0}' is page '{1}' having type '{2}' defined. That type cannot be used in this application</value>
+  </data>
   <data name="PowerChart" xml:space="preserve">
     <value>Power and Voltage Monitor</value>
   </data>
   <data name="ProgrammingDecoder" xml:space="preserve">
     <value>Programming decoder</value>
   </data>
+  <data name="RailComMustBeTurnedOn" xml:space="preserve">
+    <value>RailCom must be enabled in Z21 and decoder in order to read CV values from POM</value>
+  </data>
   <data name="RailComView" xml:space="preserve">
     <value>RailCom data</value>
   </data>
   <data name="RBusView" xml:space="preserve">
     <value>R-Bus Feedback</value>
+  </data>
+  <data name="ReadRejected" xml:space="preserve">
+    <value>Read rejected. Reveived a 'NACK' message</value>
+  </data>
+  <data name="ShortCircuit" xml:space="preserve">
+    <value>Short circuit has been detected</value>
   </data>
   <data name="ShowLogView" xml:space="preserve">
     <value>Show Log</value>
@@ -174,10 +267,34 @@
   <data name="Text0005" xml:space="preserve">
     <value>Failed to open the user manual: {Message}</value>
   </data>
+  <data name="TimeoutDuringReadPOM" xml:space="preserve">
+    <value>Timeout during read of CV {0}. No response from decoder on main track</value>
+  </data>
+  <data name="TimeoutDuringReadProgTrack" xml:space="preserve">
+    <value>Timeout: No response for CV {0} on the programming track</value>
+  </data>
+  <data name="TimeoutDuringWrite" xml:space="preserve">
+    <value>Timeout during write. No response from decoder</value>
+  </data>
   <data name="TurnoutListView" xml:space="preserve">
     <value>Turnouts</value>
   </data>
   <data name="TurnoutProtocolSelector" xml:space="preserve">
     <value>Turnout protocol selector</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>(Unknown)</value>
+  </data>
+  <data name="UnknownProgTarget" xml:space="preserve">
+    <value>Unknown programming target</value>
+  </data>
+  <data name="ValueOutOfRange" xml:space="preserve">
+    <value>Value must be between '{0}' and '{1}'</value>
+  </data>
+  <data name="WriteRejected" xml:space="preserve">
+    <value>Write rejected. Reveived a 'NACK' message</value>
+  </data>
+  <data name="CannotSaveDecoderDef" xml:space="preserve">
+    <value>Cannot save decoder definition to application resources</value>
   </data>
 </root>

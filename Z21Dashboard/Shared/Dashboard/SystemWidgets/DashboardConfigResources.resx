@@ -156,4 +156,13 @@
   <data name="SettingsSavedMessage" xml:space="preserve">
     <value>Settings are saved.</value>
   </data>
+  <data name="LocalLocoDecoderFolder" xml:space="preserve">
+    <value>Localfolder for loco decoders</value>
+  </data>
+  <data name="LocalLocomotiveFolder" xml:space="preserve">
+    <value>Local folder for locomotives</value>
+  </data>
+  <data name="PathsCannotBeEqual" xml:space="preserve">
+    <value>The Decoder and Locomotive folders must not be the same</value>
+  </data>
 </root>

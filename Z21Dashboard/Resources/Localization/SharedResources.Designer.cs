@@ -70,11 +70,218 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input bit {0} must not be in range &apos;{1}&apos; to &apos;{2}&apos;.
+        /// </summary>
+        public static string BitOutOfRange {
+            get {
+                return ResourceManager.GetString("BitOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot not understand the JSON content in the decoder definition file.
+        /// </summary>
+        public static string CannotDeserialize {
+            get {
+                return ResourceManager.GetString("CannotDeserialize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot save decoder definition to application resources.
+        /// </summary>
+        public static string CannotSaveDecoderDef {
+            get {
+                return ResourceManager.GetString("CannotSaveDecoderDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection.
         /// </summary>
         public static string Connection {
             get {
                 return ResourceManager.GetString("Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Returned CV17 or CV18 does not contain a value.
+        /// </summary>
+        public static string CV1718NoValue {
+            get {
+                return ResourceManager.GetString("CV1718NoValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information about cv-address {0} was not found. Operation aborted.
+        /// </summary>
+        public static string CvMetadataNotFound {
+            get {
+                return ResourceManager.GetString("CvMetadataNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information about ValueBits are missing for cv {0}.
+        /// </summary>
+        public static string CvMetadataValueBitsMissing {
+            get {
+                return ResourceManager.GetString("CvMetadataValueBitsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sync error: Requested CV {0}, received {1}.
+        /// </summary>
+        public static string CVSyncError {
+            get {
+                return ResourceManager.GetString("CVSyncError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; of cv {1} is outside the valid range &apos;{2}&apos; to &apos;{3}&apos;.
+        /// </summary>
+        public static string CvValueOutsideRange {
+            get {
+                return ResourceManager.GetString("CvValueOutsideRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The decoder definition file &apos;{0}&apos; does not exist.
+        /// </summary>
+        public static string DecoderfileDoesNotExist {
+            get {
+                return ResourceManager.GetString("DecoderfileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decoder file &apos;{0}&apos; from &apos;{1}&apos; has no CV definitions.
+        /// </summary>
+        public static string DecoderFileNoCvDefinitions {
+            get {
+                return ResourceManager.GetString("DecoderFileNoCvDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load decoder definition for {0} from {1}. Error: &apos;{2}&apos;.
+        /// </summary>
+        public static string ErrorLoadingDecoderDef {
+            get {
+                return ResourceManager.GetString("ErrorLoadingDecoderDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading local decoder file &apos;{0}&apos;. Error: &apos;{1}&apos;.
+        /// </summary>
+        public static string ErrorLoadingLocalDecoderFile {
+            get {
+                return ResourceManager.GetString("ErrorLoadingLocalDecoderFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error during load of decoder file from local folder &apos;{0}&apos;.
+        /// </summary>
+        public static string ErrorLoadingLocalDecoders {
+            get {
+                return ResourceManager.GetString("ErrorLoadingLocalDecoders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load NMRA standard file.
+        /// </summary>
+        public static string ErrorLoadingNmraStandard {
+            get {
+                return ResourceManager.GetString("ErrorLoadingNmraStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error reading app resource: &apos;{0}&apos;. Error: &apos;{1}&apos;.
+        /// </summary>
+        public static string ErrorReadingAppResource {
+            get {
+                return ResourceManager.GetString("ErrorReadingAppResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load decoder definition for {0} from {1}. Error: &apos;{2}&apos;.
+        /// </summary>
+        public static string ErrorReadingDecoderFile {
+            get {
+                return ResourceManager.GetString("ErrorReadingDecoderFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to read CV from decoder. Error: &apos;{0}&apos;.
+        /// </summary>
+        public static string ErrorReadingFromDecoder {
+            get {
+                return ResourceManager.GetString("ErrorReadingFromDecoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving decoder definition &apos;{0}&apos; to location &apos;{1}&apos;. Error: &apos;{2}&apos;.
+        /// </summary>
+        public static string ErrorSavingDecoderDef {
+            get {
+                return ResourceManager.GetString("ErrorSavingDecoderDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to write CV to decoder. Error: &apos;{0}&apos;.
+        /// </summary>
+        public static string ErrorWritingToDecoder {
+            get {
+                return ResourceManager.GetString("ErrorWritingToDecoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to retrieve system state. Cannot proceed with POM CV reading.
+        /// </summary>
+        public static string FailedToRetrieveSystemStatus {
+            get {
+                return ResourceManager.GetString("FailedToRetrieveSystemStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local folder for decoder files does not exist. The folder is &apos;{0}&apos;.
+        /// </summary>
+        public static string LocalDecoderFolderNotFound {
+            get {
+                return ResourceManager.GetString("LocalDecoderFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loco address must not be &apos;null&apos;.
+        /// </summary>
+        public static string LocoAddressMustNotBeNull {
+            get {
+                return ResourceManager.GetString("LocoAddressMustNotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The locomotive address must have a value betweeen 1 and {0} in order to communicate on the main track.
+        /// </summary>
+        public static string LocoAddressOutOfRange {
+            get {
+                return ResourceManager.GetString("LocoAddressOutOfRange", resourceCulture);
             }
         }
         
@@ -115,6 +322,60 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find page with id {0}.
+        /// </summary>
+        public static string MissingPageId {
+            get {
+                return ResourceManager.GetString("MissingPageId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More than one CV value was returned from Z21.
+        /// </summary>
+        public static string MoreThanOneCV {
+            get {
+                return ResourceManager.GetString("MoreThanOneCV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New locomotive address must be between 1 and {0}.
+        /// </summary>
+        public static string NewLocoAddressOutOfRange {
+            get {
+                return ResourceManager.GetString("NewLocoAddressOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No CV values returned but no errors was reported.
+        /// </summary>
+        public static string NoCVValueNoError {
+            get {
+                return ResourceManager.GetString("NoCVValueNoError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected decoder &apos;{0}&apos;, file &apos;{1}&apos; from manufacturer &apos;{2}&apos;, does not have any pages defined. Pages are needed.
+        /// </summary>
+        public static string NoPagesInDecoderFiles {
+            get {
+                return ResourceManager.GetString("NoPagesInDecoderFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In decoder file &apos;{0}&apos; is page &apos;{1}&apos; having type &apos;{2}&apos; defined. That type cannot be used in this application.
+        /// </summary>
+        public static string PageTypeInDecoderFileUnknown {
+            get {
+                return ResourceManager.GetString("PageTypeInDecoderFileUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Power and Voltage Monitor.
         /// </summary>
         public static string PowerChart {
@@ -133,6 +394,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RailCom must be enabled in Z21 and decoder in order to read CV values from POM.
+        /// </summary>
+        public static string RailComMustBeTurnedOn {
+            get {
+                return ResourceManager.GetString("RailComMustBeTurnedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RailCom data.
         /// </summary>
         public static string RailComView {
@@ -147,6 +417,24 @@ namespace Z21Dashboard.Resources.Localization {
         public static string RBusView {
             get {
                 return ResourceManager.GetString("RBusView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read rejected. Reveived a &apos;NACK&apos; message.
+        /// </summary>
+        public static string ReadRejected {
+            get {
+                return ResourceManager.GetString("ReadRejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short circuit has been detected.
+        /// </summary>
+        public static string ShortCircuit {
+            get {
+                return ResourceManager.GetString("ShortCircuit", resourceCulture);
             }
         }
         
@@ -232,6 +520,33 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timeout during read of CV {0}. No response from decoder on main track.
+        /// </summary>
+        public static string TimeoutDuringReadPOM {
+            get {
+                return ResourceManager.GetString("TimeoutDuringReadPOM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout: No response for CV {0} on the programming track.
+        /// </summary>
+        public static string TimeoutDuringReadProgTrack {
+            get {
+                return ResourceManager.GetString("TimeoutDuringReadProgTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout during write. No response from decoder.
+        /// </summary>
+        public static string TimeoutDuringWrite {
+            get {
+                return ResourceManager.GetString("TimeoutDuringWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Turnouts.
         /// </summary>
         public static string TurnoutListView {
@@ -246,6 +561,42 @@ namespace Z21Dashboard.Resources.Localization {
         public static string TurnoutProtocolSelector {
             get {
                 return ResourceManager.GetString("TurnoutProtocolSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Unknown).
+        /// </summary>
+        public static string UnknownManufacturer {
+            get {
+                return ResourceManager.GetString("UnknownManufacturer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown programming target.
+        /// </summary>
+        public static string UnknownProgTarget {
+            get {
+                return ResourceManager.GetString("UnknownProgTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value must be between &apos;{0}&apos; and &apos;{1}&apos;.
+        /// </summary>
+        public static string ValueOutOfRange {
+            get {
+                return ResourceManager.GetString("ValueOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write rejected. Reveived a &apos;NACK&apos; message.
+        /// </summary>
+        public static string WriteRejected {
+            get {
+                return ResourceManager.GetString("WriteRejected", resourceCulture);
             }
         }
     }

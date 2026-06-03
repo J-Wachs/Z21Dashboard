@@ -61,7 +61,7 @@ namespace Z21Dashboard.Shared.Dashboard.Components {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (The value is not to be changed).
+        ///   Looks up a localized string similar to (Do not change the value).
         /// </summary>
         internal static string NoChange {
             get {

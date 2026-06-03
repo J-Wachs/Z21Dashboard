@@ -61,15 +61,6 @@ namespace Z21Dashboard.Shared.Dashboard.Widgets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loco address.
-        /// </summary>
-        internal static string Address {
-            get {
-                return ResourceManager.GetString("Address", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         internal static string AdvProg {

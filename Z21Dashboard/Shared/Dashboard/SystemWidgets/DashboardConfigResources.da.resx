@@ -156,4 +156,13 @@
   <data name="SettingsSavedMessage" xml:space="preserve">
     <value>Indstillinger er gemt.</value>
   </data>
+  <data name="LocalLocoDecoderFolder" xml:space="preserve">
+    <value>Lokal folder for lokomotivdekodere</value>
+  </data>
+  <data name="LocalLocomotiveFolder" xml:space="preserve">
+    <value>Lokal folder for lokomotiver</value>
+  </data>
+  <data name="PathsCannotBeEqual" xml:space="preserve">
+    <value>Dekoder og Lokomotiv folderne må ikke være den samme</value>
+  </data>
 </root>

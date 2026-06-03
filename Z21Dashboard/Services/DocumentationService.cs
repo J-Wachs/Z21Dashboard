@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
+using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Resources.Localization;
 using Z21Status.Application.Interfaces;
 
@@ -11,27 +11,18 @@ namespace Z21Status.Services;
 /// Implements the service for handling application documentation.
 /// This version opens PDF files located in a 'Docs' folder next to the application executable.
 /// </summary>
-public class DocumentationService : IDocumentationService
+public class DocumentationService(
+    ILanguageSupportService languageSupportService,
+    ILogger<DocumentationService> logger
+    ) : IDocumentationService
 {
-    private readonly ILogger<DocumentationService> _logger;
-
-    public DocumentationService(ILogger<DocumentationService> logger)
-    {
-        _logger = logger;
-    }
-
     /// <inheritdoc/>
-    public Task OpenManualAsync()
+    public async Task OpenManualAsync()
     {
         try
         {
             // 1. Determine the language and select the correct file name.
-            string cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            string manualFileName = cultureName.Equals("da", StringComparison.OrdinalIgnoreCase)
-                ? "UserManual_da.pdf"
-                : "UserManual.pdf"; // English is the fallback.
-
-            //_logger.LogInformation("Attempting to open manual. Selected file: {FileName}", manualFileName);
+            string manualFileName = $"UserManual_{languageSupportService.GetLanguageCode()}.pdf";
 
             // 2. Get the directory of the currently executing application.
             string exePath = Assembly.GetExecutingAssembly().Location;
@@ -40,8 +31,8 @@ public class DocumentationService : IDocumentationService
             if (string.IsNullOrEmpty(exeDir))
             {
                 // "Attempting to open manual. Selected file: {FileName}"
-                _logger.LogError(SharedResources.Text0003, manualFileName);
-                return Task.CompletedTask;
+                logger.LogError(SharedResources.Text0003, manualFileName);
+                return;
             }
 
             // 3. Construct the full path to the PDF file inside the 'Docs' subfolder.
@@ -50,9 +41,9 @@ public class DocumentationService : IDocumentationService
             if (!File.Exists(filePath))
             {
                 // "Manual file not found at path: {FilePath}"
-                _logger.LogError(SharedResources.Text0004, filePath);
+                logger.LogError(SharedResources.Text0004, filePath);
                 // Optionally, you could try to open the fallback English manual here if the Danish one is missing.
-                return Task.CompletedTask;
+                return;
             }
 
             // 4. Use Process.Start to open the file with the default system application.
@@ -65,10 +56,10 @@ public class DocumentationService : IDocumentationService
         catch (Exception ex)
         {
             // "Failed to open the user manual: {ex}"
-            _logger.LogError(SharedResources.Text0005, ex.Message);
+            logger.LogError(SharedResources.Text0005, ex.Message);
         }
 
-        return Task.CompletedTask;
+        return;
     }
 }
 

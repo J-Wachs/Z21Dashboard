@@ -1,14 +1,18 @@
+@*
+    Simple.razor
+    A simple form for reading and writing CV values to decoders, using either POM or programming track.
+    It is intended for users who just want to read or write a single CV value, and do not need the more
+    advanced features of the main programming decoder page.
+*@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using System.ComponentModel.DataAnnotations
-@using System.Globalization
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Infrastructure
 @using Z21Dashboard.Resources.Localization
-@using Z21Dashboard.Services
 @inject IStringLocalizer<SimpleResource> Localizer
 @inject IDecoderProgHelperService DecoderProgHelperService
 @inject INmraCvService NmraCvService
@@ -125,7 +129,7 @@
 
             <div class="row">
                 <div class="col-12 d-flex justify-content-end gap-2">
-                    <button type="submit" class="btn btn-secondary" disabled="@_buttonsDisabled"
+                    <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
                             @onclick="@(() => _buttonPressed = ButtonPressed.Write)" aria-label="WriteCV">
                         @Localizer["WriteToLocoDecoder"]
                     </button>
@@ -151,7 +155,6 @@
     private EditContext? _editContext;
     private ManualCVInput? _manualCVInputModel { get; set; }
     private bool _buttonsDisabled = true;
-    //private DccStandard? _dccStandard;
     private bool _isLoading = false;
     private string _cvName = string.Empty;
     private string _cvDescription = string.Empty;
@@ -162,9 +165,9 @@
     // The variables are updated on input events, and allow to test field contents
     // 'live'. This is used to enable/disable the buttons.
     private ProgrammingTarget _progTarget = ProgrammingTarget.POM;
-    private ushort _locoAddress = 0;
-    private ushort _cvAddress = 0;
-    private ushort _cvValue = 0;
+    private short _locoAddress = 0;
+    private short _cvAddress = 0;
+    private short _cvValue = 0;
 
     // Model for the manual CV input form
     private class ManualCVInput
@@ -179,7 +182,6 @@
         [Range(0, 255, ErrorMessageResourceType = typeof(ValidationErrorMessages), ErrorMessageResourceName = "CVValueInvalid")]
         public Int16 CVValue { get; set; }
     }
-
 
     // Keep track of which button was pressed (Write or Read).
     private ButtonPressed _buttonPressed = ButtonPressed.None;
@@ -202,21 +204,21 @@
             _progTarget = progTarget.Value;
         }
 
-        var locoAddress = SessionStorage.GetUshort("ProgrammingDecoder-LocoAddress");
+        var locoAddress = SessionStorage.GetShort("ProgrammingDecoder-LocoAddress");
         if (locoAddress is not null)
         {
             _manualCVInputModel.LocoAddress = (short)locoAddress.Value;
             _locoAddress = locoAddress.Value;
         }
 
-        var cvAddress = SessionStorage.GetUshort("ProgrammingDecoderSimple-CVAddress");
+        var cvAddress = SessionStorage.GetShort("ProgrammingDecoderSimple-CVAddress");
         if (cvAddress is not null)
         {
             _manualCVInputModel.CV = (short)cvAddress.Value;
             _cvAddress = cvAddress.Value;
         }
 
-        var cvValue = SessionStorage.GetUshort("ProgrammingDecoderSimple-CVValue");
+        var cvValue = SessionStorage.GetShort("ProgrammingDecoderSimple-CVValue");
         if (cvValue is not null)
         {
             _manualCVInputModel.CVValue = (short)cvValue.Value;
@@ -294,7 +296,7 @@
             // The valid range for this field.
             if (newVal >= 0 && newVal <= 255)
             {
-                _cvValue = (ushort)newVal;
+                _cvValue = newVal;
             }
         }
         else
@@ -346,7 +348,7 @@
         {
             if (newVal is >= 0 and <= (short)Limits.HighestLongAddress)
             {
-                _locoAddress = (ushort)newVal;
+                _locoAddress = newVal;
             }
         }
 
@@ -387,18 +389,25 @@
 
             if (result.IsSuccess)
             {
-                _manualCVInputModel.CVValue = result.CvValues is null || result.CvValues.Count == 0 ? (short)0 : result.CvValues.FirstOrDefault()!.Value;
-                _cvValue = (ushort)_manualCVInputModel.CVValue;
+                _manualCVInputModel.CVValue = result.Data is null || result.Data!.Count == 0 ? (short)0 : result.Data!.FirstOrDefault()!.Value;
+                _cvValue = _manualCVInputModel.CVValue;
                 _successMessage = Localizer["CVRead"];
+
                 // Unfortnually the event for fields change in the model, is only triggered when the user
                 // enteres a value, not when it is assigned as above. Hence, I have to call the save to session storage here:
-                SessionStorage.SetUshort("ProgrammingDecoderSimple-CVValue", (ushort?)(_cvValue));
+                SessionStorage.SetShort("ProgrammingDecoderSimple-CVValue", _cvValue);
             }
             else
             {
-                if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+                if (result.Messages.Count > 0)
                 {
-                    _errorMessages.Add(result.ErrorMessage);
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        foreach (var message in fileMessages.Messages)
+                        {
+                            _errorMessages.Add(message);
+                        }
+                    }
                 }
             }
         }
@@ -433,9 +442,15 @@
             }
             else
             {
-                if (string.IsNullOrEmpty(result.ErrorMessage) is false)
+                if (result.Messages.Count > 0)
                 {
-                    _errorMessages.Add(result.ErrorMessage);
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        foreach (var message in fileMessages.Messages)
+                        {
+                            _errorMessages.Add(message);
+                        }
+                    }
                 }
             }
         }
@@ -454,17 +469,16 @@
         {
             if (cvNumber is >= 0 and <= 1024)
             {
-                _cvAddress = (ushort)cvNumber;
-                (_cvName, _cvDescription) = await NmraCvService.GetCVNameAndDescription(_cvAddress);
-                //cvDescription = await NmraCvService.GetCVDescription(_cvAddress);
-                _bitDesc[0] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Zero);
-                _bitDesc[1] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.One);
-                _bitDesc[2] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Two);
-                _bitDesc[3] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Three);
-                _bitDesc[4] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Four);
-                _bitDesc[5] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Five);
-                _bitDesc[6] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Six);
-                _bitDesc[7] = await NmraCvService.GetCVBitDescription(_cvAddress, Bits.Seven);
+                _cvAddress = cvNumber;
+                (_cvName, _cvDescription) = await NmraCvService.GetCVNameAndDescription((ushort)_cvAddress);
+                _bitDesc[0] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Zero);
+                _bitDesc[1] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.One);
+                _bitDesc[2] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Two);
+                _bitDesc[3] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Three);
+                _bitDesc[4] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Four);
+                _bitDesc[5] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Five);
+                _bitDesc[6] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Six);
+                _bitDesc[7] = await NmraCvService.GetCVBitDescription((ushort)_cvAddress, Bits.Seven);
                 found = true;
             }
         }
@@ -498,10 +512,16 @@
         if (_isLoading is false)
         {
             SessionStorage.SetProgTarget("ProgrammingDecoder-ProgTarget", _manualCVInputModel?.ProgrammingTarget ?? ProgrammingTarget.POM);
-            SessionStorage.SetUshort("ProgrammingDecoder-LocoAddress", (ushort?)(_manualCVInputModel?.LocoAddress));
-            SessionStorage.SetUshort("ProgrammingDecoderSimple-CVAddress", (ushort?)(_manualCVInputModel?.CV));
-            SessionStorage.SetUshort("ProgrammingDecoderSimple-CVValue", (ushort?)(_manualCVInputModel?.CVValue));
+            SessionStorage.SetShort("ProgrammingDecoder-LocoAddress", _manualCVInputModel?.LocoAddress);
+            SessionStorage.SetShort("ProgrammingDecoderSimple-CVAddress", _manualCVInputModel?.CV);
+            SessionStorage.SetShort("ProgrammingDecoderSimple-CVValue", _manualCVInputModel?.CVValue);
         }
+    }
+
+    private void OnInvalidSubmit(EditContext args)
+    {
+        // Is not supposed to be implemented.
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -513,9 +533,5 @@
         _workingMessage = null;
         _successMessage = null;
         StateHasChanged();
-    }
-    private void OnInvalidSubmit(EditContext args)
-    {
-        throw new NotImplementedException();
     }
 }

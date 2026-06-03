@@ -32,7 +32,7 @@ internal interface ISessionStorage
     /// <param name="key">The key whose associated unsigned 16-bit integer value is to be retrieved. This parameter cannot be null or
     /// empty.</param>
     /// <returns>An unsigned 16-bit integer value if the key exists; otherwise, null.</returns>
-    ushort? GetUshort(string key);
+    short? GetShort(string key);
 
     /// <summary>
     /// Sets the boolean value associated with the specified key in the session storage.
@@ -60,5 +60,5 @@ internal interface ISessionStorage
     /// does not exist, it will be created.</remarks>
     /// <param name="key">The key associated with the value to set. This cannot be null or empty.</param>
     /// <param name="value">The unsigned short value to set for the specified key. If null, the key will be removed.</param>
-    void SetUshort(string key, ushort? value);
+    void SetShort(string key, short? value);
 }

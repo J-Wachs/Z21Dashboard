@@ -1,0 +1,32 @@
+[
+  {
+    "file_name": "0-Eksempel.json",
+    "name": "Eksempel",
+    "manufacturer": "JW"
+  },
+  {
+    "file_name": "0-NMRAMaxStandardDecoder.json",
+    "name": "NMRA Maximal Standard Decoder",
+    "manufacturer": "NMRA"
+  },
+  {
+    "file_name": "0-NMRAMinStandardDecoder.json",
+    "name": "NMRA Minimal Standard Decoder",
+    "manufacturer": "NMRA"
+  },
+  {
+    "file_name": "131-Trix612093.json",
+    "name": "Trix 612093 Decoder",
+    "manufacturer": "Trix"
+  },
+  {
+    "file_name": "151-LokPilotV5.json",
+    "name": "LokPilot 5 Multiprotocol (DCC/MM/SX/M4)",
+    "manufacturer": "ESU"
+  },
+  {
+    "file_name": "151-LokPilotV5DCC.json",
+    "name": "LokPilot 5 DCC",
+    "manufacturer": "ESU"
+  }
+]

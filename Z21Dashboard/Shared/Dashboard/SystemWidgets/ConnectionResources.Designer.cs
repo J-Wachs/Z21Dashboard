@@ -230,5 +230,50 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
                 return ResourceManager.GetString("Unlocked", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z21 New.
+        /// </summary>
+        public static string Z21New {
+            get {
+                return ResourceManager.GetString("Z21New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z21.
+        /// </summary>
+        public static string Z21Old {
+            get {
+                return ResourceManager.GetString("Z21Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to z21.
+        /// </summary>
+        public static string z21Small {
+            get {
+                return ResourceManager.GetString("z21Small", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to z21 Start.
+        /// </summary>
+        public static string z21Start {
+            get {
+                return ResourceManager.GetString("z21Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Z21XL {
+            get {
+                return ResourceManager.GetString("Z21XL", resourceCulture);
+            }
+        }
     }
 }

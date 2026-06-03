@@ -1,0 +1,895 @@
+{
+  "meta": {
+    "manufacturer": "NMRA",
+    "manufacturer_id": 0,
+    "model": "NMRA Maximal Standard Decoder",
+    "version": "1.0",
+    "protocol": "DCC",
+    "type": "locomotivedecoder"
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3
+    },
+    {
+      "type": "cv_single",
+      "cv": 2,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 3,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 4,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 5,
+      "source": "nmra",
+      "default_value": 255
+    },
+    {
+      "type": "cv_single",
+      "cv": 6,
+      "source": "nmra",
+      "default_value": 126
+    },
+    {
+      "type": "cv_single",
+      "cv": 7,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 9,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 10,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 11,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 12,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 13,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 14,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 15,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 16,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 17,
+      "source": "nmra",
+      "default_value": 192
+    },
+    {
+      "type": "cv_single",
+      "cv": 18,
+      "source": "nmra",
+      "default_value": 3
+    },
+    {
+      "type": "cv_single",
+      "cv": 19,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 21,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 22,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 23,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 24,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 25,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 27,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 28,
+      "source": "nmra",
+      "default_value": 3
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra",
+      "default_value": 6
+    },
+    {
+      "type": "cv_single",
+      "cv": 30,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_single",
+      "cv": 33,
+      "source": "nmra",
+      "default_value": 1
+    },
+    {
+      "type": "cv_single",
+      "cv": 34,
+      "source": "nmra",
+      "default_value": 2
+    },
+    {
+      "type": "cv_single",
+      "cv": 35,
+      "source": "nmra",
+      "default_value": 4
+    },
+    {
+      "type": "cv_single",
+      "cv": 36,
+      "source": "nmra",
+      "default_value": 8
+    },
+    {
+      "type": "cv_single",
+      "cv": 37,
+      "source": "nmra",
+      "default_value": 16
+    },
+    {
+      "type": "cv_single",
+      "cv": 38,
+      "source": "nmra",
+      "default_value": 4
+    },
+    {
+      "type": "cv_single",
+      "cv": 39,
+      "source": "nmra",
+      "default_value": 8
+    },
+    {
+      "type": "cv_single",
+      "cv": 40,
+      "source": "nmra",
+      "default_value": 16
+    },
+    {
+      "type": "cv_single",
+      "cv": 41,
+      "source": "nmra",
+      "default_value": 32
+    },
+    {
+      "type": "cv_single",
+      "cv": 42,
+      "source": "nmra",
+      "default_value": 64
+    },
+    {
+      "type": "cv_single",
+      "cv": 43,
+      "source": "nmra",
+      "default_value": 16
+    },
+    {
+      "type": "cv_single",
+      "cv": 44,
+      "source": "nmra",
+      "default_value": 32
+    },
+    {
+      "type": "cv_single",
+      "cv": 45,
+      "source": "nmra",
+      "default_value": 64
+    },
+    {
+      "type": "cv_single",
+      "cv": 46,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_single",
+      "cv": 65,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 66,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_range",
+      "cv_start": 67,
+      "cv_end": 94,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 95,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_single",
+      "cv": 105,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 106,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 894,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 895,
+      "source": "nmra",
+      "default_value": 0
+    }
+  ],
+  "ui_pages": [
+    {
+      "_comment": "Denne side viser basale informationer",
+      "id": "page_basic",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P2 Basic",
+        "da": "S2 Grundlæggende"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 30
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser info om protokoller",
+      "id": "page_protocols",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P3 Protocols",
+        "da": "S3 Protokoller"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser p.t. analog som felter",
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P4 Analog",
+        "da": "S4 Analog"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser motor indstillinger",
+      "id": "page_motor",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P5 Motor",
+        "da": "S5 Motor"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 9
+            },
+            {
+              "type": "cv_single",
+              "cv": 10
+            },
+            {
+              "type": "cv_single",
+              "cv": 23
+            },
+            {
+              "type": "cv_single",
+              "cv": 24
+            },
+            {
+              "type": "cv_single",
+              "cv": 25
+            },
+            {
+              "type": "cv_single",
+              "cv": 65
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_speed_curve",
+      "type": "speed_curve_graph_3and28",
+      "title": {
+        "en": "P6 Speed Curve",
+        "da": "S6 Hastighedskurve"
+      },
+      "page_content": [
+        {
+          "type": "conditional_content",
+          "content": [
+            {
+              "cv": 29,
+              "bit": 4,
+              "value": 0,
+              "content": [
+                {
+                  "type": "cv_single",
+                  "cv": 2
+                },
+                {
+                  "type": "cv_single",
+                  "cv": 5
+                },
+                {
+                  "type": "cv_single",
+                  "cv": 6
+                },
+                {
+                  "type": "cv_with_bit",
+                  "cv": 29,
+                  "bit": 4
+                }
+              ]
+            },
+            {
+
+              "cv": 29,
+              "bit": 4,
+              "value": 1,
+              "content": [
+                {
+                  "type": "cv_with_bit",
+                  "cv": 29,
+                  "bit": 4
+                },
+                {
+                  "type": "cv_range",
+                  "cv_start": 67,
+                  "cv_end": 94
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 4
+            },
+            {
+              "type": "cv_range",
+              "cv_start": 67,
+              "cv_end": 94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser RailCom informationer",
+      "id": "page_railcom",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P7 RailCom",
+        "da": "S7 RailCom"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser multitraktion informationer",
+      "id": "page_consist",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P8 Consist",
+        "da": "S8 Multitraktion"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 19
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 19,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser mapning mellem F taster og output",
+      "id": "page_funcoutputs",
+      "type": "fkeymappingstandard",
+      "title": {
+        "en": "P9 Function Outputs",
+        "da": "S9 Funktionsudgange"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 33
+            },
+            {
+              "type": "cv_single",
+              "cv": 34
+            },
+            {
+              "type": "cv_single",
+              "cv": 35
+            },
+            {
+              "type": "cv_single",
+              "cv": 36
+            },
+            {
+              "type": "cv_single",
+              "cv": 37
+            },
+            {
+              "type": "cv_single",
+              "cv": 38
+            },
+            {
+              "type": "cv_single",
+              "cv": 39
+            },
+            {
+              "type": "cv_single",
+              "cv": 40
+            },
+            {
+              "type": "cv_single",
+              "cv": 41
+            },
+            {
+              "type": "cv_single",
+              "cv": 42
+            },
+            {
+              "type": "cv_single",
+              "cv": 43
+            },
+            {
+              "type": "cv_single",
+              "cv": 44
+            },
+            {
+              "type": "cv_single",
+              "cv": 45
+            },
+            {
+              "type": "cv_single",
+              "cv": 46
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser diverse CV",
+      "id": "page_miscellaneous",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P10 Miscellaneous",
+        "da": "S10 Diverse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 15
+            },
+            {
+              "type": "cv_single",
+              "cv": 16
+            },
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            },
+            {
+              "type": "cv_single",
+              "cv": 894
+            },
+            {
+              "type": "cv_single",
+              "cv": 895
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_comment": "Denne side viser bremse konfig",
+      "id": "page_breaking",
+      "type": "dynamic_list",
+      "title": {
+        "en": "P11 Breaking",
+        "da": "S11 Bremse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Z21Dashboard.Infrastructure;
 
-namespace Z21Dashboard.Infrastructure;
-
+/// <summary>
+/// Limits for various information in the application, such as highest allowed locomotive address, etc.
+/// </summary>
 internal static class Limits
 {
     internal const ushort HighestLongAddress = 9999;

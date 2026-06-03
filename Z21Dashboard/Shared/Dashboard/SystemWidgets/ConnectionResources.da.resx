@@ -174,4 +174,16 @@
   <data name="NoDevicesFound" xml:space="preserve">
     <value>Ingen enheder fundet</value>
   </data>
+  <data name="Z21New" xml:space="preserve">
+    <value>Z21 Ny</value>
+  </data>
+  <data name="Z21Old" xml:space="preserve">
+    <value>Z21</value>
+  </data>
+  <data name="z21Small" xml:space="preserve">
+    <value>z21</value>
+  </data>
+  <data name="z21Start" xml:space="preserve">
+    <value>z21 Start</value>
+  </data>
 </root>

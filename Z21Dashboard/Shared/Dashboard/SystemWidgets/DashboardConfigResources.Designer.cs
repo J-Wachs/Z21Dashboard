@@ -79,11 +79,38 @@ namespace Z21Dashboard.Shared.Dashboard.SystemWidgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Localfolder for loco decoders.
+        /// </summary>
+        internal static string LocalLocoDecoderFolder {
+            get {
+                return ResourceManager.GetString("LocalLocoDecoderFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local folder for locomotives.
+        /// </summary>
+        internal static string LocalLocomotiveFolder {
+            get {
+                return ResourceManager.GetString("LocalLocomotiveFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No configurable dashboard components were found.
         /// </summary>
         internal static string NoWidgets {
             get {
                 return ResourceManager.GetString("NoWidgets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Decoder and Locomotive folders must not be the same.
+        /// </summary>
+        internal static string PathsCannotBeEqual {
+            get {
+                return ResourceManager.GetString("PathsCannotBeEqual", resourceCulture);
             }
         }
         

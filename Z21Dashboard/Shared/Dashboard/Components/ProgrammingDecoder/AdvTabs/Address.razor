@@ -1,0 +1,317 @@
+@*
+    Address.razor
+    Component for reading and writing the locomotive address (CV1 or CV17/18)
+    during programming on the main track.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Infrastructure
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<Address> Logger
+@inject ISessionStorage SessionStorage
+@inject IStringLocalizer<AddressResource> Localizer
+@inject IZ21Client Z21Client
+
+@if (Z21Client.Isz21 is true && _hideZ21Warning is false)
+{
+    <div class="alert alert-warning py-2 mb-3">
+        <div>@Localizer["z21Warning"]</div>
+
+        <div class="form-check small mt-2">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="hideZ21Warning"
+                   @bind="_hideZ21Warning"
+                   @bind:after="SavePreference" />
+            <label class="form-check-label" for="hideZ21Warning">
+                @Localizer["DontShowAgain"]
+            </label>
+        </div>
+    </div>
+}
+
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+
+<div class="row mb-2 align-items-center">
+    <div class="col-5">
+        <label>@Localizer["LocoAddress"]:</label>
+    </div>
+    <div class="col-7">
+        <EditForm Model="this">
+            <InputNumber @bind-Value="ProgTargetAddr.LocoAddress"
+                         @oninput="OnInputLocoAddress"
+                         class="form-control form-control-sm"
+                         style="width: 80px;" />
+        </EditForm>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" disabled="@_locoAddressButtonsDisabled"
+                @onclick="@(async () => await WriteLocoAddress())" aria-label="WriteCV">
+            @Localizer["WriteToLocoDecoder"]
+        </button>
+        <button type="button" class="btn btn-primary"
+                @onclick="@(async () => await GetLocoAddress())" aria-label="ReadCV">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+@code {
+
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+
+    private bool _hideZ21Warning;
+    private bool _locoAddressButtonsDisabled;
+    private short? _lastValidValue = 0;
+
+
+    protected override void OnInitialized()
+    {
+        var value = SessionStorage.GetBool("Address-z21WarningHide", false);
+        _hideZ21Warning = value is true;
+
+        ProgTargetAddr.LocoAddress = GetAddressInDecoderSettings();
+        _locoAddressButtonsDisabled = ShouldButtonsBeDisabled();
+    }
+
+    /// <summary>
+    /// Event handler for input event on locomotive address field.
+    /// </summary>
+    /// <param name="e">The change event arguments.</param>
+    /// <returns></returns>
+    private async Task OnInputLocoAddress(ChangeEventArgs e)
+    {
+        short.TryParse(e.Value?.ToString(), out short value);
+
+        if (value is 0 || value > Limits.HighestLongAddress)
+        {
+            // This is a workaround in order to get the UI field updated correctly in MAUI Blazor Hybrid.
+            ProgTargetAddr.LocoAddress = value;
+            await Task.Yield();
+            value = _lastValidValue ?? 0;
+            ProgTargetAddr.LocoAddress = value;
+        }
+        else
+        {
+            _lastValidValue = value;
+            ProgTargetAddr.LocoAddress = value;
+        }
+
+        // In order to get the address field updated (next to the POM selection)
+        // it is nessecary to trigger a state change in the parent component (TabControl).
+        await Parent.NotifyStateChanged();
+        _locoAddressButtonsDisabled = ShouldButtonsBeDisabled();
+        SetAddressInDecoderSettings(ProgTargetAddr.LocoAddress);
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Wtrite the locomotive address to the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteLocoAddress()
+    {
+        await BlankMessages();
+
+        if (ProgTargetAddr.LocoAddress is null or 0)
+        {
+            ErrorMessages.Add(Localizer["NewLocoAddressMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _locoAddressButtonsDisabled = true;
+
+        WorkingMessage = Localizer["CVWriting"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.WriteLocoAddressAsync((ushort)ProgTargetAddr.LocoAddress);
+        if (result.IsSuccess)
+        {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            SuccessMessage = Localizer["CVWritten"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+        else
+        {
+            if (result.Messages.Count > 0)
+            {
+                foreach (var fileMessages in result.Messages)
+                {
+                    foreach (var message in fileMessages.Messages)
+                    {
+                        ErrorMessages.Add(message);
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    }
+                }
+            }
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            SuccessMessage = null;
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+    }
+
+    /// <summary>
+    /// Get the locomotive address from the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task GetLocoAddress()
+    {
+        await BlankMessages();
+
+        _locoAddressButtonsDisabled = true;
+
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.ReadLocoAddressAsync();
+        if (result.IsSuccess)
+        {
+            ProgTargetAddr.LocoAddress = (short?)result.Data;
+            SetAddressInDecoderSettings(ProgTargetAddr.LocoAddress);
+
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            SuccessMessage = Localizer["CVRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+        else
+        {
+            if (result.Messages.Count > 0)
+            {
+                foreach (var fileMessages in result.Messages)
+                {
+                    foreach (var message in fileMessages.Messages)
+                    {
+                        ErrorMessages.Add(message);
+                    }
+                }
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            SuccessMessage = null;
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        _locoAddressButtonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Gets the locomotive address based on address configuration (Cv 29, bit 5: Short or long)
+    /// and retrieves the value from Cv 3 or 17/18 (calculation of long address).
+    /// </summary>
+    private short? GetAddressInDecoderSettings()
+    {
+        // Calculate CV values and set DecoderSettings:
+        var isLongAddress = DecoderSettings.GetCvBit(Cvs.ConfigurationData1, Bits.Five);
+        if (isLongAddress is true)
+        {
+            var cv17 = DecoderSettings.GetCvValue(Cvs.LongAddressHighByte);
+            var cv18 = DecoderSettings.GetCvValue(Cvs.LongAddressLowByte);
+            if (cv17.HasValue && cv18.HasValue)
+            {
+                return (short?)(((cv17.Value - 192) * 256) + cv18.Value);
+            }
+        }
+        else
+        {
+            var cv1 = DecoderSettings.GetCvValue(Cvs.ShortAddress);
+            if (cv1.HasValue)
+            {
+                return cv1.Value;
+            }
+        }
+
+        return null;
+    }
+
+    /// Based on the input address, sets the configuration of locomotive address
+    /// (short or long) and sets the respective Cv addresses (3 or 17/18 plus 29, bit 5).
+    /// and sets it in the ProgTargetAddr parameter.
+    private void SetAddressInDecoderSettings(short? locoAddress)
+    {
+        // Calculate CV values and set DecoderSettings:
+        if (locoAddress >= 128)
+        {
+            DecoderSettings.SetCvBitValue(Cvs.ConfigurationData1, Bits.Five, true);
+            var cv17 = 192 + (locoAddress / 256);
+            var cv18 = locoAddress % 256;
+
+            DecoderSettings.SetCvValue(Cvs.LongAddressHighByte, (byte?)cv17);
+            DecoderSettings.SetCvValue(Cvs.LongAddressLowByte, (byte?)cv18);
+        }
+        else
+        {
+            DecoderSettings.SetCvBitValue(Cvs.ConfigurationData1, Bits.Five, false);
+            DecoderSettings.SetCvValue(Cvs.ShortAddress, (byte?)locoAddress);
+        }
+    }
+
+    /// <summary>
+    /// Determine if the buttons should be disabled based on current input field values.
+    /// </summary>
+    /// <returns></returns>
+    private bool ShouldButtonsBeDisabled()
+    {
+        return ProgTargetAddr.LocoAddress is null or 0;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessages()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        StateHasChanged();
+    }
+
+    private void SavePreference()
+    {
+        SessionStorage.SetBool("Address-z21WarningHide", _hideZ21Warning);
+    }
+}

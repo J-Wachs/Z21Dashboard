@@ -1,14 +1,16 @@
 ﻿using System.Text.Json;
+using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 
 namespace Z21Dashboard.Services;
 
-public static class ManufacturerService
+public class ManufacturerService : IManufacturerService
 {
-    public static async Task<ManufacturerCollection.Manufacturer?> GetManufacturerAsync(byte id)
+    /// <inheritdoc />
+    public async Task<ManufacturerCollection.Manufacturer?> GetManufacturerAsync(byte id)
     {
 #if WINDOWS
-        // Åbn fil fra Resources/Raw
+        // Open the file from the REssources/Raw folder
         using var stream = await FileSystem.OpenAppPackageFileAsync("NmraManufacturers.json");
         using var reader = new StreamReader(stream);
 
@@ -16,7 +18,7 @@ public static class ManufacturerService
 
         // Deserialize
         var collection = JsonSerializer.Deserialize<ManufacturerCollection>(json);
-        var lookup = collection?.IDs.ToDictionary(x => x.Id, x => new ManufacturerCollection.Manufacturer { Name = x.Name, Type = x.Type });
+        var lookup = collection?.IDs.ToDictionary(x => x.Id, x => new ManufacturerCollection.Manufacturer(x.Id, x.Name, x.Type));
 
         if (lookup is not null && lookup.TryGetValue(id, out var manufacturer))
         {

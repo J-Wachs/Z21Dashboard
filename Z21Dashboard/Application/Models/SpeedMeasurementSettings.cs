@@ -2,6 +2,10 @@
 
 namespace Z21Dashboard.Application.Models;
 
+/// <summary>
+/// The settings for the Speed Measurement feature, which allows users to
+/// measure the speed of their model trains using two sensors placed at a known distance apart.
+/// </summary>
 public class SpeedMeasurementSettings
 {
     [Required]

@@ -1,70 +1,90 @@
 ﻿using Z21Client.Models;
 using Z21Dashboard.Application.Models;
+using Z21Dashboard.Helpers;
 
 namespace Z21Dashboard.Application.Interfaces;
 
 internal interface IDecoderProgHelperService
 {
     /// <summary>
-    /// 
+    /// From a page definition, extract the CVs and bits that need to be read,
+    /// and then perform the read operations against the decoder. This is intended
+    /// to be a helper method for the UI, where the page definition contains the CVs
+    /// and bits that are relevant for that page, and this method will handle the
+    /// logic of extracting those CVs and bits, performing the read/write operations,
+    /// and returning the results in a way that can be easily consumed by the UI.
+    /// </summary>
+    /// <param name="progTarget"></param>
+    /// <param name="locoAddress"></param>
+    /// <param name="pageId"></param>
+    /// <param name="decoderSettings"></param>
+    /// <returns></returns>
+    Task<Result> ExtractCvsAndBitsAndReadFromDecoder(
+        ProgrammingTarget progTarget,
+        ushort? locoAddress,
+        string pageId,
+        DecoderSettings decoderSettings);
+
+    /// <summary>
+    /// From a page definition, extract the CVs and bits that need to be written,
+    /// and then perform the write operations against the decoder. This is intended
+    /// to be a helper method for the UI, where the page definition contains the CVs
+    /// and bits that are relevant for that page, and this method will handle the
+    /// logic of extracting those CVs and bits, performing the read/write operations,
+    /// and returning the results in a way that can be easily consumed by the UI.
+    /// </summary>
+    /// <param name="progTarget"></param>
+    /// <param name="locoAddress"></param>
+    /// <param name="pageId"></param>
+    /// <param name="decoderSettings"></param>
+    /// <returns></returns>
+    Task<Result> ExtractCvsAndBitsAndWriteToDecoder(
+        ProgrammingTarget progTarget,
+        ushort? locoAddress,
+        string pageId,
+        DecoderSettings decoderSettings);
+
+    /// <summary>
+    /// Read a number of CVs from the locomotive. The CVs to read are passed in as
+    /// a queue, and the method will read them in order and return the results in a list.
     /// </summary>
     /// <param name="progTarget"></param>
     /// <param name="locoAddress"></param>
     /// <param name="cvsToRequest"></param>
-    /// <returns></returns>
-    Task<(bool IsSuccess, string? ErrorMessage, List<CVValue> CvValues)> ReadCVValuesAsync(ProgrammingTarget progTarget, ushort? locoAddress, Queue<ushort> cvsToRequest);
+    /// <returns>The state of the reading</returns>
+    Task<Result<List<CVValue>>> ReadCVValuesAsync(ProgrammingTarget progTarget, ushort? locoAddress, Queue<ushort> cvsToRequest);
 
     /// <summary>
-    /// 
+    /// Read the locomotive address from the decoder. The locomotive must be placed
+    /// on the programming track (if one exists on the connected central station).
     /// </summary>
     /// <returns></returns>
-    Task<ReadLocoAddressResponse> ReadLocoAddressAsync();
+    Task<Result<ushort>> ReadLocoAddressAsync();
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="progTarget"></param>
-    /// <param name="locoAddress"></param>
-    /// <returns></returns>
-    Task<ReadManufacturerResponse> ReadLocoDecoderManufacturerAsync(ProgrammingTarget progTarget, ushort? locoAddress);
-
-    /// <summary>
-    /// 
+    /// Reads the manufacturer information from the decoder. The id from the decoder
+    /// is then used to look up information about the manufacturer.
     /// </summary>
     /// <param name="progTarget"></param>
     /// <param name="locoAddress"></param>
     /// <returns></returns>
-    Task<ReadLocoMotorCvsResponse> ReadLocoMotorCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress);
+    Task<Result<DecoderManufacturerInfo>> ReadLocoDecoderManufacturerAsync(ProgrammingTarget progTarget, ushort? locoAddress);
 
     /// <summary>
-    /// Reads all RailCom-related CVs from the locomotive.
-    /// </summary>
-    Task<ReadLocoRailComCVsResponse> ReadLocoRailComCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress);
-
-    Task<ReadLocoSpeedCurveResponse> ReadLocoSpeedCurveCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress);
-
-    /// <summary>
-    /// 
+    /// Writes a number of CVs to the locomotive. The CVs to write are passed in as
+    /// a queue, and the method will write them in order.
     /// </summary>
     /// <param name="progTarget"></param>
     /// <param name="locoAddress"></param>
     /// <param name="cvsToWrite"></param>
     /// <returns></returns>
-    Task<(bool IsSuccess, string? ErrorMessage)> WriteCVValuesAsync(ProgrammingTarget progTarget, ushort? locoAddress, Queue<CVValue> cvsToWrite);
+    Task<Result> WriteCVValuesAsync(ProgrammingTarget progTarget, ushort? locoAddress, Queue<CVValue> cvsToWrite);
 
     /// <summary>
-    /// 
+    /// Writes the (new) address to the locomotive, taking into account if
+    /// the address is a short or long address.
     /// </summary>
-    /// <param name="writeLocoAddressParams"></param>
+    /// <param name="newLocoAddress"></param>
     /// <returns></returns>
-    Task<WriteLocoAddressResponse> WriteLocoAddressAsync(ushort newLocoAddress);
-
-    Task<WriteLocoMotorCVsResponse> WriteLocoMotorCVsAsync(WriteLocoMotorCVsParams writeLocoMotorCVsParams);
-
-    /// <summary>
-    /// Writes all RailCom-related CVs to the locomotive.
-    /// </summary>
-    Task<WriteLocoRailComCVsResponse> WriteLocoRailComCVsAsync(WriteLocoRailComCVsParams parms);
-
-    Task<WriteLocoSpeedCurveResponse> WriteLocoSpeedCurveCVsAsync(WriteLocoSpeedCurveParams parms);
+    Task<Result> WriteLocoAddressAsync(ushort newLocoAddress);
 }

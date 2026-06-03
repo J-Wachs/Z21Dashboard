@@ -23,7 +23,7 @@
             if (Z21Client.HardwareInfo is not null)
             {
                 <span class="badge bg-info">
-                    @Z21Client.HardwareInfo.HwType, @if (Z21Client.Z21Code is not null)
+                    @Localizer[Z21Client.HardwareInfo.HwType.ToString()], @if (Z21Client.Z21Code is not null)
                     {
                         <text>@Z21CodeText, </text>
                     }
@@ -81,7 +81,7 @@
                                 {
                                     <li>
                                         <button class="dropdown-item" type="button" @onclick="() => SelectIp(z21.IpAddress)">
-                                            <strong>@z21.ToString()</strong>
+                                            <strong>@z21.IpAddress (@Localizer[z21.HardwareInfo.HwType.ToString()], FW: @z21.HardwareInfo.FwVersion)</strong>
                                         </button>
                                     </li>
                                 }
@@ -197,7 +197,7 @@
 
     private string Z21CodeText => Z21Client.Z21Code?.LockState switch
     {
-        Z21LockState.NoLock => Localizer["Nolock"],
+        Z21LockState.NoLock => Localizer["NoLock"],
         Z21LockState.Locked => Localizer["Locked"],
         Z21LockState.Unlocked => Localizer["Unlocked"],
         _ => string.Empty

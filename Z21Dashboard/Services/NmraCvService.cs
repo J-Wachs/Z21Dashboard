@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
@@ -9,7 +9,10 @@ namespace Z21Dashboard.Services;
 /// <summary>
 /// Service to read and return description of all the CV defined by NRMA.
 /// </summary>
-public class NmraCvService : INmraCvService
+internal class NmraCvService(
+    ILogger<NmraCvService> logger,
+    ILanguageSupportService languageSupportService
+    ) : INmraCvService
 {
     private readonly JsonSerializerOptions options = new()
     {
@@ -19,6 +22,7 @@ public class NmraCvService : INmraCvService
 
     private DccStandard? _dccStandard = null;
 
+    /// <inheritdoc />
     public async Task<string> GetCVBitName(ushort cvNumber, Bits bit)
     {
         if (_dccStandard is null)
@@ -28,7 +32,7 @@ public class NmraCvService : INmraCvService
 
         var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
             x => x.Cv is not null && x.Cv == cvNumber ||
-            x.Range is not null && x.Range.From <= cvNumber && x.Range.To >= cvNumber
+            x.Range is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
             );
 
         if (cvDef is not null && cvDef.FlagBits is not null)
@@ -36,11 +40,7 @@ public class NmraCvService : INmraCvService
             var flagBits = cvDef.FlagBits.FirstOrDefault(x => x.Bit == (int)bit);
             if (flagBits is not null)
             {
-                string language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                if (language is not "da" and not "en")
-                {
-                    language = "en";
-                }
+                string language = languageSupportService.GetLanguageCode();
 
                 string fullNameOfBit = string.Empty;
                 if (flagBits.Name.TryGetValue(language, out var nameOfBit))
@@ -53,6 +53,31 @@ public class NmraCvService : INmraCvService
         return string.Empty;
     }
 
+    /// <inheritdoc />
+    public async Task<string> GetCVName(ushort cvNumber)
+    {
+        if (_dccStandard is null)
+        {
+            await GetListOfCVsAsync();
+        }
+
+        string name = string.Empty;
+
+        var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
+            x => x.Cv is not null && x.Cv == cvNumber ||
+            x.Range  is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
+            );
+
+        if (cvDef is not null)
+        {
+            string language = languageSupportService.GetLanguageCode();
+            name = cvDef.GetName(language);
+        }
+
+        return name;
+    }
+
+    /// <inheritdoc />
     public async Task<string> GetCVDescription(ushort cvNumber)
     {
         if (_dccStandard is null)
@@ -64,24 +89,19 @@ public class NmraCvService : INmraCvService
 
         var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
             x => x.Cv is not null && x.Cv == cvNumber ||
-            x.Range is not null && x.Range.From <= cvNumber && x.Range.To >= cvNumber
+            x.Range is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
             );
 
         if (cvDef is not null)
         {
-            string language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (language is not "da" and not "en")
-            {
-                language = "en";
-            }
-
+            string language = languageSupportService.GetLanguageCode();
             description = cvDef.GetDescription(language);
         }
 
         return description;
     }
 
-
+    /// <inheritdoc />
     public async Task<string> GetCVBitDescription(ushort cvNumber, Bits bit)
     {
         if (_dccStandard is null)
@@ -93,15 +113,11 @@ public class NmraCvService : INmraCvService
 
         var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
             x => x.Cv is not null && x.Cv == cvNumber ||
-            x.Range is not null && x.Range.From <= cvNumber && x.Range.To >= cvNumber
+            x.Range is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
             );
         if (cvDef is not null)
         {
-            string language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (language is not "da" and not "en")
-            {
-                language = "en";
-            }
+            string language = languageSupportService.GetLanguageCode();
 
             description = cvDef.GetBitDescription((int)bit, language);
         }
@@ -109,7 +125,7 @@ public class NmraCvService : INmraCvService
         return description;
     }
 
-
+    /// <inheritdoc />
     public async Task<(string ZeroDescription, string OneDescription)> GetCVBitValuesDescription(ushort cvNumber, Bits bit)
     {
         if (_dccStandard is null)
@@ -119,15 +135,11 @@ public class NmraCvService : INmraCvService
 
         var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
             x => x.Cv is not null && x.Cv == cvNumber ||
-            x.Range is not null && x.Range.From <= cvNumber && x.Range.To >= cvNumber
+            x.Range is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
             );
         if (cvDef is not null)
         {
-            string language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (language is not "da" and not "en")
-            {
-                language = "en";
-            }
+            string language = languageSupportService.GetLanguageCode();
 
             if (cvDef.FlagBits is not null)
             {
@@ -141,8 +153,7 @@ public class NmraCvService : INmraCvService
                         // returns null.
                         string? zeroDescription = string.Empty;
                         string? oneDescription = string.Empty;
-                        Dictionary<string, string>? bitValue = null;
-                        if (flagBits.Values.TryGetValue(0, out bitValue))
+                        if (flagBits.Values.TryGetValue(0, out Dictionary<string, string>? bitValue))
                         {
                             if (bitValue.TryGetValue(language, out zeroDescription) is false)
                             {
@@ -165,7 +176,7 @@ public class NmraCvService : INmraCvService
         return (string.Empty, string.Empty);
     }
 
-
+    /// <inheritdoc />
     public async Task<(string Name, string Description)> GetCVNameAndDescription(ushort cvNumber)
     {
         if (_dccStandard is null)
@@ -175,15 +186,11 @@ public class NmraCvService : INmraCvService
 
         var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
             x => x.Cv is not null && x.Cv == cvNumber ||
-            x.Range is not null && x.Range.From <= cvNumber && x.Range.To >= cvNumber
+            x.Range is not null && x.Range.CvStart <= cvNumber && x.Range.CvEnd >= cvNumber
             );
         if (cvDef is not null)
         {
-            string language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (language is not "da" and not "en")
-            {
-                language = "en";
-            }
+            string language = languageSupportService.GetLanguageCode();
 
             var result = cvDef.GetNameAndDescription(language);
             return result;
@@ -192,6 +199,19 @@ public class NmraCvService : INmraCvService
         return (string.Empty, string.Empty);
     }
 
+    public async Task<CvDefinition?> GetRawCvDefinition(ushort cv)
+    {
+        if (_dccStandard is null)
+        {
+            await GetListOfCVsAsync();
+        }
+
+        var cvDef = _dccStandard?.CvDefinitions.FirstOrDefault(
+            x => x.Cv is not null && x.Cv == cv ||
+            x.Range is not null && x.Range.CvStart <= cv && x.Range.CvEnd >= cv
+            );
+        return cvDef;
+    }
 
     /// <summary>
     /// Asynchronously retrieves the DCC standard configuration values from the application's package file.
@@ -202,12 +222,19 @@ public class NmraCvService : INmraCvService
     /// deserialized.</returns>
     private async Task GetListOfCVsAsync()
     {
-        using var stream = FileSystem.OpenAppPackageFileAsync("nmra_9_2_2_locomotive_base.json").GetAwaiter().GetResult();
+        using var stream = await FileSystem.OpenAppPackageFileAsync("nmra_9_2_2_locomotive_base.json");
         using var reader = new StreamReader(stream);
 
-        var json = reader.ReadToEnd();
+        var json = await reader.ReadToEndAsync();
 
-        // Deserialize
-        _dccStandard = JsonSerializer.Deserialize<DccStandard>(json, options);
+        try
+        {
+            // Deserialize
+            _dccStandard = JsonSerializer.Deserialize<DccStandard>(json, options);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical("An error has occurred when loading NMRA CV standard: '{ex.Message}'.", ex.Message);
+        }
     }
 }

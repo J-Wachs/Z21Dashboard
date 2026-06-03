@@ -1,28 +1,158 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.ObjectModel;
 using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
+using Z21Dashboard.Helpers;
 using Z21Dashboard.Infrastructure;
+using Z21Dashboard.Resources.Localization;
 
 namespace Z21Dashboard.Services;
 
-internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger, IDecoderProgService decoderProgService) : IDecoderProgHelperService
+internal class DecoderProgHelperService(
+    IDecoderProgService decoderProgService,
+    IManufacturerService manufacturerService
+    ) : IDecoderProgHelperService
 {
     #region Exposed methods
 
     /// <inheritdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage, List<CVValue> CvValues)> ReadCVValuesAsync(
-    ProgrammingTarget progTarget,
-    ushort? locoAddress,
-    Queue<ushort> cvsToRequest)
+    public async Task<Result> ExtractCvsAndBitsAndReadFromDecoder(
+        ProgrammingTarget progTarget,
+        ushort? locoAddress,
+        string pageId,
+        DecoderSettings decoderSettings
+        )
+    {
+        var pageContent = decoderSettings.Pages.FirstOrDefault(p => p.Id == pageId);
+        if (pageContent is null)
+        {
+            // "Cannot find page with id {0}"
+            return Result.Failure(string.Format(SharedResources.MissingPageId, pageId));
+        }
+
+        var cvBitsInPage = GetCvsAndBits(pageContent.PageContent, decoderSettings.CvValues, getForWrite: false);
+
+        var cvsToRead = new Queue<ushort>(cvBitsInPage.Select(x => x.Cv).Distinct());
+
+        var result = await ReadCVValuesAsync(progTarget, locoAddress, cvsToRead);
+        if (result.IsSuccess)
+        {
+            foreach (var cv in result.Data!)
+            {
+                Result resultSetCv;
+                // We need to be carefull and set either by bit or by whole value:
+                var listCvInfo = cvBitsInPage.Where(x => x.Cv == cv.Cv);
+                foreach (var entry in listCvInfo)
+                {
+                    if (entry.Bit is not null)
+                    {
+                        resultSetCv = decoderSettings.SetCvBitValue(cv.Cv, (Bits)entry.Bit, (cv.Value & (1 << (int)entry.Bit)) != 0);
+                    }
+                    else
+                    {
+                        resultSetCv = decoderSettings.SetCvValue(cv.Cv, cv.Value);
+                    }
+
+                    if (resultSetCv.IsSuccess is false)
+                    {
+                        return Result.Failure(result.Messages);
+                    }
+                }
+            }
+            return Result.Success();
+        }
+
+        return Result.Failure(result.Messages);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result> ExtractCvsAndBitsAndWriteToDecoder(
+        ProgrammingTarget progTarget,
+        ushort? locoAddress,
+        string pageId,
+        DecoderSettings decoderSettings
+    )
+    {
+        var pageContent = decoderSettings.Pages.FirstOrDefault(p => p.Id == pageId);
+        if (pageContent is null)
+        {
+            // "Cannot find page with id {0}"
+            return Result.Failure(string.Format(SharedResources.MissingPageId, pageId));
+        }
+
+        var cvBitsInPage = GetCvsAndBits(pageContent.PageContent, decoderSettings.CvValues, getForWrite: true);
+
+        // This method build up a structure that contains the needed
+        // information to be able to update the CV values in the decoder, by either setting a bit or a whole value, depending on the CV and bit information from the page content, and the current values in the decoder settings.
+        var result = BuildCvValuesFromDecoderSettings(cvBitsInPage, decoderSettings);
+        if (result.IsSuccess is false)
+        {
+            return Result.Failure(result.Messages);
+        }
+
+        var cvStates = result.Data!;
+        Queue<CVValue> cvValuesToWrite = [];
+
+        // For each cv that has null bits (flags that are not set) read the value:
+        foreach (var entry in cvStates)
+        {
+            if (entry.Value.AnyBitNotSet() is true)
+            {
+                // When a bitwise CV has some flags set, and other not we need to read
+                // the current value from the decoder, patch it with the new bit values
+                // and write the whole value back.
+
+                // Get the decoder value:
+                Queue<ushort> cvToRead = new([entry.Key]);
+                var resultReadCVValuesAsync = await ReadCVValuesAsync(progTarget, locoAddress, cvToRead);
+                if (resultReadCVValuesAsync.IsSuccess is false)
+                {
+                    if (resultReadCVValuesAsync.Messages is not null)
+                    {
+                        return Result.Failure(resultReadCVValuesAsync.Messages);
+                    }
+                    return Result.Failure(string.Empty);
+                }
+                var decoderValue = resultReadCVValuesAsync.Data!.First().Value;
+                var patchedValue = entry.Value.PatchWithWholeValue(decoderValue);
+                if (patchedValue is not null)
+                {
+                    cvValuesToWrite.Enqueue(new(entry.Key, (byte)patchedValue));
+                }
+            }
+            else
+            {
+                // We either have a bitwise CV with all bits set, or a value CV,
+                // in both cases we can just write the whole value:
+                var wholeValue = entry.Value.GetWholeValue();
+                if (wholeValue is not null)
+                {
+                    cvValuesToWrite.Enqueue(new(entry.Key, (byte)wholeValue));
+                }
+            }
+        }
+
+        var resultWriteCvValues = await WriteCVValuesAsync(progTarget, locoAddress, cvValuesToWrite);
+
+        return resultWriteCvValues.Match(
+            onSuccess: () => Result.Success(),
+            onFailure: error => Result.Failure(error)
+            );
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<List<CVValue>>> ReadCVValuesAsync(
+        ProgrammingTarget progTarget,
+        ushort? locoAddress,
+        Queue<ushort> cvsToRequest
+        )
     {
         if (progTarget is ProgrammingTarget.POM)
         {
             if (locoAddress is null or 0 or > Limits.HighestLongAddress)
             {
-                return (false,
-                    $"The locomotive address must have a value betweeen 1 and {Limits.HighestLongAddress} in order to read on the main track",
-                    []);
+                // "The locomotive address must have a value betweeen 1 and {0} in order to read on the main track"
+                return Result<List<CVValue>>.Failure(string.Format(SharedResources.LocoAddressOutOfRange, Limits.HighestLongAddress));
             }
             return await decoderProgService.ReadCVAddressesPOMAsync((ushort)locoAddress, cvsToRequest);
         }
@@ -32,38 +162,34 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
         }
         else
         {
-            return (false,
-                "Unknown programming target",
-                []);
+            // "Unknown programming target"
+            return Result<List<CVValue>>.Failure(SharedResources.UnknownProgTarget);
         }
     }
 
-
     /// <inheritdoc />
-    public async Task<ReadLocoAddressResponse> ReadLocoAddressAsync()
+    public async Task<Result<ushort>> ReadLocoAddressAsync()
     {
-        logger.LogError("GetLocoAddress");
-
         string errorMessage = string.Empty;
         ushort locoAddress = 0;
 
         Queue<ushort> cvsToRequest = [];
         cvsToRequest.Enqueue(Cvs.ConfigurationData1);
 
-        //var result = await decoderProgService.ReadCVAddressesProgTrackAsync(cvsToRequest);
         var result = await ReadCVValuesAsync(ProgrammingTarget.ProgTrack, null, cvsToRequest);
 
         if (result.IsSuccess)
         {
-            if (result.CvValues.Count > 1)
+            if (result.Data!.Count > 1)
             {
-                errorMessage = "More than one CV value was returned from Z21";
+                // "More than one CV value was returned from Z21"
+                errorMessage = SharedResources.MoreThanOneCV;
             }
-            else if (result.CvValues.Count == 1)
+            else if (result.Data!.Count is 1)
             {
                 cvsToRequest.Clear();
 
-                var cv29Value = result.CvValues[0].Value;
+                var cv29Value = result.Data![0].Value;
                 // Short or long address?
                 if ((cv29Value & Cvs.CV29_Bit5_LongAddress) > 0)
                 {
@@ -77,25 +203,25 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
                     cvsToRequest.Enqueue(Cvs.ShortAddress);
                 }
 
-                //result = await decoderProgService.ReadCVAddressesProgTrackAsync(cvsToRequest);
                 result = await ReadCVValuesAsync(ProgrammingTarget.ProgTrack, null, cvsToRequest);
                 if (result.IsSuccess)
                 {
                     // Check if short or long address:
-                    if (result.CvValues[0].Cv is Cvs.ShortAddress)
+                    if (result.Data![0].Cv is Cvs.ShortAddress)
                     {
-                        locoAddress = result.CvValues[0].Value;
+                        locoAddress = result.Data![0].Value;
                     }
-                    else if (result.CvValues[0].Cv is Cvs.LongAddressHighByte or Cvs.LongAddressLowByte)
+                    else if (result.Data![0].Cv is Cvs.LongAddressHighByte or Cvs.LongAddressLowByte)
                     {
                         // Calculate the long address:
-                        var cv17 = result.CvValues.Find(x => x.Cv is Cvs.LongAddressHighByte);
-                        var cv18 = result.CvValues.Find(x => x.Cv is Cvs.LongAddressLowByte);
+                        var cv17 = result.Data!.Find(x => x.Cv is Cvs.LongAddressHighByte);
+                        var cv18 = result.Data!.Find(x => x.Cv is Cvs.LongAddressLowByte);
 
                         // Part one of the workaround
                         if (cv17 is null || cv18 is null)
                         {
-                            errorMessage = "Returned CV17 or CV18 does not contain a value";
+                            // "Returned CV17 or CV18 does not contain a value"
+                            errorMessage = SharedResources.CV1718NoValue;
                         }
                         else
                         {
@@ -106,83 +232,17 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
             }
             else
             {
-                errorMessage = "No CV values returned but no errors was reported";
+                // "No CV values returned but no errors was reported"
+                errorMessage = SharedResources.NoCVValueNoError;
             }
         }
 
-        if (result.IsSuccess)
-        {
-            return new ReadLocoAddressResponse(
-                errorMessage == string.Empty,
-                errorMessage,
-                locoAddress);
-        }
-        else
-        {
-            return new ReadLocoAddressResponse(
-                false,
-                result.ErrorMessage,
-                0);
-        }
+        return result.IsSuccess ? Results.Success(locoAddress) : Result<ushort>.Failure(errorMessage);
     }
-
+    
     /// <inheritdoc />
-    public async Task<ReadLocoMotorCvsResponse> ReadLocoMotorCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress)
+    public async Task<Result<DecoderManufacturerInfo>> ReadLocoDecoderManufacturerAsync(ProgrammingTarget progTarget, ushort? locoAddress)
     {
-        logger.LogError("GetLocoMotorCVs");
-
-        Queue<ushort> cvsToRequest = [];
-        cvsToRequest.Enqueue(Cvs.ConfigurationData1);
-        cvsToRequest.Enqueue(Cvs.AccelerationRate);
-        cvsToRequest.Enqueue(Cvs.DeaccelerationRate);
-        cvsToRequest.Enqueue(Cvs.PWMPeriod);
-        cvsToRequest.Enqueue(Cvs.KickStart);
-
-        //(bool IsSuccess, List<string> ErrorMessages, List<CVValue> CvValues) result;
-
-        var result = await ReadCVValuesAsync(progTarget, locoAddress, cvsToRequest);
-        if (result.IsSuccess)
-        {
-            if (result.CvValues.Count > 0)
-            {
-                CVMotorParameters cVMotorParameters = new()
-                {
-                    CV29_0_ForwardDirection = (result.CvValues.Find(x => x.Cv == Cvs.ConfigurationData1)?.Value & 0b00000001) > 0,
-                    CV29_1_SpeedSteps = (result.CvValues.Find(x => x.Cv == Cvs.ConfigurationData1)?.Value & 0b00000010) > 0,
-                    CV29_2_DCAnalog = (result.CvValues.Find(x => x.Cv == Cvs.ConfigurationData1)?.Value & 0b00000100) > 0,
-                    CV3_AccRate = result.CvValues.Find(x => x.Cv == Cvs.AccelerationRate)?.Value ?? 0,
-                    CV4_DecRate = result.CvValues.Find(x => x.Cv == Cvs.DeaccelerationRate)?.Value ?? 0,
-                    CV9_PWMPeriod = result.CvValues.Find(x => x.Cv == Cvs.PWMPeriod)?.Value ?? 0,
-                    CV65_KickStart = result.CvValues.Find(x => x.Cv == Cvs.KickStart)?.Value ?? 0
-                };
-                return new ReadLocoMotorCvsResponse(
-                    true,
-                    null,
-                    cVMotorParameters
-                    );
-            }
-            else
-            {
-                return new ReadLocoMotorCvsResponse(
-                    false,
-                    "No CV values returned but no errors was reported",
-                    null
-                    );
-            }
-        }
-
-        return new ReadLocoMotorCvsResponse(
-            false,
-            result.ErrorMessage,
-            null
-            );
-    }
-
-    /// <inheritdoc />
-    public async Task<ReadManufacturerResponse> ReadLocoDecoderManufacturerAsync(ProgrammingTarget progTarget, ushort? locoAddress)
-    {
-        logger.LogError("GetManufacturer");
-
         byte manufacturerCode = 0;
         string manufacturerName = string.Empty;
         byte manufacturerVersionNbr = 0;
@@ -192,141 +252,26 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
         cvsToRequest.Enqueue(Cvs.ManufacturerVersionNbr);
         cvsToRequest.Enqueue(Cvs.Manufacturer);
 
-        //(bool IsSuccess, List<string> ErrorMessages, List<CVValue> CvValues) result;
         var result = await ReadCVValuesAsync(progTarget, locoAddress, cvsToRequest);
 
         if (result.IsSuccess)
         {
-            if (result.CvValues.Count > 0)
+            if (result.Data!.Count > 0)
             {
-                manufacturerCode = result.CvValues.Find(x => x.Cv == Cvs.Manufacturer)?.Value ?? 0;
-
-                // Skal laves om til en DI klasse
-                var getManufacturer = await ManufacturerService.GetManufacturerAsync(manufacturerCode);
-                manufacturerName = getManufacturer is null ? "(Ukendt)" : getManufacturer.Name;
-                manufacturerVersionNbr = result.CvValues.Find(x => x.Cv == Cvs.ManufacturerVersionNbr)?.Value ?? 0;
+                manufacturerCode = result.Data!.Find(x => x.Cv == Cvs.Manufacturer)?.Value ?? 0;
+                var getManufacturer = await manufacturerService.GetManufacturerAsync(manufacturerCode);
+                // "(Unknown)"
+                manufacturerName = getManufacturer is null ? SharedResources.UnknownManufacturer : getManufacturer.Name;
+                manufacturerVersionNbr = result.Data!.Find(x => x.Cv == Cvs.ManufacturerVersionNbr)?.Value ?? 0;
             }
         }
 
-        return new ReadManufacturerResponse(
-            result.IsSuccess,
-            result.ErrorMessage,
-                    manufacturerCode,
-                    manufacturerName,
-                    manufacturerVersionNbr
-            );
+        return result.IsSuccess ? Results.Success(new DecoderManufacturerInfo(manufacturerCode, manufacturerName, manufacturerVersionNbr)) :
+            Result<DecoderManufacturerInfo>.Failure(result.Messages);
     }
 
     /// <inheritdoc />
-    public async Task<ReadLocoRailComCVsResponse> ReadLocoRailComCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress)
-    {
-        logger.LogInformation("Reading RailCom CVs");
-
-        // Prepare CVs to read:
-        // CV28: bits 0,1,7 (channel1, channel2, autologin)
-        // CV29: bit 3 (RailCom enable)
-        // CV127: RailCom delay
-        // CV128: RailCom sensitivity
-        Queue<ushort> cvsToRead = [];
-        cvsToRead.Enqueue(Cvs.RailComConfiguration);  // CV28
-        cvsToRead.Enqueue(Cvs.ConfigurationData1);    // CV29
-
-        var result = await ReadCVValuesAsync(progTarget, locoAddress, cvsToRead);
-        if (!result.IsSuccess)
-            return new ReadLocoRailComCVsResponse(false, result.ErrorMessage, null);
-
-        var cvValues = result.CvValues;
-
-        var parameters = new CVRailComParameters
-        {
-            // --- CV28 bits ---
-            CV28_Bit0_Channel1 = (cvValues.Find(x => x.Cv == Cvs.RailComConfiguration)?.Value & Cvs.CV28_Bit0_Channel1Broadcast) > 0,
-            CV28_Bit1_Channel2 = (cvValues.Find(x => x.Cv == Cvs.RailComConfiguration)?.Value & Cvs.CV28_Bit1_DataTransmissionAllowed) > 0,
-            CV28_Bit7_AutoLogin = (cvValues.Find(x => x.Cv == Cvs.RailComConfiguration)?.Value & Cvs.CV28_Bit7_AutoLogin) > 0,
-
-            // --- CV29 bit 3 (RailCom enable) ---
-            CV29_3_RailComEnabled = (cvValues.Find(x => x.Cv == Cvs.ConfigurationData1)?.Value & Cvs.CV29_Bit3_RailCom) > 0,
-        };
-
-        return new ReadLocoRailComCVsResponse(true, null, parameters);
-    }
-
-    /// <inheritdoc />
-    public async Task<ReadLocoSpeedCurveResponse> ReadLocoSpeedCurveCVsAsync(ProgrammingTarget progTarget, ushort? locoAddress)
-    {
-        logger.LogError("GetLocoSpeedCurveCVs");
-
-        // 1. Læs CV 29 først for at bestemme kurve-typen
-        Queue<ushort> cv29Request = [];
-        cv29Request.Enqueue(Cvs.ConfigurationData1);
-
-        var cv29Result = await ReadCVValuesAsync(progTarget, locoAddress, cv29Request);
-
-        if (!cv29Result.IsSuccess || cv29Result.CvValues.Count == 0)
-        {
-            return new ReadLocoSpeedCurveResponse(false, cv29Result.ErrorMessage, null);
-        }
-
-        byte cv29Value = cv29Result.CvValues[0].Value;
-        bool isSpeedTableActive = (cv29Value & Cvs.CV29_Bit4_SpeedTable) > 0;
-
-        // 2. Forbered næste læsning baseret på bit 4
-        Queue<ushort> curveCvsRequest = [];
-
-        if (isSpeedTableActive)
-        {
-            // Avanceret: Læs tabel (67-94) + Trim
-            for (ushort i = Cvs.SpeedTableStart; i <= Cvs.SpeedTableEnd; i++)
-            {
-                curveCvsRequest.Enqueue(i);
-            }
-            curveCvsRequest.Enqueue(Cvs.ForwardTrim);
-            curveCvsRequest.Enqueue(Cvs.ReverseTrim);
-        }
-        else
-        {
-            // Simpel: Læs VStart, VMid, VHigh
-            curveCvsRequest.Enqueue(Cvs.VStart);
-            curveCvsRequest.Enqueue(Cvs.VMid);
-            curveCvsRequest.Enqueue(Cvs.VHigh);
-        }
-
-        var curveResult = await ReadCVValuesAsync(progTarget, locoAddress, curveCvsRequest);
-
-        if (!curveResult.IsSuccess)
-        {
-            return new ReadLocoSpeedCurveResponse(false, curveResult.ErrorMessage, null);
-        }
-
-        // 3. Map resultatet til modellen
-        var parameters = new CVSpeedCurveParameters
-        {
-            UseSpeedTable = isSpeedTableActive
-        };
-
-        if (isSpeedTableActive)
-        {
-            // Fyld arrayet
-            for (int i = 0; i < 28; i++)
-            {
-                byte cvNum = (byte)(Cvs.SpeedTableStart + i);
-                parameters.SpeedTable[i] = curveResult.CvValues.Find(x => x.Cv == cvNum)?.Value ?? 0;
-            }
-            parameters.CV66_ForwardTrim = curveResult.CvValues.Find(x => x.Cv == Cvs.ForwardTrim)?.Value ?? 128;
-            parameters.CV95_ReverseTrim = curveResult.CvValues.Find(x => x.Cv == Cvs.ReverseTrim)?.Value ?? 128;
-        }
-        else
-        {
-            parameters.CV2_VStart = curveResult.CvValues.Find(x => x.Cv == Cvs.VStart)?.Value ?? 3;
-            parameters.CV6_VMid = curveResult.CvValues.Find(x => x.Cv == Cvs.VMid)?.Value ?? 0; // 0 betyder ofte lineær
-            parameters.CV5_VHigh = curveResult.CvValues.Find(x => x.Cv == Cvs.VHigh)?.Value ?? 255;
-        }
-
-        return new ReadLocoSpeedCurveResponse(true, null, parameters);
-    }
-
-    /// <inheritdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage)> WriteCVValuesAsync(ProgrammingTarget progTarget,
+    public async Task<Result> WriteCVValuesAsync(ProgrammingTarget progTarget,
         ushort? locoAddress,
         Queue<CVValue> cvsToWrite)
     {
@@ -334,7 +279,8 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
         {
             if (locoAddress is null)
             {
-                return (false, $"The locomotive address must not be 'null'");
+                // "The locomotive address must not be 'null'"
+                return Result.Failure(SharedResources.LocoAddressMustNotBeNull);
             }
             return await decoderProgService.WriteCVAddressesPOMAsync((ushort)locoAddress, cvsToWrite);
         }
@@ -344,20 +290,18 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
         }
         else
         {
-            return (false, "Unknown programming target");
+            // "Unknown programming target"
+            return Result.Failure(SharedResources.UnknownProgTarget);
         }
     }
 
     /// <inheritdoc />
-    public async Task<WriteLocoAddressResponse> WriteLocoAddressAsync(ushort newLocoAddress)
+    public async Task<Result> WriteLocoAddressAsync(ushort newLocoAddress)
     {
-        logger.LogError("WriteLocoAddress");
-
         if (newLocoAddress is 0 or > Limits.HighestLongAddress)
         {
-            return new WriteLocoAddressResponse(
-                false,
-                $"New locomotive address must be between 1 and {Limits.HighestLongAddress}");
+            // "New locomotive address must be between 1 and {0}"
+            return Result.Failure(string.Format(SharedResources.NewLocoAddressOutOfRange, Limits.HighestLongAddress));
         }
         else
         {
@@ -366,15 +310,14 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
             var result = await ReadCVValuesAsync(ProgrammingTarget.ProgTrack, null, cvsToRequest);
             if (result.IsSuccess)
             {
-                if (result.CvValues.Count > 0)
+                if (result.Data!.Count > 0)
                 {
                     Queue<CVValue> cvsToWrite = [];
 
-                    var cv29Value = result.CvValues[0].Value;
-
+                    var cv29Value = result.Data![0].Value;
                     if (newLocoAddress >= 128)
                     {
-                        // Long address
+                        // Long address: Set bit 5 to 1
                         cv29Value |= 0b00100000;
                         cvsToWrite.Enqueue(new(Cvs.ConfigurationData1, cv29Value));
 
@@ -386,7 +329,7 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
                     }
                     else
                     {
-                        // Short address
+                        // Short address: Set bit 5 to 0
                         cv29Value = (byte)(cv29Value & ~0b00100000);
                         cvsToWrite.Enqueue(new(Cvs.ConfigurationData1, cv29Value));
                         cvsToWrite.Enqueue(new(Cvs.ShortAddress, (byte)newLocoAddress));
@@ -395,218 +338,187 @@ internal class DecoderProgHelperService(ILogger<DecoderProgHelperService> logger
                     var resultWriteCV = await WriteCVValuesAsync(ProgrammingTarget.ProgTrack, null, cvsToWrite);
                     if (!resultWriteCV.IsSuccess)
                     {
-                        return new WriteLocoAddressResponse(
-                            false,
-                            resultWriteCV.ErrorMessage);
+                        return Result.Failure(resultWriteCV.Messages);
                     }
-
                 }
             }
             if (result.IsSuccess)
             {
-                return new WriteLocoAddressResponse(
-                    true,
-                    null);
+                return Result.Success();
             }
             else
             {
-                return new WriteLocoAddressResponse(
-                    false,
-                    result.ErrorMessage);
+                return Result.Failure(result.Messages);
             }
         }
-    }
-
-    /// <inheritdoc />
-    public async Task<WriteLocoMotorCVsResponse> WriteLocoMotorCVsAsync(WriteLocoMotorCVsParams writeLocoMotorCVsParams)
-    {
-        logger.LogError("WriteLocoMotorCVs");
-
-        Queue<ushort> cvsToRequest = [];
-        cvsToRequest.Enqueue(Cvs.ConfigurationData1);
-        var result = await ReadCVValuesAsync(writeLocoMotorCVsParams.ProgTarget, writeLocoMotorCVsParams.LocoAddress, cvsToRequest);
-        if (result.IsSuccess)
-        {
-            Queue<CVValue> cvsToWrite = [];
-
-            var cv29Value = result.CvValues[0].Value;
-
-            if (writeLocoMotorCVsParams.CVMotorParameters.CV29_0_ForwardDirection is true)
-            {
-                cv29Value |= Cvs.CV29_Bit0_ForwardDirection;
-            }
-            else if (writeLocoMotorCVsParams.CVMotorParameters.CV29_0_ForwardDirection is false)
-            {
-                cv29Value = (byte)(cv29Value & ~Cvs.CV29_Bit0_ForwardDirection);
-            }
-
-            if (writeLocoMotorCVsParams.CVMotorParameters.CV29_1_SpeedSteps is true)
-            {
-                cv29Value |= Cvs.CV29_Bit1_SpeedSteps;
-            }
-            else if (writeLocoMotorCVsParams.CVMotorParameters.CV29_1_SpeedSteps is false)
-            {
-                cv29Value = (byte)(cv29Value & ~Cvs.CV29_Bit1_SpeedSteps);
-            }
-
-            if (writeLocoMotorCVsParams.CVMotorParameters.CV29_2_DCAnalog is true)
-            {
-                cv29Value |= Cvs.CV29_Bit2_DCAnalog;
-            }
-            else if (writeLocoMotorCVsParams.CVMotorParameters.CV29_2_DCAnalog is false)
-            {
-                cv29Value = (byte)(cv29Value & ~Cvs.CV29_Bit2_DCAnalog);
-            }
-
-            cvsToWrite.Enqueue(new(Cvs.ConfigurationData1, cv29Value));
-            if (writeLocoMotorCVsParams.CVMotorParameters.CV3_AccRate is not null)
-            {
-                cvsToWrite.Enqueue(new(Cvs.AccelerationRate, (byte)writeLocoMotorCVsParams.CVMotorParameters.CV3_AccRate));
-            }
-            cvsToWrite.Enqueue(new(Cvs.DeaccelerationRate, (byte)writeLocoMotorCVsParams.CVMotorParameters.CV4_DecRate));
-            cvsToWrite.Enqueue(new(Cvs.PWMPeriod, (byte)writeLocoMotorCVsParams.CVMotorParameters.CV9_PWMPeriod));
-            cvsToWrite.Enqueue(new(Cvs.KickStart, (byte)writeLocoMotorCVsParams.CVMotorParameters.CV65_KickStart));
-
-            var resultWriteCVValues = await WriteCVValuesAsync(
-                writeLocoMotorCVsParams.ProgTarget,
-                writeLocoMotorCVsParams.LocoAddress,
-                cvsToWrite);
-
-            if (resultWriteCVValues.IsSuccess is false)
-            {
-                return new WriteLocoMotorCVsResponse(
-                false,
-                resultWriteCVValues.ErrorMessage);
-
-            }
-        }
-
-        if (result.IsSuccess)
-        {
-            return new WriteLocoMotorCVsResponse(
-                true,
-                null);
-        }
-        else
-        {
-            return new WriteLocoMotorCVsResponse(
-                false,
-                result.ErrorMessage);
-        }
-    }
-
-    /// <inheritdoc />
-    public async Task<WriteLocoRailComCVsResponse> WriteLocoRailComCVsAsync(WriteLocoRailComCVsParams parms)
-    {
-        // 1. Read CV29 first
-        Queue<ushort> cv29Request = new();
-        cv29Request.Enqueue(Cvs.ConfigurationData1);
-
-        var readResult = await ReadCVValuesAsync(parms.ProgTarget, parms.LocoAddress, cv29Request);
-        if (!readResult.IsSuccess) return new WriteLocoRailComCVsResponse(false, readResult.ErrorMessage);
-
-        byte cv29Value = readResult.CvValues[0].Value;
-
-        // Set/Clear bit 3 for RailCom
-        if (parms.CVRailComParameters.CV29_3_RailComEnabled)
-            cv29Value |= Cvs.CV29_Bit3_RailCom;
-        else
-            cv29Value = (byte)(cv29Value & ~Cvs.CV29_Bit3_RailCom);
-
-        // 2. Read CV28 to update channel bits
-        Queue<ushort> cv28Request = new();
-        cv28Request.Enqueue(Cvs.RailComConfiguration);
-
-        var readCV28 = await ReadCVValuesAsync(parms.ProgTarget, parms.LocoAddress, cv28Request);
-        byte cv28Value = readCV28.IsSuccess && readCV28.CvValues.Count > 0
-            ? readCV28.CvValues[0].Value
-            : (byte)0;
-
-        // Update bits from _cvRailComParameters
-        cv28Value = (byte)((parms.CVRailComParameters.CV28_Bit0_Channel1
-                            ? cv28Value | Cvs.CV28_Bit0_Channel1Broadcast
-                            : cv28Value & ~Cvs.CV28_Bit0_Channel1Broadcast)
-                           | (parms.CVRailComParameters.CV28_Bit1_Channel2
-                            ? Cvs.CV28_Bit1_DataTransmissionAllowed
-                            : 0)
-                           | (parms.CVRailComParameters.CV28_Bit7_AutoLogin
-                            ? Cvs.CV28_Bit7_AutoLogin
-                            : 0));
-
-        // 3. Write both CV28 and CV29
-        Queue<CVValue> cvsToWrite = new();
-        cvsToWrite.Enqueue(new CVValue(Cvs.ConfigurationData1, cv29Value));
-        cvsToWrite.Enqueue(new CVValue(Cvs.RailComConfiguration, cv28Value));
-
-        var writeResult = await WriteCVValuesAsync(parms.ProgTarget, parms.LocoAddress, cvsToWrite);
-        return writeResult.IsSuccess
-            ? new WriteLocoRailComCVsResponse(true, null)
-            : new WriteLocoRailComCVsResponse(false, writeResult.ErrorMessage);
-    }
-
-    /// <inheritdoc />
-    public async Task<WriteLocoSpeedCurveResponse> WriteLocoSpeedCurveCVsAsync(WriteLocoSpeedCurveParams parms)
-    {
-        logger.LogError("WriteLocoSpeedCurveCVs");
-
-        // 1. Must read CV 29 first in order not to overwrite others bites (direction, steps etc.)
-        Queue<ushort> cv29Request = [];
-        cv29Request.Enqueue(Cvs.ConfigurationData1);
-
-        var readResult = await ReadCVValuesAsync(parms.ProgTarget, parms.LocoAddress, cv29Request);
-        if (!readResult.IsSuccess)
-        {
-            return new WriteLocoSpeedCurveResponse(false, readResult.ErrorMessage);
-        }
-
-        byte cv29Value = readResult.CvValues[0].Value;
-
-        // 2. Update Bit 4
-        if (parms.CurveParameters.UseSpeedTable)
-        {
-            cv29Value |= Cvs.CV29_Bit4_SpeedTable; // Set bit
-        }
-        else
-        {
-            cv29Value = (byte)(cv29Value & ~Cvs.CV29_Bit4_SpeedTable); // Clear bit
-        }
-
-        Queue<CVValue> cvsToWrite = [];
-        cvsToWrite.Enqueue(new(Cvs.ConfigurationData1, cv29Value));
-
-        // 3. Add the needed CVs to the queue
-        if (parms.CurveParameters.UseSpeedTable)
-        {
-            for (int i = 0; i < 28; i++)
-            {
-                cvsToWrite.Enqueue(new((ushort)(Cvs.SpeedTableStart + i), parms.CurveParameters.SpeedTable[i]));
-            }
-            cvsToWrite.Enqueue(new(Cvs.ForwardTrim, parms.CurveParameters.CV66_ForwardTrim));
-            cvsToWrite.Enqueue(new(Cvs.ReverseTrim, parms.CurveParameters.CV95_ReverseTrim));
-        }
-        else
-        {
-            cvsToWrite.Enqueue(new(Cvs.VStart, parms.CurveParameters.CV2_VStart));
-            cvsToWrite.Enqueue(new(Cvs.VMid, parms.CurveParameters.CV6_VMid));
-            cvsToWrite.Enqueue(new(Cvs.VHigh, parms.CurveParameters.CV5_VHigh));
-        }
-
-        // 4. Perform write
-        var writeResult = await WriteCVValuesAsync(parms.ProgTarget, parms.LocoAddress, cvsToWrite);
-
-        if (writeResult.IsSuccess)
-        {
-            return new WriteLocoSpeedCurveResponse(
-                true,
-                null
-                );
-        }
-
-        return new WriteLocoSpeedCurveResponse(
-            false,
-            writeResult.ErrorMessage
-            );
     }
 
     #endregion Exposed methods
+
+    /// <summary>
+    /// Adds a CV and bit to the local structure that contains the CVs and bits 
+    /// on the page, if it does not already exists.
+    /// </summary>
+    /// <param name="cv"></param>
+    /// <param name="bit"></param>
+    /// <param name="cvBitsInPage"></param>
+    private static void AddToCvBitsInPageIfNotExists(ushort cv, Bits? bit, ref HashSet<CvBitInPage> cvBitsInPage)
+    {
+        var cvState = new CvBitInPage()
+        {
+            Cv = cv,
+            Bit = bit
+        };
+
+        if (cvBitsInPage.Contains(cvState) is false)
+        {
+            cvBitsInPage.Add(cvState);
+        }
+    }
+
+    /// <summary>
+    /// Evaluate a conditional rule, by checking the actual value of the CV
+    /// and bit defined in the rule against the expected value in the rule.
+    /// </summary>
+    /// <param name="rule">The rule to test.</param>
+    /// <returns>true/false for if the rule matches the actual value in
+    /// DecoderSettings.CvValues</returns>
+    private static bool DoesRuleMatch(Dictionary<ushort, CvState> cvValues, CvConditionalRule rule)
+    {
+        if (cvValues.TryGetValue(rule.Cv, out var cvValue))
+        {
+            if (rule.Bit is null)
+            {
+                // We are looking for at Value:
+                return (rule.Value == cvValue.GetValue());
+            }
+            else
+            {
+                // We are looking for a bit value
+                // The compare value (from decoder file, cannot be null)
+                var theValue = cvValue.GetBit((Bits)rule.Bit);
+                return (theValue is true && rule.Value == 1 ||
+                        theValue is false && rule.Value == 0);
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Gets the CVs from the PageContent fields and if they are a
+    /// value or/and bits. This is stored in a local structure, in
+    /// order to know which cvs and bits are on this page.
+    /// The getForWrite flag, if true, only get the CVs/bits that are relevant for write (rules that match),
+    /// otherwise get all CVs/bits on the page to be able to manage potential change between values as they all
+    /// will be read from the decoder.
+    /// </summary>
+    /// <parm name="getForWrite">Flag for are we getting CVs/bits for write operations (or read).</parm>
+    /// <returns></returns>
+    private static HashSet<CvBitInPage> GetCvsAndBits(ObservableCollection<PageContentBase> pageContent, Dictionary<ushort, CvState> cvValues, bool getForWrite)
+    {
+        // The combination of CV and possibly bit that are on the current page.
+        // This is used to know which CVs and bits to read/write when the user
+        // clicks the buttons.
+        HashSet<CvBitInPage> cvBitsInPage = [];
+
+        foreach (var item in pageContent)
+        {
+            switch (item)
+            {
+                case CvSimpleContent sc:
+                    foreach (var subItem in sc.Content)
+                    {
+                        switch (subItem)
+                        {
+                            case CvSingleItem csi:
+                                AddToCvBitsInPageIfNotExists(csi.Cv, null, ref cvBitsInPage);
+                                break;
+
+                            case CvWithBitItem cwbi:
+                                AddToCvBitsInPageIfNotExists(cwbi.Cv, (Bits?)cwbi.Bit, ref cvBitsInPage);
+                                break;
+
+                            case CvRangeItem cri:
+                                for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                {
+                                    AddToCvBitsInPageIfNotExists(cv, null, ref cvBitsInPage);
+                                }
+                                break;
+                        }
+                    }
+                    break;
+
+                case CvConditionalContent cc:
+                    foreach (var subItem in cc.Content)
+                    {
+                        // if for write, only take those that match:
+                        bool addToLocal = getForWrite ? DoesRuleMatch(cvValues, subItem) : true;
+
+                        if (addToLocal)
+                        {
+                            foreach (var subSubItem in subItem.Content)
+                            {
+                                switch (subSubItem)
+                                {
+                                    case CvSingleItem csi:
+                                        AddToCvBitsInPageIfNotExists(csi.Cv, null, ref cvBitsInPage);
+                                        break;
+
+                                    case CvWithBitItem cwbi:
+                                        AddToCvBitsInPageIfNotExists(cwbi.Cv, (Bits?)cwbi.Bit, ref cvBitsInPage);
+                                        break;
+
+                                    case CvRangeItem cri:
+                                        for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                        {
+                                            AddToCvBitsInPageIfNotExists(cv, null, ref cvBitsInPage);
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        return cvBitsInPage;
+    }
+
+    /// <summary>
+    /// Copy values over, so it is easy for us to set values.
+    /// </summary>
+    private static Result<Dictionary<ushort, CvState>> BuildCvValuesFromDecoderSettings(HashSet<CvBitInPage> cvBitsInPage, DecoderSettings decoderSettings)
+    {
+        // Just in case there should be no bits in the page, but that is unlikely
+        Result result = Result.Success();
+
+        Dictionary<ushort, CvState> cvStates = [];
+        foreach (var entry in cvBitsInPage)
+        {
+            if (cvStates.ContainsKey(entry.Cv) is false)
+            {
+                cvStates[entry.Cv] = new CvState(decoderSettings.CvMetadata[entry.Cv]);
+            }
+
+            if (entry.Bit is null)
+            {
+                result = cvStates[entry.Cv].SetValue(decoderSettings.GetCvValue(entry.Cv));
+            }
+            else
+            {
+                result = cvStates[entry.Cv].SetBit((Bits)entry.Bit, decoderSettings.GetCvBit(entry.Cv, (Bits)entry.Bit));
+            }
+        }
+
+        if (result.IsSuccess)
+        { 
+            return Results.Success(cvStates);
+        }
+        else
+        {
+            return Result<Dictionary<ushort, CvState>>.Failure(result.Messages);
+        }
+    }
 }

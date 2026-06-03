@@ -33,7 +33,7 @@ jobs:
     - name: Restore Workloads
       run: dotnet workload restore
       
-    # --- NEW STEP: Extract version from .csproj ---
+    # Extract version from .csproj
     # This is necessary because we no longer use Tags to control the version.
     # It reads <ApplicationDisplayVersion>1.0.X</Version> from your project file.
     - name: Get Version from Project
@@ -97,8 +97,8 @@ jobs:
       run: |
         npm install -g md-to-pdf
         New-Item -Path ./publish/DOC -ItemType Directory -Force
-        md-to-pdf UserManual.md
-        Move-Item -Path UserManual.pdf -Destination ./publish/DOC/UserManual.pdf -Force
+        md-to-pdf UserManual_en.md
+        Move-Item -Path UserManual_en.pdf -Destination ./publish/DOC/UserManual_en.pdf -Force
         md-to-pdf UserManual_da.md
         Move-Item -Path UserManual_da.pdf -Destination ./publish/DOC/UserManual_da.pdf -Force
 

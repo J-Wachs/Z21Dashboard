@@ -45,7 +45,7 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
     private void LoadData()
     {
         var savedData = _appDataService.GetData<List<PersistentTurnoutData>>(StorageKey);
-        if (savedData != null)
+        if (savedData is not null)
         {
             foreach (var item in savedData)
             {
@@ -59,7 +59,7 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
         }
 
         var savedMetadata = _appDataService.GetData<Dictionary<ushort, TurnoutMetadata>>(MetadataKey);
-        _metadata = savedMetadata ?? new();
+        _metadata = savedMetadata ?? [];
     }
 
     public IEnumerable<TrackedTurnoutCount> GetTrackedTurnouts()

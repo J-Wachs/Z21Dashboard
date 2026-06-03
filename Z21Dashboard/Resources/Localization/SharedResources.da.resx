@@ -117,11 +117,77 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorSavingDecoderDef" xml:space="preserve">
+    <value>Fejl under skrivning af dekoderdefinition '{0}' til lokation '{1}'. Fejl: '{2}'</value>
+  </data>
   <data name="About" xml:space="preserve">
     <value>Om</value>
   </data>
+  <data name="BitOutOfRange" xml:space="preserve">
+    <value>Bitnummer {0} må ikke være fra '{1}' til '{2}'</value>
+  </data>
+  <data name="CannotDeserialize" xml:space="preserve">
+    <value>Kan ikke forstå JSON indholdet i dekoderdefinitionsfilen</value>
+  </data>
   <data name="Connection" xml:space="preserve">
     <value>Forbindelse</value>
+  </data>
+  <data name="CV1718NoValue" xml:space="preserve">
+    <value>CV 17 eller CV 18 blev returneret uden en værdi</value>
+  </data>
+  <data name="CvMetadataNotFound" xml:space="preserve">
+    <value>Information om cv-adresse {0} findes ikke. Operation annulleret.</value>
+  </data>
+  <data name="CvMetadataValueBitsMissing" xml:space="preserve">
+    <value>Information om ValueBits mangler for cv {0}</value>
+  </data>
+  <data name="CVSyncError" xml:space="preserve">
+    <value>Synkroniseringsfejl: Forventede CV {0}, men fik {1} </value>
+  </data>
+  <data name="CvValueOutsideRange" xml:space="preserve">
+    <value>Værdien '{0}' i cv {1} er uden for det tilladte område, som er fra '{2}' til '{3}'</value>
+  </data>
+  <data name="DecoderfileDoesNotExist" xml:space="preserve">
+    <value>Dekoderdefinitionsfilen '{0}' findes ikke</value>
+  </data>
+  <data name="DecoderFileNoCvDefinitions" xml:space="preserve">
+    <value>Dekoderfilen '{0}' fra '{1}' har ingen CV definitioner</value>
+  </data>
+  <data name="ErrorLoadingDecoderDef" xml:space="preserve">
+    <value>Kunne ikke indlæse dekoderdefinition for {0} fra {1}. Fejl: '{2}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoderFile" xml:space="preserve">
+    <value>Fejl ved indlæsning af dekoderfil '{0}'. Fejl: '{1}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoders" xml:space="preserve">
+    <value>Fejl opstået under indlæsning af dekoderfil fra lokal folder '{0}'</value>
+  </data>
+  <data name="ErrorLoadingNmraStandard" xml:space="preserve">
+    <value>Kan ikke indlæse NMRA standard filen</value>
+  </data>
+  <data name="ErrorReadingAppResource" xml:space="preserve">
+    <value>Fejl under læsning af app ressource: '{0}'. Fejl: '{1}'</value>
+  </data>
+  <data name="ErrorReadingDecoderFile" xml:space="preserve">
+    <value>Kan ikke indlæse dekoder fil '{0}' fra '{1}. Fejl: '{2}'</value>
+  </data>
+  <data name="ErrorReadingFromDecoder" xml:space="preserve">
+    <value>Fejl under læsning af CV fra dekoder. Fejl: '{0}'</value>
+  </data>
+  <data name="ErrorWritingToDecoder" xml:space="preserve">
+    <value>Fejl under skrivning af CV til dekoder. Fejl: '{0}'</value>
+  </data>
+  <data name="FailedToRetrieveSystemStatus" xml:space="preserve">
+    <value>Kunne ikke hente systemstatus. Kan ikke forsætte med POM CV-læsning</value>
+  </data>
+  <data name="LocalDecoderFolderNotFound" xml:space="preserve">
+    <value>Lokal folder til dekoderfiler findes ikke. Folderen er '{0}'</value>
+  </data>
+  <data name="LocoAddressMustNotBeNull" xml:space="preserve">
+    <value>Lokomotivadresse må ikke være 'null'</value>
+  </data>
+  <data name="LocoAddressOutOfRange" xml:space="preserve">
+    <value>Lokomotivadressen skal have en værdi mellem 1 og {0} for at kunne kommunikere på hovedsporet</value>
   </data>
   <data name="LocoControl" xml:space="preserve">
     <value>Lokomotivstyring</value>
@@ -135,17 +201,44 @@
   <data name="LocoSlotView" xml:space="preserve">
     <value>Lokomotiv slots</value>
   </data>
+  <data name="MissingPageId" xml:space="preserve">
+    <value>Kan ikke finde side med id {0}</value>
+  </data>
+  <data name="MoreThanOneCV" xml:space="preserve">
+    <value>Mere end en CV-værdi blev returneret</value>
+  </data>
+  <data name="NewLocoAddressOutOfRange" xml:space="preserve">
+    <value>Den nye lokomotivadresse skal være mellem 1 og {0}</value>
+  </data>
+  <data name="NoCVValueNoError" xml:space="preserve">
+    <value>Ingen CV-værdi blev returneret men ingen fejl blev rapporteret</value>
+  </data>
+  <data name="NoPagesInDecoderFiles" xml:space="preserve">
+    <value>Den valgte dekoder '{0}', filen '{1}' fra fabrikant '{2}', har ingen sider defineret. Sider er nødvendige</value>
+  </data>
+  <data name="PageTypeInDecoderFileUnknown" xml:space="preserve">
+    <value>I dekoderfilen '{0}' er siden '{1}' af typen '{2}' defineret. Denne type kan ikke anvendes i applikationen</value>
+  </data>
   <data name="PowerChart" xml:space="preserve">
     <value>Spænding og strøm oversigt</value>
   </data>
   <data name="ProgrammingDecoder" xml:space="preserve">
     <value>Programmering af dekoder</value>
   </data>
+  <data name="RailComMustBeTurnedOn" xml:space="preserve">
+    <value>RailCom skal være aktiveret i Z21 og dekoder for at kunne læse CV-værdier på POM</value>
+  </data>
   <data name="RailComView" xml:space="preserve">
     <value>RailCom data</value>
   </data>
   <data name="RBusView" xml:space="preserve">
     <value>R-Bus tilbagemelding</value>
+  </data>
+  <data name="ReadRejected" xml:space="preserve">
+    <value>Læsning afvist. Modtog en 'NACK' besked</value>
+  </data>
+  <data name="ShortCircuit" xml:space="preserve">
+    <value>Kortslutning er detekteret</value>
   </data>
   <data name="ShowLogView" xml:space="preserve">
     <value>Vis log</value>
@@ -174,10 +267,34 @@
   <data name="Text0005" xml:space="preserve">
     <value>Kunne ikke åbne vejledning. Fejl: {Message}</value>
   </data>
+  <data name="TimeoutDuringReadPOM" xml:space="preserve">
+    <value>Udløb af ventetid under læsning af CV {0}. Der kom ingen svar fra dekoder på hovedsporet</value>
+  </data>
+  <data name="TimeoutDuringReadProgTrack" xml:space="preserve">
+    <value>Udløb af venteitd. Der kom ingen svar for CV {0} på programmeringssporet</value>
+  </data>
+  <data name="TimeoutDuringWrite" xml:space="preserve">
+    <value>Udløb af ventetid. Der kom ingen svar fra dekoder</value>
+  </data>
   <data name="TurnoutListView" xml:space="preserve">
     <value>Sporskifter</value>
   </data>
   <data name="TurnoutProtocolSelector" xml:space="preserve">
     <value>Sporskifteprotokolvælger</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+    <value>(Ukendt)</value>
+  </data>
+  <data name="UnknownProgTarget" xml:space="preserve">
+    <value>Ukendt sted for programmering</value>
+  </data>
+  <data name="ValueOutOfRange" xml:space="preserve">
+    <value>Værdien skal være mellem '{0}' og '{1}'</value>
+  </data>
+  <data name="WriteRejected" xml:space="preserve">
+    <value>Skrivning afvist. Modtog en 'NACK' besked</value>
+  </data>
+  <data name="CannotSaveDecoderDef" xml:space="preserve">
+    <value>Kan ikke gemme dekoderdefinition til applikationsresourcer</value>
   </data>
 </root>

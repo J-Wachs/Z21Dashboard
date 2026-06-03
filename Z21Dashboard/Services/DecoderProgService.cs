@@ -4,20 +4,30 @@ using Z21Client.Helpers;
 using Z21Client.Infrastructure;
 using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
+using Z21Dashboard.Helpers;
 using Z21Dashboard.Infrastructure;
+using Z21Dashboard.Resources.Localization;
 
 namespace Z21Dashboard.Services;
 
-internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client z21Client) : IDecoderProgService
+/// <summary>
+/// Implementation of <see cref="IDecoderProgService"/> that uses the Z21Client to perform CV reading and writing
+/// operations on both the main track (POM) and programming track, with enhanced error handling and logging.
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="z21Client"></param>
+internal class DecoderProgService(
+    ILogger<DecoderProgService> logger,
+    IZ21Client z21Client
+    ) : IDecoderProgService
 {
-    /// <inhericdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage, List<CVValue> CvValues)> ReadCVAddressesPOMAsync(ushort locoAddress, Queue<ushort> cvsToRead)
+    /// <inheritdoc />
+    public async Task<Result<List<CVValue>>> ReadCVAddressesPOMAsync(ushort locoAddress, Queue<ushort> cvsToRead)
     {
         if (locoAddress is 0 or > Limits.HighestLongAddress)
         {
-            return (false,
-                $"The locomotive address must have a value between 1 and {Limits.HighestLongAddress} in order to read on the main track",
-                []);
+            // "The locomotive address must have a value between 1 and {0} in order to communicate on the main track"
+            return Result<List<CVValue>>.Failure(string.Format(SharedResources.LocoAddressOutOfRange, Limits.HighestLongAddress));
         }
 
         // Check that RailCom is enabled before we start the POM reading, since without it we won't get any CV values back.
@@ -27,26 +37,22 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
                 subscribe: h => z21Client.OnSystemStateChanged += h,
                 unsubscribe: h => z21Client.OnSystemStateChanged -= h,
                 timeoutMs: 3000
-            ); ;
+            );
 
         if (sysStateSuccess is false || trackState is null)
         {
-            return new(
-                false,
-                "Failed to retrieve system state. Cannot proceed with POM CV reading.",
-                []
-                );
+            // "Failed to retrieve system state. Cannot proceed with POM CV reading"
+            return Result<List<CVValue>>.Failure(SharedResources.FailedToRetrieveSystemStatus); 
         }
+
         // When we come here, we need to check the configuration for RailCom is enabled.
         // Before FW 1.42 the Capabilities byte was not present. If < 1.42, we just
         // go ahead.
         if (z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42 &&
             trackState.Capabilities?.RailComEnabled is false)
         {
-            return new(
-                false,
-                "RailCom skal være aktiveret for at kunne læse CV værdier fra POM",
-                []);
+            // "RailCom must be enabled in Z21 and decoder in order to read CV values from POM"
+            return Result<List<CVValue>>.Failure(SharedResources.RailComMustBeTurnedOn);
         }
 
         // Go on with the POM reading as before, since we know RailCom is enabled if we got here.
@@ -62,28 +68,28 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
                 timeoutMs: 3000
             );
 
-            if (!success || cvResult == null)
+            if (success is false || cvResult is null)
             {
-                logger.LogError($"Timeout while reading CV {cvAddress} via POM.");
-                return (false, 
-                    $"Timeout: No response for CV {cvAddress} on the main track.",
-                    []);
+                // "Timeout during read of CV {0}. No response from decoder on main track"
+                return Result<List<CVValue>>.Failure(string.Format(SharedResources.TimeoutDuringReadPOM, cvAddress));
             }
 
             if (cvResult.Cv != cvAddress)
-                return (false,
-                    $"Sync error: Requested CV {cvAddress}, received {cvResult.Cv}",
-                    []);
+            {
+                // "Sync error: Requested CV {0}, received {1}"
+                return Result<List<CVValue>>.Failure(string.Format(SharedResources.CVSyncError, cvAddress, cvResult.Cv));
+
+            }
 
             resultList.Add(cvResult);
             await Task.Delay(100); // Ease the bus a bit
         }
 
-        return (true, null, resultList);
+        return Results.Success(resultList);
     }
 
-    /// <inhericdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage, List<CVValue> CvValues)> ReadCVAddressesProgTrackAsync(Queue<ushort> cvsToRead)
+    /// <inheritdoc />
+    public async Task<Result<List<CVValue>>> ReadCVAddressesProgTrackAsync(Queue<ushort> cvsToRead)
     {
         List<CVValue> resultList = [];
 
@@ -105,31 +111,39 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
                 {
                     case AsyncStatus.Success:
                         if (cvResult!.Cv != cvAddress)
-                            return (false,
-                                $"Sync error: Requested CV {cvAddress}, received {cvResult.Cv}",
-                                []);
+                        {
+                            // "Sync error: Requested CV {0}, received {1}"
+                            return Result<List<CVValue>>.Failure(string.Format(SharedResources.CVSyncError, cvAddress, cvResult.Cv));
+                        }
+                            
                         resultList.Add(cvResult);
                         break;
 
                     case AsyncStatus.FailureEvent:
                         // We received a NACK. 'nackShortCircuit' indicates whether it was a short circuit
+                        //  ? "Short circuit detected"
+                        //  : "Read failed (NACK) – no contact with decoder.";
+
                         string msg = nackShortCircuit
-                            ? "Short circuit detected on the programming track!"
-                            : "Read failed (NACK) – no contact with decoder.";
+                            ? SharedResources.ShortCircuit
+                            : SharedResources.ReadRejected;
                         logger.LogWarning(msg);
-                        return (false, msg, []);
+                        return Result<List<CVValue>>.Failure(msg);
 
                     case AsyncStatus.Timeout:
-                        return (false,
-                            "Timeout on the programming track.",
-                            []);
+                        // "Timeout: No response for CV {0} on the programming track"
+                        return Result<List<CVValue>>.Failure(string.Format(SharedResources.TimeoutDuringReadProgTrack, cvAddress));
                 }
 
                 await Task.Delay(100);
             }
-            return (true,
-                null,
-                resultList);
+            return Results.Success(resultList);
+        }
+        catch(Exception ex)
+        {
+            var errorMessage = string.Format(SharedResources.ErrorReadingFromDecoder, ex.Message);
+            logger.LogError(ex, errorMessage);
+            return Result<List<CVValue>>.Failure(errorMessage);
         }
         finally
         {
@@ -137,12 +151,13 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
         }
     }
 
-    /// <inhericdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage)> WriteCVAddressesPOMAsync(ushort locoAddress, Queue<CVValue> cvsToWrite)
+    /// <inheritdoc />
+    public async Task<Result> WriteCVAddressesPOMAsync(ushort locoAddress, Queue<CVValue> cvsToWrite)
     {
         if (locoAddress is 0 or > Limits.HighestLongAddress)
         {
-            return (false, $"The locomotive address must have a value between 1 and {Limits.HighestLongAddress} in order to write on the main track");
+            // "The locomotive address must have a value between 1 and {0} in order to communicate on the main track"
+            return Result.Failure(string.Format(SharedResources.LocoAddressOutOfRange, Limits.HighestLongAddress));
         }
 
         foreach (var item in cvsToWrite)
@@ -155,11 +170,11 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
             await Task.Delay(100);
         }
 
-        return (true, null);
+        return Result.Success();
     }
 
-    /// <inhericdoc />
-    public async Task<(bool IsSuccess, string? ErrorMessage)> WriteCVAddressesProgTrackAsync(Queue<CVValue> cvsToWrite)
+    /// <inheritdoc />
+    public async Task<Result> WriteCVAddressesProgTrackAsync(Queue<CVValue> cvsToWrite)
     {
         try
         {
@@ -178,21 +193,27 @@ internal class DecoderProgService(ILogger<DecoderProgService> logger, IZ21Client
 
                 if (status == AsyncStatus.FailureEvent)
                 {
-                    string msg = nackShortCircuit ? "Short circuit!" : "Write rejected (NACK).";
-                    return (false, msg);
+                    // "Short circuit!" : "Write rejected (NACK)"
+                    string msg = nackShortCircuit ? SharedResources.ShortCircuit : SharedResources.WriteRejected;
+                    return Result.Failure(msg);
                 }
 
                 if (status == AsyncStatus.Timeout)
                 {
-                    return (false,
-                        "Timeout during write – no response.");
+                    // "Timeout during write – no response"
+                    return Result.Failure(SharedResources.TimeoutDuringWrite);
                 }
 
                 // Status must be Success here
                 await Task.Delay(100);
             }
-            return (true,
-                null);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = string.Format(SharedResources.ErrorWritingToDecoder, ex.Message);
+            logger.LogError(ex, errorMessage);
+            return Result.Failure(errorMessage);
         }
         finally
         {

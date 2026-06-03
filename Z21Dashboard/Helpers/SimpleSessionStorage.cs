@@ -31,11 +31,11 @@ internal class SimpleSessionStorage : ISessionStorage
     }
 
     /// <inheritdoc />
-    public ushort? GetUshort(string key)
+    public short? GetShort(string key)
     {
         if (_sessiontItems.TryGetValue(key, out var value))
         {
-            return (ushort?)value;
+            return (short?)value;
         }
 
         return null;
@@ -48,7 +48,7 @@ internal class SimpleSessionStorage : ISessionStorage
     }
 
     /// <inheritdoc />
-    public void SetUshort(string key, ushort? value)
+    public void SetShort(string key, short? value)
     {
         _sessiontItems[key] = value;
     }

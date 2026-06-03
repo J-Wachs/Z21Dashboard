@@ -72,7 +72,7 @@
     },
     {
       "cv": 5,
-      "status": "recommended",
+      "status": "optional",
       "name": {
         "en": "Vhigh",
         "da": "Tophastighed (Vhigh)"
@@ -88,7 +88,7 @@
     },
     {
       "cv": 6,
-      "status": "recommended",
+      "status": "optional",
       "name": {
         "en": "Vmid",
         "da": "Middelhastighed (Vmid)"
@@ -175,6 +175,16 @@
           "name": {
             "en": "Disable Back-EMF",
             "da": "Deaktiver lastregulering"
+          },
+          "values": {
+            "0": {
+              "en": "Not disabled",
+              "da": "Ikke deaktiveret"
+            },
+            "1": {
+              "en": "Disabled",
+              "da": "Deaktiveret"
+            }
           }
         }
       ]
@@ -206,10 +216,110 @@
         "en": "Allowed analog power sources.",
         "da": "Tilladte analoge strømkilder."
       },
-      "value_bits": {
-        "min": 0,
-        "max": 255
-      }
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Analog power conversion",
+            "da": "Skift til analog drift"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Radio",
+            "da": "Radio"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Zero-1",
+            "da": "Zero-1"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "TRIX",
+            "da": "TRIX"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "CTC 16 / Railcommand",
+            "da": "CTC 16 / Railcommand"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "FMZ (Fleischmann)",
+            "da": "FMZ (Fleischmann)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On",
+              "da": "Tændt"
+            }
+          }
+        }
+      ]
     },
     {
       "cv": 13,
@@ -226,8 +336,8 @@
         {
           "bit": 0,
           "name": {
-            "en": "F1",
-            "da": "F1"
+            "en": "At analog F1 is",
+            "da": "Ved analog er F1"
           },
           "values": {
             "0": {
@@ -243,8 +353,8 @@
         {
           "bit": 1,
           "name": {
-            "en": "F2",
-            "da": "F2"
+            "en": "At analog F2 is",
+            "da": "Ved analog er F2"
           },
           "values": {
             "0": {
@@ -260,8 +370,8 @@
         {
           "bit": 2,
           "name": {
-            "en": "F3",
-            "da": "F3"
+            "en": "At analog F3 is",
+            "da": "Ved analog er F3"
           },
           "values": {
             "0": {
@@ -277,8 +387,8 @@
         {
           "bit": 3,
           "name": {
-            "en": "F4",
-            "da": "F4"
+            "en": "At analog F4 is",
+            "da": "Ved analog er F4"
           },
           "values": {
             "0": {
@@ -294,8 +404,8 @@
         {
           "bit": 4,
           "name": {
-            "en": "F5",
-            "da": "F5"
+            "en": "At analog F5 is",
+            "da": "Ved analog er F5"
           },
           "values": {
             "0": {
@@ -311,8 +421,8 @@
         {
           "bit": 5,
           "name": {
-            "en": "F6",
-            "da": "F6"
+            "en": "At analog F6 is",
+            "da": "Ved analog er F6"
           },
           "values": {
             "0": {
@@ -328,8 +438,8 @@
         {
           "bit": 6,
           "name": {
-            "en": "F7",
-            "da": "F7"
+            "en": "At analog F7 is",
+            "da": "Ved analog er F7"
           },
           "values": {
             "0": {
@@ -345,8 +455,8 @@
         {
           "bit": 7,
           "name": {
-            "en": "F8",
-            "da": "F8"
+            "en": "At analog F8 is",
+            "da": "Ved analog er F8"
           },
           "values": {
             "0": {
@@ -376,8 +486,8 @@
         {
           "bit": 0,
           "name": {
-            "en": "FL (Forward)",
-            "da": "FL (Frem)"
+            "en": "At analog FL (Forward) is",
+            "da": "Ved analog er FL (Frem)"
           },
           "values": {
             "0": {
@@ -393,8 +503,8 @@
         {
           "bit": 1,
           "name": {
-            "en": "FL (Reverse)",
-            "da": "FL (Bak)"
+            "en": "At analog FL (Reverse) is",
+            "da": "Ved analog er FL (Bak)"
           },
           "values": {
             "0": {
@@ -410,8 +520,8 @@
         {
           "bit": 2,
           "name": {
-            "en": "F9",
-            "da": "F9"
+            "en": "At analog F9 is",
+            "da": "Ved analog er F9"
           },
           "values": {
             "0": {
@@ -427,8 +537,8 @@
         {
           "bit": 3,
           "name": {
-            "en": "F10",
-            "da": "F10"
+            "en": "At analog F10 is",
+            "da": "Ved analog er F10"
           },
           "values": {
             "0": {
@@ -444,8 +554,8 @@
         {
           "bit": 4,
           "name": {
-            "en": "F11",
-            "da": "F11"
+            "en": "At analog F11 is",
+            "da": "Ved analog er F11"
           },
           "values": {
             "0": {
@@ -461,8 +571,8 @@
         {
           "bit": 5,
           "name": {
-            "en": "F12",
-            "da": "F12"
+            "en": "At analog F12 is",
+            "da": "Ved analog er F12"
           },
           "values": {
             "0": {
@@ -552,7 +662,7 @@
             },
             "1": {
               "en": "Reverse relative to consist",
-              "da": "Omvendt ift. consist"
+              "da": "Omvendt ift. multitraktion"
             }
           }
         }
@@ -571,6 +681,16 @@
           "name": {
             "en": "F0 follows consist",
             "da": "F0 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -578,6 +698,16 @@
           "name": {
             "en": "F1 follows consist",
             "da": "F1 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -585,6 +715,16 @@
           "name": {
             "en": "F2 follows consist",
             "da": "F2 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -592,6 +732,16 @@
           "name": {
             "en": "F3 follows consist",
             "da": "F3 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -599,6 +749,16 @@
           "name": {
             "en": "F4 follows consist",
             "da": "F4 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -606,6 +766,16 @@
           "name": {
             "en": "F5 follows consist",
             "da": "F5 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -613,6 +783,16 @@
           "name": {
             "en": "F6 follows consist",
             "da": "F6 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -620,6 +800,16 @@
           "name": {
             "en": "F7 follows consist",
             "da": "F7 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         }
       ]
@@ -637,6 +827,16 @@
           "name": {
             "en": "F8 follows consist",
             "da": "F8 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -644,6 +844,16 @@
           "name": {
             "en": "F9 follows consist",
             "da": "F9 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -651,6 +861,16 @@
           "name": {
             "en": "F10 follows consist",
             "da": "F10 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -658,6 +878,16 @@
           "name": {
             "en": "F11 follows consist",
             "da": "F11 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -665,6 +895,16 @@
           "name": {
             "en": "F12 follows consist",
             "da": "F12 følger multitraktion"
+          },
+          "values": {
+            "0": {
+              "en": "No",
+              "da": "Nej"
+            },
+            "1": {
+              "en": "Yes",
+              "da": "Ja"
+            }
           }
         },
         {
@@ -689,6 +929,30 @@
           }
         }
       ]
+    },
+    {
+      "cv": 23,
+      "status": "optional",
+      "name": {
+        "en": "Acceleration Adjustment",
+        "da": "Justering af acceleration"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
+    },
+    {
+      "cv": 24,
+      "status": "optional",
+      "name": {
+        "en": "Deceleration Adjustment",
+        "da": "Justering af deacceleration"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255
+      }
     },
     {
       "cv": 25,
@@ -709,10 +973,93 @@
         "en": "Automatic Braking Configuration",
         "da": "Automatisk bremsning"
       },
-      "value_bits": {
-        "min": 0,
-        "max": 255
-      }
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Auto stop when asymmetrical DCC signal, more positive on the right rail",
+            "da": "Auto stop ved asymetrisk DCC signal, mere positiv på højre skinne"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Auto stop when asymmetrical DCC signal, more positive on the left rail",
+            "da": "Autostop ved asymetrisk DCC signal, mere positiv på ventre skinne"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Auto stop when 'Signal Controlled Influence' cutout signal",
+            "da": "Autostop ved 'Signal Controlled Influence' cutout signal"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Auto stop when reverse polarity DC",
+            "da": "Autostop ved baglæns polaritet DC"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Auto stop when forward polarity DC",
+            "da": "Autostop ved fremad polaritet DC"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tændt"
+            }
+          }
+        }
+      ]
     },
     {
       "cv": 28,
@@ -828,8 +1175,8 @@
         {
           "bit": 2,
           "name": {
-            "en": "Analog Mode",
-            "da": "Analog Drift"
+            "en": "Digital/analog mode",
+            "da": "Digital/analog drift"
           },
           "values": {
             "0": {
@@ -837,8 +1184,8 @@
               "da": "Kun Digital"
             },
             "1": {
-              "en": "Analog Allowed",
-              "da": "Analog Tilladt"
+              "en": "Digital and analog",
+              "da": "Digital og analog"
             }
           }
         },
@@ -949,15 +1296,2048 @@
       }
     },
     {
-      "cv_range": {
-        "from": 33,
-        "to": 46
-      },
+      "cv": 33,
       "status": "optional",
       "name": {
-        "en": "Function Mapping",
-        "da": "Funktionskortlægning"
-      }
+        "en": "Mapping of F0 forward to outputs",
+        "da": "Mapning af F0 fremad til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F0 to Output 1",
+            "da": "Map F0 til Udgang 1"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F0 to Output 2",
+            "da": "Map F0 til Udgang 2"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F0 to Output 3",
+            "da": "Map F0 til Udgang 3"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F0 to Output 4",
+            "da": "Map F0 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F0 to Output 5",
+            "da": "Map F0 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F0 to Output 6",
+            "da": "Map F0 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F0 to Output 7",
+            "da": "Map F0 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F0 to Output 8",
+            "da": "Map F0 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 34,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F0 reverse to outputs",
+        "da": "Mapning af F0 baglæns til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F0 to Output 1",
+            "da": "Map F0 til Udgang 1"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F0 to Output 2",
+            "da": "Map F0 til Udgang 2"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F0 to Output 3",
+            "da": "Map F0 til Udgang 3"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F0 to Output 4",
+            "da": "Map F0 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F0 to Output 5",
+            "da": "Map F0 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F0 to Output 6",
+            "da": "Map F0 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F0 to Output 7",
+            "da": "Map F0 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F0 to Output 8",
+            "da": "Map F0 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 35,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F1 to outputs",
+        "da": "Mapning af F1 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F1 to Output 1",
+            "da": "Map F1 til Udgang 1"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F1 to Output 2",
+            "da": "Map F1 til Udgang 2"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F1 to Output 3",
+            "da": "Map F1 til Udgang 3"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F1 to Output 4",
+            "da": "Map F1 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F1 to Output 5",
+            "da": "Map F1 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F1 to Output 6",
+            "da": "Map F1 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F1 to Output 7",
+            "da": "Map F1 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F1 to Output 8",
+            "da": "Map F1 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 36,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F2 to outputs",
+        "da": "Mapning af F2 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F2 to Output 1",
+            "da": "Map F2 til Udgang 1"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F2 to Output 2",
+            "da": "Map F2 til Udgang 2"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F2 to Output 3",
+            "da": "Map F2 til Udgang 3"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F2 to Output 4",
+            "da": "Map F2 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F2 to Output 5",
+            "da": "Map F2 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F2 to Output 6",
+            "da": "Map F2 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F2 to Output 7",
+            "da": "Map F2 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F2 to Output 8",
+            "da": "Map F2 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 37,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F3 to outputs",
+        "da": "Mapning af F3 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F3 to Output 1",
+            "da": "Map F3 til Udgang 1"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F3 to Output 2",
+            "da": "Map F3 til Udgang 2"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F3 to Output 3",
+            "da": "Map F3 til Udgang 3"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F3 to Output 4",
+            "da": "Map F3 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F3 to Output 5",
+            "da": "Map F3 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F3 to Output 6",
+            "da": "Map F3 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F3 to Output 7",
+            "da": "Map F3 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F3 to Output 8",
+            "da": "Map F3 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 38,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F4 to outputs",
+        "da": "Mapning af F4 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F4 to Output 4",
+            "da": "Map F4 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F4 to Output 5",
+            "da": "Map F4 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F4 to Output 6",
+            "da": "Map F4 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F4 to Output 7",
+            "da": "Map F4 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F4 to Output 8",
+            "da": "Map F4 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F4 to Output 9",
+            "da": "Map F4 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F4 to Output 10",
+            "da": "Map F4 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F4 to Output 11",
+            "da": "Map F4 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 39,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F5 to outputs",
+        "da": "Mapning af F5 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F5 to Output 4",
+            "da": "Map F5 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F5 to Output 5",
+            "da": "Map F5 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F5 to Output 6",
+            "da": "Map F5 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F5 to Output 7",
+            "da": "Map F5 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F5 to Output 8",
+            "da": "Map F5 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F5 to Output 9",
+            "da": "Map F5 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F5 to Output 10",
+            "da": "Map F5 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F5 to Output 11",
+            "da": "Map F5 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 40,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F6 to outputs",
+        "da": "Mapning af F6 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F6 to Output 4",
+            "da": "Map F6 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F6 to Output 5",
+            "da": "Map F6 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F6 to Output 6",
+            "da": "Map F6 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F6 to Output 7",
+            "da": "Map F6 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F6 to Output 8",
+            "da": "Map F6 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F6 to Output 9",
+            "da": "Map F6 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F6 to Output 10",
+            "da": "Map F6 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F6 to Output 11",
+            "da": "Map F6 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 41,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F7 to outputs",
+        "da": "Mapning af F7 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F7 to Output 4",
+            "da": "Map F7 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F7 to Output 5",
+            "da": "Map F7 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F7 to Output 6",
+            "da": "Map F7 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F7 to Output 7",
+            "da": "Map F7 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F7 to Output 8",
+            "da": "Map F7 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F7 to Output 9",
+            "da": "Map F7 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F7 to Output 10",
+            "da": "Map F7 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F7 to Output 11",
+            "da": "Map F7 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 42,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F8 to outputs",
+        "da": "Mapning af F8 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F8 to Output 4",
+            "da": "Map F8 til Udgang 4"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F8 to Output 5",
+            "da": "Map F8 til Udgang 5"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F8 to Output 6",
+            "da": "Map F8 til Udgang 6"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F8 to Output 7",
+            "da": "Map F8 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F8 to Output 8",
+            "da": "Map F8 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F8 to Output 9",
+            "da": "Map F8 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F8 to Output 10",
+            "da": "Map F8 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F8 to Output 11",
+            "da": "Map F8 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 43,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F9 to outputs",
+        "da": "Mapning af F9 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F9 to Output 7",
+            "da": "Map F9 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F9 to Output 8",
+            "da": "Map F9 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F9 to Output 9",
+            "da": "Map F9 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F9 to Output 10",
+            "da": "Map F9 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F9 to Output 11",
+            "da": "Map F9 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F9 to Output 12",
+            "da": "Map F9 til Udgang 12"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F9 to Output 13",
+            "da": "Map F9 til Udgang 13"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F9 to Output 14",
+            "da": "Map F9 til Udgang 14"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 44,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F10 to outputs",
+        "da": "Mapning af F10 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F10 to Output 7",
+            "da": "Map F10 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F10 to Output 8",
+            "da": "Map F10 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F10 to Output 9",
+            "da": "Map F10 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F10 to Output 10",
+            "da": "Map F10 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F10 to Output 11",
+            "da": "Map F10 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F10 to Output 12",
+            "da": "Map F10 til Udgang 12"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F10 to Output 13",
+            "da": "Map F10 til Udgang 13"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F10 to Output 14",
+            "da": "Map F10 til Udgang 14"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 45,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F11 to outputs",
+        "da": "Mapning af F11 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F11 to Output 7",
+            "da": "Map F11 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F11 to Output 8",
+            "da": "Map F11 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F11 to Output 9",
+            "da": "Map F11 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F11 to Output 10",
+            "da": "Map F11 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F11 to Output 11",
+            "da": "Map F11 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F11 to Output 12",
+            "da": "Map F11 til Udgang 12"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F11 to Output 13",
+            "da": "Map F11 til Udgang 13"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F11 to Output 14",
+            "da": "Map F11 til Udgang 14"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "cv": 46,
+      "status": "optional",
+      "name": {
+        "en": "Mapping of F12 to outputs",
+        "da": "Mapning af F12 til udgange"
+      },
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Map F12 to Output 7",
+            "da": "Map F12 til Udgang 7"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Map F12 to Output 8",
+            "da": "Map F12 til Udgang 8"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Map F12 to Output 9",
+            "da": "Map F12 til Udgang 9"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Map F12 to Output 10",
+            "da": "Map F12 til Udgang 10"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Map F12 to Output 11",
+            "da": "Map F12 til Udgang 11"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Map F12 to Output 12",
+            "da": "Map F12 til Udgang 12"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Map F12 to Output 13",
+            "da": "Map F12 til Udgang 13"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Map F12 to Output 14",
+            "da": "Map F12 til Udgang 14"
+          },
+          "values": {
+            "0": {
+              "en": "Not mapped",
+              "da": "Ikke mappet"
+            },
+            "1": {
+              "en": "Mapped",
+              "da": "Mappet"
+            }
+          }
+        }
+      ]
     },
     {
       "cv_range": {

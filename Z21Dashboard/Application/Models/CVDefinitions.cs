@@ -3,6 +3,13 @@ using Z21Client.Models;
 
 namespace Z21Dashboard.Application.Models;
 
+/// <summary>
+/// This file contains all the classes related to the structure
+/// of the CV definitions as defined by NMRA in the DCC standard.
+/// </summary>
+/// 
+
+
 public class DccStandard
 {
     [JsonPropertyName("meta")]
@@ -50,12 +57,6 @@ public class CvDefinition
     [JsonPropertyName("flag_bits")]
     public List<CvFlagBit>? FlagBits { get; set; }
 
-    [JsonPropertyName("structure")]
-    public string? Structure { get; set; }
-
-    [JsonPropertyName("table_length")]
-    public int? TableLength { get; set; }
-
     /// <summary>
     /// Helper method to safely retrieve the name in a specific language.
     /// </summary>
@@ -69,7 +70,7 @@ public class CvDefinition
     /// </summary>
     public string GetDescription(string langCode)
     {
-        string? value = null;
+        string? value;
         if (Description is null)
         {
 
@@ -123,8 +124,7 @@ public class CvDefinition
                 {
                     bool hasSetSeperator = false;
                     string? description = null;
-                    Dictionary<string, string>? bitValue = null;
-                    if (flagBits.Values.TryGetValue(0, out bitValue))
+                    if (flagBits.Values.TryGetValue(0, out Dictionary<string, string>? bitValue))
                     {
                         if (bitValue.TryGetValue(langCode, out description))
                         {
@@ -169,25 +169,25 @@ public class CvDefinition
     public class CvRange
     {
         [JsonPropertyName("from")]
-        public required int From { get; set; }
+        public required int CvStart { get; set; }
 
         [JsonPropertyName("to")]
-        public required int To { get; set; }
+        public required int CvEnd { get; set; }
     }
 
     public class CvValueBits
     {
         [JsonPropertyName("min")]
-        public int? Min { get; set; }
+        public ushort? Min { get; set; }
 
         [JsonPropertyName("max")]
-        public int? Max { get; set; }
+        public ushort? Max { get; set; }
 
         [JsonPropertyName("from_bit")]
-        public int? FromBit { get; set; }
+        public ushort? FromBit { get; set; }
 
         [JsonPropertyName("to_bit")]
-        public int? ToBit { get; set; }
+        public ushort? ToBit { get; set; }
     }
 
     public class CvFlagBit

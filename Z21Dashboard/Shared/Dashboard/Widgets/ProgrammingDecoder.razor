@@ -4,6 +4,7 @@
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @using Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder
+@using Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder.AdvTabs
 @inject IStringLocalizer<ProgrammingDecoderResource> Localizer
 @inject IDecoderProgService DecoderProgService
 
@@ -11,18 +12,15 @@
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
-        <div class="d-flex align-items-center justify-content-center p-2">
-            <TabControl @ref="_tabControl">
-                <TabPage Title="@Localizer["SimpleCVProg"]">
-                    <Simple />
-                </TabPage>
-                <TabPage Title="@Localizer["AdvProg"]">
-                    <Advanced DecoderSettings="_decoderSettings"/>
-                </TabPage>
-                <TabPage Title="@Localizer["Address"]">
-                    <Address />
-                </TabPage>
-            </TabControl>
+        <div class="h-100" style="overflow-y: auto;">
+        <TabControl @ref="_tabControl">
+            <TabPage Title="@Localizer["SimpleCVProg"]">
+                <Simple />
+            </TabPage>
+            <TabPage Title="@Localizer["AdvProg"]">
+                <Advanced DecoderSettings="_decoderSettings" />
+            </TabPage>
+        </TabControl>
         </div>
     </Content>
 </DashboardWidget>
@@ -35,6 +33,5 @@
     public EventCallback OnBringToFront { get; set; }
 
     private TabControl? _tabControl;
-
     private DecoderSettings _decoderSettings = new();
 }

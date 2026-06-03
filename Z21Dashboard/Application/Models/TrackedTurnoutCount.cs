@@ -1,8 +1,10 @@
-﻿using System;
-using Z21Client.Models;
+﻿using Z21Client.Models;
 
 namespace Z21Dashboard.Application.Models;
 
+/// <summary>
+/// Record to represent the count of tracked turnouts, including their address, total switches, switches since last service, state, timestamp, and mode.
+/// </summary>
 public record TrackedTurnoutCount
 {
     public ushort Address { get; init; }

@@ -17,12 +17,18 @@ public class DashboardSettings
 
     public MeasurementUnitSystem UnitSystem { get; set; } = MeasurementUnitSystem.Metric;
 
+    public string? LocalLocoDecoderFolder { get; set; }
+
+    public string? LocalLocomotiveFolder { get; set; }
+
     public static implicit operator DashboardSettings(DashboardSettingsStorage storage)
     {
         return new DashboardSettings
         {
             Scale = storage.Scale,
-            TemperatureScale = storage.TemperatureScale
+            TemperatureScale = storage.TemperatureScale,
+            LocalLocoDecoderFolder = storage.LocalLocoDecoderFolder,
+            LocalLocomotiveFolder = storage.LocalLocomotiveFolder
         };
     }
 
@@ -31,7 +37,9 @@ public class DashboardSettings
         return new DashboardSettingsStorage
         {
             Scale = settings.Scale,
-            TemperatureScale = settings.TemperatureScale
+            TemperatureScale = settings.TemperatureScale,
+            LocalLocoDecoderFolder = settings.LocalLocoDecoderFolder,
+            LocalLocomotiveFolder= settings.LocalLocomotiveFolder
         };
     }
 }

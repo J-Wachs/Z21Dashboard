@@ -70,7 +70,7 @@ namespace Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CV read from decoder.
+        ///   Looks up a localized string similar to CV-value read from decoder.
         /// </summary>
         internal static string CVRead {
             get {

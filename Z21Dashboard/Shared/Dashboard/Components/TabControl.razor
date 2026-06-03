@@ -1,42 +1,46 @@
 @*
-   TabControl.razor
+  TabControl.razor
 *@
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
+@using Z21Dashboard.Application.Models
 @inject IJSRuntime JS
 @inject IStringLocalizer<TabControlResource> Localizer
 
 <div class="tabs-container">
-
     <div class="tabs-header">
         <div class="tabs-scroll" @ref="TabsScrollRef">
-
             <ul class="nav-tabs">
-                @foreach (var onePage in Pages)
+                @foreach (var tab in Pages)
                 {
-                    <li class="@(ActivePage == onePage ? "active" : string.Empty)"
-                        onclick="@(() => ActivatePage(onePage))">
-                        @onePage.Title
+                    <li class="@(ActiveTab == tab ? "active" : string.Empty)"
+                        @onclick="() => ActivateTab(tab)">
+                        @tab.Title
                     </li>
                 }
             </ul>
         </div>
 
-        <button class="scroll-btn right" type="button" style="display:@(ShowScrollButtons ? "inline-block" : "none")" onclick="@ScrollLeft" title="@Localizer["ToolTipLeft"]">
-            &#9664;
-        </button>
-        <button class="scroll-btn right" type="button" style="display:@(ShowScrollButtons ? "inline-block" : "none")" onclick="@ScrollRight" title="@Localizer["ToolTipRight"]">
-            &#9654;
-        </button>
+        <button class="scroll-btn right" type="button" style="display:@(ShowScrollButtons ? "inline-block" : "none")" @onclick="ScrollLeft" title="@Localizer["ToolTipLeft"]">&#9664;</button>
+        <button class="scroll-btn right" type="button" style="display:@(ShowScrollButtons ? "inline-block" : "none")" @onclick="ScrollRight" title="@Localizer["ToolTipRight"]">&#9654;</button>
     </div>
 
     <div class="tab-content">
+        <CascadingValue Value="this">
+            @ActiveTab?.Content
+        </CascadingValue>
         <CascadingValue Value="this">
             @ChildContent
         </CascadingValue>
     </div>
 </div>
 
+@*
+    The purpose of these JavaScripts are to scroll the tab header left or right when the respective
+    buttons are clicked, and to check if the tab header is overflowing (i.e., if the total width of
+    the tabs exceeds the visible area) to determine whether to show the scroll buttons.
+*@
 <script>
     window.tabControlScroll = window.tabControlScroll || {};
     window.tabControlScroll.scrollBy = function (element, amount) {
@@ -57,23 +61,133 @@
     [Parameter]
     public EventCallback<ushort>? OnPageChange { get; set; }
 
-    public TabPage? ActivePage { get; set; }
-    private List<TabPage> Pages = new List<TabPage>();
+    [Parameter]
+    public EventCallback OnNotifyStateChange { get; set; }
+
+    public List<TabPageDefinition> Pages = new();
+    private TabPageDefinition? ActiveTab;
 
     private bool ShowScrollButtons = false;
-
     private ElementReference TabsScrollRef;
+    private bool _hasComponentBeenrendered = false;
+
+    private bool _needsMeasure;
+
+    /// <summary>
+    /// Force an update.
+    /// </summary>
+    public async Task NotifyStateChanged()
+    {
+        await OnNotifyStateChange.InvokeAsync();
+        StateHasChanged();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        _hasComponentBeenrendered = true;
+        if ((_needsMeasure || firstRender) && Pages.Count > 0)
         {
-            if (Pages.Count > 0)
-            {
-                ShowScrollButtons = await JS.InvokeAsync<bool>("tabControlScroll.isOverflowing", TabsScrollRef);
-                StateHasChanged();
-            }
+            _needsMeasure = false;
+            // Vent én render-cyklus så DOM er opdateret
+            await Task.Yield();
+            ShowScrollButtons = await JS.InvokeAsync<bool>("tabControlScroll.isOverflowing", TabsScrollRef);
+            StateHasChanged();
         }
+    }
+
+    /// <summary>
+    /// Compile-time (TabPage) registrering
+    /// </summary>
+    /// <param name="tab"></param>
+    /// <returns></returns>
+    internal async ValueTask RegisterPage(TabPageDefinition tab)
+    {
+        // Check if this pageid already exists
+        if (string.IsNullOrEmpty(tab.Id) is false &&
+            Pages.FirstOrDefault(x => x.Id == tab.Id) is not null)
+        {
+            return;
+        }
+
+        Pages.Add(tab);
+
+        if (ActiveTab is null)
+            ActiveTab = tab;
+
+        if (_hasComponentBeenrendered is true)
+        {
+            // Vent én render-cyklus så DOM er opdateret
+            await Task.Yield();
+            ShowScrollButtons = await JS.InvokeAsync<bool>("tabControlScroll.isOverflowing", TabsScrollRef);
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Runtime tabs registration. Can be used to add tabs dynamically
+    /// after the component has been rendered.
+    /// </summary>
+    /// <param name="tab"></param>
+    /// <returns></returns>
+    public async ValueTask AddPage(TabPageDefinition tab)
+    {
+        await RegisterPage(tab);
+        _needsMeasure = true;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Remove a tab page. If the removed tab is the active one,
+    /// the first remaining tab will be activated.
+    /// </summary>
+    /// <param name="tab"></param>
+    public void RemovePage(TabPageDefinition tab)
+    {
+        if (Pages.Remove(tab))
+        {
+            if (ActiveTab == tab)
+                ActiveTab = Pages.FirstOrDefault();
+            StateHasChanged();
+        }
+        else
+        {
+            var res = "Did not go well";
+        }
+    }
+
+    /// <summary>
+    /// Remove tab page by id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public bool RemoveTabById(string id)
+    {
+        var tab = Pages.FirstOrDefault(t => t.Id == id);
+        if (tab is not null)
+        {
+            RemovePage(tab);
+            return true;
+        }
+        else
+        {
+            var res = "Not found";
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Sets the specified tab as active and triggers
+    /// the OnPageChange event with the new active tab index.
+    /// </summary>
+    /// <param name="tab"></param>
+    private void ActivateTab(TabPageDefinition tab)
+    {
+        ActiveTab = tab;
+
+        var index = Pages.IndexOf(tab);
+        OnPageChange?.InvokeAsync((ushort)index);
+
+        StateHasChanged();
     }
 
 
@@ -82,29 +196,9 @@
         await JS.InvokeVoidAsync("tabControlScroll.scrollBy", TabsScrollRef, -150);
     }
 
+
     private async Task ScrollRight()
     {
         await JS.InvokeVoidAsync("tabControlScroll.scrollBy", TabsScrollRef, 150);
-    }
-
-    public void AddPage(TabPage page)
-    {
-        Pages.Add(page);
-        if (Pages.Count == 1)
-        {
-            ActivePage = page;
-        }
-        StateHasChanged();
-    }
-
-    private void ActivatePage(TabPage page)
-    {
-        ActivePage = page;
-
-        // Find the number of the page
-        var index = Pages.FindIndex(p => p == page);
-        OnPageChange?.InvokeAsync((ushort)index);
-
-        StateHasChanged();
     }
 }

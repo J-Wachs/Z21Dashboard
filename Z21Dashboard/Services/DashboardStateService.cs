@@ -85,7 +85,6 @@ public class DashboardStateService : IDashboardStateService
         await Task.CompletedTask;
     }
 
-
     /// <summary>
     /// Retrieves the default set of dashboard component definitions used to initialize the dashboard layout.
     /// The list build in this method, is the master list of widgets in the Z21Dashboard.
@@ -119,7 +118,7 @@ public class DashboardStateService : IDashboardStateService
             new() { Name = SharedResources.TurnoutListView, Width = 450, ComponentType = typeof(TurnoutListView), ComponentTypeName = typeof(TurnoutListView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.TurnoutProtocolSelector, Width = 250, ComponentType = typeof(TurnoutProtocolSelector), ComponentTypeName = typeof(TurnoutProtocolSelector).AssemblyQualifiedName ?? string.Empty },
 
-            new() { Name = SharedResources.ProgrammingDecoder, Width = 700, ComponentType = typeof(ProgrammingDecoder), ComponentTypeName = typeof(ProgrammingDecoder).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.ProgrammingDecoder, Width = 750, Height = 700, ComponentType = typeof(ProgrammingDecoder), ComponentTypeName = typeof(ProgrammingDecoder).AssemblyQualifiedName ?? string.Empty },
         ];
     }
 
@@ -170,7 +169,7 @@ public class DashboardStateService : IDashboardStateService
             {
                 var userComp = storedState.FirstOrDefault(s => s.ComponentTypeName == defaultComp.ComponentTypeName);
 
-                if (userComp != null)
+                if (userComp is not null)
                 {
                     // Component exists: merge properties.
                     mergedState.Add(new DashboardComponentState
@@ -257,6 +256,7 @@ public class DashboardStateService : IDashboardStateService
         {
             return _regionInfo.TwoLetterISORegionName switch
             {
+                // USA, Liberia and Myanmar are the only countries that officially use Fahrenheit. The rest of the world uses Celsius.
                 "US" or "LR" or "MM" => TemperatureScale.Fahrenheit,
                 _ => TemperatureScale.Celsius,
             };
