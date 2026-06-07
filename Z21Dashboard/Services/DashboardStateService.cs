@@ -18,6 +18,8 @@ public class DashboardStateService : IDashboardStateService
 
     private readonly RegionInfo? _regionInfo;
 
+    #region Exposed methods
+
     public DashboardStateService(IAppDataService appDataService)
     {
         var cultureInfo = CultureInfo.CurrentUICulture;
@@ -64,7 +66,7 @@ public class DashboardStateService : IDashboardStateService
     }
 
     /// <inheritdoc  />
-    public async Task<DashboardSettings> GetSettings()
+    public async Task<DashboardSettings> GetSettingsAsync()
     {
         var settings = _appDataService.GetData<DashboardSettingsStorage>("DashboardSettings");
         settings ??= new()
@@ -84,6 +86,8 @@ public class DashboardStateService : IDashboardStateService
         OnSettingsChanged?.Invoke(dashboardSettings);
         await Task.CompletedTask;
     }
+
+    #endregion Exposed methods
 
     /// <summary>
     /// Retrieves the default set of dashboard component definitions used to initialize the dashboard layout.
@@ -106,6 +110,8 @@ public class DashboardStateService : IDashboardStateService
             // User selectable widgets
             new() { Name = SharedResources.LocoControl, Width = 300, ComponentType = typeof(LocoControl), ComponentTypeName = typeof(LocoControl).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoControl2, Width = 300, ComponentType = typeof(LocoControl2), ComponentTypeName = typeof(LocoControl2).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoControl3, Width = 300, ComponentType = typeof(LocoControl3), ComponentTypeName = typeof(LocoControl3).AssemblyQualifiedName ?? string.Empty },
+            new() { Name = SharedResources.LocoControl4, Width = 300, ComponentType = typeof(LocoControl4), ComponentTypeName = typeof(LocoControl4).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoListView, Width = 800, ComponentType = typeof(LocoListView), ComponentTypeName = typeof(LocoListView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.LocoSlotView, Width = 800, ComponentType = typeof(LocoSlotView), ComponentTypeName = typeof(LocoSlotView).AssemblyQualifiedName ?? string.Empty },
             new() { Name = SharedResources.PowerChart, Width = 800, ComponentType = typeof(PowerChart), ComponentTypeName = typeof(PowerChart).AssemblyQualifiedName ?? string.Empty },
@@ -136,7 +142,7 @@ public class DashboardStateService : IDashboardStateService
         var storedState = _appDataService.GetData<List<DashboardComponentStorage>>(DashboardLayoutKey);
         var defaultDefinitions = GetDefaultComponentDefinitions();
 
-        if (storedState == null || storedState.Count == 0)
+        if (storedState is null || storedState.Count == 0)
         {
             // First run: Use default definitions, assign positions, and save.
             int yPos = 130;
@@ -167,7 +173,10 @@ public class DashboardStateService : IDashboardStateService
 
             foreach (var defaultComp in defaultDefinitions)
             {
-                var userComp = storedState.FirstOrDefault(s => s.ComponentTypeName == defaultComp.ComponentTypeName);
+                // We just want to test on the widget name, not the entire type name, as the version will
+                // change for each release.
+                var expectedTypePrefix = $"{defaultComp.ComponentType?.FullName},";
+                var userComp = storedState.FirstOrDefault(s => s.ComponentTypeName.StartsWith(expectedTypePrefix));
 
                 if (userComp is not null)
                 {

@@ -6,25 +6,23 @@
 @using Microsoft.Extensions.Logging
 @using Microsoft.JSInterop
 @using Microsoft.Maui.Controls
-@using System.Text.Json
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
-@using Z21Dashboard.Services.DTOs
 @inject IDashboardStateService DashboardStateService
 @inject IDecoderUIPageBuilder DecoderUIPageBuilder
 @inject IDecoderDefinitionService DecoderDefinitionService
 @inject IDecoderProgHelperService DecoderProgHelperService
 @inject IFileAndFolderService FileAndFolderService
 @inject IJSRuntime JSRuntime
+@inject ILocoDefinitionService LocoDefinitionService
 @inject ILogger<Identify> Logger
-@inject IStringLocalizer<LocomotivesResource> Localizer
+@inject IStringLocalizer<LocosRosterListViewResource> Localizer
 
 <div class="row">
     <div class="col-12">
-        <DataGrid TItem="LocomotiveGridItemDto"
+        <DataGrid TItem="LocomotiveListItemDto"
                   Items="@_locomotivesList"
                   Columns="@_locoColumns"
-                  RowActionsTemplate="@RenderLocoActions"
                   @bind-SelectedItem="@_selectedLocomotive"
                   OnRowClicked="@OnLocomotiveRowClicked"
                   EmptyMessage="No locomotives found in C:\Trains"
@@ -40,19 +38,114 @@
         {
             <button type="button" class="btn btn-primary"
                     @onclick="@(async () => await OnAddNewLoco())" title="Add New Locomotive">
-                @Localizer["AddNewLocomotive"]
+                @Localizer["AddNew"]
             </button>
             <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
                     @onclick="@(async () => await SaveSelectedDecoderAsLocal())" aria-label="ReadCV">
-                @Localizer["MakeCopyOfSelectedLocomotive"]
+                @Localizer["Copy"]
             </button>
             <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
                     @onclick="@(async () => await LoadAndSetupForDecoder())" aria-label="ReadCV">
-                @Localizer["UseSelectedLocomotive"]
+                @Localizer["Edit"]
+            </button>
+            <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                    @onclick="@(async () => await LoadAndSetupForDecoder())" aria-label="ReadCV">
+                @Localizer["Delete"]
+            </button>
+            <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                    @onclick="@(async () => await LoadAndSetupForDecoder())" aria-label="ReadCV">
+                @Localizer["ReadIn"]
             </button>
         }
     </div>
 </div>
+
+@* Add/Edit Locomotive Modal *@
+<DraggableModal IsOpen="@_showAddLocomotiveModal"
+                Title="@(_isEditMode ? $"Edit Locomotive - {_newLocomotive?.Meta?.Name}" : "Add New Locomotive")"
+                Size="DraggableModal.ModalSize.Large"
+                OnClose="@CancelAddLocomotive">
+    <ChildContent>
+        @if (_newLocomotive?.Meta is not null)
+        {
+            <div class="locomotive-form">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name *</label>
+                    <input id="name" type="text" class="form-control" @bind="_newLocomotive.Meta.Name" placeholder="e.g., Express Engine #42" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="shortName" class="form-label">Short name</label>
+                            <input id="shortName" type="text" class="form-control" @bind="_newLocomotive.Meta.ShortName" placeholder="e.g., EX42" maxlength="20" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="manufacturer" class="form-label">Manufacturer</label>
+                            <input id="manufacturer" type="text" class="form-control" @bind="_newLocomotive.Meta.Manufacturer" placeholder="e.g., Kato" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="class" class="form-label">Class</label>
+                            <input id="class" type="text" class="form-control" @bind="_newLocomotive.Meta.Class" placeholder="e.g., A4" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="unitNumber" class="form-label">Unit Number</label>
+                            <input id="unitNumber" type="text" class="form-control" @bind="_newLocomotive.Meta.UnitNumber" placeholder="e.g., 4468" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="catalogueNumber" class="form-label">Catalogue Number</label>
+                    <input id="catalogueNumber" type="text" class="form-control" @bind="_newLocomotive.Meta.CatalogueNumber" placeholder="e.g., 700-1201" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" class="form-control" @bind="_newLocomotive.Meta.Description" placeholder="Detailed description..." rows="3"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="purchased" class="form-label">Purchased</label>
+                            <input id="purchased" type="date" class="form-control" @bind="_newLocomotive.Meta.Purchased" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="purchasePrice" class="form-label">Purchase Price</label>
+                            <input id="purchasePrice" type="number" step="0.01" class="form-control" @bind="_newLocomotive.Meta.PurchasePrice" placeholder="0.00" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="remarks" class="form-label">Remarks</label>
+                    <textarea id="remarks" class="form-control" @bind="_newLocomotive.Meta.Remarks" placeholder="Any remarks..." rows="2"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="modifications" class="form-label">Modifications</label>
+                    <textarea id="modifications" class="form-control" @bind="_newLocomotive.Meta.Modifications" placeholder="List of modifications..." rows="2"></textarea>
+                </div>
+            </div>
+        }
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" @onclick="@SaveNewLocomotiveClick">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="@CancelAddLocomotive">Cancel</button>
+    </FooterContent>
+</DraggableModal>
 
 @code {
     [CascadingParameter]
@@ -86,29 +179,32 @@
     private List<DecoderListItemDto> _listOfLocoDecoders = [];
     private DecoderListItemDto? _selectedFile = null;
     private bool _buttonsDisabled = true;
-    private byte? _manufacturerCode = default;
-    private string _manufacturerName = string.Empty;
-    private byte? _manufacturerVersionNbr = default;
     private DashboardSettings _dashboardSettings = new();
 
-    private List<LocomotiveGridItemDto> _locomotivesList = [];
+    private List<LocomotiveListItemDto> _locomotivesList = [];
     private string _locomotivesDirectory = string.Empty;
-    private LocomotiveGridItemDto? _selectedLocomotive = null;
-    private List<ColumnDefinition<LocomotiveGridItemDto>>? _locoColumns = null;
-    private Func<LocomotiveGridItemDto, string>[]? _searchSelectors = null;
+    private LocomotiveListItemDto? _selectedLocomotive = null;
+    private List<ColumnDefinition<LocomotiveListItemDto>>? _locoColumns = null;
+    private Func<LocomotiveListItemDto, string>[]? _searchSelectors = null;
+
+    // Modal state variables
+    private bool _showAddLocomotiveModal = false;
+    private LocomotiveDefinitionDto? _newLocomotive = null;
+    private bool _isEditMode = false;
+    private string _editingFilePath = string.Empty;
 
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        _dashboardSettings = await GetSettings();
+        _dashboardSettings = await GetSettingsAsync();
 
         _locomotivesDirectory = _dashboardSettings.LocalLocomotiveFolder ?? string.Empty;
 
         InitializeColumns();
 
-        await LoadLocomotivesFromFiles();
+        await LoadLocomotivesFromFilesAsync();
 
         await GetAvailableDecodersAsync();
         if (await SetSelectedDecoderFile())
@@ -128,7 +224,7 @@
     /// <returns></returns>
     private async Task GetAvailableDecodersAsync()
     {
-        var resultListOfLocoDecoders = await DecoderDefinitionService.GetAvailableDecodersAsync();
+        var resultListOfLocoDecoders = await DecoderDefinitionService.GetLocoDecodersAsync();
         if (resultListOfLocoDecoders.IsSuccess is false)
         {
             List<string> lstErrorMessages = [];
@@ -163,7 +259,7 @@
     /// </summary>
     private void InitializeColumns()
     {
-        _locoColumns = new List<ColumnDefinition<LocomotiveGridItemDto>>
+        _locoColumns = new List<ColumnDefinition<LocomotiveListItemDto>>
         {
             new()
             {
@@ -179,7 +275,7 @@
             },
             new()
             {
-                Header = "Short Name",
+                Header = "Short",
                 ValueSelector = l => l.ShortName ?? string.Empty,
                 Width = "100px"
             },
@@ -204,7 +300,7 @@
         };
 
         // Initialize search selectors - these define which fields are searchable
-        _searchSelectors = new Func<LocomotiveGridItemDto, string>[]
+        _searchSelectors = new Func<LocomotiveListItemDto, string>[]
         {
             l => l.Address.ToString(),
             l => l.Name ?? string.Empty,                    // Search by locomotive name
@@ -216,44 +312,9 @@
     }
 
     /// <summary>
-    /// Render the action buttons for a locomotive row.
-    /// </summary>
-    private RenderFragment<LocomotiveGridItemDto> RenderLocoActions => locomotive =>
-    {
-        return builder =>
-        {
-            builder.OpenElement(0, "div");
-            builder.AddAttribute(1, "class", "btn-group btn-group-sm");
-            builder.AddAttribute(2, "role", "group");
-
-            // Edit button
-            builder.OpenElement(3, "button");
-            builder.AddAttribute(4, "type", "button");
-            builder.AddAttribute(5, "class", "btn btn-success btn-sm");
-            builder.AddAttribute(6, "title", "Edit");
-            builder.AddAttribute(7, "onclick", EventCallback.Factory.Create(this, async () => await OnLocoEdit(locomotive)));
-            builder.AddEventStopPropagationAttribute(8, "onclick", true);
-            builder.AddContent(9, new MarkupString("<span style=\"font-size: 12pt;\">✎</span>"));
-            builder.CloseElement();
-
-            // Delete button
-            builder.OpenElement(10, "button");
-            builder.AddAttribute(11, "type", "button");
-            builder.AddAttribute(12, "class", "btn btn-danger btn-sm");
-            builder.AddAttribute(13, "title", "Delete");
-            builder.AddAttribute(14, "onclick", EventCallback.Factory.Create(this, async () => await OnLocoDelete(locomotive)));
-            builder.AddEventStopPropagationAttribute(15, "onclick", true);
-            builder.AddContent(16, new MarkupString("<span style=\"font-size: 12pt;\">✕</span>"));
-            builder.CloseElement();
-
-            builder.CloseElement();
-        };
-    };
-
-    /// <summary>
     /// Handle row click event in the locomotive grid.
     /// </summary>
-    private async Task OnLocomotiveRowClicked(LocomotiveGridItemDto locomotive)
+    private async Task OnLocomotiveRowClicked(LocomotiveListItemDto locomotive)
     {
         //_selectedLocomotive = locomotive;
         _buttonsDisabled = false;
@@ -263,53 +324,26 @@
     /// <summary>
     /// Load locomotive definitions from JSON files in the C:\Trains directory.
     /// </summary>
-    private async Task LoadLocomotivesFromFiles()
+    private async Task LoadLocomotivesFromFilesAsync()
     {
-        try
+
+        var result = await LocoDefinitionService.GetLocomotivesAsync();
+        if (result.IsSuccess is false)
         {
-            _locomotivesList.Clear();
-
-            if (!Directory.Exists(_locomotivesDirectory))
+            if (result.Messages.Count > 0)
             {
-                return;
-            }
-
-            var jsonFiles = Directory.GetFiles(_locomotivesDirectory, "*.json");
-
-            foreach (var filePath in jsonFiles)
-            {
-                try
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
                 {
-                    var jsonContent = await File.ReadAllTextAsync(filePath);
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var locomotive = JsonSerializer.Deserialize<LocomotiveDefinitionFileDto>(jsonContent, options);
-
-                    if (locomotive?.Meta is not null)
-                    {
-                        _locomotivesList.Add(new LocomotiveGridItemDto
-                        {
-                            Address = locomotive.Decoder.Address,
-                            FilePath = filePath,
-                            FileName = Path.GetFileName(filePath),
-                            Name = locomotive.Meta.Name ?? string.Empty,
-                            ShortName = locomotive.Meta.ShortName,
-                            Manufacturer = locomotive.Meta.Manufacturer,
-                            Class = locomotive.Meta.Class,
-                            UnitNumber = locomotive.Meta.UnitNumber
-                        });
-                    }
+                    lstErrorMessages.AddRange(fileMessages.Messages);
                 }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, $"Error loading locomotive file: {filePath}");
-                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
             }
         }
-        catch (Exception ex)
+        else
         {
-            Logger.LogError(ex, "Error loading locomotives from directory");
-            ErrorMessages.Add($"Error loading locomotives: {ex.Message}");
-            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            _locomotivesList = [.. result.Data!];
         }
     }
 
@@ -386,7 +420,7 @@
         }
 
         // Read the decoder definition file:
-        var result = await DecoderDefinitionService.SetCVsFromDecoderDefIntoSettings(decoder, DecoderSettings);
+        var result = await DecoderDefinitionService.GetLocoDecoderDefAndSetCVsIntoSettings(decoder, DecoderSettings);
         if (result.IsSuccess is false)
         {
             foreach (var errorMessageForField in result.Messages)
@@ -453,7 +487,7 @@
     {
         await BlankMessages();
 
-        _dashboardSettings = await GetSettings();
+        _dashboardSettings = await GetSettingsAsync();
 
         if (Directory.Exists(_dashboardSettings.LocalLocoDecoderFolder))
         {
@@ -569,7 +603,7 @@
     /// <returns></returns>
     private async Task SetCopiedDecoderFileAsSelected(DecoderListItemDto originalSelectedFile, string fullFilename)
     {
-        DecoderFileRootDto? decoderFile = await DecoderDefinitionService.GetMetaInfoFromLocalDecoderFile(fullFilename);
+        DecoderFileRootDto? decoderFile = await DecoderDefinitionService.GetMetaInfoFromLocalLocoDecoderFile(fullFilename);
 
         _selectedFile = new(
             FileName: Path.GetFileName(fullFilename),
@@ -579,10 +613,9 @@
         );
     }
 
-
-    private async Task<DashboardSettings> GetSettings()
+    private async Task<DashboardSettings> GetSettingsAsync()
     {
-        return await DashboardStateService.GetSettings();
+        return await DashboardStateService.GetSettingsAsync();
     }
 
     /// <summary>
@@ -623,52 +656,6 @@
     }
 
     /// <summary>
-    /// Get manufacturer information from decoder and look up manufacturer name
-    /// from the NRMA list of manufacturers.
-    /// </summary>
-    /// <returns></returns>
-    private async Task GetManufacturer()
-    {
-        await BlankMessages();
-
-        _buttonsDisabled = true;
-        WorkingMessage = Localizer["CVReading"];
-        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
-        StateHasChanged();
-
-        var result = await DecoderProgHelperService.ReadLocoDecoderManufacturerAsync(
-            ProgTargetAddr.ProgTarget,
-            (ushort?)ProgTargetAddr.LocoAddress
-            );
-
-        WorkingMessage = null;
-        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
-
-        if (result.IsSuccess)
-        {
-            SuccessMessage = Localizer["CVRead"];
-            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
-            _manufacturerCode = result.Data!.ManufacturerCode;
-            _manufacturerName = result.Data!.ManufacturerName;
-            _manufacturerVersionNbr = result.Data!.VersionNumber;
-        }
-        else
-        {
-            if (result.Messages?.Count > 0)
-            {
-                List<string> lstErrorMessages = [];
-                foreach (var errorMessageForField in result.Messages)
-                {
-                    lstErrorMessages.AddRange(errorMessageForField.Messages);
-                }
-                ErrorMessages = lstErrorMessages;
-                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
-            }
-        }
-        _buttonsDisabled = false;
-    }
-
-    /// <summary>
     /// Clear error and status messages
     /// </summary>
     private async Task BlankMessages()
@@ -685,21 +672,48 @@
     /// <summary>
     /// Handle edit action for a locomotive.
     /// </summary>
-    private async Task OnLocoEdit(LocomotiveGridItemDto locomotive)
+    private async Task OnLocoEdit(LocomotiveListItemDto locomotive)
     {
         try
         {
             await BlankMessages();
-            WorkingMessage = "Opening locomotive for editing...";
+            WorkingMessage = "Loading locomotive for editing...";
             await WorkingMessageChanged.InvokeAsync(WorkingMessage);
             StateHasChanged();
 
-            // TODO: Implement edit functionality
-            // This could open a dialog/modal for editing the locomotive file
-            // For now, just display a success message
-            SuccessMessage = $"Edit feature for '{locomotive.Name}' not yet implemented.";
-            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
-            StateHasChanged();
+            // Load the locomotive data from the file
+            var result = await LocoDefinitionService.GetLocomotiveAsync(locomotive.FilePath);
+            if (!result.IsSuccess)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    List<string> lstErrorMessages = [];
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        lstErrorMessages.AddRange(fileMessages.Messages);
+                    }
+
+                    ErrorMessages.AddRange(lstErrorMessages);
+                    await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                }
+                return;
+            }
+            _newLocomotive = result.Data;
+
+            if (_newLocomotive is not null)
+            {
+                _isEditMode = true;
+                _editingFilePath = locomotive.FilePath;
+                _showAddLocomotiveModal = true;
+                StateHasChanged();
+                SuccessMessage = null;
+                await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            }
+            else
+            {
+                ErrorMessages.Add($"Failed to load locomotive data from '{locomotive.FilePath}'");
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
         }
         catch (Exception ex)
         {
@@ -717,7 +731,7 @@
     /// <summary>
     /// Handle delete action for a locomotive.
     /// </summary>
-    private async Task OnLocoDelete(LocomotiveGridItemDto locomotive)
+    private async Task OnLocoDelete(LocomotiveListItemDto locomotive)
     {
         try
         {
@@ -745,17 +759,27 @@
                 await WorkingMessageChanged.InvokeAsync(WorkingMessage);
                 StateHasChanged();
 
-                if (File.Exists(locomotive.FilePath))
+                var result = await LocoDefinitionService.DeleteLocomotiveFileAsync(locomotive.FilePath);
+                if (result.IsSuccess)
                 {
-                    File.Delete(locomotive.FilePath);
-                    await LoadLocomotivesFromFiles();
+                    await LoadLocomotivesFromFilesAsync();
                     SuccessMessage = $"Locomotive '{locomotive.Name}' deleted successfully.";
                     await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                    StateHasChanged();
+                    
                 }
                 else
                 {
-                    ErrorMessages.Add($"Locomotive file not found: {locomotive.FilePath}");
-                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    if (result.Messages.Count > 0)
+                    {
+                        List<string> lstErrorMessages = [];
+                        foreach (var fileMessages in result.Messages)
+                        {
+                            lstErrorMessages.AddRange(fileMessages.Messages);
+                        }
+                        ErrorMessages.AddRange(lstErrorMessages);
+                        await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                    }
                 }
             }
         }
@@ -781,22 +805,101 @@
         try
         {
             await BlankMessages();
-            WorkingMessage = "Opening new locomotive dialog...";
-            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
-            StateHasChanged();
 
-            // TODO: Implement add functionality
-            // This could open a dialog/modal for creating a new locomotive
-            // For now, just display a success message
-            SuccessMessage = "Add new locomotive feature not yet implemented.";
+            // Initialize a new locomotive with default decoder configuration
+            _newLocomotive = new LocomotiveDefinitionDto
+            {
+                Meta = new LocomotiveMetaDto
+                {
+                    Name = string.Empty,
+                    ShortName = null,
+                    Manufacturer = null,
+                    CatalogueNumber = null,
+                    Class = null,
+                    UnitNumber = null,
+                    Description = null,
+                    Purchased = null,
+                    PurchasePrice = null,
+                    Remarks = null,
+                    Modifications = null
+                },
+                Decoder = new LocomotiveDecoderDto
+                {
+                    Address = 0
+                }
+            };
+
+            // Open the modal
+            _showAddLocomotiveModal = true;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessages.Add($"Error opening add locomotive dialog: {ex.Message}");
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            Logger.LogError(ex, "Error opening add locomotive dialog");
+        }
+    }
+
+    /// <summary>
+    /// Save the new locomotive to a JSON file and refresh the list.
+    /// </summary>
+    private async Task SaveNewLocomotiveClick()
+    {
+        if (_newLocomotive?.Meta is not null)
+        {
+            await SaveNewLocomotive();
+        }
+    }
+
+    /// <summary>
+    /// Validate and save the locomotive to a JSON file (handles both add and edit modes).
+    /// </summary>
+    private async Task SaveNewLocomotive()
+    {
+        try
+        {
+            await BlankMessages();
+
+            var result = await LocoDefinitionService.SaveLocomotiveAsync(_newLocomotive!);
+            if (!result.IsSuccess)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    List<string> lstErrorMessages = [];
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        lstErrorMessages.AddRange(fileMessages.Messages);
+                    }
+                    ErrorMessages.AddRange(lstErrorMessages);
+                    await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                }
+                StateHasChanged();
+                return;
+            }
+
+            // Reload the locomotives list
+            await LoadLocomotivesFromFilesAsync();
+
+            // Store the locomotive name for the success message before clearing
+            string locoName = _newLocomotive!.Meta.Name ?? "Unknown";
+
+            // Close the modal
+            _showAddLocomotiveModal = false;
+            _newLocomotive = null;
+            _isEditMode = false;
+            _editingFilePath = string.Empty;
+
+            string action = _isEditMode ? "updated" : "added";
+            SuccessMessage = $"Locomotive '{locoName}' {action} successfully.";
             await SuccessMessageChanged.InvokeAsync(SuccessMessage);
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            ErrorMessages.Add($"Error adding locomotive: {ex.Message}");
+            ErrorMessages.Add($"Error saving locomotive: {ex.Message}");
             await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
-            Logger.LogError(ex, "Error adding locomotive");
+            Logger.LogError(ex, "Error saving locomotive");
         }
         finally
         {
@@ -804,4 +907,18 @@
             await WorkingMessageChanged.InvokeAsync(WorkingMessage);
         }
     }
+
+    /// <summary>
+    /// Cancel adding/editing a locomotive and close the modal.
+    /// </summary>
+    private async Task CancelAddLocomotive()
+    {
+        _showAddLocomotiveModal = false;
+        _newLocomotive = null;
+        _isEditMode = false;
+        _editingFilePath = string.Empty;
+        await BlankMessages();
+        StateHasChanged();
+    }
+
 }

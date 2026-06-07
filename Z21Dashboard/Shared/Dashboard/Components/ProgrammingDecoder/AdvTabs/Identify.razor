@@ -18,7 +18,6 @@
 @using Microsoft.Maui.Controls
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
-@using Z21Dashboard.Services.DTOs
 @inject IDashboardStateService DashboardStateService
 @inject IDecoderUIPageBuilder DecoderUIPageBuilder
 @inject IDecoderDefinitionService DecoderDefinitionService
@@ -152,7 +151,7 @@
     {
         await base.OnInitializedAsync();
 
-        _dashboardSettings = await GetSettings();
+        _dashboardSettings = await GetSettingsAsync();
 
         await GetAvailableDecodersAsync();
         if (await SetSelectedDecoderFile())
@@ -172,7 +171,7 @@
     /// <returns></returns>
     private async Task GetAvailableDecodersAsync()
     {
-        var resultListOfLocoDecoders = await DecoderDefinitionService.GetAvailableDecodersAsync();
+        var resultListOfLocoDecoders = await DecoderDefinitionService.GetLocoDecodersAsync();
         if (resultListOfLocoDecoders.IsSuccess is false)
         {
             foreach (var errorMessageForField in resultListOfLocoDecoders.Messages)
@@ -288,7 +287,7 @@
         var afterCount = Parent.Pages.Count();
 
         // Read the decoder definition file:
-        var result = await DecoderDefinitionService.SetCVsFromDecoderDefIntoSettings(decoder, DecoderSettings);
+        var result = await DecoderDefinitionService.GetLocoDecoderDefAndSetCVsIntoSettings(decoder, DecoderSettings);
         if (result.IsSuccess is false)
         {
             List<string> lstErrorMessages = [];
@@ -385,7 +384,7 @@
     {
         await BlankMessages();
 
-        _dashboardSettings = await GetSettings();
+        _dashboardSettings = await GetSettingsAsync();
 
         if (Directory.Exists(_dashboardSettings.LocalLocoDecoderFolder))
         {
@@ -501,7 +500,7 @@
     /// <returns></returns>
     private async Task SetCopiedDecoderFileAsSelected(DecoderListItemDto originalSelectedFile, string fullFilename)
     {
-        DecoderFileRootDto? decoderFile = await DecoderDefinitionService.GetMetaInfoFromLocalDecoderFile(fullFilename);
+        DecoderFileRootDto? decoderFile = await DecoderDefinitionService.GetMetaInfoFromLocalLocoDecoderFile(fullFilename);
 
         _selectedFile = new(
             FileName: Path.GetFileName(fullFilename),
@@ -512,9 +511,9 @@
     }
 
 
-    private async Task<DashboardSettings> GetSettings()
+    private async Task<DashboardSettings> GetSettingsAsync()
     {
-        return await DashboardStateService.GetSettings();
+        return await DashboardStateService.GetSettingsAsync();
     }
 
     /// <summary>

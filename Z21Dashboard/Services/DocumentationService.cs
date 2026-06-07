@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Resources.Localization;
-using Z21Status.Application.Interfaces;
 
-namespace Z21Status.Services;
+namespace Z21Dashboard.Services;
 
 /// <summary>
 /// Implements the service for handling application documentation.

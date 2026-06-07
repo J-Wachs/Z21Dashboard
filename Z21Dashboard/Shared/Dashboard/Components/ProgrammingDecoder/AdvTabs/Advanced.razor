@@ -17,7 +17,7 @@
     <CascadingValue Value="@DecoderSettings">
         <TabControl OnNotifyStateChange="OnTimeToRefresh">
             <TabPage Title="@Localizer["Locomotives"]">
-                <Locomotives @bind-ErrorMessages="@_errorMessages"
+                <LocosRosterListView @bind-ErrorMessages="@_errorMessages"
                              @bind-WorkingMessage="@_workingMessage"
                              @bind-SuccessMessage="@_statusMessage" />
             </TabPage>

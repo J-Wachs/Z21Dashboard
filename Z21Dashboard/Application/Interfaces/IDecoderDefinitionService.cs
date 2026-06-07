@@ -1,6 +1,5 @@
 ﻿using Z21Dashboard.Application.Models;
 using Z21Dashboard.Helpers;
-using Z21Dashboard.Services.DTOs;
 
 namespace Z21Dashboard.Application.Interfaces;
 
@@ -14,14 +13,14 @@ internal interface IDecoderDefinitionService
     /// the application package and the local custom folder.
     /// </summary>
     /// <returns>A list of decoder items containing metadata.</returns>
-    Task<Result<IReadOnlyList<DecoderListItemDto>?>> GetAvailableDecodersAsync();
+    Task<Result<IReadOnlyList<DecoderListItemDto>?>> GetLocoDecodersAsync();
 
     /// <summary>
     /// Get the meta section of a local decoder definition file without fully parsing the entire file.
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    Task<DecoderFileRootDto?> GetMetaInfoFromLocalDecoderFile(string filePath);
+    Task<DecoderFileRootDto?> GetMetaInfoFromLocalLocoDecoderFile(string filePath);
 
     /// <summary>
     /// The decoder definition file ia updated with the values from teh DecoderSettings structure.
@@ -41,5 +40,5 @@ internal interface IDecoderDefinitionService
     /// </summary>
     /// <param name="decoder">The decoder definition.</param>
     /// <param name="decoderSettings">The settings object to populate.</param>
-    Task<Result> SetCVsFromDecoderDefIntoSettings(DecoderListItemDto decoder, DecoderSettings decoderSettings);
+    Task<Result> GetLocoDecoderDefAndSetCVsIntoSettings(DecoderListItemDto decoder, DecoderSettings decoderSettings);
 }

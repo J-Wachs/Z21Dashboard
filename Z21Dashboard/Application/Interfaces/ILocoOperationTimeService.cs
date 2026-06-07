@@ -24,7 +24,7 @@ public record TrackedLocoTime(
 /// <summary>
 /// Defines the contract for a service that tracks locomotive operating time.
 /// </summary>
-public interface ILocoOperatingTimeService
+internal interface ILocoOperatingTimeService
 {
     /// <summary>
     /// An event that is raised whenever the operating time data is updated (typically once per second).

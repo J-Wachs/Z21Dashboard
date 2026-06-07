@@ -4,7 +4,7 @@ using Z21Client.Models;
 using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 
-namespace Z21Dashboard.Application.Services;
+namespace Z21Dashboard.Services;
 
 public class TurnoutCounterService : ITurnoutCounterService, IDisposable
 {
@@ -23,8 +23,8 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
     private readonly ConcurrentDictionary<ushort, TurnoutState> _lastKnownStates = new();
     private readonly ConcurrentDictionary<ushort, DateTime> _timestamps = new();
     private readonly ConcurrentDictionary<ushort, TurnoutMode> _modes = new();
-    private Dictionary<ushort, TurnoutMetadata> _metadata = new();
-    private readonly object _lock = new();
+    private Dictionary<ushort, TurnoutMetadata> _metadata = [];
+    private readonly Lock _lock = new();
 
     private const string StorageKey = "TurnoutCounts";
     private const string MetadataKey = "TurnoutMetadata";
@@ -66,7 +66,7 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
     {
         lock (_lock)
         {
-            return _trackers.Values.Select(t => new TrackedTurnoutCount
+            return [.. _trackers.Values.Select(t => new TrackedTurnoutCount
             {
                 Address = t.Address,
                 TotalSwitches = t.TotalSwitches,
@@ -74,7 +74,7 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
                 State = _lastKnownStates.TryGetValue(t.Address, out var state) ? state : TurnoutState.NotSwitched,
                 Timestamp = _timestamps.TryGetValue(t.Address, out var ts) ? ts : DateTime.MinValue,
                 Mode = _modes.TryGetValue(t.Address, out var mode) ? mode : null
-            }).OrderBy(rec => rec.Address).ToList();
+            }).OrderBy(rec => rec.Address).ToList()];
         }
     }
 
@@ -246,5 +246,6 @@ public class TurnoutCounterService : ITurnoutCounterService, IDisposable
     {
         _z21Client.OnTurnoutInfoReceived -= OnTurnoutInfoReceived;
         _z21Client.OnTurnoutModeReceived -= OnTurnoutModeReceived;
+        GC.SuppressFinalize(this);
     }
 }

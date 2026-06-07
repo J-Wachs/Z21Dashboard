@@ -1,6 +1,6 @@
 namespace Z21Dashboard.Application.Models;
 
-public class LocomotiveGridItemDto
+public class LocomotiveListItemDto
 {
     public required string FilePath { get; set; }
     public required short Address { get; set; }

@@ -1,4 +1,5 @@
 @*
+    PowerChart.razor
     A component that subscribes to Z21 SystemStateChanged events, samples the data
     at a configurable interval to find peak values, and displays the result in a dual-axis line chart.
 *@
@@ -32,36 +33,25 @@
     </Content>
 </DashboardWidget>
 
-<!-- Settings Dialog -->
-@if (showSettingsDialog)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditSettingsForPower"]</h5>
-                    <button type="button" class="btn-close" @onclick="CloseSettingsDialog" aria-label="@Localizer["Close"]"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="intervalSelect" class="form-label">@Localizer["SampleInterval"]:</label>
-                        <select id="intervalSelect" class="form-select" @onchange="OnIntervalChanged">
-                            @for (int i = 10; i <= 60; i += 10)
-                            {
-                                <option value="@i" selected="@(i == dataCaptureIntervalSeconds)">@i @Localizer["Seconds"]</option>
-                            }
-                        </select>
-                        <div class="form-text">@Localizer["SampleInfoText"]</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CloseSettingsDialog">@Localizer["Close"]</button>
-                </div>
-            </div>
+<DraggableModal IsOpen="showSettingsDialog"
+                Title="@Localizer["EditSettingsForPower"]"
+                OnClose="CloseSettingsDialog">
+    <ChildContent>
+        <div class="mb-3">
+            <label for="intervalSelect" class="form-label">@Localizer["SampleInterval"]:</label>
+            <select id="intervalSelect" class="form-select" @onchange="OnIntervalChanged">
+                @for (int i = 10; i <= 60; i += 10)
+                {
+                    <option value="@i" selected="@(i == dataCaptureIntervalSeconds)">@i @Localizer["Seconds"]</option>
+                }
+            </select>
+            <div class="form-text">@Localizer["SampleInfoText"]</div>
         </div>
-    </div>
-}
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" @onclick="CloseSettingsDialog" aria-label="@Localizer["Close"]">@Localizer["Close"]</button>
+    </FooterContent>
+</DraggableModal>
 
 @code {
     [Parameter]

@@ -168,7 +168,7 @@
   <data name="ServiceInterval" xml:space="preserve">
     <value>Serviceinterval</value>
   </data>
-  <data name="SIPlaceholder" xml:space="preserve">
+  <data name="SIPlaceHolder" xml:space="preserve">
     <value>Fx 10</value>
   </data>
   <data name="Speed" xml:space="preserve">

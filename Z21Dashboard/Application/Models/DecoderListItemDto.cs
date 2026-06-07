@@ -1,6 +1,4 @@
-﻿using Z21Dashboard.Application.Models;
-
-namespace Z21Dashboard.Services.DTOs;
+﻿namespace Z21Dashboard.Application.Models;
 
 /// <summary>
 /// Data Transfer Object representing a summary of a decoder definition.

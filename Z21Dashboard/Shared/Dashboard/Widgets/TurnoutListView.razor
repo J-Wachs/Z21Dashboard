@@ -1,3 +1,8 @@
+@*
+    TurnoutListView.razor
+    Widget to display a list of tracked turnouts with their switch counts and
+    allow quick access to change their position and edit settings.
+*@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Client
@@ -76,72 +81,64 @@
         </div>
     </Content>
 </DashboardWidget>
-
-@if (_isDialogOpen)
-{
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal fade show" tabindex="-1" style="display: block;">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Localizer["EditSettingsForTurnout"] @(_selectedTurnoutForEdit?.Address + 1)</h5>
-                    <button type="button" class="btn-close" @onclick="CloseEditDialog" aria-label="@Localizer["Close"]"></button>
-                </div>
-                <div class="modal-body">
-                    @if (!_showDeleteConfirmation)
-                    {
-                        <div class="mb-3">
-                            <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
-                            <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
-                                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC)
-                                {
-                                    <option value="@TurnoutMode.DCC">DCC</option>
-                                }
-                                @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.MM)
-                                {
-                                    <option value="@TurnoutMode.MM">MM</option>
-                                }
-                            </select>
-                        </div>
-                        <hr />
-                        <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
-                        <div class="mb-3">
-                            <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalSwitches"]:</label>
-                            <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalSwitches" placeholder="@Localizer["IntervalPlaceholder"]" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">@Localizer["SwitchesSinceService"]:</label>
-                            <input type="text" class="form-control" value="@(_selectedTurnoutForEdit?.SwitchesSinceService ?? 0)" readonly />
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
-                            <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkServicePerformed"]</label>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-warning">
-                            @Localizer["ConfirmDeleteText"] (@(_selectedTurnoutForEdit?.Address + 1))?
-                        </div>
-                    }
-                </div>
-                <div class="modal-footer">
-                    @if (!_showDeleteConfirmation)
-                    {
-                        <button type="button" class="btn btn-danger me-auto" @onclick="@(() => _showDeleteConfirmation = true)">@Localizer["Delete"]</button>
-                        <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog">@Localizer["Cancel"]</button>
-                        <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync">@Localizer["Save"]</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-danger" @onclick="DeleteTurnoutAsync">@Localizer["Confirm"]</button>
-                        <button type="button" class="btn btn-secondary" @onclick="@(() => _showDeleteConfirmation = false)">@Localizer["Cancel"]</button>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+@{
+    var modalTitle = Localizer["EditSettingsForTurnout"] + " " + (_selectedTurnoutForEdit?.Address + 1);
 }
+<DraggableModal IsOpen="_isDialogOpen"
+                OnClose="CloseEditDialog"
+                Title="@Localizer["EditSettingsForTurnout"]">
+    <ChildContent>
+        @if (!_showDeleteConfirmation)
+        {
+            <div class="mb-3">
+                <label for="protocolSelect" class="form-label">@Localizer["Protocol"]</label>
+                <select id="protocolSelect" class="form-select" @bind="_selectedTurnoutMode">
+                    @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC)
+                    {
+                        <option value="@TurnoutMode.DCC">DCC</option>
+                    }
+                    @if (Z21Client.Capabilities is null || Z21Client.Capabilities.Protocols is Protocols.DCC_MM or Protocols.MM)
+                    {
+                        <option value="@TurnoutMode.MM">MM</option>
+                    }
+                </select>
+            </div>
+            <hr />
+            <h6 class="mb-3">@Localizer["ServiceInterval"]</h6>
+            <div class="mb-3">
+                <label for="serviceIntervalInput" class="form-label">@Localizer["IntervalSwitches"]:</label>
+                <input type="number" id="serviceIntervalInput" class="form-control" @bind="_editableMetadata.ServiceIntervalSwitches" placeholder="@Localizer["IntervalPlaceholder"]" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">@Localizer["SwitchesSinceService"]:</label>
+                <input type="text" class="form-control" value="@(_selectedTurnoutForEdit?.SwitchesSinceService ?? 0)" readonly />
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="servicePerformedCheck" @bind="_servicePerformed" />
+                <label class="form-check-label" for="servicePerformedCheck">@Localizer["MarkServicePerformed"]</label>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                @Localizer["ConfirmDeleteText"] (@(_selectedTurnoutForEdit?.Address + 1))?
+            </div>
+        }
+    </ChildContent>
+    <FooterContent>
+        @if (!_showDeleteConfirmation)
+        {
+            <button type="button" class="btn btn-danger me-auto" @onclick="@(() => _showDeleteConfirmation = true)" aria-label="@Localizer["Delete"]">@Localizer["Delete"]</button>
+            <button type="button" class="btn btn-secondary" @onclick="CloseEditDialog" aria-label="@Localizer["Cancel"]">@Localizer["Cancel"]</button>
+            <button type="button" class="btn btn-primary" @onclick="SaveSettingsAsync" aria-label="@Localizer["Save"]">@Localizer["Save"]</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger" @onclick="DeleteTurnoutAsync" aria-label="@Localizer["Confirm"]">@Localizer["Confirm"]</button>
+            <button type="button" class="btn btn-secondary" @onclick="@(() => _showDeleteConfirmation = false)" aria-label="@Localizer["Cancel"]">@Localizer["Cancel"]</button>
+        }
+    </FooterContent>
+</DraggableModal>
 
 @code {
     [Parameter]

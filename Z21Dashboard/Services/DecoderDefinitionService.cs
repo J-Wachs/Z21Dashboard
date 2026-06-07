@@ -6,7 +6,6 @@ using Z21Dashboard.Application.Interfaces;
 using Z21Dashboard.Application.Models;
 using Z21Dashboard.Helpers;
 using Z21Dashboard.Resources.Localization;
-using Z21Dashboard.Services.DTOs;
 using Z21Dashboard.Shared.Dashboard.Components.ProgrammingDecoder.AdvTabs;
 
 namespace Z21Dashboard.Services;
@@ -32,12 +31,12 @@ internal class DecoderDefinitionService(
     #region Exposed Methods
 
     /// <inheritdoc />
-    public async Task<Result<IReadOnlyList<DecoderListItemDto>?>> GetAvailableDecodersAsync()
+    public async Task<Result<IReadOnlyList<DecoderListItemDto>?>> GetLocoDecodersAsync()
     {
         List<DecoderListItemDto> decoderList = [];
 
         // Step 1: Load from Application Resources
-        var resultLoadFromAppRess = await LoadFromApplicationResourceAsync();
+        var resultLoadFromAppRess = await LoadLocoDecoderIndexFromAppResourceAsync();
         if (resultLoadFromAppRess.IsSuccess is false || resultLoadFromAppRess.Data is null)
         {
             return Result<IReadOnlyList<DecoderListItemDto>?>.Failure(resultLoadFromAppRess.Messages);
@@ -46,7 +45,7 @@ internal class DecoderDefinitionService(
         decoderList.AddRange(appDecoders);
 
         // Step 2: Load from Local File System
-        var resultLoadFromLocalFileSys = await LoadFromLocalFileSystemAsync();
+        var resultLoadFromLocalFileSys = await LoadLocoDecoderIndexFromLocalFileSystemAsync();
         if (resultLoadFromLocalFileSys.IsSuccess is false || resultLoadFromLocalFileSys.Data is null)
         {
             return Result<IReadOnlyList<DecoderListItemDto>?>.Failure(resultLoadFromAppRess.Messages);
@@ -58,7 +57,7 @@ internal class DecoderDefinitionService(
     }
 
     /// <inheritdoc />
-    public async Task<DecoderFileRootDto?> GetMetaInfoFromLocalDecoderFile(string filePath)
+    public async Task<DecoderFileRootDto?> GetMetaInfoFromLocalLocoDecoderFile(string filePath)
     {
         var content = await File.ReadAllTextAsync(filePath);
 
@@ -127,7 +126,7 @@ internal class DecoderDefinitionService(
     }
 
     /// <inheritdoc />
-    public async Task<Result> SetCVsFromDecoderDefIntoSettings(DecoderListItemDto decoder, DecoderSettings decoderSettings)
+    public async Task<Result> GetLocoDecoderDefAndSetCVsIntoSettings(DecoderListItemDto decoder, DecoderSettings decoderSettings)
     {
         // 0. Prepare settings object
         decoderSettings.Clear();
@@ -281,7 +280,7 @@ internal class DecoderDefinitionService(
             string jsonContent = JsonSerializer.Serialize(decoderDefinition, _jsonOptions);
             if (decoder.Location == DecoderFileLocation.LocalStorage)
             {
-                var dashboardSettings = await dashboardStateService.GetSettings();
+                var dashboardSettings = await dashboardStateService.GetSettingsAsync();
                 string filePath = Path.Combine(dashboardSettings.LocalLocoDecoderFolder!, decoder.FileName);
                 await File.WriteAllTextAsync(filePath, jsonContent);
 
@@ -664,7 +663,7 @@ internal class DecoderDefinitionService(
     /// the app) and returns a list of DecoderListItemDto.
     /// </summary>
     /// <returns></returns>
-    private async Task<Result<IReadOnlyList<DecoderListItemDto>>> LoadFromApplicationResourceAsync()
+    private async Task<Result<IReadOnlyList<DecoderListItemDto>>> LoadLocoDecoderIndexFromAppResourceAsync()
     {
         List<DecoderListItemDto> results = [];
         // "#if WINDOWS" is used as the method FileSystem.OpenAppPackageFileAsync only exists
@@ -706,9 +705,9 @@ internal class DecoderDefinitionService(
     /// Loads decoder files from the local file system and returns a list of DecoderListItemDto.
     /// </summary>
     /// <returns></returns>
-    private async Task<Result<IReadOnlyList<DecoderListItemDto>>> LoadFromLocalFileSystemAsync()
+    private async Task<Result<IReadOnlyList<DecoderListItemDto>>> LoadLocoDecoderIndexFromLocalFileSystemAsync()
     {
-        var _dashboardSettings = await dashboardStateService.GetSettings();
+        var _dashboardSettings = await dashboardStateService.GetSettingsAsync();
         if (Path.Exists(_dashboardSettings.LocalLocoDecoderFolder) is false)
         {
             var errorMessage = string.Format(SharedResources.LocalDecoderFolderNotFound, _dashboardSettings.LocalLocoDecoderFolder);
@@ -730,7 +729,7 @@ internal class DecoderDefinitionService(
             {
                 try
                 {
-                    DecoderFileRootDto? decoderFile = await GetMetaInfoFromLocalDecoderFile(filePath);
+                    DecoderFileRootDto? decoderFile = await GetMetaInfoFromLocalLocoDecoderFile(filePath);
                     if (decoderFile?.Meta is not null &&
                         !string.IsNullOrWhiteSpace(decoderFile.Meta.Manufacturer) &&
                         !string.IsNullOrWhiteSpace(decoderFile.Meta.Model))
@@ -793,7 +792,7 @@ internal class DecoderDefinitionService(
             }
             else
             {
-                var _dashboardSettings = await dashboardStateService.GetSettings();
+                var _dashboardSettings = await dashboardStateService.GetSettingsAsync();
                 if (Path.Exists(_dashboardSettings.LocalLocoDecoderFolder) is false)
                 {
                     return Result<DecoderDefinitionFileDto>.Failure(string.Format(SharedResources.LocalDecoderFolderNotFound, _dashboardSettings.LocalLocoDecoderFolder));

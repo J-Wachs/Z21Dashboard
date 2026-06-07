@@ -2,7 +2,7 @@
 
 namespace Z21Dashboard.Application.Models;
 
-public class LocomotiveDefinitionFileDto
+public class LocomotiveDefinitionDto
 {
     [JsonPropertyName("meta")]
     public required LocomotiveMetaDto Meta { get; set; }

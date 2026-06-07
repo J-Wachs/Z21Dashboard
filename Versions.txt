@@ -1,0 +1,61 @@
+Version 1.20 of 2026-03-17
+--------------------------
+For users:
+* Z21Dashboard Settings renamed to Configuration
+* Configuration divided into tabs
+* Added a tab with settings: Temperature scale and model train scale
+* Changes to System Status and System Status – complete widgets to display temperature in the
+  selected temperature scale
+* New widget "Speed Measure" to measure the model train’s speed and convert it to full-scale speed
+* Added button 'Super Maximize' to the title bar of the dashboard's main window to maximize the
+  dashboard to the full screen size (across monitors)
+* A 'Acknowledgement' button and dialog was added to the 'About' widget to acknowledge the use of
+  third-party libraries and tools in the development of Z21Dashboard
+* Added two more locomotive controllers, giving four locomotive controllers in total
+
+For developers:
+* DashboardStateService exposes an event triggered when settings are changed
+* New Blazor component 'DraggableModal.razor' for creating draggable modals. The component has been
+  applied to all widgets having a modal dialog (LocoController, Settings, Speed Measure, etc.)
+* As a part of adding two more locomotive controllers, the code for locomotive controllers has been
+  refactored to use one set of resource files
+
+Bug fixes:
+* The RBus widget did not request the initial state of the RBus
+* In the Loco Control widgets, the place holder text for service interval was not
+  displayed correctly when the value was not set
+* When updating the Z21Dashboard application the previously positions and the selected widget was reset
+  and all widgets were shown
+
+
+Version 1.10 of 2025-12-31
+--------------------------
+* The dashboard canvas has now been expanded to fill the entire window. Widgets for connection and
+  'About' can be moved and overlapped by other widgets
+* Delay when entering locomotive address is 1.5 seconds
+* Added widget to change protocol on turnouts
+* If the Z21 uses firmware 1.42 or newer, it is only possible to choose the protocol configured
+  directly in the Z21
+* Unlike the first version, the installation now includes the required .NET runtime (.NET 10), and
+  you do not need to download it yourself
+* The turnout overview now shows the number of switches, and by clicking the setup button you can
+  specify how many switches there should be before the turnout requires servicing. The number of
+  switches is shown in yellow when 10% of the allowed number of switches remain (or fewer than 50),
+  and in red when service should already have been performed
+* It is now possible to delete locomotives and turnouts from the overviews
+* Bug that allowed entering addresses greater than 10239 has been fixed
+* Bug where certain texts in the “Locomotive slots” widget were in English. They are now either in
+  Danish or English depending on Windows settings
+* For those who want to develop themselves, some widgets have had their names changed, e.g.
+  DashboardWindows.razor is now called DashboardWidget.razor
+
+Version 1.01 of 2025-12-07
+--------------------------
+* When you have installed with the exe installation file, and later wants to uninstall, then the
+  two folders that the application has created will be not removed as expected. Uninstall the
+  current version, and install this version and if you later wants to uninstall, the folders will
+  be removed as expected.
+
+Version 1.00 of 2025-11-28
+--------------------------
+Initial release of Z21Dashboard.

@@ -1,7 +1,8 @@
 @*
     About.razor
-    A simple component that displays the application's assembly version
-    and an optional additional text string.
+    Displays the application's assembly version and an optional additional
+    text string. It also includes a button to open a dialog showing
+    acknowledgements.
 *@
 @using System.Reflection
 @using Microsoft.AspNetCore.Components.Web
@@ -13,13 +14,60 @@
                  OnHeaderMouseDown="OnHeaderMouseDown"
                  OnBringToFront="OnBringToFront">
     <Content>
-        <div class="row g-2">
+        <div class="row">
             <span>@Localizer["Version"]: @_appVersion</span>
-            <p></p>
-            <p>@Localizer["Description"]</p>
+        </div>
+        <div class="row">
+            <span>@Localizer["Description"]</span>
+        </div>
+        <div class="row">
+            <span><button class="btn btn-primary float-end" @onclick="OpenDialog" aria-label="@Localizer["Acknowledgements"]">@Localizer["Acknowledgements"]</button></span>
         </div>
     </Content>
 </DashboardWidget>
+
+<DraggableModal IsOpen="_isDialogOpen"
+                Title="@Localizer["AcknowledgementsHeader"]"
+                Size="DraggableModal.ModalSize.Large"
+                OnClose="CloseDialog">
+    <ChildContent>
+        <p>
+            @Localizer["AckText"]
+        </p>
+        <p>
+            <span style="text-decoration-line: underline;">@Localizer["TheFont"] FluentSystemIcons-Regular.ttf</span>
+        </p>
+        <span style="font-family: monospace">
+            <p>
+                MIT License
+            </p>
+            <p>
+                Copyright (c) 2020 Microsoft Corporation
+            </p>
+            <p>
+                Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+                associated documentation files (the "Software"), to deal in the Software without restriction, including
+                without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+                following conditions:
+            </p>
+            <p>
+                The above copyright notice and this permission notice shall be included in all copies or substantial
+                portions of the Software.
+            </p>
+            <p>
+                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+                TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+                THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+                CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+                DEALINGS IN THE SOFTWARE.
+            </p>
+        </span>
+    </ChildContent>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" @onclick="CloseDialog" aria-label="@Localizer["Close"]">@Localizer["Close"]</button>
+    </FooterContent>
+</DraggableModal>
 
 @code {
     [Parameter]
@@ -29,13 +77,21 @@
     public EventCallback OnBringToFront { get; set; }
 
     private string _appVersion = "-";
+    private bool _isDialogOpen = false;
 
     protected override void OnInitialized()
     {
-        // Get the currently executing assembly (our application).
         var assembly = Assembly.GetExecutingAssembly();
-
-        // This corresponds to the <AssemblyVersion> tag (e.g., 1.0.0.0).
         _appVersion = assembly.GetName().Version?.ToString() ?? "-";
+    }
+
+    private void OpenDialog()
+    {
+        _isDialogOpen = true;
+    }
+
+    private void CloseDialog()
+    {
+        _isDialogOpen = false;
     }
 }

@@ -2,19 +2,23 @@
 
 # Indholdsfortegnelse
 *   [Indledning](#indledning)
+    *   [Nyheder i version 1.20](#nyheder-i-version-1.20)
     *   [Hvorfor Z21Dashboard?](#hvorfor-z21dashboard)
+    *   [Målgruppen for applikationen](#målgruppen-for-applikationen)
     *   [Lidt om teknikken](#lidt-om-teknikken)
 *   [Z21 familien af centralstationer](#z21-familien-af-centralstationer)
     *   [Brug af protokol](#brug-af-protokol)
     *   [z21/z21Start og låst eller ej](#z21z21start-og-låst-eller-ej)
 *   [Første gang du starter](#første-gang-du-starter)
 *   [Dashboardet](#dashboardet)
+    *   [Supermaksimer af dashboardet](#supermaksimer-af-dashboardet)
     *   [Flyt rundt på vinduer](#flyt-rundt-på-vinduer)
     *   [Tilpas dit dashboard (vis/skjul vinduer)](#tilpas-dit-dashboard-visskjul-vinduer)
     *   [De vigtigste vinduer forklaret](#de-vigtigste-vinduer-forklaret)
 *   [Kendte problemer](#kendte-problemer)
     *   [Z21Dashboard afvikles i en virtuel Windows maskine i Virtual](#z21dashboard-afvikles-i-en-virtuel-windows-maskine-i-virtualbox-men-visse-widgets-vises-ikke-korrekt)
 *   [FAQ (OSS)](#faq-oss)
+    *   [Når jeg klikker på knappen for at søge vises min Z21 ikke](#når-jeg-klikker-på-knappen-for-at-søge-vises-min-z21-ikke)
     *   [Hvad betyder "Låst" (Locked)?](#hvad-betyder-låst-locked)
     *   [Kan navne fra min multiMAUS eller Z21 app overføres til Z21Dashboard?](#kan-navne-fra-min-multimaus-eller-z21-app-overføres-til-z21dashboard)
     *   [Z21Dashboard kan ikke forbinde til min Z21](#z21dashboard-kan-ikke-forbinde-til-min-z21)
@@ -27,6 +31,22 @@
 Velkommen til Z21Dashboard. Denne vejledning hjælper dig med at komme i gang med at bruge programmet til at overvåge
 og styre din modeljernbane via din Roco/Fleischmann Z21 centralstation.
 
+## Nyheder i version 1.20
+
+* Z21Dashboard Settings er omdøbt til Konfiguration
+* Konfiguration er opdelt i faner
+* Tilføjet en fane med indstillinger: temperaturskala og modeltogsskala
+* Ændringer i widgets System Status og System Status – Complete, så temperaturen vises i den valgte temperaturskala
+* Ny widget “Hastighedsmåling” til måling af modeltogets hastighed og konvertering til hastighed i fuld skala
+* Tilføjet knappen “Super Maximize” i titellinjen på dashboardets hovedvindue for at maksimere dashboardet til fuld skærm (på tværs af skærme)
+* Tilføjet en “Anerkendelser”-knap og dialog i "Om" widgetten til at anerkende brugen af tredjepartsbiblioteker og -værktøjer i udviklingen af Z21Dashboard
+* Tilføjet to ekstra lokomotivstyringer, så der i alt er fire lokomotivstyringer
+* DashboardStateService eksponerer nu en hændelse, som udløses, når indstillinger ændres
+
+Fejlrettelser:
+* "RBus" widgetten anmodede ikke om RBus’ indledende tilstand
+* I "Lokomotivstyring" widgets blev pladsholderteksten for serviceinterval ikke vist korrekt, når værdien ikke var angivet
+
 ## Hvorfor Z21Dashboard?
 
 Z21Dashboard startede som et "for sjov projekt". Jeg er IT-udvikler, og syntes det kunne sjovt at
@@ -34,6 +54,17 @@ skrive et program til min z21Start, så jeg kunne se hvilke lokomotiver og spors
 min togbane.
 
 Så kom alle ideérne og så blev Z21Dashboard til.
+
+## Målgruppen for applikationen
+
+Der er to målgrupper for Z21Dashboard:
+
+* Modeltogsentusiasten, der ønsker et overblik, som man ikke får ved at bruge multiMAUS, wlanMAUS eller den
+  officielle Z21-app, men på samme tid ikke ønsker en mere kompliceret løsning, som software til at automatisere
+  driften på modelbanen.
+* Modeltogsentusiasten, der, udover ovenstående, ønsker at udvikle software til Z21, og derfor kan hente inspiration
+  i Z21Dashboard eller bruge Z21Dashboard som afsæt til en ny applikation. Et ønske kunne være at udvide med CAN-bus
+  og LocoNet-funktionalitet til Z21 (modeller i sort kabinet) centralstationerne.
 
 ## Lidt om teknikken
 
@@ -104,6 +135,22 @@ vist oversigen med widget. Her kan du skjule de widgets, du ikke ønsker at se.
 
 Hele skærmbilledet er dit personlige lærred. Her kan du arrangere de forskellige informations- og kontrolvinduer
 (widgets), præcis som du ønsker det.
+
+## Supermaksimer af dashboardet
+I dashboardets titellinje, øverst til venstre, er der fire knapper:
+
+* Supermaksimer
+* Minimer
+* Maksimer
+* Luk
+
+De tre sidste er standard Windows-knapper, og de fungerer som du forventer. Supermaksimér knappen maksimerer dashboardet
+til fuld skærm, på tværs af alle dine skærme. Når dashboard vinduet er supermaksimeret, vil et klik på Supermaksimér knappen igen gendanne
+det til den størrelse og position, det havde før supermaksimeringen.
+
+Hvis dashboardvinduet er supermaksiteret når du lukker applikationen, og du starter applikationen igen, så vil dashboardet starte i supermaksimeret
+tilstand. Ønsker du herefter at bringe vinduet tilbage til normal størrelse, er du nødt til at gøre det ved at trække i vinduets kanter, da Supermaksimér
+knappen ikke længere kender den tidligere størrelse på vinduet.
 
 ## Flyt rundt på vinduer
 
@@ -213,7 +260,6 @@ Widget'en husker den højeste værdi modtaget, og når intervallet er "udløbet"
 værdi til grafen.
 
 ### Hastighedsmåling
-
 Dette vindue måler togets modelhastighed og omregner den til skala 1:1 hastighed. Du kan samtidig se begge værdier.
 
 For at kunne måle hastighed er det nødvendigt, at du har sensorer på din bane. Sensorer kan være implementeret som
@@ -238,7 +284,7 @@ På billedet vises en strækning inddelt i blokke, hvor blokkene fungerer som se
 De to blokke behøver ikke nødvendigvis at støde op til hinanden. Med opsætningen i billedet kan du anvende  
 blok B2 og B4 som sensorer.
 
-![Blok eksempel](./Blocks.png)
+![Blok eksempel](./TwoBlocks.png)
 
 **Bemærk!**  
 Da målingen foregår ved at registrere, hvornår en sensor aktiveres (blok optaget eller kontaktskinne/IR-sensor trigget),  
@@ -246,9 +292,11 @@ kan systemet ikke afgøre, *hvilket* tog der passerer. Hvis sensorerne er placer
 komme ind på strækningen, vil dette give en forkert måling.
 
 Der er indbygget en timeout i målingen. Når den første sensor aktiveres, skal den anden sensor aktiveres  
-inden for 15 minutter, ellers annulleres målingen.
+inden for 10 minutter, ellers annulleres målingen.
 
-
+**Bemærk!**
+Hvis du ændrer målesystemet i Windows, mens Z21Dashboard er åbent, så skal du lukke det, og starte det igen, for at
+ændringen træder i kraft i Z21Dashboard.
 
 # Kendte problemer
 
@@ -260,6 +308,24 @@ Dette kan skyldes at der er valgt at "Pointing device" på fanen "System" i Virt
 Ændr det til "PS/2 Mouse" og prøv igen.
 
 # FAQ (OSS)
+
+## Når jeg klikker på knappen for at søge vises min Z21 ikke
+
+Listen som metoden returnerer er tom, og du får ingen fejl. Du kan forbinde med Z21Client til din Z21 centralstation
+(alle modeller), og sende kommandoer og modtage data. At metoden returnerer en tom liste, sker typisk når pc'en er
+koblet på netværket trådløst.
+
+For at finde Z21'ere på netværket udsender QueryForZ21s en UDP-broadcast som Z21 centralstationerne skal svare på.
+Mange access points og routere blokerer for UDP-broadcasts, og det er derfor muligt, at din Z21 ikke modtager
+broadcastet og derfor ikke svarer på det. Det er også muligt, at din pc ikke modtager svaret fra Z21.
+
+Kik i opsætningen af dit access point eller router og se, om der er en indstilling for at blokere for UDP-broadcasts.
+Hvis det er tilfældet, skal du slå denne indstilling fra. Visse routere og access points har også en indstilling for
+at blokere for UDP-broadcasts på det trådløse net alene. Andre access points og routere har ikke en indstilling, men
+blokerer for UDP-broadcasts på det trådløse net som standard. I dette tilfælde kan du prøve at forbinde din pc til
+netværket med kabel for at se, om det løser problemet. Hvis det gør det, er det sandsynligt, at dit access point
+eller router blokerer for UDP-broadcasts på det trådløse net.
+
 
 ## Hvad betyder "Låst" (Locked)?
 

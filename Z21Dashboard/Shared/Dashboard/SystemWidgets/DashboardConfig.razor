@@ -141,7 +141,7 @@
     {
         DashboardStateService.OnLayoutChanged += OnLayoutChanged;
         LoadComponentList();
-        _dashboardSettings = await DashboardStateService.GetSettings();
+        _dashboardSettings = await DashboardStateService.GetSettingsAsync();
     }
 
     private void LoadComponentList()
@@ -160,7 +160,7 @@
 
     public async Task RereadSettings()
     {
-        _dashboardSettings = await DashboardStateService.GetSettings();
+        _dashboardSettings = await DashboardStateService.GetSettingsAsync();
         _settingsMessage = Localizer["SettingsRereadMessage"];
     }
 
