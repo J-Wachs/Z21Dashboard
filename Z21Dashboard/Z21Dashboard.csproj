@@ -39,12 +39,12 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.3.0</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -66,23 +66,30 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="Resources\Raw\LocoDecoders\0-Eksempel.json" />
+      <Content Remove="resources\raw\locodecoders\0-MärklinMotorolaV1.json" />
+      <Content Remove="Resources\Raw\LocoDecoders\0-MärklinMotorolaV2.json" />
       <Content Remove="resources\raw\locodecoders\0-NMRAMaxStandardDecoder.json" />
 	  <Content Remove="Resources\Raw\LocoDecoders\0-NMRAMinStandardDecoder.json" />
 	  <Content Remove="Resources\Raw\LocoDecoders\131-Trix612093.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\145-Zimo-MX633P22.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\145-Zimo-MX645P16.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\145-Zimo-MX645P22.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\151-ESUInteriourLight50708.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\151-LokPilotDCCV5.json" />
 	  <Content Remove="Resources\Raw\LocoDecoders\151-LokPilotV5.json" />
-	  <Content Remove="Resources\Raw\LocoDecoders\151-LokPilotV5DCC.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\151-LokSoundV5.json" />
+	  <Content Remove="Resources\Raw\LocoDecoders\151-LokSoundV5DCC.json" />
       <Content Remove="Resources\Raw\NmraManufacturers.json" />
       <Content Remove="resources\raw\nmra_9_2_2_locomotive_base.json" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.8" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.11" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.101" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.101" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.12" />
     </ItemGroup>
 
     <ItemGroup>
@@ -91,6 +98,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="AppXamlResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AppXamlResource.resx</DependentUpon>
+      </Compile>
       <Compile Update="Resources\Localization\SharedResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -101,162 +113,227 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\InputCVBitFlagResources.Designer.cs">
+      <Compile Update="Ui\Components\FileSaveAsDialogResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>InputCVBitFlagResources.resx</DependentUpon>
+        <DependentUpon>FileSaveAsDialogResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\InputNumericValueResources.Designer.cs">
+      <Compile Update="Ui\Components\InputBitFlagResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>InputBitFlagResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Components\InputNumericValueResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>InputNumericValueResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\AdvancedResource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Components\DraggableModalResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>AdvancedResource.resx</DependentUpon>
+        <DependentUpon>DraggableModalResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\DynamicListResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProgrammingDecoderResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\AllCvsReadWriteResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllCvsReadWriteResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\DecoderEditMetaResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DecoderEditMetaResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\SpeedCurve28Resources.Designer.cs">
+        <DependentUpon>SpeedCurve28Resources.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\ZIMO_FKeyMappingResources.Designer.cs">
+        <DependentUpon>ZIMO_FKeyMappingResources.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\Esu50708_09_FKeyMappingResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Esu50708_09_FKeyMappingResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\Esu50708_09OutputsResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Esu50708_09OutputsResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoDecodersResource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoDecodersResource.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\DynamicListResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DynamicListResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\FKeyMappingStandardResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\FKeyMappingStandardResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>FKeyMappingStandardResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\LocosRosterListViewResource.Designer.cs">
-        <DependentUpon>LocosRosterListViewResource.resx</DependentUpon>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoEditBaseResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoEditBaseResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoEditInfoResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocoEditInfoResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocomotivesResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocomotivesResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocosRosterListViewResources.Designer.cs">
+        <DependentUpon>LocosRosterListViewResources.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\IdentifyResource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoDecoderListResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>IdentifyResource.resx</DependentUpon>
+        <DependentUpon>LocoDecoderListResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\AddressResource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\AddressResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>AddressResource.resx</DependentUpon>
+        <DependentUpon>AddressResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\SpeedCurve3And28Resource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\MMPropertiesResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>SpeedCurve3And28Resource.resx</DependentUpon>
+        <DependentUpon>MMPropertiesResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\ProgTargetResource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\SpeedCurve3And28Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>ProgTargetResource.resx</DependentUpon>
+        <DependentUpon>SpeedCurve3And28Resources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\ProgrammingDecoder\SimpleResource.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\ProgTargetResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ProgTargetResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\AllCvsReadWriteResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AllCvsReadWriteResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\SimpleResource.Designer.cs">
         <DependentUpon>SimpleResource.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\TabControlResource.Designer.cs">
+      <Compile Update="Ui\Components\TabControlResource.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>TabControlResource.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\SystemWidgets\AboutResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\SystemWidgets\AboutResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AboutResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\SystemWidgets\ConnectionResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\SystemWidgets\ConnectionResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>ConnectionResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\SystemWidgets\DashboardConfigResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardConfigResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\DashboardWidgetResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Components\DashboardWidgetResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardWidgetResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\DashboardResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\DashboardResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>DashboardResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\ProgrammingDecoderResource.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ProgrammingDecoderResource.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\RailComViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\RailComViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>RailComViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Components\SpeedBarResources.Designer.cs">
+      <Compile Update="Ui\Components\SpeedBarResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SpeedBarResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoControlResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\LocoControlResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>LocoControlResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoListViewResources.da.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\LocoListViewResources.da.Designer.cs">
         <DependentUpon>LocoListViewResources.da.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoListViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\LocoListViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>LocoListViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\LocoSlotViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\LocoSlotViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>LocoSlotViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\PowerChartResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\PowerChartResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>PowerChartResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\RBusViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\RBusViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>RBusViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\ShowLogViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\ShowLogViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>ShowLogViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\SpeedMeasureResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\SpeedMeasureResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SpeedMeasureResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\SystemStateFullViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SystemStateFullViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\SystemStateViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\SystemStateViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>SystemStateViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\TurnoutListViewResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\TurnoutListViewResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>TurnoutListViewResources.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.Designer.cs">
+      <Compile Update="Ui\Dashboard\Widgets\TurnoutProtocolSelectorResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>TurnoutProtocolSelectorResources.resx</DependentUpon>
@@ -264,6 +341,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Update="AppXamlResource.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>AppXamlResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Resources\Localization\SharedResources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
@@ -272,131 +353,179 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ValidationErrorMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\InputCVBitFlagResources.resx">
+      <EmbeddedResource Update="Ui\Components\FileSaveAsDialogResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>InputCVBitFlagResources.Designer.cs</LastGenOutput>
+        <LastGenOutput>FileSaveAsDialogResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\InputNumericValueResources.resx">
+      <EmbeddedResource Update="Ui\Components\InputBitFlagResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>InputBitFlagResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Components\InputNumericValueResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>InputNumericValueResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\AdvancedResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Components\DraggableModalResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>AdvancedResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>DraggableModalResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\DynamicListResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\DecoderEditMetaResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>DecoderEditMetaResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\SpeedCurve28Resources.resx">
+        <LastGenOutput>SpeedCurve28Resources.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\ZIMO_FKeyMappingResources.resx">
+        <LastGenOutput>ZIMO_FKeyMappingResources.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\Esu50708_09_FKeyMappingResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Esu50708_09_FKeyMappingResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\Esu50708_09OutputsResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Esu50708_09OutputsResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoDecodersResource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoDecodersResource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\DynamicListResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DynamicListResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\FKeyMappingStandardResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\FKeyMappingStandardResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>FKeyMappingStandardResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\LocosRosterListViewResource.resx">
-        <LastGenOutput>LocosRosterListViewResource.Designer.cs</LastGenOutput>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoEditBaseResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoEditBaseResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoEditInfoResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocoEditInfoResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocomotivesResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocomotivesResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocosRosterListViewResources.resx">
+        <LastGenOutput>LocosRosterListViewResources.Designer.cs</LastGenOutput>
         <Generator>ResXFileCodeGenerator</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\IdentifyResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\LocoDecoderListResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>IdentifyResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>LocoDecoderListResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\AddressResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\AddressResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>AddressResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>AddressResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\SpeedCurve3And28Resource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\MMPropertiesResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>SpeedCurve3And28Resource.Designer.cs</LastGenOutput>
+        <LastGenOutput>MMPropertiesResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\AdvTabs\ProgTargetResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\AllCvsReadWriteResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ProgTargetResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>AllCvsReadWriteResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\ProgrammingDecoder\SimpleResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\SpeedCurve3And28Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>SpeedCurve3And28Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\AdvTabs\ProgTargetResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ProgTargetResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderTabs\SimpleResource.resx">
         <LastGenOutput>SimpleResource.Designer.cs</LastGenOutput>
         <Generator>ResXFileCodeGenerator</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\TabControlResource.resx">
+      <EmbeddedResource Update="Ui\Components\TabControlResource.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>TabControlResource.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\AboutResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\SystemWidgets\AboutResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AboutResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\ConnectionResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\SystemWidgets\ConnectionResources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>ConnectionResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\SystemWidgets\DashboardConfigResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\SystemWidgets\DashboardConfigResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardConfigResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\DashboardWidgetResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Components\DashboardWidgetResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardWidgetResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\DashboardResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\DashboardResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>DashboardResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\ProgrammingDecoderResource.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ProgrammingDecoderResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ProgrammingDecoderResource.Designer.cs</LastGenOutput>
+        <LastGenOutput>ProgrammingDecoderResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\RailComViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\RailComViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>RailComViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Components\SpeedBarResources.resx">
+      <EmbeddedResource Update="Ui\Components\SpeedBarResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SpeedBarResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoControlResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\LocoControlResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>LocoControlResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoListViewResources.da.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\LocoListViewResources.da.resx">
         <LastGenOutput>LocoListViewResources.da.Designer.cs</LastGenOutput>
         <Generator>ResXFileCodeGenerator</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoListViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\LocoListViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>LocoListViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\LocoSlotViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\LocoSlotViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>LocoSlotViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\PowerChartResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\PowerChartResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>PowerChartResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\RBusViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\RBusViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>RBusViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\ShowLogViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\ShowLogViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ShowLogViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\SpeedMeasureResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\SpeedMeasureResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SpeedMeasureResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateFullViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\SystemStateFullViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SystemStateFullViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\SystemStateViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\SystemStateViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>SystemStateViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutListViewResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\TurnoutListViewResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>TurnoutListViewResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Dashboard\Widgets\TurnoutProtocolSelectorResources.resx">
+      <EmbeddedResource Update="Ui\Dashboard\Widgets\TurnoutProtocolSelectorResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>TurnoutProtocolSelectorResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
@@ -414,12 +543,6 @@
 
     <ItemGroup>
       <MauiAsset Update="Resources\Raw\LocoDecoders\0-Eksempel2.json">
-        <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-      </MauiAsset>
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiAsset Update="Resources\Raw\LocoDecoders\0-Eksempel.json">
         <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
       </MauiAsset>
     </ItemGroup>

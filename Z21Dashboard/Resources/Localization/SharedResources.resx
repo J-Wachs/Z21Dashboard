@@ -303,4 +303,58 @@
   <data name="CannotSaveDecoderDef" xml:space="preserve">
     <value>Cannot save decoder definition to application resources</value>
   </data>
+  <data name="LocoFileNotFound" xml:space="preserve">
+    <value>Locomotive file not found</value>
+  </data>
+  <data name="ErrorReadingLoco" xml:space="preserve">
+    <value>Error reading locomotive  definition file '{0}': {1}</value>
+  </data>
+  <data name="LocoFolderNotConfigured" xml:space="preserve">
+    <value>Locomotives folder not configured</value>
+  </data>
+  <data name="LocoFolderNotFound" xml:space="preserve">
+    <value>Locomotives folder '{0}' not found</value>
+  </data>
+  <data name="ErrorGettingLocos" xml:space="preserve">
+    <value>Error loading locomotive from file '{0}': {1}</value>
+  </data>
+  <data name="ErrorGettingLocosFolder" xml:space="preserve">
+    <value>Error loading locomotives from directory. The error is: {0}</value>
+  </data>
+  <data name="LocoMetadataMissing" xml:space="preserve">
+    <value>Locomotive meta data is missing</value>
+  </data>
+  <data name="LocoNameRequired" xml:space="preserve">
+    <value>Locomotive name is required</value>
+  </data>
+  <data name="LocoFileNotFoundPath" xml:space="preserve">
+    <value>Locomotive definition file '{0}' is not found</value>
+  </data>
+  <data name="ErrorGetDesLocoFile" xml:space="preserve">
+    <value>Error getting and deserializing locomotive from file {0}. The error is: {1}</value>
+  </data>
+  <data name="ErrorSavingLocoDef" xml:space="preserve">
+    <value>Error saving locomotive definition file '{0}'. The error is: {1}</value>
+  </data>
+  <data name="ErrorLoadNMRAStd" xml:space="preserve">
+    <value>An error has occurred when loading NMRA CV standard: '{0}'</value>
+  </data>
+  <data name="FromToBitCalculation" xml:space="preserve">
+    <value>When FromBit or ToBit is set in CV {0}, Max value must be calculated based on bit range, not directly from CV definition</value>
+  </data>
+  <data name="CVNotFoundInNmra" xml:space="preserve">
+    <value>The CV '{0}' does not exists in the NMRA standard</value>
+  </data>
+  <data name="DecoderEditBaseTitle" xml:space="preserve">
+    <value>Meta info</value>
+  </data>
+  <data name="AddressTitle" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="PageAllCvsReadWrite" xml:space="preserve">
+    <value>Read/write all Cvs</value>
+  </data>
+  <data name="LocoShortNameRequired" xml:space="preserve">
+    <value>Locomotive short name is required</value>
+  </data>
 </root>

@@ -1,0 +1,127 @@
+@*
+    InputBitFlag.razor
+    Lets the user set a single bit in a CV to true/false or leave it unchanged (null).
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.LocomotiveDecoders.Models
+@inject IStringLocalizer<InputBitFlagResources> Localizer
+
+@* We handle CSS validation classes manually via EditContext *@
+@if (ReadOnly)
+{
+    <select class="@ComputedCssClass"
+            @onchange="OnSelectionChanged"
+            value="@CurrentValueAsString"
+            @attributes="AdditionalAttributes" readonly>
+        <option value="">@_optionNullText</option>
+        <option value="False">@_optionFalseText</option>
+        <option value="True">@_optionTrueText</option>
+    </select>
+}
+else
+{
+    <select class="@ComputedCssClass"
+            @onchange="OnSelectionChanged"
+            value="@CurrentValueAsString"
+            @attributes="AdditionalAttributes">
+        <option value="">@_optionNullText</option>
+        <option value="False">@_optionFalseText</option>
+        <option value="True">@_optionTrueText</option>
+    </select>
+}
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // We retrieve the EditContext to be able to style the field red/green if necessary (optional)
+    [CascadingParameter]
+    private EditContext? CascadedEditContext { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    // Manual Two-way binding
+    [Parameter]
+    public bool? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool?> ValueChanged { get; set; }
+
+    [Parameter]
+    public CvBitInformation? Metadata { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; } = "form-control";
+
+
+    private string _optionTrueText = "On";
+    private string _optionFalseText = "Off";
+    private string _optionNullText = "NoChange";
+
+    // Calculate CSS classes based on validation status (if we want to keep the visual)
+    private string ComputedCssClass
+    {
+        get
+        {
+            var classes = CssClass;
+            if (CascadedEditContext is not null && CascadedEditContext.IsModified())
+            {
+                // Since we don't have a FieldIdentifier for an array index, we use a simple check
+                // Or we can just return the base class, as bits rarely fail validation.
+                classes += " modified";
+            }
+            return classes;
+        }
+    }
+
+    private string CurrentValueAsString =>
+        Value.HasValue ? Value.Value.ToString() : string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        // Logic for the text
+        _optionNullText = Localizer["NoChange"];
+
+        if (Metadata?.Values is not null)
+        {
+            //_optionTrueText = Metadata.OnLabel;
+            if (Metadata.Values.TryGetValue(1, out var tempOnLabel))
+            {
+                _optionTrueText = tempOnLabel;
+            }
+            //_optionFalseText = Metadata.OffLabel;
+            if (Metadata.Values.TryGetValue(0, out var tempOffLabel))
+            {
+                _optionFalseText = tempOffLabel;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handle the value has been changed by the user.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    private async Task OnSelectionChanged(ChangeEventArgs e)
+    {
+        var val = e.Value?.ToString();
+        bool? newValue = val switch
+        {
+            "True" => true,
+            "False" => false,
+            _ => null
+        };
+
+        if (newValue != Value)
+        {
+            Value = newValue;
+            await ValueChanged.InvokeAsync(newValue);
+
+            // Inform the EditContext that the value is changed
+            CascadedEditContext?.NotifyFieldChanged(new FieldIdentifier(CascadedEditContext.Model, string.Empty));
+        }
+    }
+}

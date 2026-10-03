@@ -1,0 +1,118 @@
+@*
+    LocoEditInfo.razor
+    Allows the user to edit more information about a locomotive.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Locomotives.Models
+@inject IStringLocalizer<LocoEditInfoResources> Localizer
+
+<EditForm EditContext="_editContext" OnValidSubmit="@(async () => await OnValidSubmitAsync())">
+    <DataAnnotationsValidator />
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Description"]:</label>
+        </div>
+        <div class="col-7">
+            <InputTextArea @bind-Value="@LocomotiveSettings.LocomotiveMeta.Description"
+                       class="form-control form-control-sm" rows="3" /> 
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Description)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["PurchaseDate"]:</label>
+        </div>
+        <div class="col-7">
+            <InputDate TValue="DateOnly?"
+                       @bind-Value="@LocomotiveSettings.LocomotiveMeta.Purchased"
+                       class="form-control form-control-sm" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Purchased)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["PurchasePrice"]:</label>
+        </div>
+        <div class="col-7">
+            <InputNumber @bind-Value="@LocomotiveSettings.LocomotiveMeta.PurchasePrice"
+                         class="form-control form-control-sm"
+                         step="0.01" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.PurchasePrice)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Modifications"]:</label>
+        </div>
+        <div class="col-7">
+            <InputTextArea @bind-Value="@LocomotiveSettings.LocomotiveMeta.Modifications"
+                           class="form-control form-control-sm" rows="2" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Modifications)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Remarks"]:</label>
+        </div>
+        <div class="col-7">
+            <InputTextArea @bind-Value="@LocomotiveSettings.LocomotiveMeta.Remarks"
+                           class="form-control form-control-sm" rows="2" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Remarks)" />
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public required LocomotiveSettings LocomotiveSettings { get; set; }
+
+    private EditContext? _editContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _editContext = new EditContext(LocomotiveSettings.LocomotiveMeta);
+    }
+
+    /// <summary>
+    /// Dummy method for EditForm.
+    /// The method is actually not used.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+    }
+}

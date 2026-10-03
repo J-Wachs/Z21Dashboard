@@ -1,0 +1,151 @@
+@*
+    ItemList.razor
+    A simple component to display a list of items. It allows for 
+    grouping the items and lets the user search for items.
+
+    As it operate on a list, it is not recommanded for larger
+    sets of data.
+*@
+@typeparam TItem
+@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="item-list-wrapper">
+    
+    @* SEARCH FIELD *@
+    <input class="item-list-search form-control form-control-sm"
+           placeholder="@SearchPlaceholder"
+           @bind="SearchText"
+           @bind:event="oninput" />
+
+    @* SCROLLABLE ITEM LIST *@
+    <div class="item-list" style="height:@Height; overflow-y:auto;">
+
+        @if (FilteredItems?.Any() == true)
+        {
+            var groups = FilteredItems!
+            .GroupBy(item => GroupKeySelector?.Invoke(item) ?? string.Empty);
+
+            foreach (var group in groups)
+            {
+                if (GroupKeySelector is not null)
+                {
+                    <div class="group-header">@((MarkupString)HighlightText(group.Key, SearchText))</div>
+                }
+
+                foreach (var item in group)
+                {
+                    string? key = null;
+                    if (KeySelector is not null)
+                    {
+                        key = KeySelector(item);
+                    }
+                    var display = DisplaySelector(item);
+                    var match = EqualityComparer<TItem>.Default.Equals(item, SelectedItem);
+                    <div class="item @(match ? "selected" : string.Empty)"
+                         @onclick="() => SelectItem(item)">
+
+                        @if (DisplayKey && key is not null)
+                        {
+                            <span class="item-key">@((MarkupString)HighlightText(key, SearchText)):</span>
+                        }
+
+                        <span class="item-display">@((MarkupString)HighlightText(display, SearchText))</span>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="empty">@EmptyText</div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<TItem>? Items { get; set; }
+
+    [Parameter]
+    public Func<TItem, string> KeySelector { get; set; } = default!;
+
+    [Parameter]
+    public Func<TItem, string> DisplaySelector { get; set; } = default!;
+
+    [Parameter]
+    public Func<TItem, string>? GroupKeySelector { get; set; }
+
+    [Parameter]
+    public bool DisplayKey { get; set; } = true;
+
+    [Parameter]
+    public string Height { get; set; } = "160px";
+
+    [Parameter]
+    public string EmptyText { get; set; } = string.Empty;
+
+    [Parameter]
+    public TItem? SelectedItem { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem?> SelectedItemChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnItemClicked { get; set; }
+
+    [Parameter]
+    public string SearchPlaceholder { get; set; } = string.Empty;
+
+    [Parameter]
+    public Func<TItem, string>[]? SearchSelectors { get; set; }
+
+    private string SearchText { get; set; } = string.Empty;
+
+    // Based on input parameters, it tages the filter and selects which
+    // entries in the list to display.
+    private IEnumerable<TItem> FilteredItems => string.IsNullOrWhiteSpace(SearchText)
+        ? Items ?? Enumerable.Empty<TItem>()
+        : (Items ?? Enumerable.Empty<TItem>()).Where(item =>
+            SearchSelectors?.Any(sel =>
+                sel(item).Contains(SearchText, StringComparison.OrdinalIgnoreCase)) ?? false
+        );
+
+    /// <summary>
+    /// Event that is triggered when an item is clicked.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private async Task SelectItem(TItem item)
+    {
+        SelectedItem = item;
+        await SelectedItemChanged.InvokeAsync(item);
+        await OnItemClicked.InvokeAsync(item);
+    }
+
+    /// <summary>
+    /// Highligth the text that matches the search word
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="search"></param>
+    /// <returns></returns>
+    private string HighlightText(string text, string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+            return text;
+
+        // Case-insensitive search
+        int index = text.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+        if (index < 0)
+            return text;
+
+        // Split text into pre-match, match, post-match
+        string pre = text.Substring(0, index);
+        string match = text.Substring(index, search.Length);
+        string post = text.Substring(index + search.Length);
+
+        // Wrap the matched text in <mark> for highlighting
+        return $"{pre}<mark>{match}</mark>{post}";
+    }
+}

@@ -1,0 +1,983 @@
+@*
+    LocoDecoderList.razor
+    This component is used to read the manufacturer information from a loco decoder and to show
+    that information to the user.
+
+    Further, the component shows a list of loco decoder definition files that are available in the system and allows
+    the user to select one of those files to use for programming the loco decoder. The component also allows the
+    user to save a copy of the selected decoder definition file to a local storage folder, so that the user can edit
+    that file and have it available in the list of decoders as a user defined decoder.
+
+    Unfortunately there is no standard way to read the decoder type and version from a loco decoder,
+    so this component just read the manufacturer id and the Cv 7 for the version.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop
+@using Microsoft.Maui.Controls
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Helpers
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.NmraDccStandard
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Dashboard.Components
+@using Z21Dashboard.Ui.Interfaces
+@using Z21Dashboard.Ui.Models
+@using GlobalConstants = Z21Dashboard.Constants;
+@inject IDashboardStateService DashboardStateService
+@inject IDecoderUIPageBuilder DecoderUIPageBuilder
+@inject IDecoderDefinitionService DecoderDefinitionService
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject IFileAndFolderService FileAndFolderService
+@inject IJSRuntime JSRuntime
+@inject ILogger<LocoDecoderList> Logger
+@inject IStringLocalizer<LocoDecoderListResources> Localizer
+
+@_decoderDoesNotSupportRailCom
+@if (_decoderDoesNotSupportRailCom)
+{
+    <div class="alert alert-info py-2 mb-3">@Localizer["DecoderNoRailCom"]</div>
+}
+
+<div class="row mb-2 align-items-center">
+    <div class="col-3">
+        <label>@Localizer["ManufacturerCode"]:</label>
+    </div>
+    <div class="col-9">
+        <div class="form-control form-control-sm">
+            @_manufacturerCode
+        </div>
+    </div>
+</div>
+<div class="row mb-2 align-items-center">
+    <div class="col-3">
+        <label>@Localizer["Manufacturer"]:</label>
+    </div>
+    <div class="col-9">
+        <div class="form-control form-control-sm">
+            @_manufacturerName
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2 align-items-center">
+    <div class="col-3">
+        <label>@Localizer["VersionNumber"]:</label>
+    </div>
+    <div class="col-9">
+        <div class="form-control form-control-sm">
+            @_manufacturerVersionNbr
+        </div>
+    </div>
+</div>
+
+@if (_displayZimoDecoderModel)
+{
+    <div class="row mb-2 align-items-center">
+        <div class="col-3">
+            <label>@Localizer["ZIMODecoderModel"]:</label>
+        </div>
+        <div class="col-9">
+            <div class="form-control form-control-sm">
+                @_zimoDecoderModel
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row mb-2">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                @onclick="@(async () => await GetManufacturerAsync())" aria-label="ReadCV">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+<div class="row mb-2 align-text-top">
+    <div class="col-3">
+        <label>@Localizer["Decoders"]:</label>
+    </div>
+    <div class="col-9">
+        <ItemList TItem="DecoderListItemDto"
+                  Items="@_listOfLocoDecoders"
+                  Height="180px"
+                  EmptyText="@Localizer["NoDecoderMatch"]"
+                  @bind-SelectedItem="@_selectedFile"
+                  GroupKeySelector='c => $"{c.ManufacturerId} - {c.Manufacturer}"'
+                  DisplayKey="false"
+                  KeySelector="f => f.FileName"
+                  DisplaySelector="f => f.Name"
+                  SearchPlaceholder="@Localizer["SearchInfo"]"
+                  SearchSelectors="@(new Func<DecoderListItemDto,string>[] { c => $"{c.ManufacturerId} - {c.Manufacturer}", c => c.Name})">
+        </ItemList>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        @if (string.IsNullOrEmpty(_dashboardSettings.LocalLocoDecoderFolder) is false &&
+            DecoderRequestParent is DecoderRequestParent.Decoder)
+        {
+            <button type="button" class="btn btn-primary"
+                    @onclick="@(async () => await SaveSelectedDecoderAsLocalAsync())" aria-label="@Localizer["SaveSelectedDecoderAsLocal"]">
+                @Localizer["SaveSelectedDecoderAsLocal"]
+            </button>
+        }
+        @if (string.IsNullOrEmpty(_dashboardSettings.LocalLocoDecoderFolder) is false &&
+            DecoderRequestParent is DecoderRequestParent.Decoder &&
+            DecoderSettings.DecoderFileLocation is DecoderFileLocation.LocalStorage
+            )
+        {
+            <button type="button" class="btn btn-primary"
+                    @onclick="@(async () => await SaveCurrentDecoderAsync())" aria-label="ReadCV">
+                @Localizer["Save"]@GetChangesIndicator()
+            </button>
+        }
+        <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                @onclick="@(async () => await LoadAndSetupForDecoderAsync())" aria-label="ReadCV">
+            @if (DecoderRequestParent is DecoderRequestParent.Decoder)
+            {
+                @Localizer["ReadSelectedDecoder"]
+            }
+            else
+            {
+                @Localizer["UseSelectedDecoder"]
+            }
+        </button>
+    </div>
+</div>
+
+<DraggableModal IsOpen="_displaySaveAs"
+                Title="@Localizer["SaveAs"]"
+                OnClose="@(() => _displaySaveAs = false)"
+                Height="500px">
+    <Content>
+        <FileSaveAsDialog InitialFolder="@_dashboardSettings.LocalLocoDecoderFolder"
+                          SuggestedFilename="@_suggestedDecoderFilename"
+                          RestrictFolderChange="true"
+                          OnFileSelected="@(async (filename) => await OnButtonClickInSaveDialogAsync(filename))" />
+    </Content>
+    <FooterContent>
+    </FooterContent>
+</DraggableModal>
+
+
+@code {
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [CascadingParameter(Name = "DecoderRequestParent")]
+    public DecoderRequestParent DecoderRequestParent { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+
+    private List<DecoderListItemDto> _listOfLocoDecoders = [];
+    private DecoderListItemDto? _selectedFile = null;
+    private bool _buttonsDisabled = false;
+    private byte? _manufacturerCode = default;
+    private string _manufacturerName = string.Empty;
+    private byte? _manufacturerVersionNbr = default;
+    private DashboardSettings _dashboardSettings = new();
+    private bool _displayZimoDecoderModel = false;
+    private string _zimoDecoderModel = string.Empty;
+
+    private bool _displaySaveAs = false;
+    private string _suggestedDecoderFilename = string.Empty;
+    private bool _decoderDoesNotSupportRailCom = false;
+
+    private static readonly Dictionary<byte, string> ZimoDecoderModels = new()
+    {
+        [130] = "MX630 (2022)",
+        [131] = "MX630 RevE",
+        [132] = "MX623 (2022)",
+        [133] = "MX633 (2020)",
+        [134] = "MX634 (2020)",
+        [135] = "MX635",
+        [136] = "MX636",
+        [137] = "MX637",
+        [138] = "MX622",
+        [142] = "MDS442",
+        [151] = "MX615 (2023)",
+        [152] = "MX152 Roco",
+        [158] = "MX685 RevE",
+        [160] = "MX660",
+        [161] = "MX616 (2023)",
+        [165] = "REE_DU65",
+        [166] = "MX600 (2021)",
+        [171] = "MX671",
+        [173] = "MX673",
+        [174] = "MX675",
+        [175] = "MX675",
+        [176] = "R72016",
+        [177] = "MX617",
+        [178] = "MX676",
+        [179] = "MXLIPL3 (380mm)",
+        [180] = "MX688 (2022)",
+        [181] = "MX618",
+        [182] = "MX682",
+        [183] = "MX689",
+        [184] = "MXLIPL1 160mm)",
+        [185] = "MX685 (2020)",
+        [186] = "MX605N",
+        [187] = "MX605FL",
+        [188] = "MX605SL",
+        [189] = "MX605",
+        [190] = "MX659",
+        [192] = "MX622 (2020)",
+        [193] = "MX638",
+        [194] = "MX615",
+        [195] = "MX616",
+        [196] = "MXKISS",
+        [197] = "MX617",
+        [198] = "FLM_E69",
+        [199] = "MX600",
+        [200] = "MX82",
+        [201] = "MX620",
+        [202] = "MX62",
+        [203] = "MX63",
+        [204] = "MX64",
+        [205] = "MX64H",
+        [206] = "MX64D",
+        [207] = "MX680",
+        [208] = "MX690",
+        [209] = "MX69",
+        [210] = "MX640",
+        [211] = "MX630-P2520",
+        [212] = "MX632",
+        [213] = "MX631",
+        [214] = "MX642",
+        [215] = "MX643",
+        [216] = "MX647",
+        [217] = "MX646",
+        [218] = "MX630 (2011)",
+        [219] = "MX631 (2011)",
+        [220] = "MX632 (2011)",
+        [221] = "MX645",
+        [222] = "MX644",
+        [223] = "MX621",
+        [224] = "MX695 RevB",
+        [225] = "MX648",
+        [226] = "MX685",
+        [227] = "MX695 RevC",
+        [228] = "MX681",
+        [229] = "MX695N",
+        [230] = "MX696",
+        [231] = "MX696N",
+        [232] = "MX686",
+        [233] = "MX622",
+        [234] = "MX623",
+        [235] = "MX687",
+        [236] = "MX621-FLM",
+        [237] = "MX633",
+        [238] = "MX820 RevA",
+        [240] = "MX634",
+        [241] = "MX686B",
+        [242] = "MX820 RevB",
+        [243] = "MX618",
+        [244] = "Roco NextG",
+        [245] = "MX697 RevA",
+        [246] = "MX658",
+        [247] = "MX688",
+        [248] = "MX821",
+        [249] = "MX648 RevC,D",
+        [250] = "MX699",
+        [251] = "Roco 2067",
+        [252] = "Roco ICE",
+        [253] = "MX649",
+        [254] = "MX697 RevB"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await BlankMessagesAsync();
+
+        _dashboardSettings = await GetSettingsAsync();
+
+        await GetAvailableDecodersAsync();
+        if (await SetSelectedDecoderFileAsync())
+        {
+            var resultLoadSelectedDecoderFile = await LoadSelectedDecoderFileAsync();
+            if (resultLoadSelectedDecoderFile.IsFailure)
+            {
+                foreach (var errorMessageForField in resultLoadSelectedDecoderFile.Messages)
+                {
+                    foreach (var errorMessage in errorMessageForField.Messages)
+                    {
+                        if (string.IsNullOrEmpty(errorMessage) is false)
+                        {
+                            ErrorMessages.Add(errorMessage);
+                            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            await SetupTabsAsync();
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Get decoders and populate list.
+    /// </summary>
+    /// <returns></returns>
+    private async Task GetAvailableDecodersAsync()
+    {
+        var resultListOfLocoDecoders = await DecoderDefinitionService.GetLocoDecodersAsync();
+        if (resultListOfLocoDecoders.IsFailure)
+        {
+            foreach (var errorMessageForField in resultListOfLocoDecoders.Messages)
+            {
+                foreach (var errorMessage in errorMessageForField.Messages)
+                {
+                    if (string.IsNullOrEmpty(errorMessage) is false)
+                    {
+                        ErrorMessages.Add(errorMessage);
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    }
+                }
+            }
+        }
+        else
+        {
+            var listOfLocoDecoders = resultListOfLocoDecoders.Data;
+
+            _listOfLocoDecoders.Clear();
+            if (listOfLocoDecoders is not null)
+            {
+                foreach (var oneDecoder in listOfLocoDecoders)
+                {
+                    var strManufacturerId = oneDecoder.FileName.Substring(0, oneDecoder.FileName.IndexOf('-'));
+                    ushort.TryParse(strManufacturerId, out var manufacturerId);
+                    _listOfLocoDecoders.Add(new(
+                        Name: oneDecoder.Name + $" ({(oneDecoder.Location is DecoderFileLocation.LocalStorage ? Localizer["UserDef"] : Localizer["SystemDef"])})",
+                        FileName: oneDecoder.FileName,
+                        ManufacturerId: manufacturerId,
+                        Manufacturer: oneDecoder.Manufacturer,
+                        Location: oneDecoder.Location
+                    ));
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set the selected decoder file based on the DecoderSettings.
+    /// If a selected decoder file is specified in the DecoderSettings
+    /// then that file will be selected, otherwise the standard NMRA decoder will be selected by default.
+    /// </summary>
+    /// <returns>false: Specific decoder file was previously selected, so do not override 'DecoderSettings'.</returns>
+    private async Task<bool> SetSelectedDecoderFileAsync()
+    {
+        // If a selected decoder exists then select that one
+        if (string.IsNullOrEmpty(DecoderSettings.DecoderFile) is false)
+        {
+            var name = $"{DecoderSettings.DecoderModel} ({(DecoderSettings.DecoderFileLocation is DecoderFileLocation.Application ? Localizer["SystemDef"] : Localizer["UserDef"])})";
+            _selectedFile = new(
+                FileName: DecoderSettings.DecoderFile,
+                Name: name,
+                ManufacturerId: (ushort?)DecoderSettings.DecoderMfgId ?? 0,
+                Manufacturer: DecoderSettings.DecoderMfg!,
+                Location: DecoderSettings.DecoderFileLocation!.Value
+                );
+            return false;
+        }
+        else
+        {
+            // Pre-select the standard NMRA decoder
+            _selectedFile = new(
+            FileName: Constants.DefaultNMRADecoderFile,
+            Name: "NMRA Maximal Standard Decoder (" + Localizer["SystemDef"] + ")",
+            ManufacturerId: 0,
+            Manufacturer: "NMRA",
+            Location: DecoderFileLocation.Application
+            );
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Load the decoder definition file for the selected decoder and
+    /// setup the CV definitions and tabs based on that decoder definition file.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<Result> LoadSelectedDecoderFileAsync()
+    {
+        if (_selectedFile is not null)
+        {
+            var resultReadDecoderDef = await ReadDecoderDefAsync(_selectedFile);
+            if (resultReadDecoderDef.IsSuccess)
+            {
+                await SetupTabsAsync();
+                await Parent.NotifyStateChangedAsync();
+            }
+            else
+            {
+                return Result.Failure(resultReadDecoderDef.Messages);
+            }
+        }
+
+        // Show warning about no RailCom.
+        if (DecoderSettings.SupportsRailCom())
+        {
+            _decoderDoesNotSupportRailCom = false;
+        }
+        else
+        {
+            _decoderDoesNotSupportRailCom = true;
+            ProgTargetAddr.ProgTarget = ProgrammingTarget.ProgTrack;
+            await Parent.NotifyStateChangedAsync();
+        }
+
+        StateHasChanged();
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Reads the decoder definition file for the selected decoder
+    /// and sets the CV definitions from that file into the DecoderSettings.
+    /// </summary>
+    /// <param name="decoder"></param>
+    /// <returns></returns>
+    private async Task<Result> ReadDecoderDefAsync(DecoderListItemDto decoder)
+    {
+        // Remove tabs associated with the previous selected decoder:
+        _ = Parent.RemoveTabById(GlobalConstants.DecoderEditBasePageId);
+        _ = Parent.RemoveTabById(GlobalConstants.DecoderAddressPageId);
+        _ = Parent.RemoveTabById(GlobalConstants.AllCvsReadWritePageId);
+        foreach (var onePage in DecoderSettings.Pages)
+        {
+            _ = Parent.RemoveTabById(onePage.Id);
+        }
+
+        // Read the decoder definition file:
+        var result = await DecoderDefinitionService.GetLocoDecoderDefAndSetCVsIntoSettingsAsync(
+            decoder,
+            DecoderSettings);
+        if (result.IsFailure)
+        {
+            return Result.Failure(result.Messages);
+        }
+
+        ProgTargetAddr.LocoAddress = DecoderSettings.GetLocoAddress();
+
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Setup the tabs by adding them to the TabControl that is
+    /// the parent of this component.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SetupTabsAsync()
+    {
+        // Setup the tabs associated with the selected decoder
+        UIPagesAddPagesParams parms = new(
+            Parent: Parent,
+            DecoderSettings: DecoderSettings,
+            ProgTarget: ProgTargetAddr.ProgTarget,
+            LocoAddress: (ushort?)ProgTargetAddr.LocoAddress,
+            ErrorMessages: ErrorMessages,
+            ErrorMessagesChanged: ErrorMessagesChanged,
+            WorkingMessage: WorkingMessage,
+            WorkingMessageChanged: WorkingMessageChanged,
+            SuccessMessage: SuccessMessage,
+            SuccessMessageChanged: SuccessMessageChanged
+        );
+
+        var result = await DecoderUIPageBuilder.AddPagesAsync(parms);
+        if (result.IsSuccess is false)
+        {
+            foreach (var errorMessageForField in result.Messages)
+            {
+                foreach (var errorMessage in errorMessageForField.Messages)
+                {
+                    if (string.IsNullOrEmpty(errorMessage) is false)
+                    {
+                        ErrorMessages.Add(errorMessage);
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    /// <summary>
+    /// Depending on the save is for a new locomotive or an existing one,
+    /// either display the Save As dialog or save the locomotive definition directly.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SaveSelectedDecoderAsLocalAsync()
+    {
+        if (_selectedFile is not null)
+        {
+            if (DecoderSettings.IsChanged() && DecoderSettings.DecoderFileLocation is DecoderFileLocation.LocalStorage)
+            {
+                // Dialog Do you want to save before override.
+                var page = Application.Current?.Windows[0].Page;
+                bool saveBefore = false;
+                if (page is not null)
+                {
+                    // "You have made changes to your decoder. Do you want to save them, before loading the selected decoder?"
+                    saveBefore = await page.DisplayAlertAsync(Localizer["Decoder"], Localizer["DecoderChangedWantToSave"], Localizer["Yes"], Localizer["No"]);
+                }
+                else
+                {
+                    saveBefore = await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["DecoderChangedWantToSave"]}");
+                }
+
+                if (saveBefore is false)
+                {
+                    return;
+                }
+
+                await DecoderDefinitionService.SaveValuesToUserDefinedLocoDecoderAsync(_selectedFile, DecoderSettings);
+            }
+
+            _suggestedDecoderFilename = Path.GetFileNameWithoutExtension(_selectedFile.FileName) + " - " + Localizer["FileCopy"] + Path.GetExtension(_selectedFile.FileName);
+            _displaySaveAs = true;
+        }
+    }
+
+    /// <summary>
+    /// Event handler called when either Canel or Save is clicked in the Save As
+    /// dialog. If the fileFileName is null, Cancel was clicked.
+    /// </summary>
+    /// <param name="fullFilename"></param>
+    /// <returns></returns>
+    private async Task OnButtonClickInSaveDialogAsync(string fullFilename)
+    {
+        await BlankMessagesAsync();
+
+        _displaySaveAs = false;
+
+        // Was dialog canceled?
+        if (string.IsNullOrEmpty(fullFilename))
+        {
+            return;
+        }
+
+        if (Directory.Exists(_dashboardSettings.LocalLocoDecoderFolder) is false)
+        {
+            ErrorMessages.Add(Localizer["DirDoesNotExists"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        if (File.Exists(fullFilename))
+        {
+            string filename = Path.GetFileName(fullFilename);
+            var page = Application.Current?.Windows[0].Page;
+            bool overwriteFile = false;
+            var warningMessage = string.Format(Localizer["FileExists"], filename);
+            if (page is not null)
+            {
+                overwriteFile = await page.DisplayAlertAsync(Localizer["FileExists"], warningMessage, Localizer["Yes"], Localizer["No"]);
+            }
+            else
+            {
+                overwriteFile = await JSRuntime.InvokeAsync<bool>("confirm", Localizer["FileExists"] + $"\n\n" + warningMessage);
+            }
+            if (!overwriteFile)
+            {
+                return;
+            }
+        }
+
+        await CopyDecoderDefinitionAsync(fullFilename);
+    }
+
+    /// <summary>
+    /// Saves the information about the decoder in DecoderSettings.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SaveCurrentDecoderAsync()
+    {
+        await BlankMessagesAsync();
+
+        var currentFile = new DecoderListItemDto(
+            FileName: DecoderSettings.DecoderFile!,
+            Name: DecoderSettings.DecoderModel!,
+            ManufacturerId: (ushort?)DecoderSettings.DecoderMfgId ?? 0,
+            Manufacturer: DecoderSettings.DecoderMfg!,
+            Location: DecoderSettings.DecoderFileLocation ?? DecoderFileLocation.LocalStorage
+            );
+
+        await DecoderDefinitionService.SaveValuesToUserDefinedLocoDecoderAsync(currentFile, DecoderSettings);
+
+        SuccessMessage = Localizer["DecoderSaved"];
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+
+    }
+
+    /// <summary>
+    /// Saves the selected decoder file to the local storage folder for loco decoders,
+    /// so that the user can edit that file and have it available in the list of decoders
+    /// as a user defined decoder. If the selected decoder is already in the local storage
+    /// folder then it will be overwritten with the version from the application folder.
+    /// This allows the user to start with a copy of an existing decoder definition and
+    /// then edit that copy to create a new user defined decoder.
+    /// </summary>
+    /// <returns></returns>
+
+    private async Task CopyDecoderDefinitionAsync(string fullFilename)
+    {
+        if (fullFilename is not null && _selectedFile is not null)
+        {
+            if (_selectedFile.Location is DecoderFileLocation.Application)
+            {
+                try
+                {
+                    using var stream = await FileSystem.OpenAppPackageFileAsync(@".\LocoDecoders\" + _selectedFile.FileName);
+                    using var outputStream = new FileStream(fullFilename, FileMode.Create, FileAccess.Write);
+                    await stream.CopyToAsync(outputStream);
+                    stream.Close();
+                    outputStream.Close();
+
+                    await SetCopiedDecoderFileAsSelectedAsync(_selectedFile, fullFilename);
+
+                    await GetAvailableDecodersAsync();
+
+                    var resultLoadSelectedDecoderFile = await LoadSelectedDecoderFileAsync();
+                    if (resultLoadSelectedDecoderFile.IsSuccess)
+                    {
+                        SuccessMessage = Localizer["DecoderCopied"];
+                        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                    }
+                    else
+                    {
+                        List<string> lstErrorMessages = [];
+                        foreach (var fileMessages in resultLoadSelectedDecoderFile.Messages)
+                        {
+                            lstErrorMessages.AddRange(fileMessages.Messages);
+                        }
+                        ErrorMessages = lstErrorMessages;
+                        await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessages.Add(Localizer["ErrorCopyingFile"] + ": " + ex.Message);
+                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                }
+            }
+            else
+            {
+                var fullFromFilename = Path.Combine(_dashboardSettings.LocalLocoDecoderFolder!, _selectedFile.FileName);
+
+                if (string.Compare(fullFromFilename, fullFilename, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    ErrorMessages.Add(Localizer["FromAndToFileAreTheSame"]);
+                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    return;
+                }
+
+                if (File.Exists(fullFromFilename) is false)
+                {
+                    ErrorMessages.Add(Localizer["FromFileDoesNotExist"]);
+                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    return;
+                }
+
+                try
+                {
+                    string fileName = Path.GetFileName(fullFilename);
+                    string destinationPath = Path.Combine(_dashboardSettings.LocalLocoDecoderFolder!, fileName);
+
+                    File.Copy(fullFromFilename, destinationPath, overwrite: true);
+
+                    await SetCopiedDecoderFileAsSelectedAsync(_selectedFile, fullFilename);
+
+                    await GetAvailableDecodersAsync();
+
+                    var resultLoadSelectedDecoderFile = await LoadSelectedDecoderFileAsync();
+                    if (resultLoadSelectedDecoderFile.IsSuccess)
+                    {
+                        SuccessMessage = Localizer["DecoderCopied"];
+                        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                    }
+                    else
+                    {
+                        List<string> lstErrorMessages = [];
+                        foreach (var fileMessages in resultLoadSelectedDecoderFile.Messages)
+                        {
+                            lstErrorMessages.AddRange(fileMessages.Messages);
+                        }
+                        ErrorMessages = lstErrorMessages;
+                        await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessages.Add(Localizer["ErrorCopyingFile"] + ": " + ex.Message);
+                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set the _selectedFile field to the just copied decoder file.
+    /// </summary>
+    /// <param name="originalSelectedFile"></param>
+    /// <param name="fullFilename"></param>
+    /// <returns></returns>
+    private async Task SetCopiedDecoderFileAsSelectedAsync(DecoderListItemDto originalSelectedFile, string fullFilename)
+    {
+        DecoderFileRootDto? decoderFile = await DecoderDefinitionService.GetMetaInfoFromLocalLocoDecoderFileAsync(fullFilename);
+
+        _selectedFile = new(
+        FileName: Path.GetFileName(fullFilename),
+        Name: decoderFile!.Meta.Model + $" ({Localizer["UserDef"]})",
+        Manufacturer: originalSelectedFile.Manufacturer,
+        ManufacturerId: decoderFile.Meta.ManufacturerId,
+        Location: DecoderFileLocation.LocalStorage
+        );
+    }
+
+    /// <summary>
+    /// Gets the dashboard settings because we need to know the local storage folder for loco decoder
+    /// definition files in order to be able to save a copy of the selected decoder definition file to
+    /// that folder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<DashboardSettings> GetSettingsAsync()
+    {
+        return await DashboardStateService.GetSettingsAsync();
+    }
+
+    /// <summary>
+    /// Gives a warning when a new decoder definition file is to be loaded.
+    /// This gives the user the option to save the changes to the current
+    /// decoder definition before it gets overridden by the new decoder definition,
+    /// provided that the decoder file is a user defined decoder file (i.e. located
+    /// in the local storage folder) and that there are changes to save.
+    /// </summary>
+    /// <returns></returns>
+    private async Task LoadAndSetupForDecoderAsync()
+    {
+        await BlankMessagesAsync();
+
+        if (DecoderSettings.IsChanged() && DecoderSettings.DecoderFileLocation is DecoderFileLocation.LocalStorage)
+        {
+            // Dialog Do you want to save before override.
+            var page = Application.Current?.Windows[0].Page;
+            bool saveBeforeLoad = false;
+            if (page is not null)
+            {
+                // "You have made changes to your decoder. Do you want to save them, before loading the selected decoder?"
+                saveBeforeLoad = await page.DisplayAlertAsync(Localizer["Decoder"], Localizer["DecoderChangedWantToSave"], Localizer["Yes"], Localizer["No"]);
+            }
+            else
+            {
+                saveBeforeLoad = await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["DecoderChangedWantToSave"]}");
+            }
+
+            if (saveBeforeLoad)
+            {
+                var currentFile = new DecoderListItemDto(
+                    FileName: DecoderSettings.DecoderFile!,
+                    Name: DecoderSettings.DecoderModel!,
+                    Manufacturer: DecoderSettings.DecoderMfg!,
+                    ManufacturerId: (ushort?)DecoderSettings.DecoderMfgId ?? 0,
+                    Location: (DecoderFileLocation)DecoderSettings.DecoderFileLocation
+                );
+                await DecoderDefinitionService.SaveValuesToUserDefinedLocoDecoderAsync(currentFile, DecoderSettings);
+            }
+        }
+
+        var resultReadDecoderDef = await LoadSelectedDecoderFileAsync();
+        if (resultReadDecoderDef.IsSuccess)
+        {
+            SuccessMessage = Localizer["DecoderDefRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+
+            // If we are not in the locomotive flow, we reset the ChangedFlag
+            if (DecoderRequestParent is not DecoderRequestParent.Locomotive)
+            {
+                DecoderSettings.ClearChanged();
+            }
+        }
+        else
+        {
+            List<string> lstErrorMessages = [];
+            foreach (var fileMessages in resultReadDecoderDef.Messages)
+            {
+                lstErrorMessages.AddRange(fileMessages.Messages);
+            }
+            ErrorMessages = lstErrorMessages;
+            await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+        }
+    }
+
+    /// <summary>
+    /// Get manufacturer information from decoder and look up manufacturer name
+    /// from the NRMA list of manufacturers.
+    /// </summary>
+    /// <returns></returns>
+    private async Task GetManufacturerAsync()
+    {
+        await BlankMessagesAsync();
+
+        _buttonsDisabled = true;
+        _displayZimoDecoderModel = false;
+        _zimoDecoderModel = string.Empty;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var result = await DecoderProgHelperService.ReadLocoDecoderManufacturerAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress
+            );
+
+        if (result.IsSuccess)
+        {
+            _manufacturerCode = result.Data!.ManufacturerCode;
+            _manufacturerName = result.Data!.ManufacturerName;
+            _manufacturerVersionNbr = result.Data!.VersionNumber;
+
+            if (_manufacturerCode == 145)  // ZIMO
+            {
+                if ((await ReadZimoDecoderModelAsync()).IsSuccess)
+                {
+                    SuccessMessage = Localizer["CVRead"];
+                    await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                }
+            }
+            else
+            {
+                SuccessMessage = Localizer["CVRead"];
+                await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            }
+
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        }
+        else
+        {
+            if (result.Messages?.Count > 0)
+            {
+                foreach (var errorMessageForField in result.Messages)
+                {
+                    foreach (var errorMessage in errorMessageForField.Messages)
+                    {
+                        if (string.IsNullOrEmpty(errorMessage) is false)
+                        {
+                            ErrorMessages.Add(errorMessage);
+                        }
+                    }
+                }
+            }
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        }
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Reads CV 250 to identify the ZIMO decoder model.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<Result> ReadZimoDecoderModelAsync()
+    {
+        var queue = new Queue<ushort>();
+        queue.Enqueue(Cvs.ZIMODecoderModel);
+
+        var result = await DecoderProgHelperService.ReadCVValuesAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress,
+            queue);
+
+        if (result.IsSuccess && result.Data is not null && result.Data.Count > 0)
+        {
+            var modelNumber = result.Data[0].Value;
+            if (ZimoDecoderModels.TryGetValue(modelNumber, out var modelName))
+            {
+                _zimoDecoderModel = modelName;
+            }
+            else
+            {
+                _zimoDecoderModel = string.Format(Localizer["UnknownZimoDecoder"], modelNumber);
+            }
+            _displayZimoDecoderModel = true;
+            return Result.Success();
+        }
+        else
+        {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+            if (result.Messages?.Count > 0)
+            {
+                foreach (var errorMessageForField in result.Messages)
+                {
+                    foreach (var errorMessage in errorMessageForField.Messages)
+                    {
+                        if (string.IsNullOrEmpty(errorMessage) is false)
+                        {
+                            ErrorMessages.Add(errorMessage);
+                        }
+                    }
+                }
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+        return Result.Failure(string.Empty);
+    }
+
+    /// <summary>
+    /// Gets the changes indicator for the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private string GetChangesIndicator()
+    {
+        return DecoderSettings.IsChanged() ? "*" : string.Empty;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "manufacturer": "None",
+    "manufacturer_id": 0,
+    "model": "Märklin Motorola V2",
+    "version": "1.0",
+    "protocols": "MM2",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 5
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "custom",
+      "name": {
+        "en": "Address",
+        "da": "Adresse"
+      },
+      "default_value": 78,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_märklin motorola",
+      "type": "mm_properties",
+      "title": {
+        "en": "Märklin Motorola",
+        "da": "Märklin Motorola",
+        "de": "Märklin Motorola",
+        "fr": "Märklin Motorola"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+@*
+    InputCVBitFlags.razor
+    Lets the user set a range of bits in an integer field to a selected value or leave it unchanged (null).
+    The Options keys are offset values (0-based) that are shifted into place starting at FromBit.
+*@
+@typeparam TType where TType : struct, global::System.Numerics.IBinaryInteger<TType>
+@using System.Runtime.CompilerServices
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+
+@if (ReadOnly)
+{
+    <select class="@ComputedCssClass"
+            @onchange="OnSelectionChanged"
+            @attributes="AdditionalAttributes"
+            disabled>
+        <option hidden disabled selected value=""></option>
+        @if (Options is not null)
+        {
+            @foreach (var option in Options)
+            {
+                @if (Value == option.Key)
+                {
+                    <option selected value="@option.Key">@option.Value</option>
+                }
+                else
+                {
+                    <option value="@option.Key">@option.Value</option>
+                }
+            }
+        }
+    </select>
+}
+else
+{
+    <select class="@ComputedCssClass"
+            @onchange="OnSelectionChanged"
+            @attributes="AdditionalAttributes">
+        <option hidden disabled selected value=""></option>
+        @if (Options is not null)
+        {
+            @foreach (var option in Options)
+            {
+                @if (Value == option.Key)
+                {
+                    <option selected value="@option.Key">@option.Value</option>
+                }
+                else
+                {
+                    <option value="@option.Key">@option.Value</option>
+                }
+            }
+        }
+    </select>
+}
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [CascadingParameter]
+    private EditContext? CascadedEditContext { get; set; }
+
+    [Parameter, EditorRequired]
+    public TType? Value { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<TType?> ValueChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public Dictionary<TType, string>? Options { get; set; }
+
+    [Parameter, EditorRequired]
+    public int FromBit { get; set; }
+
+    [Parameter, EditorRequired]
+    public int ToBit { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; } = "form-control";
+
+    private int _fromBitValue;
+    private int _toBitValue;
+    private int _bitCount;
+    private TType _mask = TType.Zero;
+    private TType _maxRawValue = TType.Zero;
+
+    private string ComputedCssClass
+    {
+        get
+        {
+            var classes = CssClass;
+            if (CascadedEditContext is not null && CascadedEditContext.IsModified())
+            {
+                classes += " modified";
+            }
+            return classes;
+        }
+    }
+
+    private string CurrentValueAsString
+    {
+        get
+        {
+            if (!Value.HasValue)
+            {
+                return string.Empty;
+            }
+
+            var selectedValue = (Value.Value & _mask) >> _fromBitValue;
+            return selectedValue.ToString() ?? string.Empty;
+        }
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        _fromBitValue = FromBit;
+        _toBitValue = ToBit;
+
+        if (_fromBitValue < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(FromBit), $"{nameof(FromBit)} must be non-negative.");
+        }
+
+        if (_toBitValue < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ToBit), $"{nameof(ToBit)} must be non-negative.");
+        }
+
+        if (_fromBitValue > _toBitValue)
+        {
+            throw new ArgumentException($"{nameof(FromBit)} must be less than or equal to {nameof(ToBit)}.");
+        }
+
+        var typeBits = Unsafe.SizeOf<TType>() * 8;
+
+        if (_toBitValue >= typeBits)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ToBit), $"{nameof(ToBit)} must be less than the number of bits in {typeof(TType).Name} ({typeBits}).");
+        }
+
+        _bitCount = _toBitValue - _fromBitValue + 1;
+
+        TType ones = TType.Zero;
+        for (int i = 0; i < _bitCount; i++)
+        {
+            ones |= TType.One << i;
+        }
+
+        _maxRawValue = ones;
+        _mask = ones << _fromBitValue;
+
+        if (Options is not null)
+        {
+            foreach (var key in Options.Keys)
+            {
+                if (key < TType.Zero)
+                {
+                    throw new ArgumentException($"All keys in {nameof(Options)} must be non-negative.");
+                }
+
+                if (key > _maxRawValue)
+                {
+                    throw new ArgumentException($"All keys in {nameof(Options)} must fit within the bit range defined by {nameof(FromBit)} and {nameof(ToBit)} (0 to {_maxRawValue}).");
+                }
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task OnSelectionChanged(ChangeEventArgs e)
+    {
+        var val = e.Value?.ToString();
+
+        if (string.IsNullOrEmpty(val))
+        {
+            Value = null;
+            await ValueChanged.InvokeAsync(null);
+        }
+        else if (TType.TryParse(val, System.Globalization.CultureInfo.InvariantCulture, out var parsedValue))
+        {
+            if (parsedValue < TType.Zero || parsedValue > _maxRawValue)
+            {
+                return;
+            }
+
+            TType? newValue;
+
+            if (Value.HasValue)
+            {
+                newValue = (Value.Value & ~_mask) | (parsedValue << _fromBitValue);
+            }
+            else
+            {
+                newValue = parsedValue << _fromBitValue;
+            }
+
+            if (newValue != Value)
+            {
+                Value = newValue;
+                await ValueChanged.InvokeAsync(newValue);
+                CascadedEditContext?.NotifyFieldChanged(new FieldIdentifier(CascadedEditContext.Model, string.Empty));
+            }
+        }
+    }
+}

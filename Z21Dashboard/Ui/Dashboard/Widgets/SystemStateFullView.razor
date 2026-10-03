@@ -1,0 +1,277 @@
+@*
+    SystemStateFullView.razor
+    Full view of the Z21 system state, including detailed flags decoding.
+*@
+@using System.Text
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client.Infrastructure
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Ui.Dashboard.Components
+@using Z21Dashboard.Ui.Models
+@using Z21Dashboard.Ui.Interfaces
+@inject IZ21Client Z21Client
+@inject IDashboardStateService DashboardStateService
+@inject IStringLocalizer<SystemStateFullViewResources> Localizer
+@implements IDisposable
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="row">
+            <div class="col-md-3">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="text-nowrap">@Localizer["MainCurrent"]</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_systemState?.MainCurrentmA @Localizer["MilliAmpsShort"]</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">@Localizer["ProgrammingCurrent"]</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    @if (Z21Client.HardwareInfo?.HwType is HardwareType.Z21Old or HardwareType.Z21New)
+                                    {
+                                        <text>@_systemState?.ProgCurrentmA @Localizer["MilliAmpsShort"]</text>
+                                    }
+                                    else
+                                    {
+                                        <text>-</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">@Localizer["Temperature"]</td>
+                            <td class="@_alertTemp text-nowrap">
+                                @if (_systemState is not null)
+                                {
+                                    <text>@GetTemperature()</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">@Localizer["SupplyVoltage"]</td>
+                            <td>
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_supplyVoltageV @Localizer["VoltShort"]</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap">@Localizer["InternalVoltage"]</td>
+                            <td class="@_alertVolt">
+                                @if (_systemState is not null)
+                                {
+                                    <text>@_vccVoltageV @Localizer["VoltShort"]</text>
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <h5>@Localizer["CentralStateFlags"]</h5>
+                <pre>@if (_systemState is not null)
+                {
+                     @DecodeCentralState(_systemState.CentralState)
+                }
+            </pre>
+            </div>
+            <div class="col-md-3">
+                <h5>@Localizer["ExtendedStateFlags"]</h5>
+                <pre>@if (_systemState is not null && Z21Client.HardwareInfo is not null)
+                {
+                         @DecodeCentralStateEx(_systemState.CentralStateEx, Z21Client.HardwareInfo.FwVersion)
+                }
+            </pre>
+            </div>
+            @if (Z21Client.HardwareInfo?.FwVersion.Version >= Z21FirmwareVersions.V1_42 && _systemState is not null && _systemState.Capabilities is not null)
+            {
+                <div class="col-md-3">
+                    <h5>@Localizer["CapabilitiesFlags"]</h5>
+                    <pre>@if (_systemState is not null)
+                    {
+                         @DecodeCapabilities(_systemState.Capabilities)
+                    }
+                    </pre>
+                </div>
+            }
+        </div>
+    </Content>
+</DashboardWidget>
+
+@code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    private SystemState? _systemState;
+    private string _supplyVoltageV => _systemState?.SupplyVoltagemV is not null ? ((decimal)_systemState.SupplyVoltagemV / 1000).ToString("0.0") : "-";
+    private string _vccVoltageV => _systemState?.VccVoltagemV is not null ? ((decimal)_systemState.VccVoltagemV / 1000).ToString("0.0") : "-";
+    private string _alertTemp = string.Empty;
+    private string _alertVolt = string.Empty;
+
+    private DashboardSettings? _dashboardSettings = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Z21Client.OnSystemStateChanged += OnSystemStateChanged;
+        await Z21Client.GetSystemStateAsync();
+
+        _dashboardSettings = await DashboardStateService.GetSettingsAsync();
+        DashboardStateService.OnSettingsChanged += OnSettingsChanged;
+    }
+
+    private async void OnSystemStateChanged(object? sender, SystemState e)
+    {
+        _systemState = e;
+
+        _alertVolt = e.CentralState.ShortCircuit ? "alertfield" : string.Empty;
+        _alertTemp = ((e.CentralStateEx & SystemState.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnSettingsChanged(DashboardSettings dashbordSettings)
+    {
+        _dashboardSettings = dashbordSettings;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetTemperature()
+    {
+        string tempString;
+        if (_systemState is null)
+        {
+            tempString = "-";
+        }
+        else if (_dashboardSettings?.TemperatureScale is TemperatureScale.Fahrenheit)
+        {
+            tempString = (_systemState.TemperatureC * 9.0d / 5.0d + 32).ToString("F0");
+        }
+        else
+        {
+            tempString = _systemState.TemperatureC.ToString();
+        }
+
+        return $"{tempString} °{(_dashboardSettings?.TemperatureScale is TemperatureScale.Fahrenheit ? "F" : "C")}";
+    }
+
+
+    private string MakeFixedLengthString(string text, int len)
+    {
+        if (text.Length < len)
+        {
+            text = text + new String(' ', len - text.Length);
+        }
+        return text;
+    }
+
+    private string DecodeCentralState(StatusChanged state)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {(state.EmergencyStop ? Localizer["On"] : Localizer["Off"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {(state.TrackVoltageOff ? Localizer["Off"] : Localizer["On"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {(state.ShortCircuit ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {(state.ProgrammingModeActive ? Localizer["On"] : Localizer["Off"])}"
+        );
+        return sb.ToString();
+    }
+
+    private string DecodeCentralStateEx(byte stateEx, FirmwareVersion? fw)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["HighTemperature"] + ":", 20)} {((stateEx & SystemState.CentralStateExHighTemperature) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["PowerLost"] + ":", 20)} {((stateEx & SystemState.CentralStateExPowerLost) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuitExt"] + ":", 20)} {((stateEx & SystemState.CentralStateExShortCircuitExternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["ShortCircuitInt"] + ":", 20)} {((stateEx & SystemState.CentralStateExShortCircuitInternal) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+        );
+
+        if (fw?.Version >= Z21FirmwareVersions.V1_42)
+        {
+            sb.AppendLine($"{MakeFixedLengthString(Localizer["RCN213Mode"] + ":", 20)} {((stateEx & SystemState.CentralStateExRcn213Mode) > 0 ? Localizer["Active"] : Localizer["Inactive"])}");
+        }
+        return sb.ToString();
+    }
+
+    private string DecodeCapabilities(SystemState.Caps capabilities)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["Protocols"] + ":", 20)} {(capabilities.Protocols is Protocols.DCC_MM or Protocols.DCC ? "DCC " : string.Empty)}{(capabilities.Protocols is Protocols.DCC_MM or Protocols.MM ? "MM" : string.Empty)}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["RailCom"] + ":", 20)} {(capabilities.RailComEnabled ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANLocoCmds"] + ":", 20)} {(capabilities.AcceptLANLocoCmds ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANAccCmds"] + ":", 20)} {(capabilities.AcceptLANAccCmds ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["AcceptLANDetCmds"] + ":", 20)} {(capabilities.AcceptLANDetCmds ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        sb.AppendLine(
+            $"{MakeFixedLengthString(Localizer["NeedsUnlockCode"] + ":", 20)} {(capabilities.NeedsUnlockCode ? Localizer["Yes"] : Localizer["No"])}"
+        );
+        return sb.ToString();
+    }
+
+    public void Dispose()
+    {
+        Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
+        DashboardStateService.OnSettingsChanged -= OnSettingsChanged;
+    }
+}

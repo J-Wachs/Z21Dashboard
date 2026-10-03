@@ -1,0 +1,320 @@
+@*
+    Esu50708_09Outputs.razor
+    Mapping of function keys to CV bits for standard decoders (segment reset).
+    It is for the CVs 33-46, which are defined by NMRA and used by many decoders for function key mapping.
+    The exact mapping of bits to function keys can vary between decoders.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client.Models
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject IStringLocalizer<Esu50708_09OutputsResources> Localizer
+
+@if (_currentPage is not null)
+{
+    <EditForm EditContext="@_editContext">
+        <table class="table table-sm table-bordered text-left align-middle">
+            <thead>
+                <tr>
+                    <th>
+                        @Localizer["OutputPort"]
+                    </th>
+                    <th>
+                        @Localizer["Brightness"]
+                    </th>
+                    <th>
+                        @Localizer["LightMode"]
+                    </th>
+                    <th>
+                        @Localizer["Delay"]
+                    </th>
+                    <th>
+                        @Localizer["Random"]
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < 8; i++)
+                {
+                    int cv = 113 + i;
+
+                    <tr class="hover-row">
+                        <td title="CV @cv">
+                            @(DecoderSettings.CvMetadata.TryGetValue((ushort)cv, out var meta)
+                                ? meta.Name
+                                : $"CV {cv}")
+                        </td>
+                        <td>
+                            @if (DecoderSettings.CvValues.TryGetValue((ushort)cv, out var currentCvState))
+                            {
+                                var options2 = meta?.BitDetails.FirstOrDefault(b => b.Key.Item1 == 0 && b.Key.Item2 == 2).Value.Values;
+
+                                <InputCVBitFlags TType="byte"
+                                                 Value="@currentCvState.Value"
+                                                 ValueChanged="@(v => DecoderSettings.SetCvValue((ushort)cv, v ?? 0))"
+                                                 FromBit="(int)Bits.Zero"
+                                                 ToBit="(int)Bits.Two"
+                                                 CssClass="form-control form-control-sm"
+                                                 Options="@options2" />
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var options = meta?.BitDetails.FirstOrDefault(b => b.Key.Item1 == 3 && b.Key.Item2 == 5).Value.Values;
+                                <InputCVBitFlags TType="byte"
+                                                 Value="@currentCvState?.Value"
+                                                 ValueChanged="@(v => DecoderSettings.SetCvValue((ushort)cv, v ?? 0))"
+                                                 FromBit="(int)Bits.Three"
+                                                 ToBit="(int)Bits.Five"
+                                                 CssClass="form-control form-control-sm"
+                                                 Options="@options" />
+                            }
+                        </td>
+                        <td class="text-center">
+                            <CheckboxTriState Checked="@DecoderSettings.GetCvBit((ushort)cv, Bits.Six)"
+                                              CheckedChanged="@(v => DecoderSettings.SetCvBitValue((ushort)cv, Bits.Six, v))"
+                                              TrueTooltip="@Localizer["Set"]"
+                                              FalseTooltip="@Localizer["NotSet"]"
+                                              IndeterminateTooltip="@Localizer["NoChange"]"
+                                              class="form-check-input" />
+                        </td>
+                        <td class="text-center">
+                            <CheckboxTriState Checked="@DecoderSettings.GetCvBit((ushort)cv, Bits.Seven)"
+                                              CheckedChanged="@(v => DecoderSettings.SetCvBitValue((ushort)cv, Bits.Seven, v))"
+                                              TrueTooltip="@Localizer["Set"]"
+                                              FalseTooltip="@Localizer["NotSet"]"
+                                              IndeterminateTooltip="@Localizer["NoChange"]"
+                                              class="form-check-input" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </EditForm>
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end gap-2">
+            <button class="btn btn-primary" disabled="@_buttonsDisabled" @onclick="WriteCVs">
+                @Localizer["WriteToLocoDecoder"]
+            </button>
+            <button class="btn btn-primary" disabled="@_buttonsDisabled" @onclick="ReadCVs">
+                @Localizer["ReadFromLocoDecoder"]
+            </button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        @Localizer["PageNotFound"]: @TabId
+    </div>
+}
+
+@code {
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? TabId { get; set; }
+
+    [Parameter]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private EditContext? _editContext;
+    private DecoderPage? _currentPage;
+    private bool _buttonsDisabled = false;
+    private string? saveTabId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await BlankMessagesAsync();
+
+        _editContext = new EditContext(DecoderSettings);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (TabId != saveTabId)
+        {
+            saveTabId = TabId;
+            _currentPage = DecoderSettings.Pages.FirstOrDefault(p => p.Id == TabId);
+        }
+    }
+
+    /// <summary>
+    /// Because the CVs 33-46 are mapped differently, we need
+    /// to calculate the bit number for the different sets of CVs.
+    /// </summary>
+    /// <param name="cv"></param>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    private int? GetLocalBitIndex(int cv, int cell)
+    {
+        return cv switch
+        {
+            >= 33 and <= 37 when cell >= 1 && cell <= 8
+                => cell - 1,
+
+            >= 38 and <= 42 when cell >= 4 && cell <= 11
+                => cell - 4,
+
+            >= 43 and <= 46 when cell >= 7 && cell <= 14
+                => cell - 7,
+
+            _ => null
+        };
+    }
+
+
+    private string GetCellCss(int cv, int cell)
+    {
+        bool active = GetLocalBitIndex(cv, cell) is not null;
+
+        if (!active)
+            return "bg-light";
+
+        return "text-center";
+    }
+
+    /// <summary>
+    /// Read the Cvs used on this page from the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ReadCVs()
+    {
+        await BlankMessagesAsync();
+
+        // In this widget, there must be a Content defined:
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndReadFromDecoderAsync(
+             ProgTargetAddr.ProgTarget,
+             (ushort?)ProgTargetAddr.LocoAddress,
+             _currentPage.Id,
+             DecoderSettings
+        );
+
+        if (result.IsSuccess)
+        {
+            SuccessMessage = Localizer["CVRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+        else
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+            }
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Wite the Cvs and/or bits to the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteCVs()
+    {
+        await BlankMessagesAsync();
+
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVWriting"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndWriteToDecoderAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress,
+            _currentPage.Id,
+            DecoderSettings
+        );
+
+        if (result.IsSuccess is false)
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+            }
+        }
+        else
+        {
+            SuccessMessage = Localizer["CVWritten"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+}

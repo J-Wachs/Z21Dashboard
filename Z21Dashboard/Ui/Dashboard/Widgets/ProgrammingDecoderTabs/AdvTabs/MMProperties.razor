@@ -1,0 +1,159 @@
+@*
+    MMProperties.razor
+    Component that let the user edit the properties that are specific to the Märklin Motorola
+    protocol.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.NmraDccStandard
+@using Z21Dashboard.Ui.Components
+@inject IStringLocalizer<MMPropertiesResources> Localizer
+
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+
+<EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmitAsync">
+    <DataAnnotationsValidator />
+    @{
+        var cv = Cvs.ShortAddress;
+
+        var metadata = GetMetadata(cv);
+        string label = GetFormattedName(metadata?.Name, cv);
+        string uniqueKey = $"cv_{cv}";
+    }
+    @if (CvValuesProxy.TryGetValue(cv, out var currentCvState))
+    {
+        <div class="row mb-2 align-items-center" @key="uniqueKey">
+            <div class="col-5">
+                <label title="CV @cv">@label:</label>
+            </div>
+            <div class="col-2">
+                <InputNumericValue @bind-Value="@currentCvState.Value"
+                                   class="form-control form-control-sm"
+                                   min="@(metadata?.ValueBits?.Min ?? 0)" max="@(metadata?.ValueBits?.Max ?? 255)" />
+            </div>
+            <div class="col-5">
+                <span class="text-muted" style="font-size: 0.8rem;">
+                    @metadata?.Description
+                </span>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5"></div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => currentCvState.Value)" />
+                </div>
+            </div>
+        </div>
+    }
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? TabId { get; set; }
+
+    [Parameter]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private EditContext? _editContext;
+    private DecoderPage? _currentPage;
+
+    private string? saveTabId = null;
+
+    // Proxy object for EditContext. We binds directly to DecoderSettings.CvValues
+    // but EditContext needs an object to validate on.
+    private Dictionary<ushort, CvState> CvValuesProxy => DecoderSettings.CvValues;
+
+    /// <summary>
+    /// As the DynamicList component is used for all the different pages defined in
+    /// the decoder definition, we need to check if we are still on the same page.
+    /// If we are on a new page, we need to build the form again based on the content defined
+    /// </summary>
+    /// <returns></returns>
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        // Check if we are still on the same page.
+        if (TabId != saveTabId)
+        {
+            await BlankMessagesAsync();
+
+            saveTabId = TabId;
+            _currentPage = DecoderSettings.Pages.FirstOrDefault(p => p.Id == TabId);
+
+            if (_currentPage is not null)
+            {
+                // Because this page might have been show with the content of
+                // another page defined in the decoder file, we receive this event
+                // (OnParamertsSetAcsync) several times. If we create a new editContext
+                // we are in trouble.
+                if (_editContext is null || _editContext.Model != DecoderSettings)
+                {
+                    _editContext = new EditContext(DecoderSettings);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles the form submission when the form is valid.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+        // No functionality.
+    }
+
+    /// <summary>
+    /// Gets metadata for a CV.
+    /// </summary>
+    /// <param name="cv"></param>
+    /// <returns></returns>
+    private CvInformation? GetMetadata(ushort cv)
+    {
+        return DecoderSettings.CvMetadata.TryGetValue(cv, out var info) ? info : null;
+    }
+
+    /// <summary>
+    /// Format the name with either the actual name, or if not found, the CV number.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="cv"></param>
+    /// <returns></returns>
+    private string GetFormattedName(string? name, ushort cv)
+    {
+        return string.IsNullOrEmpty(name) ? $"CV {cv}" : name;
+    }
+
+    /// <summary>
+    /// Reset the message list/fields to none/null.
+    /// </summary>
+    /// <returns></returns>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+}

@@ -1,0 +1,533 @@
+@*
+    AllCvsReadWrite.razor
+    Component for reading and writing all CVs in a locomotive decoder.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
+@using Microsoft.Maui.Controls
+@using Z21Client.Models
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Ui.Models
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<AllCvsReadWriteResources> Localizer
+
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+
+<div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col-6">
+        <div class="progress border border-secondary" style="height: 30px;">
+            <div class="progress-bar bg-primary"
+                 role="progressbar"
+                 style="@( $"width: {GetProgressPercentage():F0}%" )"
+                 aria-valuenow="@_currentProgress"
+                 aria-valuemin="0"
+                 aria-valuemax="@_maxProgress">
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col-6 w-100 text-center">
+        @if (_maxProgress > 0)
+        {
+            <text>@_currentProgress @Localizer[_actionText] / @_maxProgress @Localizer["CvsTotal"]</text>
+        }
+    </div>
+    <div class="col-3">
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col-6 w-100 text-sm-center text-muted" style="font-size: 0.85rem;">
+        @GetEstimatedTimeRemaining()
+    </div>
+    <div class="col-3">
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col-6 w-100 text-sm-center mt-2">
+        @if (_operationInProgress)
+        {
+            <button type="button" class="btn btn-sm btn-warning"
+                    @onclick="CancelOperation" aria-label="Cancel">
+                @Localizer["Cancel"]
+            </button>
+        }
+    </div>
+    <div class="col-3">
+    </div>
+</div>
+
+<div class="row" style="margin-top: 110px;">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                @onclick="ShowWriteConfirmation" aria-label="WriteCV">
+            @Localizer["WriteToLocoDecoder"]
+        </button>
+        <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                @onclick="ShowReadConfirmation" aria-label="ReadCV">
+            @Localizer["ReadFromLocoDecoder"]
+        </button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private int _currentProgress;
+    private int _maxProgress;
+    private bool _buttonsDisabled;
+    private bool _operationInProgress;
+    private string _actionText = string.Empty;
+    private DateTime? _operationStartTime;
+    private double? _averageSecondsPerCv;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await BlankMessagesAsync();
+    }
+
+    /// <summary>
+    /// Read CVs from the locomotive decoder in batches of five.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ReadCVsAsync()
+    {
+        await BlankMessagesAsync();
+
+        if (DecoderSettings.CvValues.Count == 0)
+        {
+            SuccessMessage = Localizer["NoCVsToRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            return;
+        }
+
+        var cvCount = DecoderSettings.CvValues.Count;
+        _operationStartTime = DateTime.Now;
+        _averageSecondsPerCv = null;
+        _operationInProgress = true;
+        InitializeProgress(cvCount);
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var batchSize = 1;
+        var cvKeys = DecoderSettings.CvValues.Keys;
+        var index = 0;
+        var lastCV = cvKeys.LastOrDefault();
+        foreach (var cv in cvKeys)
+        {
+            if (_operationInProgress is false)
+            {
+                break;
+            }
+
+            var batch = cvKeys.Skip(index).Take(batchSize);
+            var queue = new Queue<ushort>(batch);
+
+            var result = await DecoderProgHelperService.ReadCVValuesAsync(
+                ProgTargetAddr.ProgTarget,
+                (ushort?)ProgTargetAddr.LocoAddress,
+                queue,
+                cv == lastCV); // When reading the last CV, turn on the track power after read.
+
+            if (result.IsSuccess is false)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        ErrorMessages.AddRange(fileMessages.Messages);
+                    }
+                }
+
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                break;
+            }
+
+            if (result.Data is not null)
+            {
+                foreach (var cvValue in result.Data)
+                {
+                    var setResult = DecoderSettings.SetCvWholeValue(cvValue.Cv, cvValue.Value);
+                    if (setResult.IsSuccess is false)
+                    {
+                        if (setResult.Messages.Count > 0)
+                        {
+                            foreach (var fileMessages in setResult.Messages)
+                            {
+                                ErrorMessages.AddRange(fileMessages.Messages);
+                            }
+                        }
+
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                        break;
+                    }
+                }
+            }
+
+            index += batchSize;
+            _currentProgress = Math.Min(index, cvCount);
+            UpdateAverageSecondsPerCv();
+            StateHasChanged();
+
+            if (ErrorMessages.Count > 0 || index >= cvCount)
+            {
+                break;
+            }
+        }
+
+        _operationInProgress = false;
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        if (ErrorMessages.Count == 0 && _currentProgress == cvCount)
+        {
+            _currentProgress = cvCount;
+            SuccessMessage = Localizer["AllCVsRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Updates the average time per CV based on elapsed time and processed CVs.
+    /// </summary>
+    private void UpdateAverageSecondsPerCv()
+    {
+        if (_operationStartTime is null || _currentProgress == 0)
+        {
+            return;
+        }
+
+        var elapsed = DateTime.Now - _operationStartTime.Value;
+        _averageSecondsPerCv = elapsed.TotalSeconds / _currentProgress;
+    }
+
+    /// <summary>
+    /// Shows the confirmation dialog before reading CVs and starts the read
+    /// if the user confirms.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ShowReadConfirmation()
+    {
+        await BlankMessagesAsync();
+
+        _currentProgress = 0;
+        _actionText = "CvsRead";
+
+        if (DecoderSettings.IsChanged())
+        {
+            if (await ShowUnsavedChangesWarningAsync() is false)
+            {
+                return;
+            }
+        }
+
+        var page = Application.Current?.Windows[0].Page;
+        bool confirm = false;
+        if (page is not null)
+        {
+            confirm = await page.DisplayAlertAsync(
+                Localizer["ReadConfirmationTitle"],
+                Localizer["ReadConfirmationText"],
+                Localizer["Confirm"],
+                Localizer["Cancel"]);
+        }
+        else
+        {
+            confirm = await JSRuntime.InvokeAsync<bool>(
+                "confirm",
+                $"{Localizer["ReadConfirmationTitle"]}\n{Localizer["ReadConfirmationText"]}");
+        }
+
+        if (confirm)
+        {
+            await ReadCVsAsync();
+        }
+    }
+
+    /// <summary>
+    /// Shows a warning that the current decoder settings have unsaved changes.
+    /// Returns true if the user chooses to proceed, otherwise false.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool> ShowUnsavedChangesWarningAsync()
+    {
+        var page = Application.Current?.Windows[0].Page;
+        bool proceed = false;
+        if (page is not null)
+        {
+            proceed = await page.DisplayAlertAsync(
+                Localizer["UnsavedChangesTitle"],
+                Localizer["UnsavedChangesText"],
+                Localizer["Continue"],
+                Localizer["Cancel"]);
+        }
+        else
+        {
+            proceed = await JSRuntime.InvokeAsync<bool>(
+                "confirm",
+                $"{Localizer["UnsavedChangesTitle"]}\n{Localizer["UnsavedChangesText"]}");
+        }
+
+        return proceed;
+    }
+
+    /// <summary>
+    /// Shows the confirmation dialog before writing CVs and starts the write
+    /// if the user confirms.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ShowWriteConfirmation()
+    {
+        await BlankMessagesAsync();
+
+        _currentProgress = 0;
+        _actionText = "CvsWritten";
+
+        var page = Application.Current?.Windows[0].Page;
+        bool confirm = false;
+        if (page is not null)
+        {
+            confirm = await page.DisplayAlertAsync(
+                Localizer["WriteConfirmationTitle"],
+                Localizer["WriteConfirmationText"],
+                Localizer["Confirm"],
+                Localizer["Cancel"]);
+        }
+        else
+        {
+            confirm = await JSRuntime.InvokeAsync<bool>(
+                "confirm",
+                $"{Localizer["WriteConfirmationTitle"]}\n{Localizer["WriteConfirmationText"]}");
+        }
+
+        if (confirm)
+        {
+            await WriteCVsAsync();
+        }
+    }
+
+    /// <summary>
+    /// Write CVs to the locomotive decoder in batches of five.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteCVsAsync()
+    {
+        await BlankMessagesAsync();
+
+        if (DecoderSettings.CvValues.Count == 0)
+        {
+            SuccessMessage = Localizer["NoCVsToWrite"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            return;
+        }
+
+        var cvCount = DecoderSettings.CvValues.Count;
+        _operationStartTime = DateTime.Now;
+        _averageSecondsPerCv = null;
+        _operationInProgress = true;
+        InitializeProgress(cvCount);
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVWriting"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        StateHasChanged();
+
+        var batchSize = 5;
+        var cvKeys = DecoderSettings.CvMetadata.Where(rec => rec.Value.ReadOnly is false).Select(rec => rec.Key);
+        var index = 0;
+        foreach (var cv in cvKeys)
+        {
+            if (_operationInProgress is false)
+            {
+                break;
+            }
+
+            var batch = cvKeys.Skip(index).Take(batchSize)
+                .Select(cv => new CVValue(cv, DecoderSettings.CvValues[cv].GetWholeValue() ?? 0));
+            var queue = new Queue<CVValue>(batch);
+
+            var result = await DecoderProgHelperService.WriteCVValuesAsync(
+                ProgTargetAddr.ProgTarget,
+                (ushort?)ProgTargetAddr.LocoAddress,
+                queue);
+
+            if (result.IsSuccess is false)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        ErrorMessages.AddRange(fileMessages.Messages);
+                    }
+                }
+
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                break;
+            }
+
+            index += batchSize;
+            _currentProgress = Math.Min(index, cvCount);
+            UpdateAverageSecondsPerCv();
+            StateHasChanged();
+
+            if (ErrorMessages.Count > 0 || index >= cvCount)
+            {
+                break;
+            }
+        }
+
+        _operationInProgress = false;
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        if (ErrorMessages.Count == 0 && _currentProgress == cvCount)
+        {
+            _currentProgress = cvCount;
+            SuccessMessage = Localizer["AllCVsWritten"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Cancels the ongoing read or write operation.
+    /// </summary>
+    private void CancelOperation()
+    {
+        _operationInProgress = false;
+    }
+
+    /// <summary>
+    /// Gets a formatted estimate of the remaining time until all CVs are processed.
+    /// </summary>
+    /// <returns></returns>
+    private string GetEstimatedTimeRemaining()
+    {
+        if (_maxProgress <= 0 || _currentProgress >= _maxProgress || _averageSecondsPerCv is null)
+        {
+            return string.Empty;
+        }
+
+        var remaining = _maxProgress - _currentProgress;
+        var estimatedSeconds = remaining * _averageSecondsPerCv.Value;
+        var timeSpan = TimeSpan.FromSeconds(estimatedSeconds);
+
+        if (timeSpan.TotalSeconds < 1)
+        {
+            return Localizer["LessThanSecondRemaining"];
+        }
+
+        if (timeSpan.TotalMinutes < 1)
+        {
+            return string.Format(Localizer["SecondsRemaining"], (int)timeSpan.TotalSeconds);
+        }
+
+        if (timeSpan.TotalHours < 1)
+        {
+            return string.Format(Localizer["MinutesRemaining"], (int)timeSpan.TotalMinutes);
+        }
+
+        return string.Format(Localizer["HoursRemaining"], (int)timeSpan.TotalHours);
+    }
+
+    /// <summary>
+    /// Calculates the progress percentage, capped at 100%.
+    /// </summary>
+    /// <returns></returns>
+    private double GetProgressPercentage()
+    {
+        if (_maxProgress == 0)
+        {
+            return 0;
+        }
+
+        return Math.Min(((double)_currentProgress / _maxProgress) * 100.0, 100.0);
+    }
+
+    /// <summary>
+    /// Resets the progress to zero.
+    /// </summary>
+    private void ResetProgress()
+    {
+        _currentProgress = 0;
+        _maxProgress = 0;
+    }
+
+    /// <summary>
+    /// Initializes the progress bar with the specified maximum value.
+    /// </summary>
+    /// <param name="max">The maximum progress value.</param>
+    private void InitializeProgress(int max)
+    {
+        _currentProgress = 0;
+        _maxProgress = max;
+    }
+
+    /// <summary>
+    /// Increments the current progress by one, up to the maximum value.
+    /// </summary>
+    private void IncrementProgress()
+    {
+        if (_currentProgress < _maxProgress)
+        {
+            _currentProgress++;
+        }
+    }
+
+    /// <summary>
+    /// Reset the message list/fields to none/null.
+    /// </summary>
+    /// <returns></returns>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+}

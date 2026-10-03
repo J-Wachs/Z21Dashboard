@@ -1,0 +1,105 @@
+@*
+    RailComView.razor
+    Component to display RailCom data received from the Z21 command station.
+    Subscribes to RailComDataReceived event from IZ21Client to update the display in real-time.
+
+    Please note: There seems to be a bug in the Z21 firmware 1.43 where RailCom data is not sent even if 
+    you subscribe to them. A workaround has been implemented in the Z21Client to request RailCom data
+    every second. This workaround may be removed in future versions if the firmware issue is resolved.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Ui.Dashboard.Components
+@inject IZ21Client Z21Client
+@inject IStringLocalizer<RailComViewResources> Localizer
+@implements IDisposable
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>@Localizer["Address"]</th>
+                    <th>@Localizer["ReceiveCount"]</th>
+                    <th>@Localizer["ErrorCount"]</th>
+                    <th>@Localizer["Speed"]</th>
+                    <th>@Localizer["QoS"]</th>
+                    <th>@Localizer["Options"]</th>
+                </tr>
+            </thead>
+            @if (ActiveLocosForUI.Any())
+            {
+                <tbody>
+                    @foreach (var loco in ActiveLocosForUI)
+                    {
+                        <tr>
+                            <td><strong>@loco.LocoAddress</strong></td>
+                            <td>@loco.ReceiveCounter</td>
+                            <td>@loco.ErrorCounter</td>
+                            <td>@(loco.HasSpeed1 || loco.HasSpeed2 ? loco.Speed.ToString() : Localizer["NA"])</td>
+                            <td>@(loco.HasQoS? loco.QoS.ToString() : Localizer["NA"])</td>
+                            <td>@loco.Options.ToString("b8")</td>
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+    </Content>
+</DashboardWidget>
+
+@code {
+    /// <summary>
+    /// Receives the mousedown event from the parent (Dashboard.razor)
+    /// to initiate a drag operation.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+    // The shared dictionary that needs protection.
+    private readonly Dictionary<ushort, RailComData> activeRailComLocos = new();
+
+    // The lock object to synchronize access.
+    private readonly object _locosLock = new();
+
+    // A thread-safe property for the UI to bind to.
+    private List<RailComData> ActiveLocosForUI
+    {
+        get
+        {
+            lock (_locosLock)
+            {
+                // Return a copy of the data for safe iteration in the UI.
+                return activeRailComLocos.Values.OrderBy(l => l.LocoAddress).ToList();
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Z21Client.OnRailComDataReceived += OnRailComDataReceived;
+    }
+
+    private async void OnRailComDataReceived(object? sender, RailComData e)
+    {
+        lock (_locosLock)
+        {
+            // This write operation is now protected.
+            activeRailComLocos[e.LocoAddress] = e;
+        }
+
+        // The UI update is invoked outside the lock.
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Z21Client.OnRailComDataReceived -= OnRailComDataReceived;
+    }
+}

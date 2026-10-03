@@ -1,3 +1,32 @@
+Version 1.30 of ????-??-??
+--------------------------
+For users:
+* Added German and French localization
+* Caption on buttons on the log widget is now localized (was in English)
+* New widget "Programming locomotive decoders" that allows to create a
+  locomotive roster and program the locomotives, and decoders. The
+  functionality is quite comprehensive. The widget only supports CVs
+  that are not indexed
+* Added large section to user manual about CV programming and locomotive
+  programming
+
+For developers:
+* Added method GetStatusAsync() to send command LAN_GET_STATUS to the Z21 and
+  return the response as a StatusResponse object in a event
+* Restructured the code in the Z21Dasboard project to separate the code into
+  folders for each type of functionality (e.g. widgets, services, etc.)
+* Info: There is currectly a bug in MAUI that prevent the add the project to a
+  testproject using xUnit. Hence no unit tests are included in this release
+
+Bug fixes:
+* Receive RailCom data event was not setup correct for firmware versions less than
+  1.29
+* After initial connect to the Z21, subsequent connects resulted in Locomotive
+  List not displaying the speed and buttons correctly
+* Locomotive operation time was counting even when the track power was
+  switched off
+
+
 Version 1.20 of 2026-03-17
 --------------------------
 For users:

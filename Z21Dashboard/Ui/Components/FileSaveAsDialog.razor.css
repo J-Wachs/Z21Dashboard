@@ -1,0 +1,59 @@
+<style >
+.file-save-dialog {
+    background-color: #fff;
+}
+
+.nav-toolbar {
+    background-color: #f3f3f3;
+}
+
+.input-section {
+    background-color: #f3f3f3;
+}
+
+.button-section {
+    background-color: #f3f3f3;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #6c757d;
+        content: "/";
+    }
+
+    .breadcrumb-item button {
+        background: none;
+        border: none;
+        padding: 0 !important;
+        font: inherit;
+        color: #0d6efd;
+        text-decoration: none;
+        cursor: pointer;
+        vertical-align: baseline;
+    }
+
+        .breadcrumb-item button:hover:not(:disabled) {
+            text-decoration: underline;
+            color: #0b5ed7;
+        }
+
+        .breadcrumb-item button:disabled {
+            opacity: 1;
+            color: #6c757d;
+            cursor: default;
+        }
+
+</style >

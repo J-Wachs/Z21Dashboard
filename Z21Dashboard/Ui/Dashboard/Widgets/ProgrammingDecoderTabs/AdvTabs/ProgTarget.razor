@@ -1,0 +1,135 @@
+﻿@*
+    ProgTraget.razpr
+    This component allows the user to select the programming target (Programming Track or POM)
+    and, if POM is selected, to enter the loco address.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Dashboard.Ui.Interfaces
+@using Z21Dashboard.Ui.Models
+@inject ILogger<ProgTarget> Logger
+@inject ISessionStorage SessionStorage
+@inject IStringLocalizer<ProgTargetResources> Localizer
+
+<div class="container-fluid p-2 border-bottom mb-2" style="height: 50px;">
+    <EditForm Model="this">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <div class="d-flex align-items-baseline gap-2">
+                <label class="form-label mb-0 small">@Localizer["ProgTarget"]:</label>
+                <InputRadioGroup @bind-Value="ProgTargetAddr.ProgTarget">
+                    <div class="d-flex gap-2">
+                        <div class="form-check mb-0 small">
+                            <InputRadio Value="ProgrammingTarget.POM" class="form-check-input" id="advRadioPOM"
+                                        @oninput="@(e => OnRadioButtonClick(e.Value?.ToString() ?? string.Empty))" />
+                            <label class="form-check-label" for="advRadioPOM">@Localizer["POM"]</label>
+                        </div>
+                        (@ProgTargetAddr.LocoAddress)
+                        <div class="form-check mb-0 small">
+                            <InputRadio Value="ProgrammingTarget.ProgTrack" class="form-check-input" id="advRadioPT"
+                                        @oninput="@(e => OnRadioButtonClick(e.Value?.ToString() ?? string.Empty))" />
+                            <label class="form-check-label" for="advRadioPT">@Localizer["ProgTrack"]</label>
+                        </div>
+                    </div>
+                </InputRadioGroup>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [Parameter]
+    public EventCallback<ProgrammingTargetAddr> ProgTargetAddrChanged { get; set; }
+
+    private short? _lastValidValue = 0;
+
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _isLoading = true;
+        var progTarget = SessionStorage.GetProgTarget("ProgrammingDecoder-ProgTarget");
+        if (progTarget is not null)
+        {
+            ProgTargetAddr.ProgTarget = progTarget.Value;
+            await ProgTargetAddrChanged.InvokeAsync(ProgTargetAddr);
+        }
+
+        var locoAddress = SessionStorage.GetShort("ProgrammingDecoder-LocoAddress");
+        if (locoAddress is not null)
+        {
+            ProgTargetAddr.LocoAddress = locoAddress.Value;
+            await ProgTargetAddrChanged.InvokeAsync(ProgTargetAddr);
+        }
+
+        _isLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_isLoading is false)
+        {
+            SessionStorage.SetProgTarget("ProgrammingDecoder-ProgTarget", ProgTargetAddr.ProgTarget);
+            SessionStorage.SetShort("ProgrammingDecoder-LocoAddress", ProgTargetAddr.LocoAddress);
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+    /// <summary>
+    /// Handle input changes in the loco address field.
+    /// </summary>
+    /// <param name="valueAsString"></param>
+    /// <returns></returns>
+    private async Task OnLocoAddressChanged(string valueAsString)
+    {
+        short.TryParse(valueAsString, out var value);
+
+        if (value > Limits.HighestLongAddress)
+        {
+            // This is a workaround in order to get the UI field updated correctly in MAUI Blazor Hybrid.
+            ProgTargetAddr.LocoAddress = value;
+            await Task.Yield();
+            value = _lastValidValue ?? 0;
+
+            ProgTargetAddr.LocoAddress = value;
+            await ProgTargetAddrChanged.InvokeAsync(ProgTargetAddr);
+        }
+        else
+        {
+            _lastValidValue = value;
+            ProgTargetAddr.LocoAddress = value;
+            await ProgTargetAddrChanged.InvokeAsync(ProgTargetAddr);
+        }
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Handle radio button clicks.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private async Task OnRadioButtonClick(string value)
+    {
+        var programmingTarget = ProgrammingTarget.POM;
+
+        switch (value)
+        {
+            case nameof(ProgrammingTarget.ProgTrack):
+                programmingTarget = ProgrammingTarget.ProgTrack;
+                break;
+            case nameof(ProgrammingTarget.POM):
+                programmingTarget = ProgrammingTarget.POM;
+                break;
+        }
+        ProgTargetAddr.ProgTarget = programmingTarget;
+        await ProgTargetAddrChanged.InvokeAsync(ProgTargetAddr);
+        StateHasChanged();
+    }
+}

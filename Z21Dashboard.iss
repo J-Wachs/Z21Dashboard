@@ -15,7 +15,8 @@ AppUpdatesURL=https://github.com/J-Wachs/Z21Dashboard
 DefaultDirName={autopf}\Z21Dashboard
 UninstallDisplayIcon={app}\Z21Dashboard.exe
 ; Ensure license.txt exists in the root of your repository
-LicenseFile=license.txt
+; Replaced by language-specific license files for multi-language support
+; LicenseFile=license.txt
 
 ; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
 ; on anything but x64 and Windows 11 on Arm.
@@ -43,12 +44,20 @@ WizardStyle=modern dynamic
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "danish"; MessagesFile: "compiler:Languages\Danish.isl"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+
+Name: "english"; MessagesFile: "compiler:Default.isl"; LicenseFile: "license-english.txt"
+Name: "danish"; MessagesFile: "compiler:Languages\Danish.isl"; LicenseFile: "license-danish.txt"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"; LicenseFile: "license-german.txt"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"; LicenseFile: "license-french.txt"
 
 [CustomMessages]
 ; Define the text for English (Fallback/Standard)
 english.DeleteDataPrompt=Do you want to delete Z21Dashboard application data for all users on this computer?
-; Define the text for Danish
 danish.DeleteDataPrompt=Vil du slette Z21Dashboard applikationsdata for alle brugere på denne computer?
+german.DeleteDataPrompt=Möchten Sie die Z21Dashboard-Anwendungsdaten für alle Benutzer auf diesem Computer löschen?
+french.DeleteDataPrompt=Voulez-vous supprimer les données de l'application Z21Dashboard pour tous les utilisateurs de cet ordinateur ?
 
 [Code]
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

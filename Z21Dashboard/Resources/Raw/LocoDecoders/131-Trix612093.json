@@ -1,105 +1,303 @@
 {
   "meta": {
     "manufacturer": "Trix",
-    "manufacturer_id": 0,
-    "model": "Trix 612093 Decoder",
+    "manufacturer_id": 131,
+    "model": "Trix 612093",
     "version": "1.0",
-    "protocol": "DCC",
-    "type": "locomotivedecoder"
+    "protocols": "DCC",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 2
   },
   "cv_definitions": [
     {
       "type": "cv_single",
       "cv": 1,
       "source": "nmra",
-      "default_value": 3
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
+      }
     },
     {
       "type": "cv_single",
       "cv": 3,
       "source": "nmra",
-      "default_value": 0,
+      "default_value": 5,
       "value_bits": {
         "min": 0,
-        "max": 127
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
       }
     },
     {
       "type": "cv_single",
       "cv": 4,
       "source": "nmra",
-      "default_value": 0,
+      "default_value": 5,
       "value_bits": {
         "min": 0,
-        "max": 127
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
       }
     },
     {
       "type": "cv_single",
       "cv": 5,
-      "source": "nmra",
-      "default_value": 1,
+      "source": "custom",
+      "name": {
+        "en": "Maximum speed",
+        "da": "Maksimumshastighed",
+        "de": "Höchstgeschwindigkeit",
+        "fr": "Vitesse maximale"
+      },
+      "default_value": 7,
       "value_bits": {
         "min": 1,
-        "max": 7
+        "max": 7,
+        "from_bit": 0,
+        "to_bit": 7
       }
     },
     {
       "type": "cv_single",
       "cv": 7,
       "source": "nmra",
-      "default_value": 0
+      "readonly": true
     },
     {
       "type": "cv_single",
       "cv": 8,
       "source": "nmra",
-      "default_value": 0
+      "readonly": true
     },
     {
       "type": "cv_single",
       "cv": 17,
-      "source": "nmra",
-      "default_value": 0
+      "source": "nmra"
     },
     {
       "type": "cv_single",
       "cv": 18,
-      "source": "nmra",
-      "default_value": 0
+      "source": "nmra"
     },
     {
       "type": "cv_single",
       "cv": 29,
       "source": "nmra",
-      "default_value": 2
+      "default_value": 6
     },
     {
       "type": "cv_single",
       "cv": 49,
-      "source": "nmra",
-      "default_value": 0
+      "source": "custom",
+      "name": {
+        "en": "Pulse width for motor control",
+        "da": "Pulsbredde for motorstyring",
+        "de": "Pulsbreite der Motorsteuerung",
+        "fr": "Largeur d’impulsion pour la commande du moteur"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 3,
+        "from_bit": 0,
+        "to_bit": 7
+      }
     },
     {
       "type": "cv_single",
       "cv": 50,
-      "source": "nmra",
-      "default_value": 0
+      "source": "custom",
+      "name": {
+        "en": "Control variant",
+        "da": "Reguleringsvariant",
+        "de": "Regelvariante",
+        "fr": "Variante de régulation"
+      },
+      "default_value": 2,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Recognize analog AC",
+            "da": "Genkend analog AC",
+            "de": "Analog AC erkennen",
+            "fr": "Reconnaître le mode analogique CA"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Recognize analog DC",
+            "da": "Genkend analog DC",
+            "de": "Analog DC erkennen",
+            "fr": "Reconnaître le mode analogique CC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
     },
     {
       "type": "cv_single",
       "cv": 51,
-      "source": "nmra",
-      "default_value": 0
+      "source": "custom",
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Motor polarity reversal",
+            "da": "Omvendt motorpolaritet",
+            "de": "Umpolung des Motors",
+            "fr": "Inversion de polarité du moteur"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Headlight polarity reversal",
+            "da": "Omvendt forlyspolaritet",
+            "de": "Umpolung des Frontlichts",
+            "fr": "Inversion de polarité du feu avant"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Track polarity reversal",
+            "da": "Omvendt sporpolaritet",
+            "de": "Umpolung des Gleises",
+            "fr": "Inversion de polarité de la voie"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
     }
   ],
   "ui_pages": [
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
     {
       "id": "page_analog",
       "type": "dynamic_list",
       "title": {
         "en": "Analog",
-        "da": "Analog"
+        "da": "Analog",
+        "de": "Analog",
+        "fr": "Analogique"
       },
       "page_content": [
         {
@@ -119,12 +317,22 @@
       "type": "dynamic_list",
       "title": {
         "en": "Motor",
-        "da": "Motor"
+        "da": "Motor",
+        "de": "Motor",
+        "fr": "Moteur"
       },
       "page_content": [
         {
           "type": "cvs_content",
           "content": [
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            },
             {
               "type": "cv_with_bit",
               "cv": 29,
@@ -137,26 +345,20 @@
             },
             {
               "type": "cv_single",
-              "cv": 2
-            },
-            {
-              "type": "cv_single",
-              "cv": 3
-            },
-            {
-              "type": "cv_single",
-              "cv": 4
+              "cv": 49
             }
           ]
         }
       ]
     },
     {
-      "id": "page_speed_curve",
+      "id": "page_speed curve",
       "type": "dynamic_list",
       "title": {
-        "en": "Speed Curve",
-        "da": "Hastighedskurve"
+        "en": "Speed curve",
+        "da": "Hastighedskurve",
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
       },
       "page_content": [
         {

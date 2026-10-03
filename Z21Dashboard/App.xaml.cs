@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Z21Client;
-using Z21Dashboard.Application.Interfaces;
-using Z21Dashboard.Helpers;
+using Z21Dashboard.Locomotives.Interfaces;
+using Z21Dashboard.Ui.Services;
 
 namespace Z21Dashboard;
 

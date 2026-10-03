@@ -1,0 +1,894 @@
+@*
+    LocoRosterListView.razor
+    A subpage of the Locomotives tab that displays a list of locomotives in a data grid.
+    The user can select a locomotive from the list and then edit it or delete it.
+    Add, of cause, add a new locomotive to the list.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop
+@using Microsoft.Maui.Controls
+@using System.Text.Json
+@using Z21Dashboard.Application.Interfaces
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Locomotives.Interfaces
+@using Z21Dashboard.Locomotives.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Interfaces
+@using Z21Dashboard.Ui.Models
+@using Z21Dashboard.Ui.Dashboard.Components
+@inject IDashboardStateService DashboardStateService
+@inject IDecoderUIPageBuilder DecoderUIPageBuilder
+@inject IDecoderDefinitionService DecoderDefinitionService
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject IFileAndFolderService FileAndFolderService
+@inject IJSRuntime JSRuntime
+@inject ILocoDefinitionService LocoDefinitionService
+@inject ILogger<LocosRosterListView> Logger
+@inject IStringLocalizer<LocosRosterListViewResources> Localizer
+
+@if (LocomotiveSettings.State is LocomotiveState.New or LocomotiveState.Edit)
+{
+    <div class="row mb-2">
+        <div class="col-12">
+            @if (LocomotiveSettings.State is LocomotiveState.New)
+            {
+                <text><span class="text-muted" style="font-size: 0.8rem;">@Localizer["InProcessOfAdding"]</span></text>
+            }
+            @if (LocomotiveSettings.State is LocomotiveState.Edit)
+            {
+                <text><span class="text-muted" style="font-size: 0.8rem;">@Localizer["InProcessOfEditing"]</span></text>
+            }
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <DataGrid 
+            TItem="LocomotiveListItemDto"
+                  Items="@_locomotivesList"
+                  Columns="@_locoColumns"
+                  @bind-SelectedItem="@_selectedLocomotive"
+                  OnRowClicked="@OnLocomotiveRowClicked"
+                  EmptyMessage="@Localizer["NoLocomotivesFound"]"
+                  ShowSearch="true"
+                  SearchPlaceholder="@Localizer["SearchPlaceholder"]"
+                  SearchSelectors="@_searchSelectors" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        @if (string.IsNullOrEmpty(_dashboardSettings.LocalLocomotiveFolder) is false)
+        {
+            <button type="button" class="btn btn-primary"
+                    @onclick="@(async () => await OnAddLoco())" title="Add New Locomotive">
+                @Localizer["AddNew"]
+            </button>
+            <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                    @onclick="@(async () => await OnEditLoco(_selectedLocomotive!))" aria-label="ReadCV">
+                @Localizer["Edit"]
+            </button>
+            <button type="button" class="btn btn-primary"
+                    disabled="@(LocomotiveSettings.State is not LocomotiveState.New and not LocomotiveState.Edit)"
+                    @onclick="@(async () => await OnCancelEditOrNew())" aria-label="ReadCV">
+                @Localizer["Cancel"]
+            </button>
+            <button type="button" class="btn btn-primary"
+                    disabled="@(LocomotiveSettings.State is not LocomotiveState.New and not LocomotiveState.Edit)"
+                    @onclick="@(async () => await OnSaveLocomotive())"
+                    aria-label="Save locomotive">
+                @Localizer["Save"]@GetChangesIndicator()
+            </button>
+            <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
+                    @onclick="@(async () => await OnDeleteLoco(_selectedLocomotive!))" aria-label="ReadCV">
+                @Localizer["Delete"]
+            </button>
+        }
+    </div>
+</div>
+
+<DraggableModal IsOpen="_displaySaveAs"
+                Title="@Localizer["SaveAs"]"
+                OnClose="@(() => _displaySaveAs = false)"
+                Height="500px">
+    <Content>
+        <FileSaveAsDialog InitialFolder="@_locomotivesDirectory"
+                          SuggestedFilename="@GetLocomotiveFilename()"
+                          RestrictFolderChange="true"
+                          OnFileSelected="@(async (filename) => await OnButtonClickInSaveDialog(filename))" />
+    </Content>
+    <FooterContent>
+    </FooterContent>
+</DraggableModal>
+
+@code {
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required LocomotiveSettings LocomotiveSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private List<DecoderListItemDto> _listOfLocoDecoders = [];
+    private DecoderListItemDto? _selectedFile = null;
+    private bool _buttonsDisabled = true;
+    private DashboardSettings _dashboardSettings = new();
+
+    private List<LocomotiveListItemDto> _locomotivesList = [];
+    private string _locomotivesDirectory = string.Empty;
+    private LocomotiveListItemDto? _selectedLocomotive = null;
+    private List<ColumnDefinition<LocomotiveListItemDto>>? _locoColumns = null;
+    private Func<LocomotiveListItemDto, string>[]? _searchSelectors = null;
+
+    private const string PageLocoEditBasic = "page_locoeditbasic";
+    private const string PageLocoEditExtended = "page_locoeditextended";
+    private const string PageLocoDecoders = "page_locodecoders";
+    private const string PageAddress = "page_address";
+
+    // Cached JsonSerializerOptions to avoid creating a new instance per operation (fixes CA1869).
+    private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
+
+    private bool _displaySaveAs = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await BlankMessagesAsync();
+
+        _dashboardSettings = await GetSettingsAsync();
+
+        _locomotivesDirectory = _dashboardSettings.LocalLocomotiveFolder ?? string.Empty;
+
+        InitializeColumns();
+
+        await LoadLocomotivesFromFilesAsync();
+
+        // Find out if we are in the process of either adding a new locomotive or
+        // editong an existing one.
+        // We can come there one in two ways:
+        // - We selected Locomotives Tab to see locomotives.
+        // - We are either adding a new locomotive or editing one.
+        //   In this case, we need to check what to setup of tabs etc.
+        if (LocomotiveSettings.State is LocomotiveState.New
+            or LocomotiveState.Edit)
+        {
+            // Check the tabs collection if it looks like we came from another locomotive tab
+            // or if the user clicked Locomotive tabs from the Decoder tab.
+            if (Parent.Pages.Count == 1)
+            {
+                // We came from the Decoder tab, so we need to setup the tabs for the selected decoder file.
+                await SetupForEditAndNew();
+                await SetupTabs();
+                await Parent.NotifyStateChangedAsync();
+            }
+
+            if (LocomotiveSettings.State is LocomotiveState.Edit)
+            {
+                _selectedLocomotive = new(
+                    LocomotiveSettings.LocomotiveFile!,
+                    LocomotiveSettings.DecoderSettings.GetLocoAddress() ?? 0,
+                    Path.GetFileName(LocomotiveSettings.LocomotiveFile!),
+                    LocomotiveSettings.LocomotiveMeta.Name,
+                    LocomotiveSettings.LocomotiveMeta.ShortName,
+                    LocomotiveSettings.LocomotiveMeta.Manufacturer,
+                    LocomotiveSettings.LocomotiveMeta.Class,
+                    LocomotiveSettings.LocomotiveMeta.UnitNumber
+                );
+            }
+        }
+    }
+
+    /// <summary>
+    /// Initialize the data grid columns for locomotives display.
+    /// </summary>
+    private void InitializeColumns()
+    {
+        _locoColumns = new List<ColumnDefinition<LocomotiveListItemDto>>
+        {
+            new()
+            {
+                Header = Localizer["Address"],
+                ValueSelector = l => l.Address,
+                Width = "50px"
+            },
+            new()
+            {
+                Header = Localizer["Name"],
+                ValueSelector = l => l.Name,
+                Width = "200px"
+            },
+            new()
+            {
+                Header = Localizer["ShortName"],
+                ValueSelector = l => l.ShortName ?? string.Empty,
+                Width = "100px"
+            },
+            new()
+            {
+                Header = Localizer["Manufacturer"],
+                ValueSelector = l => l.Manufacturer ?? string.Empty,
+                Width = "120px"
+            },
+            new()
+            {
+                Header = Localizer["Class"],
+                ValueSelector = l => l.Class ?? string.Empty,
+                Width = "80px"
+            },
+            new()
+            {
+                Header = Localizer["UnitNumber"],
+                ValueSelector = l => l.UnitNumber ?? string.Empty,
+                Width = "100px"
+            }
+        };
+
+        // Initialize search selectors - these define which fields are searchable
+        _searchSelectors = new Func<LocomotiveListItemDto, string>[]
+        {
+            l => l.Address.ToString(),
+            l => l.Name ?? string.Empty,                    // Search by locomotive name
+            l => l.ShortName ?? string.Empty,               // Search by short name
+            l => l.Manufacturer ?? string.Empty,            // Search by manufacturer
+            l => l.Class ?? string.Empty,                   // Search by class
+            l => l.UnitNumber ?? string.Empty               // Search by unit number
+        };
+    }
+
+    /// <summary>
+    /// Handle row click event in the locomotive grid.
+    /// </summary>
+    private async Task OnLocomotiveRowClicked(LocomotiveListItemDto locomotive)
+    {
+        _selectedLocomotive = locomotive;
+        _buttonsDisabled = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Load locomotive definitions from JSON files in the C:\Trains directory.
+    /// </summary>
+    private async Task LoadLocomotivesFromFilesAsync()
+    {
+        var result = await LocoDefinitionService.GetLocomotivesAsync();
+        if (result.IsSuccess is false)
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+        else
+        {
+            _locomotivesList = [.. result.Data!];
+        }
+    }
+
+    /// <summary>
+    /// Set the selected decoder file based on the DecoderSettings.
+    /// If a selected decoder file is specified in the DecoderSettings
+    /// then that file will be selected, otherwise the standard NMRA decoder will be selected by default.
+    /// </summary>
+    /// <returns>false: Specific decoder file was previously selected, so do not override 'DecoderSettings'.</returns>
+    private async Task<bool> SetSelectedDecoderFile()
+    {
+        // If a selected decoder exists then select that one
+        if (string.IsNullOrEmpty(LocomotiveSettings.DecoderSettings.DecoderFile) is false)
+        {
+            _selectedFile = new(
+                FileName: LocomotiveSettings.DecoderSettings.DecoderFile,
+                Name: LocomotiveSettings.DecoderSettings.DecoderModel!,
+                ManufacturerId: (ushort?)LocomotiveSettings.DecoderSettings.DecoderMfgId ?? 0,
+                Manufacturer: LocomotiveSettings.DecoderSettings.DecoderMfg!,
+                Location: LocomotiveSettings.DecoderSettings.DecoderFileLocation!.Value
+                );
+            return false;
+        }
+        else
+        {
+            // Pre-select the standard NMRA decoder
+            _selectedFile = new(
+                FileName: Constants.DefaultNMRADecoderFile,
+                Name: "NMRA Maximal Standard Decoder (" + Localizer["SystemDef"] + ")",
+                ManufacturerId: 0,
+                Manufacturer: "NMRA",
+                Location: DecoderFileLocation.Application
+                );
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Load the decoder definition file for the selected decoder and
+    /// setup the CV definitions and tabs based on that decoder definition file.
+    /// </summary>
+    /// <returns></returns>
+    private async Task LoadSelectedDecoderFile()
+    {
+        if (_selectedFile is not null)
+        {
+            await ReadDecoderDef(_selectedFile);
+        }
+        await SetupTabs();
+        await Parent.NotifyStateChangedAsync();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// When a new locomotive is to be added, this method will clear the
+    /// LocomotiveSettings and setup the tabs for editing a new locomotive.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnAddLoco()
+    {
+        await BlankMessagesAsync();
+
+        if (LocomotiveSettings.State is not LocomotiveState.Idle &&
+            LocomotiveSettings.IsChanged())
+        {
+            var page = Application.Current?.Windows[0].Page;
+            bool cancel = false;
+            if (page is not null)
+            {
+                cancel = await page.DisplayAlertAsync(Localizer["Warning"], Localizer["AlreadyWorking"], Localizer["Yes"], Localizer["No"]);
+            }
+            else
+            {
+                cancel = await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["AlreadyWorking"]}");
+            }
+
+            if (cancel is false)
+            {
+                return;
+            }
+        }
+
+        LocomotiveSettings.Clear();
+        await SetupForEditAndNew();
+        LocomotiveSettings.State = LocomotiveState.New;
+        LocomotiveSettings.ClearChanged();
+    }
+
+    /// <summary>
+    /// When editing a locomotive, this method will set up the
+    /// locomotive settings and tabs for editing the selected locomotive.
+    /// </summary>
+    /// <param name="locomotive"></param>
+    /// <returns></returns>
+    private async Task OnEditLoco(LocomotiveListItemDto locomotive)
+    {
+        try
+        {
+            await BlankMessagesAsync();
+
+            if (LocomotiveSettings.State is not LocomotiveState.Idle &&
+                LocomotiveSettings.IsChanged())
+            {
+                var page = Application.Current?.Windows[0].Page;
+                bool cancel = false;
+                if (page is not null)
+                {
+                    cancel = await page.DisplayAlertAsync(Localizer["Warning"], Localizer["AlreadyWorking"], Localizer["Yes"], Localizer["No"]);
+                }
+                else
+                {
+                    cancel = await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["AlreadyWorking"]}");
+                }
+
+                if (cancel is false)
+                {
+                    return;
+                }
+            }
+
+            WorkingMessage = Localizer["Loading"];
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            StateHasChanged();
+
+            // Load the locomotive data from the file
+            var result = await LocoDefinitionService.GetLocomotiveAndSetInfoIntoSettingsAsync(
+                locomotive.FilePath,
+                LocomotiveSettings
+            );
+            if (result.IsSuccess is false)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    List<string> lstErrorMessages = [];
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        lstErrorMessages.AddRange(fileMessages.Messages);
+                    }
+
+                    ErrorMessages.AddRange(lstErrorMessages);
+                    await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                }
+                return;
+            }
+
+            ProgTargetAddr.LocoAddress = LocomotiveSettings.DecoderSettings.GetLocoAddress();
+
+            await AddStandardTabPages();
+            await SetupTabs();
+            await Parent.SetActivePageByIdAsync(PageLocoEditBasic);
+            await Parent.NotifyStateChangedAsync();
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = string.Format(Localizer["ErrorEditLoco"], locomotive.Name, ex.Message);
+            ErrorMessages.Add(errorMessage);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            Logger.LogError(ex, errorMessage);
+        }
+        finally
+        {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        }
+    }
+
+    /// <summary>
+    /// Handles the cancellation of editing or creating a new locomotive.
+    /// </summary>
+    private async Task OnCancelEditOrNew()
+    {
+        await BlankMessagesAsync();
+
+        if (LocomotiveSettings.IsChanged())
+        {
+            // Dialog Do you want to save before override.
+            var page = Application.Current?.Windows[0].Page;
+            bool cancelEditOrNew = false;
+            if (page is not null)
+            {
+                // "You have made changes to your decoder. Do you want to save them, before loading the selected decoder?"
+                cancelEditOrNew = await page.DisplayAlertAsync(Localizer["Warning"], Localizer["LocomotiveChangedWantToSave"], Localizer["Yes"], Localizer["No"]);
+            }
+            else
+            {
+                cancelEditOrNew = await JSRuntime.InvokeAsync<bool>("confirm", $"{Localizer["Warning"]}\n{Localizer["LocomotiveChangedWantToSave"]}");
+            }
+
+            if (cancelEditOrNew is false)
+            {
+                return;
+            }
+        }
+
+        ClearDataAndTabs();
+    }
+
+
+    /// <summary>
+    /// Handle delete action for a locomotive.
+    /// </summary>
+    private async Task OnDeleteLoco(LocomotiveListItemDto locomotive)
+    {
+        try
+        {
+            await BlankMessagesAsync();
+
+            var page = Application.Current?.Windows[0].Page;
+            bool confirmDelete = false;
+            if (page is not null)
+            {
+                confirmDelete = await page.DisplayAlertAsync(
+                    Localizer["DeleteLoco"],
+                    string.Format(Localizer["AreYouSure"], locomotive.Name),
+                    Localizer["Delete"],
+                    Localizer["Cancel"]
+                );
+            }
+            else
+            {
+                confirmDelete = await JSRuntime.InvokeAsync<bool>("confirm", string.Format(Localizer["AreYouSure"], locomotive.Name));
+            }
+
+            if (confirmDelete && !string.IsNullOrEmpty(locomotive.FilePath))
+            {
+                WorkingMessage = Localizer["DeletingLoco"];
+                await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+                StateHasChanged();
+
+                var result = await LocoDefinitionService.DeleteLocomotiveFileAsync(locomotive.FilePath);
+                if (result.IsSuccess)
+                {
+                    if (locomotive.FilePath == LocomotiveSettings.LocomotiveFile)
+                    {
+                        ClearDataAndTabs();
+                    }
+
+                    await LoadLocomotivesFromFilesAsync();
+                    SuccessMessage = Localizer["DeleteSuccess"];
+                    await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                    _buttonsDisabled = true;
+                    StateHasChanged();
+                }
+                else
+                {
+                    if (result.Messages.Count > 0)
+                    {
+                        List<string> lstErrorMessages = [];
+                        foreach (var fileMessages in result.Messages)
+                        {
+                            lstErrorMessages.AddRange(fileMessages.Messages);
+                        }
+                        ErrorMessages.AddRange(lstErrorMessages);
+                        await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = string.Format(Localizer["ErrorDeleteLoco"], locomotive.Name, ex.Message);
+            ErrorMessages.Add(errorMessage);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            Logger.LogError(ex, errorMessage);
+        }
+        finally
+        {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Reads the decoder definition file for the selected decoder
+    /// and sets the CV definitions from that file into the DecoderSettings.
+    /// </summary>
+    /// <param name="decoder"></param>
+    /// <returns></returns>
+    private async Task ReadDecoderDef(DecoderListItemDto decoder)
+    {
+        // Remove tabs associated with the previous selected decoder:
+        const string DecoderEditBasePageId = "page_decodereditbase";
+        _ = Parent.RemoveTabById(DecoderEditBasePageId);
+        const string DecoderAddressPageId = "page_address";
+        _ = Parent.RemoveTabById(DecoderAddressPageId);
+        const string AllCvsReadWritePageId = "page_allcvsreadwrite";
+        _ = Parent.RemoveTabById(AllCvsReadWritePageId);
+        foreach (var onePage in LocomotiveSettings.DecoderSettings.Pages)
+        {
+            _ = Parent.RemoveTabById(onePage.Id);
+        }
+
+        // Read the decoder definition file:
+        var result = await DecoderDefinitionService.GetLocoDecoderDefAndSetCVsIntoSettingsAsync(decoder, LocomotiveSettings.DecoderSettings);
+        if (result.IsSuccess is false)
+        {
+            foreach (var errorMessageForField in result.Messages)
+            {
+                foreach (var errorMessage in errorMessageForField.Messages)
+                {
+                    if (string.IsNullOrEmpty(errorMessage) is false)
+                    {
+                        ErrorMessages.Add(errorMessage);
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    }
+                }
+            }
+            return;
+        }
+
+        ProgTargetAddr.LocoAddress = LocomotiveSettings.DecoderSettings.GetLocoAddress();
+    }
+
+    /// <summary>
+    /// Sets up the tabs associated with the selected decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SetupTabs()
+    {
+        // Setup the tabs associated with the selected decoder
+        UIPagesAddPagesParams parms = new(
+            Parent: Parent,
+            DecoderSettings: LocomotiveSettings.DecoderSettings,
+            ProgTarget: ProgTargetAddr.ProgTarget,
+            LocoAddress: (ushort?)ProgTargetAddr.LocoAddress,
+            ErrorMessages: ErrorMessages,
+            ErrorMessagesChanged: ErrorMessagesChanged,
+            WorkingMessage: WorkingMessage,
+            WorkingMessageChanged: WorkingMessageChanged,
+            SuccessMessage: SuccessMessage,
+            SuccessMessageChanged: SuccessMessageChanged
+        );
+
+        var result = await DecoderUIPageBuilder.AddPagesAsync(parms);
+        if (result.IsSuccess is false)
+        {
+            foreach (var errorMessageForField in result.Messages)
+            {
+                foreach (var errorMessage in errorMessageForField.Messages)
+                {
+                    if (string.IsNullOrEmpty(errorMessage) is false)
+                    {
+                        ErrorMessages.Add(errorMessage);
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    /// <summary>
+    /// Gets the dashboard settings.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<DashboardSettings> GetSettingsAsync()
+    {
+        return await DashboardStateService.GetSettingsAsync();
+    }
+
+    /// <summary>
+    /// Sets up the tabs associated with the selected decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SetupForEditAndNew()
+    {
+        await AddStandardTabPages();
+
+        if (await SetSelectedDecoderFile())
+        {
+            // Loads the decoder definitions file first and then
+            // calls the setup of the tabs.
+            await LoadSelectedDecoderFile();
+        }
+        else
+        {
+            await SetupTabs();
+        }
+
+        await Parent.SetActivePageByIdAsync(PageLocoEditBasic);
+    }
+
+    /// <summary>
+    /// Adds the standard tab pages.
+    /// </summary>
+    /// <returns></returns>
+    private async Task AddStandardTabPages()
+    {
+        await Parent.AddPage(new()
+        {
+            Id = PageLocoEditBasic,
+            Title = Localizer["EditLocoBasic"],
+            Content = builder =>
+            {
+                builder.OpenComponent(0, typeof(LocoEditBase));
+                builder.CloseComponent();
+            }
+        });
+        await Parent.AddPage(new()
+        {
+            Id = PageLocoEditExtended,
+            Title = Localizer["EditLocoExtended"],
+            Content = builder =>
+            {
+                builder.OpenComponent(1, typeof(LocoEditInfo));
+                builder.CloseComponent();
+            }
+        });
+        await Parent.AddPage(new()
+        {
+            Id = PageLocoDecoders,
+            Title = Localizer["Decoder"],
+            Content = builder =>
+            {
+                builder.OpenComponent(2, typeof(LocoDecoderList));
+                builder.AddAttribute(4, "ErrorMessages", ErrorMessages);
+                builder.AddAttribute(5, "ErrorMessagesChanged", ErrorMessagesChanged);
+                builder.AddAttribute(6, "WorkingMessage", WorkingMessage);
+                builder.AddAttribute(7, "WorkingMessageChanged", WorkingMessageChanged);
+                builder.AddAttribute(8, "SuccessMessage", SuccessMessage);
+                builder.AddAttribute(9, "SuccessMessageChanged", SuccessMessageChanged);
+                builder.CloseComponent();
+            }
+        });
+    }
+
+    /// <summary>
+    /// Validate and save the locomotive to a JSON file (handles both add and edit modes).
+    /// </summary>
+    private async Task SaveLocomotiveDefinition()
+    {
+        try
+        {
+            await BlankMessagesAsync();
+
+            if (string.IsNullOrEmpty(LocomotiveSettings.LocomotiveFile))
+            {
+                ErrorMessages.Add(Localizer["BlankName"]);
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                return;
+            }
+
+            string locoFileName = LocomotiveSettings.LocomotiveFile;
+            var result = await LocoDefinitionService.SaveValuesToLocomotiveDefinitionFileAsync(locoFileName, LocomotiveSettings);
+            if (!result.IsSuccess)
+            {
+                if (result.Messages.Count > 0)
+                {
+                    List<string> lstErrorMessages = [];
+                    foreach (var fileMessages in result.Messages)
+                    {
+                        lstErrorMessages.AddRange(fileMessages.Messages);
+                    }
+                    ErrorMessages.AddRange(lstErrorMessages);
+                    await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+                }
+                StateHasChanged();
+                return;
+            }
+
+            // Reload the locomotives list
+            await LoadLocomotivesFromFilesAsync();
+
+            // Store the locomotive name for the success message before clearing
+            var successMessage = string.Format(Localizer["LocomotiveSaved"], LocomotiveSettings.LocomotiveMeta.Name);
+            SuccessMessage = successMessage;
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = string.Format(Localizer["ErrorSavingLoco"], LocomotiveSettings.LocomotiveMeta.Name, ex.Message);
+            ErrorMessages.Add(errorMessage);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            Logger.LogError(ex, errorMessage);
+        }
+        finally
+        {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        }
+    }
+
+    /// <summary>
+    /// Depending on the save is for a new locomotive or an existing one,
+    /// either display the Save As dialog or save the locomotive definition directly.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnSaveLocomotive()
+    {
+        // If new, we need to get a file name.
+        // Otherwise just save it
+        if (LocomotiveSettings.State is LocomotiveState.New)
+        {
+            _displaySaveAs = true;
+            return;
+        }
+
+        await SaveLocomotiveDefinition();
+    }
+
+    /// <summary>
+    /// Gets the default filename for a new locomotive.
+    /// </summary>
+    /// <returns></returns>
+    private string GetLocomotiveFilename()
+    {
+        if (string.IsNullOrEmpty(LocomotiveSettings.LocomotiveFile))
+        {
+            return Localizer["NewLocomotiveFile"];
+        }
+
+        return Path.GetFileName(LocomotiveSettings.LocomotiveFile);
+    }
+
+    /// <summary>
+    /// Gets the changes indicator for the locomotive.
+    /// </summary>
+    /// <returns></returns>
+    private string GetChangesIndicator()
+    {
+        return LocomotiveSettings.IsChanged() ? "*" : string.Empty;
+    }
+
+    /// <summary>
+    /// Handles the button click event in the save dialog.
+    /// </summary>
+    /// <param name="fullFilename">The full filename of the selected file.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    private async Task OnButtonClickInSaveDialog(string fullFilename)
+    {
+        _displaySaveAs = false;
+
+        if (string.IsNullOrEmpty(fullFilename))
+        {
+            // User cancelled the file save dialog, so we exit the method without doing anything.
+            return;
+        }
+
+        if (File.Exists(fullFilename))
+        {
+            string filename = Path.GetFileName(fullFilename);
+            var page = Application.Current?.Windows[0].Page;
+            bool overwriteFile = false;
+            var warningMessage = string.Format(Localizer["FileExists"], filename);
+            if (page is not null)
+            {
+                overwriteFile = await page.DisplayAlertAsync(Localizer["FileExists"], warningMessage, Localizer["Yes"], Localizer["No"]);
+            }
+            else
+            {
+                overwriteFile = await JSRuntime.InvokeAsync<bool>("confirm", Localizer["FileExists"] + $"\n\n" + warningMessage);
+            }
+            if (!overwriteFile)
+            {
+                return;
+            }
+        }
+        LocomotiveSettings.LocomotiveFile = fullFilename;
+        await SaveLocomotiveDefinition();
+    }
+
+    /// <summary>
+    /// Clears the data and tabs associated with the locomotive.
+    /// This is done for prepare for another locomotive, or when
+    /// the user clicks cancel.
+    /// </summary>
+    private void ClearDataAndTabs()
+    {
+        // Remove tabs associated with the previous selected decoder:
+        foreach (var onePage in LocomotiveSettings.DecoderSettings.Pages)
+        {
+            _ = Parent.RemoveTabById(onePage.Id);
+        }
+        LocomotiveSettings.Clear();
+
+        _ = Parent.RemoveTabById(PageLocoEditBasic);
+        _ = Parent.RemoveTabById(PageLocoEditExtended);
+        _ = Parent.RemoveTabById(PageLocoDecoders);
+        _ = Parent.RemoveTabById(PageAddress);
+        LocomotiveSettings.State = LocomotiveState.Idle;
+    }
+
+    /// <summary>
+    /// Clear error and status messages
+    /// </summary>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        StateHasChanged();
+    }
+}

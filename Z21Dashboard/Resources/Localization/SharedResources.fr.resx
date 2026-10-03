@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xsd:element name="root" msdata:IsDataSet="true">
+	  <xsd:complexType>
+		<xsd:choice maxOccurs="unbounded">
+		  <xsd:element name="metadata">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" use="required" type="xsd:string" />
+			  <xsd:attribute name="type" type="xsd:string" />
+			  <xsd:attribute name="mimetype" type="xsd:string" />
+			  <xsd:attribute ref="xml:space" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="assembly">
+			<xsd:complexType>
+			  <xsd:attribute name="alias" type="xsd:string" />
+			  <xsd:attribute name="name" type="xsd:string" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="data">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+				<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+			  <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+			  <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+			  <xsd:attribute ref="xml:space" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="resheader">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" type="xsd:string" use="required" />
+			</xsd:complexType>
+		  </xsd:element>
+		</xsd:choice>
+	  </xsd:complexType>
+	</xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+	<value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+	<value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorSavingDecoderDef" xml:space="preserve">
+	<value>Erreur lors de l'enregistrement de la définition du décodeur '{0}' à l'emplacement '{1}'. Erreur : '{2}'</value>
+  </data>
+  <data name="About" xml:space="preserve">
+	<value>À propos</value>
+  </data>
+  <data name="BitOutOfRange" xml:space="preserve">
+	<value>Le bit d'entrée {0} ne doit pas être dans la plage '{1}' à '{2}'</value>
+  </data>
+  <data name="CannotDeserialize" xml:space="preserve">
+	<value>Impossible de comprendre le contenu JSON du fichier de définition du décodeur</value>
+  </data>
+  <data name="Connection" xml:space="preserve">
+	<value>Connexion</value>
+  </data>
+  <data name="CV1718NoValue" xml:space="preserve">
+	<value>La CV17 ou CV18 retournée ne contient pas de valeur</value>
+  </data>
+  <data name="CvMetadataNotFound" xml:space="preserve">
+	<value>Les informations sur l'adresse CV {0} n'ont pas été trouvées. Opération annulée</value>
+  </data>
+  <data name="CvMetadataValueBitsMissing" xml:space="preserve">
+	<value>Les informations sur les ValueBits sont manquantes pour la CV {0}</value>
+  </data>
+  <data name="CVSyncError" xml:space="preserve">
+	<value>Erreur de synchronisation : CV {0} demandée, {1} reçue</value>
+  </data>
+  <data name="CvValueOutsideRange" xml:space="preserve">
+	<value>La valeur '{0}' de la CV {1} est en dehors de la plage valide '{2}' à '{3}'</value>
+  </data>
+  <data name="DecoderfileDoesNotExist" xml:space="preserve">
+	<value>Le fichier de définition du décodeur '{0}' n'existe pas</value>
+  </data>
+  <data name="DecoderFileNoCvDefinitions" xml:space="preserve">
+	<value>Le fichier de décodeur '{0}' de '{1}' ne contient aucune définition de CV</value>
+  </data>
+  <data name="ErrorLoadingDecoderDef" xml:space="preserve">
+	<value>Échec du chargement de la définition du décodeur pour {0} depuis {1}. Erreur : '{2}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoderFile" xml:space="preserve">
+	<value>Erreur lors du chargement du fichier de décodeur local '{0}'. Erreur : '{1}'</value>
+  </data>
+  <data name="ErrorLoadingLocalDecoders" xml:space="preserve">
+	<value>Erreur lors du chargement du fichier de décodeur depuis le dossier local '{0}'</value>
+  </data>
+  <data name="ErrorLoadingNmraStandard" xml:space="preserve">
+	<value>Impossible de charger le fichier standard NMRA</value>
+  </data>
+  <data name="ErrorReadingAppResource" xml:space="preserve">
+	<value>Erreur lors de la lecture de la ressource de l'application : '{0}'. Erreur : '{1}'</value>
+  </data>
+  <data name="ErrorReadingDecoderFile" xml:space="preserve">
+	<value>Échec du chargement de la définition du décodeur pour {0} depuis {1}. Erreur : '{2}'</value>
+  </data>
+  <data name="ErrorReadingFromDecoder" xml:space="preserve">
+	<value>Échec de la lecture de la CV depuis le décodeur. Erreur : '{0}'</value>
+  </data>
+  <data name="ErrorWritingToDecoder" xml:space="preserve">
+	<value>Échec de l'écriture de la CV vers le décodeur. Erreur : '{0}'</value>
+  </data>
+  <data name="FailedToRetrieveSystemStatus" xml:space="preserve">
+	<value>Échec de la récupération de l'état du système. Impossible de continuer la lecture des CV en POM</value>
+  </data>
+  <data name="LocalDecoderFolderNotFound" xml:space="preserve">
+	<value>Le dossier local pour les fichiers de décodeur n'existe pas. Le dossier est '{0}'</value>
+  </data>
+  <data name="LocoAddressMustNotBeNull" xml:space="preserve">
+	<value>L'adresse de la locomotive ne doit pas être 'null'</value>
+  </data>
+  <data name="LocoAddressOutOfRange" xml:space="preserve">
+	<value>L'adresse de la locomotive doit avoir une valeur entre 1 et {0} pour communiquer sur la voie principale</value>
+  </data>
+  <data name="LocoControl" xml:space="preserve">
+	<value>Contrôleur de locomotive 1</value>
+  </data>
+  <data name="LocoControl2" xml:space="preserve">
+	<value>Contrôleur de locomotive 2</value>
+  </data>
+  <data name="LocoControl3" xml:space="preserve">
+	<value>Contrôleur de locomotive 3</value>
+  </data>
+  <data name="LocoControl4" xml:space="preserve">
+	<value>Contrôleur de locomotive 4</value>
+  </data>
+  <data name="LocoListView" xml:space="preserve">
+	<value>Temps de fonctionnement des locomotives</value>
+  </data>
+  <data name="LocoSlotView" xml:space="preserve">
+	<value>Emplacements des locomotives</value>
+  </data>
+  <data name="MissingPageId" xml:space="preserve">
+	<value>Impossible de trouver la page avec l'identifiant {0}</value>
+  </data>
+  <data name="MoreThanOneCV" xml:space="preserve">
+	<value>Plus d'une valeur de CV a été retournée par la Z21</value>
+  </data>
+  <data name="NewLocoAddressOutOfRange" xml:space="preserve">
+	<value>La nouvelle adresse de locomotive doit être entre 1 et {0}</value>
+  </data>
+  <data name="NoCVValueNoError" xml:space="preserve">
+	<value>Aucune valeur de CV retournée mais aucune erreur n'a été signalée</value>
+  </data>
+  <data name="NoPagesInDecoderFiles" xml:space="preserve">
+	<value>Le décodeur sélectionné '{0}', fichier '{1}' du fabricant '{2}', n'a aucune page définie. Des pages sont nécessaires</value>
+  </data>
+  <data name="PageTypeInDecoderFileUnknown" xml:space="preserve">
+	<value>Dans le fichier de décodeur '{0}', la page '{1}' est définie avec le type '{2}'. Ce type ne peut pas être utilisé dans cette application</value>
+  </data>
+  <data name="PowerChart" xml:space="preserve">
+	<value>Moniteur de puissance et de tension</value>
+  </data>
+  <data name="ProgrammingDecoder" xml:space="preserve">
+	<value>Programmation du décodeur</value>
+  </data>
+  <data name="RailComMustBeTurnedOn" xml:space="preserve">
+	<value>RailCom doit être activé dans la Z21 et dans le décodeur pour lire les valeurs des CV en POM</value>
+  </data>
+  <data name="RailComView" xml:space="preserve">
+	<value>Données RailCom</value>
+  </data>
+  <data name="RBusView" xml:space="preserve">
+	<value>Rétrosignalisation R-Bus</value>
+  </data>
+  <data name="ReadRejected" xml:space="preserve">
+	<value>Lecture rejetée. Un message 'NACK' a été reçu</value>
+  </data>
+  <data name="ShortCircuit" xml:space="preserve">
+	<value>Un court-circuit a été détecté</value>
+  </data>
+  <data name="ShowLogView" xml:space="preserve">
+	<value>Afficher le journal</value>
+  </data>
+  <data name="SpeedMeasurement" xml:space="preserve">
+	<value>Mesure de vitesse</value>
+  </data>
+  <data name="SystemStateFullView" xml:space="preserve">
+	<value>État du système - Complet</value>
+  </data>
+  <data name="SystemStateView" xml:space="preserve">
+	<value>État du système</value>
+  </data>
+  <data name="Text0001" xml:space="preserve">
+	<value>Erreur lors de l'enregistrement des données pour la clé '{key}' : {ex.Message}</value>
+  </data>
+  <data name="Text0002" xml:space="preserve">
+	<value>Erreur lors de la lecture des données pour la clé '{key}' : {ex.Message}</value>
+  </data>
+  <data name="Text0003" xml:space="preserve">
+	<value>Tentative d'ouverture du manuel. Fichier sélectionné : {FileName}</value>
+  </data>
+  <data name="Text0004" xml:space="preserve">
+	<value>Fichier du manuel non trouvé au chemin : {FilePath}</value>
+  </data>
+  <data name="Text0005" xml:space="preserve">
+	<value>Échec de l'ouverture du manuel utilisateur : {Message}</value>
+  </data>
+  <data name="TimeoutDuringReadPOM" xml:space="preserve">
+	<value>Délai d'attente dépassé lors de la lecture de la CV {0}. Aucune réponse du décodeur sur la voie principale</value>
+  </data>
+  <data name="TimeoutDuringReadProgTrack" xml:space="preserve">
+	<value>Délai d'attente dépassé : Aucune réponse pour la CV {0} sur la voie de programmation</value>
+  </data>
+  <data name="TimeoutDuringWrite" xml:space="preserve">
+	<value>Délai d'attente dépassé lors de l'écriture. Aucune réponse du décodeur</value>
+  </data>
+  <data name="TurnoutListView" xml:space="preserve">
+	<value>Aiguillages</value>
+  </data>
+  <data name="TurnoutProtocolSelector" xml:space="preserve">
+	<value>Sélecteur de protocole d'aiguillage</value>
+  </data>
+  <data name="UnknownManufacturer" xml:space="preserve">
+	<value>(Inconnu)</value>
+  </data>
+  <data name="UnknownProgTarget" xml:space="preserve">
+	<value>Cible de programmation inconnue</value>
+  </data>
+  <data name="ValueOutOfRange" xml:space="preserve">
+	<value>La valeur doit être entre '{0}' et '{1}'</value>
+  </data>
+  <data name="WriteRejected" xml:space="preserve">
+	<value>Écriture rejetée. Un message 'NACK' a été reçu</value>
+  </data>
+  <data name="CannotSaveDecoderDef" xml:space="preserve">
+	<value>Impossible d'enregistrer la définition du décodeur dans les ressources de l'application</value>
+  </data>
+  <data name="LocoFileNotFound" xml:space="preserve">
+	<value>Fichier de locomotive non trouvé</value>
+  </data>
+  <data name="ErrorReadingLoco" xml:space="preserve">
+	<value>Erreur lors de la lecture du fichier de définition de la locomotive '{0}' : {1}</value>
+  </data>
+  <data name="LocoFolderNotConfigured" xml:space="preserve">
+	<value>Dossier des locomotives non configuré</value>
+  </data>
+  <data name="LocoFolderNotFound" xml:space="preserve">
+	<value>Dossier des locomotives '{0}' non trouvé</value>
+  </data>
+  <data name="ErrorGettingLocos" xml:space="preserve">
+	<value>Erreur lors du chargement de la locomotive depuis le fichier '{0}' : {1}</value>
+  </data>
+  <data name="ErrorGettingLocosFolder" xml:space="preserve">
+	<value>Erreur lors du chargement des locomotives depuis le répertoire. L'erreur est : {0}</value>
+  </data>
+  <data name="LocoMetadataMissing" xml:space="preserve">
+	<value>Les métadonnées de la locomotive sont manquantes</value>
+  </data>
+  <data name="LocoNameRequired" xml:space="preserve">
+	<value>Le nom de la locomotive est requis</value>
+  </data>
+  <data name="LocoFileNotFoundPath" xml:space="preserve">
+	<value>Le fichier de définition de la locomotive '{0}' n'a pas été trouvé</value>
+  </data>
+  <data name="ErrorGetDesLocoFile" xml:space="preserve">
+	<value>Erreur lors de la récupération et de la désérialisation de la locomotive depuis le fichier {0}. L'erreur est : {1}</value>
+  </data>
+  <data name="ErrorSavingLocoDef" xml:space="preserve">
+	<value>Erreur lors de l'enregistrement du fichier de définition de la locomotive '{0}'. L'erreur est : {1}</value>
+  </data>
+  <data name="ErrorLoadNMRAStd" xml:space="preserve">
+	<value>Une erreur s'est produite lors du chargement du standard CV NMRA : '{0}'</value>
+  </data>
+  <data name="FromToBitCalculation" xml:space="preserve">
+	<value>Lorsque FromBit ou ToBit est défini dans la CV {0}, la valeur maximale doit être calculée à partir de la plage de bits, et non directement à partir de la définition de la CV</value>
+  </data>
+  <data name="CVNotFoundInNmra" xml:space="preserve">
+	<value>La CV '{0}' n'existe pas dans le standard NMRA</value>
+  </data>
+  <data name="DecoderEditBaseTitle" xml:space="preserve">
+	<value>Méta-informations</value>
+  </data>
+  <data name="AddressTitle" xml:space="preserve">
+	<value>Adresse</value>
+  </data>
+  <data name="PageAllCvsReadWrite" xml:space="preserve">
+	<value>Lire/écrire toutes les CV</value>
+  </data>
+  <data name="LocoShortNameRequired" xml:space="preserve">
+	<value>Le nom court de la locomotive est requis</value>
+  </data>
+</root>

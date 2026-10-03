@@ -1,0 +1,28 @@
+@*
+   TabPage.razor
+   When setting up a tabcontrol set at design time, the TabPage component
+   is used to define a page. The TabPage component will register itself
+   with the parent TabControl during initialization.
+*@
+
+@code {
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [Parameter]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await Parent.RegisterPage(new()
+        {
+            Title = Title,
+            Content = ChildContent
+        });
+    }
+}

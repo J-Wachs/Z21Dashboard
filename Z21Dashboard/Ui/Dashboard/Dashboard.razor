@@ -1,0 +1,327 @@
+@* 
+    Dashboard.razor
+    This is the main dashboard component for the Z21Dashboard application.
+    It manages the connection state to the Z21 device and displays
+    relevant information and controls based on that state.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
+@using Microsoft.Maui.Controls
+@using Z21Client
+@using Z21Client.Models
+@using Z21Dashboard.Application.Models
+@using Z21Dashboard.Ui.Interfaces
+@using Z21Dashboard.Ui.Dashboard.SystemWidgets
+@using Z21Dashboard.Ui.Dashboard.Components
+@inject IZ21Client Z21Client
+@inject IStringLocalizer<DashboardResources> Localizer
+@inject IDocumentationService DocumentationService
+@inject IDashboardStateService DashboardStateService
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<!-- Global Settings Button -->
+<div class="d-flex" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050; gap: 0.5rem;">
+    <button class="btn btn-lg btn-secondary d-flex align-items-center justify-content-center"
+            onclick="@OpenDocumentation"
+            title="@Localizer["Help"]"
+            style="width: 45px; height: 45px; padding: 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="yellow" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-1.057 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+        </svg>
+    </button>
+
+    <button class="btn btn-lg btn-secondary" onclick="@OpenConfigModal" title="@Localizer["Config"]" aria-label="@Localizer["Config"]">
+        &#9881;
+    </button>
+</div>
+
+<div class="container-fluid">
+    <div class="dashboard-canvas @DragClass"
+         style="position: relative; min-height: 2000px; min-width: 2000px;"
+         @onmousemove="HandleMouseMove"
+         @onmouseup="HandleMouseUp">
+
+        @foreach (var componentState in _widgets)
+        {
+            @if (componentState.IsSystemComponent || _connectionState is ConnectionState.Connected)
+            {
+                <div @key="componentState.Id" class="absolute-item @GetActiveClassIfTop(componentState.Id)"
+                     style="@GetAbsoluteItemStyle(componentState)">
+                    <DynamicComponent Type="@(componentState.ComponentType!)" Parameters="@componentState.Parameters" />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<DraggableModal IsOpen="_isConfigModalOpen"
+                Title="@Localizer["EditDashboardConfig"]"
+                Size="DraggableModal.ModalSize.Large"
+                Height="800px"
+                OnClose="CloseConfigModal">
+    <Content>
+        <DashboardConfig />
+    </Content>
+    <FooterContent>
+        <button type="button" class="btn btn-primary" onclick="@CloseConfigModal" aria-label="@Localizer["Close"]">@Localizer["Close"]</button>
+    </FooterContent>
+</DraggableModal>
+
+@code {
+    private ConnectionState _connectionState = ConnectionState.Disconnected;
+    private List<DashboardComponentState> _widgets { get; set; } = [];
+    private DashboardComponentState? _draggedComponent;
+    private bool _isDragging = false;
+    private double _dragOffsetX = 0;
+    private double _dragOffsetY = 0;
+
+    private Guid _topGuid = Guid.Empty;
+
+    // A computed property to apply a CSS class only during a drag operation.
+    private string DragClass => _isDragging ? "no-select" : string.Empty;
+
+    // --- State for config modal ---
+    private bool _isConfigModalOpen = false;
+
+    protected override void OnInitialized()
+    {
+        LoadVisibleComponents();
+    }
+
+    private async void OnLayoutChanged()
+    {
+        await InvokeAsync(() =>
+        {
+            LoadVisibleComponents();
+            StateHasChanged();
+        });
+    }
+
+    private void LoadVisibleComponents()
+    {
+        _widgets = DashboardStateService.GetVisibleComponentStates();
+
+        if (_widgets.Count > 0)
+        {
+            _topGuid = _widgets.Last().Id;
+        }
+
+        UpdateComponentParameters();
+    }
+
+    private void HandleMouseDown(DashboardComponentState component, MouseEventArgs args)
+    {
+        _isDragging = true;
+        _draggedComponent = component;
+        _dragOffsetX = args.ClientX - component.PositionX;
+        _dragOffsetY = args.ClientY - component.PositionY;
+        BringToFront(component);
+    }
+
+    private void BringToFront(DashboardComponentState component)
+    {
+        if (component.ZIndex >= GetHighestZIndex() && _widgets.Count > 1)
+        {
+            return;
+        }
+
+        _topGuid = component.Id;
+        component.ZIndex = GetHighestZIndex() + 1;
+        StateHasChanged();
+    }
+
+    private void HandleMouseMove(MouseEventArgs args)
+    {
+        if (!_isDragging || _draggedComponent == null) return;
+        var newX = (int)(args.ClientX - _dragOffsetX);
+        var newY = (int)(args.ClientY - _dragOffsetY);
+        _draggedComponent.PositionX = newX > 0 ? newX : 0;
+        _draggedComponent.PositionY = newY > 0 ? newY : 0;
+        StateHasChanged();
+    }
+
+    private async void HandleMouseUp()
+    {
+        if (!_isDragging || _draggedComponent == null) return;
+        NormalizeZIndexes();
+        var allComponents = DashboardStateService.GetComponentStates();
+        var componentToUpdate = allComponents.FirstOrDefault(c => c.Id == _draggedComponent.Id);
+        if (componentToUpdate != null)
+        {
+            componentToUpdate.PositionX = _draggedComponent.PositionX;
+            componentToUpdate.PositionY = _draggedComponent.PositionY;
+            componentToUpdate.ZIndex = _draggedComponent.ZIndex;
+        }
+        await DashboardStateService.UpdateLayoutAsync(allComponents);
+        _isDragging = false;
+        _draggedComponent = null;
+    }
+
+    private string GetAbsoluteItemStyle(DashboardComponentState state)
+    {
+        var style = $"position: absolute; " +
+                    $"left: {state.PositionX}px; " +
+                    $"top: {state.PositionY}px; " +
+                    $"width: {state.Width}px; " +
+                    $"z-index: {state.ZIndex};";
+
+        if (_isDragging && _draggedComponent?.Id == state.Id)
+        {
+            style += " user-select: none; opacity: 0.7; pointer-events: none;";
+        }
+
+        if (state.Height > 0)
+        {
+            style += $" height: {state.Height}px;";
+        }
+        return style;
+    }
+
+    private string GetActiveClassIfTop(Guid componentId)
+    {
+        return _topGuid == componentId ? "active-widget" : string.Empty;
+    }
+
+    private void UpdateComponentParameters()
+    {
+        foreach (var state in _widgets)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                ["OnHeaderMouseDown"] = new EventCallback<MouseEventArgs>(this, (MouseEventArgs args) => HandleMouseDown(state, args)),
+                ["OnBringToFront"] = new EventCallback(this, () => BringToFront(state))
+            };
+
+            if (state.ComponentType == typeof(Connection))
+            {
+                parameters["ConnectionState"] = _connectionState;
+                parameters["OnConnect"] = EventCallback.Factory.Create<string>(this, Connect);
+                parameters["OnDisconnect"] = EventCallback.Factory.Create(this, Disconnect);
+            }
+
+            state.Parameters = parameters;
+        }
+    }
+
+    private int GetHighestZIndex()
+    {
+        if (!_widgets.Any())
+            return 1;
+        return _widgets.Max(c => c.ZIndex);
+    }
+
+    private void NormalizeZIndexes()
+    {
+        var orderedByZ = _widgets.OrderBy(c => c.ZIndex).ToList();
+        for (int i = 0; i < orderedByZ.Count; i++)
+        {
+            orderedByZ[i].ZIndex = i + 1;
+        }
+    }
+
+    private void OpenConfigModal()
+    {
+        _isConfigModalOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseConfigModal()
+    {
+        _isConfigModalOpen = false;
+        StateHasChanged();
+    }
+
+    private async Task Connect(string ipAddress)
+    {
+        _connectionState = ConnectionState.Connecting;
+        UpdateComponentParameters();
+
+        SubscribeToEvents();
+        bool success = await Z21Client.ConnectAsync(ipAddress);
+        if (success)
+        {
+            _connectionState = ConnectionState.Connected;
+            UpdateComponentParameters();
+        }
+        else
+        {
+            await ShowConnectionFailedAlertAsync(ipAddress);
+
+            _connectionState = ConnectionState.Disconnected;
+            UpdateComponentParameters();
+            UnsubscribeFromEvents();
+        }
+    }
+
+    /// <summary>
+    /// Shows an alert that the connection to the central station could not be established.
+    /// </summary>
+    /// <param name="ipAddress"></param>
+    /// <returns></returns>
+    private async Task ShowConnectionFailedAlertAsync(string ipAddress)
+    {
+        var page = Application.Current?.Windows[0].Page;
+        var message = string.Format(Localizer["ConnectionFailedMessage"], ipAddress);
+        if (page is not null)
+        {
+            await page.DisplayAlertAsync(
+                Localizer["ConnectionFailedTitle"],
+                message,
+                Localizer["OK"]);
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<bool>(
+                "alert",
+                $"{Localizer["ConnectionFailedTitle"]}\n{message}");
+        }
+    }
+
+    private async Task Disconnect()
+    {
+        await Z21Client.DisconnectAsync();
+        UnsubscribeFromEvents();
+
+        _connectionState = ConnectionState.Disconnected;
+        UpdateComponentParameters();
+    }
+
+    private void SubscribeToEvents()
+    {
+        Z21Client.OnConnectionStateChanged += OnConnectionStateChanged;
+        DashboardStateService.OnLayoutChanged += OnLayoutChanged;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        Z21Client.OnConnectionStateChanged -= OnConnectionStateChanged;
+        DashboardStateService.OnLayoutChanged -= OnLayoutChanged;
+    }
+
+    private async void OnConnectionStateChanged(object? sender, ConnectionStatus e)
+    {
+        _connectionState = e.State;
+        if (_connectionState is ConnectionState.Lost)
+        {
+            UnsubscribeFromEvents();
+        }
+        UpdateComponentParameters();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OpenDocumentation()
+    {
+        await DocumentationService.OpenManualAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_connectionState is not ConnectionState.Disconnected)
+        {
+            await Disconnect();
+        }
+        UnsubscribeFromEvents();
+    }
+}

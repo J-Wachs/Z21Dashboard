@@ -1,0 +1,6354 @@
+{
+  "meta": {
+    "manufacturer": "ESU",
+    "manufacturer_id": 151,
+    "model": "Esu 50708/09",
+    "version": "1.0",
+    "protocols": "DCC, MM",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 20
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra",
+      "readonly": true
+    },
+    {
+      "type": "cv_single",
+      "cv": 17,
+      "source": "nmra",
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 18,
+      "source": "nmra",
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 19,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 6
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 33,
+      "source": "custom",
+      "name": {
+        "en": "F0 forward",
+        "da": "F0 forlæns"
+      },
+      "default_value": 1,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F0 forward front light",
+            "da": "F0 fremad frontlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F0 forward rear light",
+            "da": "F0 fremad baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F0 forward AUX1",
+            "da": "F0 fremad AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F0 forward LED Group A",
+            "da": "F0 fremad LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F0 forward LED Group B",
+            "da": "F0 fremad LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F0 forward LED Group C",
+            "da": "F0 fremad LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F0 forward LED Group D",
+            "da": "F0 fremad LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F0 forward LED Group E",
+            "da": "F0 fremad LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 34,
+      "source": "custom",
+      "name": {
+        "en": "F0 reverse",
+        "da": "F0 baglæns"
+      },
+      "default_value": 2,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F0 reverse front light",
+            "da": "F0 baglæns frontlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F0 reverse rear light",
+            "da": "F0 baglæns baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F0 reverse AUX1",
+            "da": "F0 baglæns AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F0 reverse LED Group A",
+            "da": "F0 baglæns LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F0 reverse LED Group B",
+            "da": "F0 baglæns LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F0 reverse LED Group C",
+            "da": "F0 baglæns LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F0 reverse LED Group D",
+            "da": "F0 baglæns LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F0 reverse LED Group E",
+            "da": "F0 baglæns LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 35,
+      "source": "custom",
+      "name": {
+        "en": "F1 forward",
+        "da": "F1 forlæns"
+      },
+      "default_value": 4,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F1 forward front light",
+            "da": "F1 fremad frontlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F1 forward rear light",
+            "da": "F1 fremad baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F1 forward AUX1",
+            "da": "F1 fremad AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F1 forward LED Group A",
+            "da": "F1 fremad LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F1 forward LED Group B",
+            "da": "F1 fremad LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F1 forward LED Group C",
+            "da": "F1 fremad LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F1 forward LED Group D",
+            "da": "F1 fremad LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F1 forward LED Group E",
+            "da": "F1 fremad LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 36,
+      "source": "custom",
+      "name": {
+        "en": "F2",
+        "da": "F2"
+      },
+      "default_value": 248,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F2 front light",
+            "da": "F2 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F2 rear light",
+            "da": "F2 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F2 AUX1",
+            "da": "F2 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F2 LED Group A",
+            "da": "F2 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F2 LED Group B",
+            "da": "F2 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F2 LED Group C",
+            "da": "F2 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F2 LED Group D",
+            "da": "F2 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F2 LED Group E",
+            "da": "F2 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 37,
+      "source": "custom",
+      "name": {
+        "en": "F3",
+        "da": "F3"
+      },
+      "default_value": 8,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F3 front light",
+            "da": "F3 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F3 rear light",
+            "da": "F3 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F3 AUX1",
+            "da": "F3 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F3 LED Group A",
+            "da": "F3 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F3 LED Group B",
+            "da": "F3 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F3 LED Group C",
+            "da": "F3 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F3 LED Group D",
+            "da": "F3 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F3 LED Group E",
+            "da": "F3 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 38,
+      "source": "custom",
+      "name": {
+        "en": "F4",
+        "da": "F4"
+      },
+      "default_value": 16,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F4 front light",
+            "da": "F4 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F4 rear light",
+            "da": "F4 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F4 AUX1",
+            "da": "F4 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F4 LED Group A",
+            "da": "F4 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F4 LED Group B",
+            "da": "F4 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F4 LED Group C",
+            "da": "F4 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F4 LED Group D",
+            "da": "F4 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F4 LED Group E",
+            "da": "F4 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 39,
+      "source": "custom",
+      "name": {
+        "en": "F5",
+        "da": "F5"
+      },
+      "default_value": 32,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F5 front light",
+            "da": "F5 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F5 rear light",
+            "da": "F5 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F5 AUX1",
+            "da": "F5 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F5 LED Group A",
+            "da": "F5 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F5 LED Group B",
+            "da": "F5 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F5 LED Group C",
+            "da": "F5 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F5 LED Group D",
+            "da": "F5 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F5 LED Group E",
+            "da": "F5 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 40,
+      "source": "custom",
+      "name": {
+        "en": "F6",
+        "da": "F6"
+      },
+      "default_value": 64,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F6 front light",
+            "da": "F6 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F6 rear light",
+            "da": "F6 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F6 AUX1",
+            "da": "F6 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F6 LED Group A",
+            "da": "F6 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F6 LED Group B",
+            "da": "F6 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F6 LED Group C",
+            "da": "F6 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F6 LED Group D",
+            "da": "F6 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F6 LED Group E",
+            "da": "F6 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 41,
+      "source": "custom",
+      "name": {
+        "en": "F7",
+        "da": "F7"
+      },
+      "default_value": 128,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F7 front light",
+            "da": "F7 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F7 rear light",
+            "da": "F7 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F7 AUX1",
+            "da": "F7 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F7 LED Group A",
+            "da": "F7 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F7 LED Group B",
+            "da": "F7 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F7 LED Group C",
+            "da": "F7 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F7 LED Group D",
+            "da": "F7 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F7 LED Group E",
+            "da": "F7 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 42,
+      "source": "custom",
+      "name": {
+        "en": "F8",
+        "da": "F8"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F8 front light",
+            "da": "F8 frontlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F8 rear light",
+            "da": "F8 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F8 AUX1",
+            "da": "F8 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F8 LED Group A",
+            "da": "F8 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F8 LED Group B",
+            "da": "F8 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F8 LED Group C",
+            "da": "F8 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F8 LED Group D",
+            "da": "F8 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F8 LED Group E",
+            "da": "F8 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 43,
+      "source": "custom",
+      "name": {
+        "en": "F9",
+        "da": "F9"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F9 front light",
+            "da": "F9 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F9 rear light",
+            "da": "F9 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F9 AUX1",
+            "da": "F9 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F9 LED Group A",
+            "da": "F9 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F9 LED Group B",
+            "da": "F9 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F9 LED Group C",
+            "da": "F9 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F9 LED Group D",
+            "da": "F9 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F9 LED Group E",
+            "da": "F9 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 44,
+      "source": "custom",
+      "name": {
+        "en": "F10",
+        "da": "F10"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F10 front light",
+            "da": "F10 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F10 rear light",
+            "da": "F10 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F10 AUX1",
+            "da": "F10 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F10 LED Group A",
+            "da": "F10 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F10 LED Group B",
+            "da": "F10 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F10 LED Group C",
+            "da": "F10 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F10 LED Group D",
+            "da": "F10 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F10 LED Group E",
+            "da": "F10 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 45,
+      "source": "custom",
+      "name": {
+        "en": "F11",
+        "da": "F11"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F11 front light",
+            "da": "F11 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F11 rear light",
+            "da": "F11 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F11 AUX1",
+            "da": "F11 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F11 LED Group A",
+            "da": "F11 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F11 LED Group B",
+            "da": "F11 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F11 LED Group C",
+            "da": "F11 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F11 LED Group D",
+            "da": "F11 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F11 LED Group E",
+            "da": "F11 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 46,
+      "source": "custom",
+      "name": {
+        "en": "F12",
+        "da": "F12"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F12 front light",
+            "da": "F12 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F12 rear light",
+            "da": "F12 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F12 AUX1",
+            "da": "F12 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F12 LED Group A",
+            "da": "F12 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F12 LED Group B",
+            "da": "F12 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F12 LED Group C",
+            "da": "F12 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F12 LED Group D",
+            "da": "F12 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F12 LED Group E",
+            "da": "F12 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 47,
+      "source": "custom",
+      "name": {
+        "en": "F1 reverse",
+        "da": "F1 baglæns"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F1 reverse front light",
+            "da": "F1 baglæns forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F1 reverse rear light",
+            "da": "F1 baglæns baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F1 reverse AUX1",
+            "da": "F1 baglæns AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F1 reverse LED Group A",
+            "da": "F1 baglæns LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F1 reverse LED Group B",
+            "da": "F1 baglæns LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F1 reverse LED Group C",
+            "da": "F1 baglæns LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F1 reverse LED Group D",
+            "da": "F1 baglæns LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F1 reverse LED Group E",
+            "da": "F1 baglæns LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 49,
+      "source": "custom",
+      "name": {
+        "en": "Extended onfiguration",
+        "da": "Udvidet konfiguration"
+      },
+      "flag_bits": [
+        {
+          "bit": 3,
+          "name": {
+            "en": "Märklin 2. address",
+            "da": "Märklin 2. adresse"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Auto Speed Step detection",
+            "da": "Automatisk reg. af hastighedstrin"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 59,
+      "source": "custom",
+      "name": {
+        "en": "Delay lower limit",
+        "da": "Nedre forsinkelsesgrænse"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 64,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 60,
+      "source": "custom",
+      "name": {
+        "en": "Delay upper limit",
+        "da": "Øvre forsinkelsesgrænse"
+      },
+      "default_value": 8,
+      "value_bits": {
+        "min": 0,
+        "max": 64,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 61,
+      "source": "custom",
+      "name": {
+        "en": "Random time lower limit",
+        "da": "Nedre grænse for tilfældig tid"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 0,
+        "max": 64,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 62,
+      "source": "custom",
+      "name": {
+        "en": "Random time upper limit",
+        "da": "Øvre grænse for tilfældig tid"
+      },
+      "default_value": 20,
+      "value_bits": {
+        "min": 0,
+        "max": 64,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 63,
+      "source": "custom",
+      "name": {
+        "en": "Start flash number neon simulation",
+        "da": "Antal startblink ved neonsimulering"
+      },
+      "default_value": 2,
+      "value_bits": {
+        "min": 0,
+        "max": 15,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 112,
+      "source": "custom",
+      "name": {
+        "en": "Blink frequence",
+        "da": "Blinkfrekvens"
+      },
+      "default_value": 16,
+      "value_bits": {
+        "min": 4,
+        "max": 64,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 113,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "Headlight brightness",
+            "da": "Forlys styrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 114,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "Rear light brightness",
+            "da": "Baglys styrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 115,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX1 brightness",
+            "da": "AUX1 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 116,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "LED 1-3 brightness",
+            "da": "LED 1-3 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 117,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "LED 4-5 brightness",
+            "da": "LED 4-5 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 118,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "LED 6-7 brightness",
+            "da": "LED 6-7 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 119,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "LED 8-9 brightness",
+            "da": "LED 8-9 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 120,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "LED 10-11 brightness",
+            "da": "LED 10-11 lysstyrke"
+          },
+          "values": {
+            "0": {
+              "en": "Level 0",
+              "da": "Niveau 0"
+            },
+            "1": {
+              "en": "Level 1",
+              "da": "Niveau 1"
+            },
+            "2": {
+              "en": "Level 2",
+              "da": "Niveau 2"
+            },
+            "3": {
+              "en": "Level 3",
+              "da": "Niveau 3"
+            },
+            "4": {
+              "en": "Level 4",
+              "da": "Niveau 4"
+            },
+            "5": {
+              "en": "Level 5",
+              "da": "Niveau 5"
+            },
+            "6": {
+              "en": "Level 6",
+              "da": "Niveau 6"
+            },
+            "7": {
+              "en": "Level 7",
+              "da": "Niveau 7"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "bit_to": 5,
+          "name": {
+            "en": "Mode",
+            "da": "Tilstand"
+          },
+          "values": {
+            "0": {
+              "en": "Dimmer",
+              "da": "Dæmper"
+            },
+            "1": {
+              "en": "Zoom",
+              "da": "Zoom"
+            },
+            "2": {
+              "en": "Strobe",
+              "da": "Stroboskop"
+            },
+            "3": {
+              "en": "Defective neon",
+              "da": "Defekt neon"
+            },
+            "4": {
+              "en": "Flickering 1",
+              "da": "Blinkende 1"
+            },
+            "5": {
+              "en": "Flickering 2",
+              "da": "Blinkende 2"
+            },
+            "6": {
+              "en": "Strobe",
+              "da": "Stroposkop"
+            },
+            "7": {
+              "en": "Flickering",
+              "da": "Blinkende"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Delay",
+            "da": "Forsinkelse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Random",
+            "da": "Tilfældig"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Slukket"
+            },
+            "1": {
+              "en": "On:da:Tændt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 129,
+      "source": "custom",
+      "name": {
+        "en": "F13",
+        "da": "F13"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F13 front light",
+            "da": "F13 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F13 rear light",
+            "da": "F13 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F13 AUX1",
+            "da": "F13 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F13 LED Group A",
+            "da": "F13 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F13 LED Group B",
+            "da": "F13 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F13 LED Group C",
+            "da": "F13 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F13 LED Group D",
+            "da": "F13 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F13 LED Group E",
+            "da": "F13 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 130,
+      "source": "custom",
+      "name": {
+        "en": "F14",
+        "da": "F14"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F14 front light",
+            "da": "F14 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F14 rear light",
+            "da": "F14 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F14 AUX1",
+            "da": "F14 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F14 LED Group A",
+            "da": "F14 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F14 LED Group B",
+            "da": "F14 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F14 LED Group C",
+            "da": "F14 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F14 LED Group D",
+            "da": "F14 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F14 LED Group E",
+            "da": "F14 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 131,
+      "source": "custom",
+      "name": {
+        "en": "F15",
+        "da": "F15"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F15 front light",
+            "da": "F15 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F15 rear light",
+            "da": "F15 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F15 AUX1",
+            "da": "F15 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F15 LED Group A",
+            "da": "F15 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F15 LED Group B",
+            "da": "F15 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F15 LED Group C",
+            "da": "F15 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F15 LED Group D",
+            "da": "F15 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F15 LED Group E",
+            "da": "F15 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 132,
+      "source": "custom",
+      "name": {
+        "en": "F16",
+        "da": "F16"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F16 front light",
+            "da": "F16 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F16 rear light",
+            "da": "F16 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F16 AUX1",
+            "da": "F16 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F16 LED Group A",
+            "da": "F16 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F16 LED Group B",
+            "da": "F16 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F16 LED Group C",
+            "da": "F16 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F16 LED Group D",
+            "da": "F16 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F16 LED Group E",
+            "da": "F16 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 133,
+      "source": "custom",
+      "name": {
+        "en": "F17",
+        "da": "F17"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F17 front light",
+            "da": "F17 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F17 rear light",
+            "da": "F17 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F17 AUX1",
+            "da": "F17 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F17 LED Group A",
+            "da": "F17 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F17 LED Group B",
+            "da": "F17 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F17 LED Group C",
+            "da": "F17 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F17 LED Group D",
+            "da": "F17 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F17 LED Group E",
+            "da": "F17 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 134,
+      "source": "custom",
+      "name": {
+        "en": "F18",
+        "da": "F18"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F18 front light",
+            "da": "F18 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F18 rear light",
+            "da": "F18 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F18 AUX1",
+            "da": "F18 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F18 LED Group A",
+            "da": "F18 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F18 LED Group B",
+            "da": "F18 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F18 LED Group C",
+            "da": "F18 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F18 LED Group D",
+            "da": "F18 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F18 LED Group E",
+            "da": "F18 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 135,
+      "source": "custom",
+      "name": {
+        "en": "F19",
+        "da": "F19"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F19 front light",
+            "da": "F19 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F19 rear light",
+            "da": "F19 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F19 AUX1",
+            "da": "F19 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F19 LED Group A",
+            "da": "F19 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F19 LED Group B",
+            "da": "F19 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F19 LED Group C",
+            "da": "F19 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F19 LED Group D",
+            "da": "F19 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F19 LED Group E",
+            "da": "F19 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 136,
+      "source": "custom",
+      "name": {
+        "en": "F20",
+        "da": "F20"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "F20 front light",
+            "da": "F20 forlys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F20 rear light",
+            "da": "F20 baglys"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F20 AUX1",
+            "da": "F20 AUX1"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F20 LED Group A",
+            "da": "F20 LED-gruppe A"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F20 LED Group B",
+            "da": "F20 LED-gruppe B"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F20 LED Group C",
+            "da": "F20 LED-gruppe C"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F20 LED Group D",
+            "da": "F20 LED-gruppe D"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F20 LED Group E",
+            "da": "F20 LED-gruppe E"
+          },
+          "values": {
+            "0": {
+              "en": "Disabled",
+              "da": "Frakoblet"
+            },
+            "1": {
+              "en": "Enabled",
+              "da": "Tilkoblet"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Analog",
+        "da": "Analog",
+        "de": "en:Analog|da:Analog",
+        "fr": "en:Analog|da:Analog"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_protocols",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocols",
+        "da": "Protokoller",
+        "de": "en:Protocols|da:Protokoller",
+        "fr": "en:Protocols|da:Protokoller"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_consist",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Consist",
+        "da": "Multitraktion",
+        "de": "en:Consist|da:Multitraktion",
+        "fr": "en:Consist|da:Multitraktion"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 19
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 19,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_lighting effect",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Lighting effect",
+        "da": "Lys effekt",
+        "de": "en:Lighting effect|da:Lys effekt",
+        "fr": "en:Lighting effect|da:Lys effekt"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 59
+            },
+            {
+              "type": "cv_single",
+              "cv": 60
+            },
+            {
+              "type": "cv_single",
+              "cv": 61
+            },
+            {
+              "type": "cv_single",
+              "cv": 62
+            },
+            {
+              "type": "cv_single",
+              "cv": 63
+            },
+            {
+              "type": "cv_single",
+              "cv": 112
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_outputs",
+      "type": "esu50708_09_outputs",
+      "title": {
+        "en": "Outputs",
+        "da": "Udgange",
+        "de": "en:Outputs|da:Udgange",
+        "fr": "en:Outputs|da:Udgange"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 113,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 113,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 113,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 113,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 114,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 114,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 114,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 114,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 115,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 115,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 115,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 115,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 116,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 116,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 116,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 116,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 117,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 117,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 117,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 117,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 118,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 118,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 118,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 118,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 119,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 119,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 119,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 119,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 120,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 120,
+              "bit": 3,
+              "bit_to": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 120,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 120,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_functions",
+      "type": "esu50708_09_fkeymapping",
+      "title": {
+        "en": "Functions",
+        "da": "Funktioner",
+        "de": "en:Functions|da:Funktioner",
+        "fr": "en:Functions|da:Funktioner"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 33,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 34,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 35,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 36,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 37,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 38,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 39,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 40,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 41,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 42,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 43,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 44,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 45,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 46,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 130,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 131,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 133,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 134,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 136,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+MIT-licens
+
+Ophavsret (c) 2025–2026 Jesper Wachs
+
+Der gives hermed uden beregning enhver person, der erhverver en kopi af
+denne software og de tilhørende dokumentationsfiler ("Softwaren"),
+tilladelse til uden begrænsninger at håndtere Softwaren, herunder uden
+begrænsning rettighederne til at bruge, kopiere, ændre, sammenflette,
+offentliggøre, distribuere, underlicensere og/eller sælge kopier af
+Softwaren samt at tillade personer, som Softwaren leveres til, at gøre
+det samme, på følgende betingelser:
+
+Ovenstående meddelelse om ophavsret og denne tilladelsesmeddelelse skal
+medtages i alle kopier eller væsentlige dele af Softwaren.
+
+SOFTWAREN LEVERES "SOM DEN ER" UDEN NOGEN FORM FOR GARANTI, HVERKEN
+UDTRYKKELIG ELLER UNDERFORSTÅET, HERUNDER, MEN IKKE BEGRÆNSET TIL,
+GARANTIER FOR SALGBARHED, EGNETHED TIL ET BESTEMT FORMÅL OG
+IKKE-KRÆNKELSE AF TREDJEMANDS RETTIGHEDER. UNDER INGEN OMSTÆNDIGHEDER
+KAN FORFATTERNE ELLER OPHAVSRETTHAVERNE HOLDES ANSVARLIGE FOR KRAV,
+SKADER ELLER ANDEN FORM FOR ANSVAR, UANSET OM DET ER BASERET PÅ
+KONTRAKT, SKADEVOLDENDE HANDLING ELLER ANDEN JURIDISK TEORI, SOM
+OPSTÅR SOM FØLGE AF, UD AF ELLER I FORBINDELSE MED SOFTWAREN ELLER
+BRUGEN AF ELLER ANDEN HÅNDTERING AF SOFTWAREN.

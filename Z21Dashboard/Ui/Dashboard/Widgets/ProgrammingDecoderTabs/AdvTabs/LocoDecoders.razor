@@ -1,0 +1,56 @@
+﻿@*
+    LocoDecoders.razor
+    The Advanced tab allows for programming loco decoders by groups of functionality such
+    as Motor, Analog etc.
+*@
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IStringLocalizer<LocoDecodersResource> Localizer
+
+<p>@Localizer["Decoder"]: @(DecoderSettings.DecoderFile is not null ? $"{Path.GetFileNameWithoutExtension(DecoderSettings.DecoderFile)} ({GetDecoderLocation()})" : "-")</p>
+<DisplayMessages ErrorMessages="@_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_statusMessage" />
+
+<ProgTarget @bind-ProgTargetAddr="@ProgTargetAddr" />
+
+<CascadingValue Value="@ProgTargetAddr">
+    <CascadingValue Value="@DecoderSettings">
+        <CascadingValue Value="@DecoderRequestParent.Decoder" Name="DecoderRequestParent">
+            <TabControl OnNotifyStateChange="OnTimeToRefresh">
+                <TabPage Title="@Localizer["Decoders"]">
+                    <LocoDecoderList @bind-ErrorMessages="@_errorMessages"
+                                     @bind-WorkingMessage="@_workingMessage"
+                                     @bind-SuccessMessage="@_statusMessage" />
+                </TabPage>
+            </TabControl>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [Parameter, EditorRequired]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    private ProgrammingTargetAddr ProgTargetAddr { get; set; } = new();
+
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _statusMessage;
+
+    private async Task OnTimeToRefresh()
+    {
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private string GetDecoderLocation()
+    {
+        if (DecoderSettings.DecoderFile is null)
+            return "?";
+
+        ProgTargetAddr.LocoAddress = DecoderSettings.GetLocoAddress();
+
+        return DecoderSettings.DecoderFileLocation is DecoderFileLocation.Application ? Localizer["SystemDef"] : Localizer["UserDef"];
+    }
+}

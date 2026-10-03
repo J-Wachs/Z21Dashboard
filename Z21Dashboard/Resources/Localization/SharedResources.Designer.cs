@@ -70,6 +70,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        public static string AddressTitle {
+            get {
+                return ResourceManager.GetString("AddressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input bit {0} must not be in range &apos;{1}&apos; to &apos;{2}&apos;.
         /// </summary>
         public static string BitOutOfRange {
@@ -133,6 +142,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The CV &apos;{0}&apos; does not exists in the NMRA standard.
+        /// </summary>
+        public static string CVNotFoundInNmra {
+            get {
+                return ResourceManager.GetString("CVNotFoundInNmra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync error: Requested CV {0}, received {1}.
         /// </summary>
         public static string CVSyncError {
@@ -151,6 +169,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meta info.
+        /// </summary>
+        public static string DecoderEditBaseTitle {
+            get {
+                return ResourceManager.GetString("DecoderEditBaseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The decoder definition file &apos;{0}&apos; does not exist.
         /// </summary>
         public static string DecoderfileDoesNotExist {
@@ -165,6 +192,33 @@ namespace Z21Dashboard.Resources.Localization {
         public static string DecoderFileNoCvDefinitions {
             get {
                 return ResourceManager.GetString("DecoderFileNoCvDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting and deserializing locomotive from file {0}. The error is: {1}.
+        /// </summary>
+        public static string ErrorGetDesLocoFile {
+            get {
+                return ResourceManager.GetString("ErrorGetDesLocoFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading locomotive from file &apos;{0}&apos;: {1}.
+        /// </summary>
+        public static string ErrorGettingLocos {
+            get {
+                return ResourceManager.GetString("ErrorGettingLocos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading locomotives from directory. The error is: {0}.
+        /// </summary>
+        public static string ErrorGettingLocosFolder {
+            get {
+                return ResourceManager.GetString("ErrorGettingLocosFolder", resourceCulture);
             }
         }
         
@@ -205,6 +259,15 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error has occurred when loading NMRA CV standard: &apos;{0}&apos;.
+        /// </summary>
+        public static string ErrorLoadNMRAStd {
+            get {
+                return ResourceManager.GetString("ErrorLoadNMRAStd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error reading app resource: &apos;{0}&apos;. Error: &apos;{1}&apos;.
         /// </summary>
         public static string ErrorReadingAppResource {
@@ -232,11 +295,29 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error reading locomotive  definition file &apos;{0}&apos;: {1}.
+        /// </summary>
+        public static string ErrorReadingLoco {
+            get {
+                return ResourceManager.GetString("ErrorReadingLoco", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error saving decoder definition &apos;{0}&apos; to location &apos;{1}&apos;. Error: &apos;{2}&apos;.
         /// </summary>
         public static string ErrorSavingDecoderDef {
             get {
                 return ResourceManager.GetString("ErrorSavingDecoderDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving locomotive definition file &apos;{0}&apos;. The error is: {1}.
+        /// </summary>
+        public static string ErrorSavingLocoDef {
+            get {
+                return ResourceManager.GetString("ErrorSavingLocoDef", resourceCulture);
             }
         }
         
@@ -255,6 +336,15 @@ namespace Z21Dashboard.Resources.Localization {
         public static string FailedToRetrieveSystemStatus {
             get {
                 return ResourceManager.GetString("FailedToRetrieveSystemStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When FromBit or ToBit is set in CV {0}, Max value must be calculated based on bit range, not directly from CV definition.
+        /// </summary>
+        public static string FromToBitCalculation {
+            get {
+                return ResourceManager.GetString("FromToBitCalculation", resourceCulture);
             }
         }
         
@@ -286,7 +376,7 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loco controller.
+        ///   Looks up a localized string similar to Loco controller 1.
         /// </summary>
         public static string LocoControl {
             get {
@@ -322,11 +412,74 @@ namespace Z21Dashboard.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locomotive file not found.
+        /// </summary>
+        public static string LocoFileNotFound {
+            get {
+                return ResourceManager.GetString("LocoFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotive definition file &apos;{0}&apos; is not found.
+        /// </summary>
+        public static string LocoFileNotFoundPath {
+            get {
+                return ResourceManager.GetString("LocoFileNotFoundPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotives folder not configured.
+        /// </summary>
+        public static string LocoFolderNotConfigured {
+            get {
+                return ResourceManager.GetString("LocoFolderNotConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotives folder &apos;{0}&apos; not found.
+        /// </summary>
+        public static string LocoFolderNotFound {
+            get {
+                return ResourceManager.GetString("LocoFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locomotives&apos; Operating Time.
         /// </summary>
         public static string LocoListView {
             get {
                 return ResourceManager.GetString("LocoListView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotive meta data is missing.
+        /// </summary>
+        public static string LocoMetadataMissing {
+            get {
+                return ResourceManager.GetString("LocoMetadataMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotive name is required.
+        /// </summary>
+        public static string LocoNameRequired {
+            get {
+                return ResourceManager.GetString("LocoNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotive short name is required.
+        /// </summary>
+        public static string LocoShortNameRequired {
+            get {
+                return ResourceManager.GetString("LocoShortNameRequired", resourceCulture);
             }
         }
         
@@ -381,6 +534,15 @@ namespace Z21Dashboard.Resources.Localization {
         public static string NoPagesInDecoderFiles {
             get {
                 return ResourceManager.GetString("NoPagesInDecoderFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read/write all Cvs.
+        /// </summary>
+        public static string PageAllCvsReadWrite {
+            get {
+                return ResourceManager.GetString("PageAllCvsReadWrite", resourceCulture);
             }
         }
         

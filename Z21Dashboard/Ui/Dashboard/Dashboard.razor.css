@@ -1,0 +1,18 @@
+/*
+    Dashboard.razor.css
+    Styles specific to the Viewport component.
+*/
+
+/*
+    Prevents text selection on the entire canvas during a drag operation,
+    avoiding the unwanted highlighting of background text and elements.
+*/
+.no-select {
+    user-select: none;
+}
+
+/* .active-widget ::deep .card-header {
+    color: black;
+    background-color: lightgrey;
+}
+ */

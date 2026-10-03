@@ -1,32 +1,82 @@
 [
   {
-    "file_name": "0-Eksempel.json",
-    "name": "Eksempel",
-    "manufacturer": "JW"
+    "file_name": "0-MärklinMotorolaV1.json",
+    "name": "Märklin Motorola V1",
+    "manufacturer": "None"
   },
   {
-    "file_name": "0-NMRAMaxStandardDecoder.json",
-    "name": "NMRA Maximal Standard Decoder",
+    "file_name": "0-MärklinMotorolaV2.json",
+    "name": "Märklin Motorola V2",
+    "manufacturer": "None"
+  },
+  {
+    "file_name": "0-NMRAStandardMax.json",
+    "name": "NMRA Standard Max",
     "manufacturer": "NMRA"
   },
   {
-    "file_name": "0-NMRAMinStandardDecoder.json",
-    "name": "NMRA Minimal Standard Decoder",
+    "file_name": "0-NMRAStandardMin.json",
+    "name": "NMRA Standard Min",
     "manufacturer": "NMRA"
+  },
+  {
+    "file_name": "131-MärklinmLD3.json",
+    "name": "Märklin mLD3",
+    "manufacturer": "Märklin"
+  },
+  {
+    "file_name": "131-MärklinmSD3.json",
+    "name": "Märklin mSD3",
+    "manufacturer": "Märklin"
   },
   {
     "file_name": "131-Trix612093.json",
-    "name": "Trix 612093 Decoder",
+    "name": "Trix 612093",
     "manufacturer": "Trix"
   },
   {
-    "file_name": "151-LokPilotV5.json",
-    "name": "LokPilot 5 Multiprotocol (DCC/MM/SX/M4)",
+    "file_name": "145-ZIMOMX633P22.json",
+    "name": "ZIMO MX633P22",
+    "manufacturer": "ZIMO"
+  },
+  {
+    "file_name": "145-ZIMOMX645P16.json",
+    "name": "ZIMO MX645P16",
+    "manufacturer": "ZIMO"
+  },
+  {
+    "file_name": "145-ZIMOMX645P22.json",
+    "name": "ZIMO MX645P22",
+    "manufacturer": "ZIMO"
+  },
+  {
+    "file_name": "151-Esu50708_09.json",
+    "name": "Esu 50708/09",
     "manufacturer": "ESU"
   },
   {
-    "file_name": "151-LokPilotV5DCC.json",
-    "name": "LokPilot 5 DCC",
+    "file_name": "151-ESULokPilotDCCV5.json",
+    "name": "ESU LokPilot DCC V5",
     "manufacturer": "ESU"
+  },
+  {
+    "file_name": "151-ESULokPilotV5.json",
+    "name": "ESU LokPilot V5",
+    "manufacturer": "ESU"
+  },
+  {
+    "file_name": "151-ESULokSoundDCCV5.json",
+    "name": "ESU LokSound DCC V5",
+    "manufacturer": "ESU"
+  },
+  {
+    "file_name": "151-ESULokSoundV5.json",
+    "name": "ESU LokSound V5",
+    "manufacturer": "ESU"
+  },
+  {
+    "file_name": "162-PIKOSmartDecoder4.1.json",
+    "name": "PIKO SmartDecoder 4.1",
+    "manufacturer": "PIKO"
   }
 ]

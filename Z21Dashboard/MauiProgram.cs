@@ -5,12 +5,19 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using Z21Client;
 using Z21Dashboard.Application.Interfaces;
-using Z21Dashboard.Helpers;
 using WinRT.Interop;
 using Z21Dashboard.Services;
-
-
-
+using Z21Dashboard.NmraDccStandard.Interfaces;
+using Z21Dashboard.NmraDccStandard.Services;
+using Z21Dashboard.LocomotiveDecoders.Interfaces;
+using Z21Dashboard.LocomotiveDecoders.Services;
+using Z21Dashboard.Locomotives.Interfaces;
+using Z21Dashboard.Locomotives.Services;
+using Z21Dashboard.Application.Services;
+using Z21Dashboard.Turnouts.Interfaces;
+using Z21Dashboard.Turnouts.Services;
+using Z21Dashboard.Ui.Interfaces;
+using Z21Dashboard.Ui.Services;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -53,6 +60,9 @@ public static class MauiProgram
 #endif
 
         var builder = MauiApp.CreateBuilder();
+        builder.Logging.AddFilter(
+            "Microsoft.Extensions.Localization",
+            LogLevel.Information);
         builder.Services.AddLocalization(options => options.ResourcesPath = string.Empty);
 
         builder

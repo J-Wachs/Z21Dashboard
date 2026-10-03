@@ -1,0 +1,664 @@
+@*
+    DynamicList.razor
+    Component to dynamically display a list of CV values. The CV is either a 'whole' CV (enter a number)
+    or a bit of a CV (On/Off).
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Client.Models
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject IStringLocalizer<DynamicListResources> Localizer
+
+@if (_currentPage is not null)
+{
+    <EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator />
+
+        @if (_dynamicForm is not null)
+        {
+            @_dynamicForm
+        }
+        else
+        {
+            <text>@Localizer["Thinking"] ...</text>
+        }
+
+        <div class="row mt-3 flex-shrink-0 pt-2 border-top">
+            <div class="col-12 d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Write)">
+                    @Localizer["WriteToLocoDecoder"]
+                </button>
+                <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Read)">
+                    @Localizer["ReadFromLocoDecoder"]
+                </button>
+            </div>
+        </div>
+    </EditForm>
+}
+else
+{
+    <div class="alert alert-warning">@Localizer["PageNotFound"]: @TabId</div>
+}
+
+@code {
+    [CascadingParameter]
+    public required TabControl Parent { get; set; }
+
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? TabId { get; set; }
+
+    [Parameter]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private EditContext? _editContext;
+    private DecoderPage? _currentPage;
+    private bool _buttonsDisabled = false;
+    private ButtonPressed _buttonPressed = ButtonPressed.None;
+
+    private RenderFragment _dynamicForm = default!;
+
+    // This field is used to check if we are still on the same page, if not we need to build the form again.
+    private string? saveTabId = null;
+
+    // Proxy object for EditContext. We binds directly to DecoderSettings.CvValues
+    // but EditContext needs an object to validate on.
+    private Dictionary<ushort, CvState> CvValuesProxy => DecoderSettings.CvValues;
+
+    private bool _hasUpdatedErrorMessages = false;
+
+    /// <summary>
+    /// As the DynamicList component is used for all the different pages defined in
+    /// the decoder definition, we need to check if we are still on the same page.
+    /// If we are on a new page, we need to build the form again based on the content defined
+    /// </summary>
+    /// <returns></returns>
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        // Check if we are still on the same page.
+        if (TabId != saveTabId)
+        {
+            await BlankMessagesAsync();
+
+            saveTabId = TabId;
+            _currentPage = DecoderSettings.Pages.FirstOrDefault(p => p.Id == TabId);
+
+            if (_currentPage is not null)
+            {
+                if (CheckIfAllCvsArePresent() is true)
+                {
+                    // If at least one CV is missing, we cannot build the form, so we show an error message instead.
+                    await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                }
+
+                _dynamicForm = await BuildEditForm(
+                    _currentPage.PageContent.ToArray(),
+                    DecoderSettings.CvValues.ToArray());
+
+                // Because this page might have been show with the content of
+                // another page defined in the decoder file, we receive this event
+                // (OnParamertsSetAcsync) several times. If we create a new editContext
+                // we are in trouble.
+                if (_editContext is null || _editContext.Model != DecoderSettings)
+                {
+                    _editContext = new EditContext(DecoderSettings);
+                }
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (_hasUpdatedErrorMessages is false && ErrorMessages.Count > 0)
+        {
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            _hasUpdatedErrorMessages = true;
+        }
+    }
+
+    /// <summary>
+    /// Handles the form submission when the form is valid.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+        if (_buttonPressed == ButtonPressed.Read)
+        {
+            await ReadCVs();
+        }
+        else if (_buttonPressed == ButtonPressed.Write)
+        {
+            await WriteCVs();
+        }
+    }
+
+    /// <summary>
+    /// Travers though the settings of the decoder definition, and
+    /// creates a form with the fields defined by the CV settings
+    /// for this page.
+    /// </summary>
+    /// <param name="pageContent"></param>
+    /// <param name="cvValues"></param>
+    /// <returns></returns>
+    private async Task<RenderFragment> BuildEditForm(
+        IEnumerable<PageContentBase> pageContent,
+        IEnumerable<KeyValuePair<ushort, CvState>> cvValues
+    )
+    {
+        RenderFragment fragment = builder =>
+        {
+            // Index counter for the elements we build up to
+            // form the user interface in this component.
+            ErrorMessages.Clear();
+
+            int uiObjIndex = 0;
+            foreach (var item in pageContent)
+            {
+                switch (item)
+                {
+                    case CvSimpleContent sc:
+                        foreach (var subItem in sc.Content)
+                        {
+                            switch (subItem)
+                            {
+                                case CvSingleItem csi:
+                                    builder.AddContent(uiObjIndex++, AddCvInputLine(csi.Cv));
+                                    break;
+
+                                case CvWithBitItem cwbi:
+                                    builder.AddContent(uiObjIndex++, AddCvBitInputLine(cwbi));
+                                    break;
+
+                                case CvRangeItem cri:
+                                    for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                    {
+                                        builder.AddContent(uiObjIndex++, AddCvInputLine(cv));
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+
+                    case CvConditionalContent cc:
+
+                        foreach (var subItem in cc.Content)
+                        {
+                            if (DoesRuleMatch(subItem))
+                            {
+                                foreach (var subSubItem in subItem.Content)
+                                {
+                                    switch (subSubItem)
+                                    {
+                                        case CvSingleItem csi:
+                                            builder.AddContent(uiObjIndex++, AddCvInputLine(csi.Cv));
+                                            break;
+
+                                        case CvWithBitItem cwbi:
+                                            builder.AddContent(uiObjIndex++, AddCvBitInputLine(cwbi));
+                                            break;
+
+                                        case CvRangeItem cri:
+                                            for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                            {
+                                                builder.AddContent(uiObjIndex++, AddCvInputLine(cv));
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        };
+
+        return fragment;
+    }
+
+    /// <summary>
+    /// Ww need to check if the decoder definition file contains all the Cvs on pages.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckIfAllCvsArePresent()
+    {
+        bool atLeastOneCvMissing = false;
+        foreach (var item in _currentPage!.PageContent)
+        {
+            switch (item)
+            {
+                case CvSimpleContent sc:
+                    foreach (var subItem in sc.Content)
+                    {
+                        switch (subItem)
+                        {
+                            case CvSingleItem csi:
+                                if (AddToStorageIfNotAlready(csi.Cv) is false)
+                                {
+                                    atLeastOneCvMissing = true;
+                                }
+                                break;
+
+                            case CvWithBitItem cwbi:
+                                if (AddToStorageIfNotAlready(cwbi.Cv) is false)
+                                {
+                                    atLeastOneCvMissing = true;
+                                }
+                                break;
+
+                            case CvRangeItem cri:
+                                for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                {
+                                    if (AddToStorageIfNotAlready(cv) is false)
+                                    {
+                                        atLeastOneCvMissing = true;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
+
+                case CvConditionalContent cc:
+
+                    foreach (var subItem in cc.Content)
+                    {
+                        if (DoesRuleMatch(subItem))
+                        {
+                            foreach (var subSubItem in subItem.Content)
+                            {
+                                switch (subSubItem)
+                                {
+                                    case CvSingleItem csi:
+                                        if (AddToStorageIfNotAlready(csi.Cv) is false)
+                                        {
+                                            atLeastOneCvMissing = true;
+                                        }
+                                        break;
+
+                                    case CvWithBitItem cwbi:
+                                        if (AddToStorageIfNotAlready(cwbi.Cv) is false)
+                                        {
+                                            atLeastOneCvMissing = true;
+                                        }
+                                        break;
+
+                                    case CvRangeItem cri:
+                                        for (ushort cv = cri.CvStart; cv <= cri.CvEnd; cv++)
+                                        {
+                                            if (AddToStorageIfNotAlready(cv) is false)
+                                            {
+                                                atLeastOneCvMissing = true;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        return atLeastOneCvMissing;
+    }
+
+    /// <summary>
+    /// Evaluate a conditional rule, by checking the actual value of the CV
+    /// and bit defined in the rule against the expected value in the rule.
+    /// </summary>
+    /// <param name="rule">The rule to test.</param>
+    /// <returns>true/false for if the rule matches the actual value in
+    /// DecoderSettings.CvValues</returns>
+    private bool DoesRuleMatch(CvConditionalRule rule)
+    {
+        if (DecoderSettings.CvValues.TryGetValue(rule.Cv, out var cvValue))
+        {
+            if (rule.Bit is null)
+            {
+                // We are looking for at Value:
+                return (rule.Value == cvValue.GetValue());
+            }
+            else
+            {
+                // We are looking for a bit value
+                // The compare value (from decoder file, cannot be null)
+                var theValue = cvValue.GetBit((Bits)rule.Bit);
+                return (theValue is true && rule.Value == 1 ||
+                        theValue is false && rule.Value == 0);
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Ensures that the Cvs are in the storage for the cv values/bits.
+    /// </summary>
+    /// <param name="cv"></param>
+    private bool AddToStorageIfNotAlready(ushort cv)
+    {
+        if (DecoderSettings.CvValues.ContainsKey(cv) is false)
+        {
+            if (DecoderSettings.CvMetadata.TryGetValue(cv, out var metadata) is false)
+            {
+                // "CV {0} is not defined in the decoder definition file, but is used in the page content for page '{1}'. Please check your decoder definition file"
+                ErrorMessages.Add(string.Format(Localizer["CVNotFoundInPage"], cv, _currentPage?.Title));
+                return false;
+            }
+            DecoderSettings.CvValues[cv] = new CvState(metadata);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Render a CV numeric entry field.
+    /// </summary>
+    /// <param name="cv">The CV address to render field for.</param>
+    /// <returns></returns>
+    private RenderFragment AddCvInputLine(ushort cv) =>
+    @<text>
+        @{
+            var metadata = GetMetadata(cv);
+            var readOnly = metadata?.ReadOnly ?? false;
+            string label = GetFormattedName(metadata?.Name, cv);
+            string uniqueKey = $"cv_{cv}_9";
+        }
+        @if (CvValuesProxy.TryGetValue(cv, out var currentCvState))
+        {
+            <div class="row mb-2 align-items-center" @key="uniqueKey">
+                <div class="col-5">
+                    <label title="CV @cv">@label:</label>
+                </div>
+                <div class="col-2">
+                    <InputNumericValue @bind-Value="@currentCvState.Value"
+                                       class="form-control form-control-sm"
+                                       ReadOnly="@readOnly"
+                                       Min="@(metadata?.ValueBits?.Min ?? 0)" Max="@(metadata?.ValueBits?.Max ?? 255)" />
+                </div>
+                <div class="col-5">
+                    <span class="text-muted" style="font-size: 0.8rem;">
+                        @metadata?.Description
+                    </span>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"></div>
+                    <div class="col-7">
+                        <ValidationMessage For="@(() => currentCvState.Value)" />
+                    </div>
+                </div>
+            </div>
+        }
+    </text>;
+
+    /// <summary>
+    /// Render a CV bit field into the page.
+    /// </summary>
+    /// <param name="cwbi">The cv and bit for which to render a input box.</param>
+    /// <returns></returns>
+    private RenderFragment AddCvBitInputLine(CvWithBitItem cwbi) =>
+    @<text>
+        @{
+            var metadata = GetMetadata(cwbi.Cv);
+            var readOnly = metadata?.ReadOnly == true;
+            CvBitInformation? bitInfo;
+            string label;
+            string uniqueKey;
+            string title;
+            if (cwbi.BitTo is null)
+            {
+                bitInfo = GetBitMetadata(metadata, cwbi.Bit);
+                label = GetFormattedBitName(bitInfo?.Name, cwbi.Cv, cwbi.Bit);
+                uniqueKey = $"cv_{cwbi.Cv}_{cwbi.Bit}";
+                title = $"CV {cwbi.Cv}, bit {(int)cwbi.Bit}";
+            }
+            else
+            {
+                bitInfo = GetBitRangeMetadata(metadata, cwbi.Bit, (byte)cwbi.BitTo);
+                label = GetFormattedBitRangeName(bitInfo?.Name, cwbi.Cv, cwbi.Bit, (byte)cwbi.BitTo);
+                uniqueKey = $"cv_{cwbi.Cv}_{cwbi.Bit}";
+                title = $"CV {cwbi.Cv}, bits {(int)cwbi.Bit}-{(int)cwbi.BitTo}";
+            }
+        }
+        @if (CvValuesProxy.TryGetValue(cwbi.Cv, out var currentCvState))
+        {
+            <div class="row mb-2 align-items-center" @key="uniqueKey">
+                <div class="col-5">
+                    <label title="@title">@label:</label>
+                </div>
+                <div class="col-7">
+                    @if (cwbi.BitTo is null)
+                    {
+                        <InputBitFlag Value="@currentCvState.GetBit((Bits)cwbi.Bit)"
+                                      ValueChanged="@(v => currentCvState.SetBit((Bits)cwbi.Bit, v))"
+                                      Metadata="@bitInfo"
+                                      ReadOnly="@readOnly"
+                                      CssClass="form-select form-select-sm" />
+                    }
+                    else
+                    {
+                        //Value="@(currentCvState.GetValue() ?? 0)"
+                        var options = metadata?.BitDetails.FirstOrDefault(b => b.Key.Item1 == cwbi.Bit && b.Key.Item2 == cwbi.BitTo).Value.Values;
+                        <InputCVBitFlags TType="byte"
+                                         Value="@(currentCvState.GetValueInBitRange((Bits)cwbi.Bit, (Bits)cwbi.BitTo) ?? 0)"
+                                         ValueChanged="@(v => currentCvState.SetValueInBitRange(v, (Bits)cwbi.Bit, (Bits)cwbi.BitTo))"
+                                         Options="@options"
+                                         ReadOnly="@readOnly"
+                                         FromBit="@((int)cwbi.Bit)"
+                                         ToBit="@((int)cwbi.BitTo)"
+                                         Class="form-select form-select-sm" />
+                    }
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5"></div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => currentCvState.Value)" />
+                </div>
+            </div>
+        }
+    </text>
+;
+
+    /// <summary>
+    /// Gets metadata for a CV.
+    /// </summary>
+    /// <param name="cv"></param>
+    /// <returns></returns>
+    private CvInformation? GetMetadata(ushort cv)
+    {
+        return DecoderSettings.CvMetadata.TryGetValue(cv, out var info) ? info : null;
+    }
+
+    /// <summary>
+    /// Gets infotmaiton about a bit in a CV.
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="bit"></param>
+    /// <returns></returns>
+    private CvBitInformation? GetBitMetadata(CvInformation? info, byte bit)
+    {
+        return info?.BitDetails.TryGetValue((bit, null), out var bitInfo) is true ? bitInfo : null;
+    }
+
+
+    private CvBitInformation? GetBitRangeMetadata(CvInformation? info, byte bit, byte bitTo)
+    {
+        return info?.BitDetails.TryGetValue((bit, bitTo), out var bitInfo) is true ? bitInfo : null;
+    }
+
+    /// <summary>
+    /// Read the Cvs used on this page from the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ReadCVs()
+    {
+        await BlankMessagesAsync();
+
+        // In this widget, there must be a Content defined:
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndReadFromDecoderAsync(
+             ProgTargetAddr.ProgTarget,
+             (ushort?)ProgTargetAddr.LocoAddress,
+             _currentPage.Id,
+             DecoderSettings
+        );
+
+        if (result.IsSuccess)
+        {
+            SuccessMessage = Localizer["CVRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+        else
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+
+                ErrorMessages.AddRange(lstErrorMessages);
+                await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+            }
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Wite the Cvs and/or bits to the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteCVs()
+    {
+        await BlankMessagesAsync();
+
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVWriting"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndWriteToDecoderAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress,
+            _currentPage.Id,
+            DecoderSettings
+        );
+
+        if (result.IsSuccess is false)
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages.AddRange(lstErrorMessages);
+                await ErrorMessagesChanged.InvokeAsync(lstErrorMessages);
+            }
+        }
+        else
+        {
+            SuccessMessage = Localizer["CVWritten"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Format the name with either the actual name, or if not found, the CV number.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="cv"></param>
+    /// <returns></returns>
+    private string GetFormattedName(string? name, ushort cv)
+    {
+        return string.IsNullOrEmpty(name) ? $"CV {cv}" : name;
+    }
+
+    /// <summary>
+    /// Formats a bit name. If the name is null or empty, it will return a default name based on the CV and bit number.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="cv"></param>
+    /// <param name="bit"></param>
+    /// <returns></returns>
+    private string GetFormattedBitName(string? name, ushort cv, byte bit)
+    {
+        return string.IsNullOrEmpty(name) ? $"CV {cv} Bit {bit}" : name;
+    }
+
+
+    private string GetFormattedBitRangeName(string? name, ushort cv, byte bit, byte bitTo)
+    {
+        return string.IsNullOrEmpty(name) ? $"CV {cv} Bits {bit}-{bitTo}" : name;
+    }
+
+
+    /// <summary>
+    /// Reset the message list/fields to none/null.
+    /// </summary>
+    /// <returns></returns>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+}

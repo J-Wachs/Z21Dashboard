@@ -303,4 +303,58 @@
   <data name="CannotSaveDecoderDef" xml:space="preserve">
     <value>Kan ikke gemme dekoderdefinition til applikationsresourcer</value>
   </data>
+  <data name="LocoFileNotFound" xml:space="preserve">
+    <value>Lokomotiv definitionsfilen kan ikke findes</value>
+  </data>
+  <data name="ErrorReadingLoco" xml:space="preserve">
+    <value>Fejl under læsning af lokomotivdefinition '{0}': {1}</value>
+  </data>
+  <data name="LocoFolderNotConfigured" xml:space="preserve">
+    <value>Folder til lokomotiver er ikke konfigureret</value>
+  </data>
+  <data name="LocoFolderNotFound" xml:space="preserve">
+    <value>Lokomotivfolderen '{0}' findes ikke</value>
+  </data>
+  <data name="ErrorGettingLocos" xml:space="preserve">
+    <value>Fejl opstået under læsning fra filen '{0}': {1}</value>
+  </data>
+  <data name="ErrorGettingLocosFolder" xml:space="preserve">
+    <value>Fejl opstået under læsning af lokomotiver fra folder. Fejlen er: {0}</value>
+  </data>
+  <data name="LocoMetadataMissing" xml:space="preserve">
+    <value>Lokomotivmetadata mangler</value>
+  </data>
+  <data name="LocoNameRequired" xml:space="preserve">
+    <value>Lokomotivnavn skal udfyldes</value>
+  </data>
+  <data name="LocoFileNotFoundPath" xml:space="preserve">
+    <value>Lokomotivfilen '{0}' kan ikke findes</value>
+  </data>
+  <data name="ErrorGetDesLocoFile" xml:space="preserve">
+    <value>Fejl opstået under indlæsning og deserialisering af lokomotivfilen '{0}'. Fejlen er: {1}</value>
+  </data>
+  <data name="ErrorSavingLocoDef" xml:space="preserve">
+    <value>Fejl under skrivning af lokomotivdefinitionsfil '{0}'. Fejlen er: {1}</value>
+  </data>
+  <data name="ErrorLoadNMRAStd" xml:space="preserve">
+    <value>Fejl opstået under indlæsning af NMRA CV standarden: '{0}'</value>
+  </data>
+  <data name="FromToBitCalculation" xml:space="preserve">
+    <value>Når FromBit eller ToBit er angivet i  CV {0}, Max værdi skal beregnes baseret på bit-området, ikke direkte fra CV definition</value>
+  </data>
+  <data name="CVNotFoundInNmra" xml:space="preserve">
+    <value>CV '{0}' findes ikke i NMRA standarden</value>
+  </data>
+  <data name="DecoderEditBaseTitle" xml:space="preserve">
+    <value>Meta info</value>
+  </data>
+  <data name="AddressTitle" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="PageAllCvsReadWrite" xml:space="preserve">
+    <value>Læs/skriv alle CVer</value>
+  </data>
+  <data name="LocoShortNameRequired" xml:space="preserve">
+    <value>Lokomotivets kortnavn skal udfyldes</value>
+  </data>
 </root>

@@ -1,0 +1,78 @@
+@*
+    InputNumericValue.razor
+    Allows the user to enter a numeric value. During the keying, the
+    value is compared to the allowed min and max value.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@inherits InputBase<byte?>
+@inject IStringLocalizer<InputNumericValueResources> Localizer
+
+@if (ReadOnly)
+{
+    <input type="number" class="@CssClass" @bind="CurrentValueAsString" @bind:event="oninput" @attributes=AdditionalAttributes readonly />
+}
+else
+{
+    <input type="number" class="@CssClass" @bind="CurrentValueAsString" @bind:event="oninput" @attributes=AdditionalAttributes />
+}
+
+@code {
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    [Parameter]
+    public ushort? Min { get; set; }
+
+    [Parameter]
+    public ushort? Max { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        // Make sure that the Min/Max contains reasonble values.
+        if (Min is null)
+        {
+            Min = 0;
+        }
+
+        if (Max is null)
+        {
+            Max = 255;
+        }
+    }
+
+    /// <summary>
+    /// Tries to parse the value that the user has keyed in. That is the 'value' is the
+    /// full entry from the user. It is comapred to the allowed range.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="result"></param>
+    /// <param name="validationErrorMessage"></param>
+    /// <returns></returns>
+    protected override bool TryParseValueFromString(string? value, out byte? result, out string validationErrorMessage)
+    {
+        // 1. Test if the entry is infact a number
+        if (byte.TryParse(value, out var tempResult))
+        {
+            // 2. Test if the full value is within the range allowed
+            if (tempResult < Min || tempResult > Max)
+            {
+                validationErrorMessage = string.Format(Localizer["ValueMustBeInRange"], Min, Max);
+                result = tempResult;
+                return false;
+            }
+
+            validationErrorMessage = string.Empty;
+            result = tempResult;
+            return true;
+        }
+        else
+        {
+            validationErrorMessage = string.Format(Localizer["ValueMustBeInRange"], Min, Max);
+            result = null;
+            return false;
+        }
+    }
+}

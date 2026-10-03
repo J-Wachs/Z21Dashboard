@@ -30,6 +30,7 @@ public enum ResultCode
     Unknown,
     Ok,
     BadRequest,
+    NotFound
 }
 
 /// <summary>
@@ -41,6 +42,8 @@ public abstract class AbstractResult
     /// Gets a value indicating whether the operation was successful.
     /// </summary>
     public bool IsSuccess { get; private set; }
+
+    public bool IsFailure => !IsSuccess;
 
     /// <summary>
     /// Gets the list of messages associated with the result, grouped by field name.
@@ -111,7 +114,8 @@ public class Result : AbstractResult
     /// <returns></returns>
     public Result Match(
         Func<Result> onSuccess,
-        Func<List<ResultMessages>, Result> onFailure)
+        Func<List<ResultMessages>, Result> onFailure
+        )
     {
         return IsSuccess ? onSuccess() : onFailure(Messages);
     }
@@ -158,6 +162,36 @@ public class Result<T> : AbstractResult
     }
 
     /// <summary>
+    /// Matches the result for Success or Failure, executing the
+    /// appropriate function based on the success status.
+    /// </summary>
+    /// <param name="onSuccess">Function to call when success.</param>
+    /// <param name="onFailure">Function to call when failure.</param>
+    /// <returns></returns>
+    public Result<T> Match(
+        Func<Result<T>> onSuccess,
+        Func<List<ResultMessages>, Result<T>> onFailure
+        )
+    {
+        return IsSuccess ? onSuccess() : onFailure(Messages);
+    }
+
+    /// <summary>
+    /// Matches the result for Success or Failure, executing the
+    /// appropriate function based on the success status.
+    /// </summary>
+    /// <param name="onSuccess">Function to call when success.</param>
+    /// <param name="onFailure">Function to call when failure.</param>
+    /// <returns></returns>
+    public Result<TOut> Match<TOut>(
+    Func<Result<TOut>> onSuccess,
+    Func<List<ResultMessages>, Result<TOut>> onFailure
+    )
+    {
+        return IsSuccess ? onSuccess() : onFailure(Messages);
+    }
+
+    /// <summary>
     /// Creates a successful result with a data payload.
     /// </summary>
     public static Result<T> Success(T data)
@@ -178,6 +212,12 @@ public class Result<T> : AbstractResult
         => new(ResultCode.BadRequest,
             messages,
             default);
+
+    public static Result<T> FailureNotFound(string message)
+        => new(ResultCode.NotFound,
+            [new() { FieldName = default, Messages = [message] }],
+            default);
+
 }
 
 /// <summary>
@@ -190,25 +230,8 @@ public class Result<T> : AbstractResult
 /// </remarks>
 public static class Results
 {
-    // -----------------------
-    // NON-GENERIC
-    // -----------------------
-
-    public static Result Success()
-        => Result.Success();
-
-    public static Result Failure(string message)
-        => Result.Failure(message);
-
-    // -----------------------
-    // GENERIC (type inference enabled)
-    // -----------------------
-
     public static Result<T> Success<T>(T data)
         => Result<T>.Success(data);
-
-    public static Result<T> Failure<T>(string message)
-        => Result<T>.Failure(message);
 
     public static Result<T> Failure<T>(List<ResultMessages> messages)
     => Result<T>.Failure(messages);

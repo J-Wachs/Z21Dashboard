@@ -1,0 +1,348 @@
+@*
+    FileSaveAsDialog.razor
+    A Blazor component that provides a file save dialog interface, allowing users to navigate folders, select files, and specify a filename for saving.
+    Features:
+    - Breadcrumb navigation for easy folder traversal.
+    - Displays folders and files in the current directory with appropriate icons.
+    - Allows users to select an existing file or enter a new filename.
+    - Configurable to restrict folder changes if needed.
+    - Emits the selected file path when the user confirms the save action.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using System.IO
+@using System.Collections.Generic
+@using System.Linq
+@inject IStringLocalizer<FileSaveAsDialogResources> Localizer
+
+<div class="file-save-dialog d-flex flex-column h-100">
+    @* Navigation Toolbar *@
+    <div class="nav-toolbar p-3 border-bottom bg-light">
+        <nav class="breadcrumb mb-0" aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                @foreach (var segment in BreadcrumbSegments)
+                {
+                    <li class="breadcrumb-item">
+                        @if (segment.Path == CurrentFolderPath)
+                        {
+                            <button class="btn btn-link p-0 text-decoration-none"
+                                    disabled
+                                    style="cursor: default; color: inherit;">
+                                @segment.Name
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-link p-0 text-decoration-none"
+                                    @onclick="() => NavigateToFolder(segment.Path)"
+                                    disabled="@RestrictFolderChange">
+                                @segment.Name
+                            </button>
+                        }
+                    </li>
+                }
+            </ol>
+        </nav>
+    </div>
+
+    @* Main Content Area *@
+    <div class="content-area flex-grow-1 overflow-auto p-3">
+        @if (CurrentFolders.Count == 0 && CurrentFiles.Count == 0)
+        {
+            <div class="text-muted text-center py-5">
+                <p>@Localizer["FolderEmpty"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="list-group list-group-flush">
+                @* Column Headings *@
+                <div class="d-flex align-items-center justify-content-between px-0 py-2 border-bottom fw-bold text-muted" style="font-size: 0.875rem;">
+                    <span>@Localizer["Name"]</span>
+                    <span>@Localizer["LastChanged"]</span>
+                </div>
+                @foreach (var folder in CurrentFolders)
+                {
+                    <button type="button"
+                            class="list-group-item list-group-item-action d-flex align-items-center px-0 py-2"
+                            @ondblclick="() => NavigateToFolder(folder.Path)"
+                            disabled="@RestrictFolderChange">
+                        <span class="fluent-icon me-2" style="font-size: 1.25rem;">📁</span>
+                        <span>@folder.Name</span>
+                    </button>
+                }
+                @foreach (var file in CurrentFiles)
+                {
+                    <button type="button"
+                            class="list-group-item list-group-item-action d-flex align-items-center justify-content-between px-0 py-2 @(SelectedFile == file.Name ? "active" : "")"
+                            @onclick="() => SelectFile(file.Name)">
+                        <span class="d-flex align-items-center">
+                            <span class="fluent-icon me-2" style="font-size: 1.25rem;">@GetFileIcon(file.Extension)</span>
+                            <span>@file.Name</span>
+                        </span>
+                        <span class="text-muted" style="font-size: 0.875rem;">@file.LastModified.ToString("g")</span>
+                    </button>
+                }
+            </div>
+        }
+    </div>
+
+    @* Filename Input Section *@
+    <div class="input-section p-3 border-top bg-light">
+        <label for="filename" class="form-label mb-2">@Localizer["FileName"]:</label>
+        <input type="text"
+               id="filename"
+               class="form-control"
+               @bind="_suggestedFilename"
+               placeholder="@Localizer["PlaceHolder"]" />
+    </div>
+
+    @* Button Section *@
+    <div class="button-section p-3 border-top bg-light d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary px-4" @onclick="OnCancel" aria-label="@Localizer["Cancel"]">@Localizer["Cancel"]</button>
+        <button type="button" class="btn btn-primary px-4" @onclick="OnSave" aria-label="@Localizer["Save"]">@Localizer["Save"]</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string InitialFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+    [Parameter]
+    public string SuggestedFilename { get; set; } = "document";
+
+    [Parameter]
+    public bool RestrictFolderChange { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnFileSelected { get; set; }
+
+    private string _suggestedFilename = "document";
+    private string CurrentFolderPath = string.Empty;
+    private List<FolderItem> CurrentFolders = new();
+    private List<FileItem> CurrentFiles = new();
+    private List<BreadcrumbItem> BreadcrumbSegments = new();
+
+    private string? FileName { get; set; }
+    private string? SelectedFile { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        CurrentFolderPath = InitialFolder;
+        _suggestedFilename = SuggestedFilename;
+        RefreshCurrentFolder();
+    }
+
+    /// <summary>
+    /// Reads the files in the directory.
+    /// </summary>
+    private void RefreshCurrentFolder()
+    {
+        try
+        {
+            var dirInfo = new DirectoryInfo(CurrentFolderPath);
+
+            CurrentFolders = dirInfo.GetDirectories()
+                            .Select(d => new FolderItem { Name = d.Name, Path = d.FullName })
+                            .OrderBy(f => f.Name)
+                            .ToList();
+
+            CurrentFiles = dirInfo.GetFiles()
+                .Select(f => new FileItem { Name = f.Name, Path = f.FullName, Extension = f.Extension, LastModified = f.LastWriteTime })
+                .OrderBy(f => f.Name)
+                .ToList();
+
+            UpdateBreadcrumb();
+        }
+        catch (Exception)
+        {
+            CurrentFolders.Clear();
+            CurrentFiles.Clear();
+        }
+    }
+
+    /// <summary>
+    /// When allowed, the user can click a folder. That
+    /// triggers this method that will change the folder
+    /// and call the method to read files in that folder.
+    /// </summary>
+    /// <param name="folderPath"></param>
+    private void NavigateToFolder(string folderPath)
+    {
+        if (RestrictFolderChange) return;
+        CurrentFolderPath = folderPath;
+        RefreshCurrentFolder();
+    }
+
+    /// <summary>
+    /// Maintain the path bradcrumb.
+    /// </summary>
+    private void UpdateBreadcrumb()
+    {
+        BreadcrumbSegments.Clear();
+        var path = CurrentFolderPath;
+
+        while (!string.IsNullOrEmpty(path))
+        {
+            var dirInfo = new DirectoryInfo(path);
+            BreadcrumbSegments.Insert(0, new BreadcrumbItem { Name = dirInfo.Name, Path = dirInfo.FullName });
+            path = dirInfo.Parent?.FullName;
+        }
+    }
+
+    /// <summary>
+    /// Event handler triggered when the user clicks on the Save button
+    /// A selected file name is send to the parent component.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnSave()
+    {
+        if (string.IsNullOrWhiteSpace(_suggestedFilename)) return;
+        var fullPath = Path.Combine(CurrentFolderPath, _suggestedFilename);
+        await OnFileSelected.InvokeAsync(fullPath);
+    }
+
+    /// <summary>
+    /// Event handler triggered when the user clicks on the Cancel button
+    /// 'null' is send to the parent component.
+    /// </summary>
+    /// <returns></returns>
+
+    private async Task OnCancel()
+    {
+        await OnFileSelected.InvokeAsync(null);
+    }
+
+    /// <summary>
+    /// When a file is clicked, this method
+    /// stores the name as the selected file, and
+    /// updates the Filename inputbox.
+    /// </summary>
+    /// <param name="fileName"></param>
+    private void SelectFile(string fileName)
+    {
+        SelectedFile = fileName;
+        _suggestedFilename = fileName;
+    }
+
+    /// <summary>
+    /// Gets an icon for the file. Is used to display an
+    /// icon next to each file.
+    /// </summary>
+    /// <param name="extension"></param>
+    /// <returns></returns>
+    private string GetFileIcon(string extension)
+    {
+        if (string.IsNullOrEmpty(extension))
+            return "📄";
+
+        return extension.ToLowerInvariant() switch
+        {
+            // Document formats
+            ".txt" => "📝",      // Text
+            ".pdf" => "📕",      // PDF
+            ".doc" => "📄",      // Word document
+            ".docx" => "📄",     // Word document
+            ".rtf" => "📋",      // Rich text format
+
+            // Spreadsheet formats
+            ".xls" => "📊",      // Excel
+            ".xlsx" => "📊",     // Excel
+            ".csv" => "📊",      // CSV
+            ".tsv" => "📊",      // TSV
+
+            // Data/Code formats
+            ".json" => "{ }",     // JSON
+            ".xml" => "< >",      // XML
+            ".yaml" => "≡",       // YAML
+            ".yml" => "≡",        // YAML
+            ".html" => "🌐",      // HTML
+            ".htm" => "🌐",       // HTML
+            ".css" => "🎨",       // CSS
+            ".js" => "⚙️",        // JavaScript
+            ".ts" => "⚙️",        // TypeScript
+            ".cs" => "⚙️",        // C#
+            ".java" => "☕",      // Java
+            ".py" => "🐍",        // Python
+            ".cpp" => "⚙️",       // C++
+            ".c" => "⚙️",         // C
+            ".sql" => "🗄️",       // SQL
+
+            // Compressed/Archive formats
+            ".zip" => "🗜️",       // ZIP
+            ".rar" => "🗜️",       // RAR
+            ".7z" => "🗜️",        // 7-Zip
+            ".tar" => "🗜️",       // TAR
+            ".gz" => "🗜️",        // GZIP
+
+            // Image formats
+            ".jpg" => "🖼️",       // JPEG
+            ".jpeg" => "🖼️",      // JPEG
+            ".png" => "🖼️",       // PNG
+            ".gif" => "🖼️",       // GIF
+            ".bmp" => "🖼️",       // BMP
+            ".svg" => "🖼️",       // SVG
+            ".ico" => "🎯",       // Icon
+
+            // Audio formats
+            ".mp3" => "🎵",       // MP3
+            ".wav" => "🎵",       // WAV
+            ".flac" => "🎵",      // FLAC
+            ".m4a" => "🎵",       // M4A
+            ".aac" => "🎵",       // AAC
+
+            // Video formats
+            ".mp4" => "🎬",       // MP4
+            ".avi" => "🎬",       // AVI
+            ".mkv" => "🎬",       // MKV
+            ".mov" => "🎬",       // MOV
+            ".wmv" => "🎬",       // WMV
+
+            // Archive/Executable formats
+            ".exe" => "⚙️",       // Executable
+            ".dll" => "📦",       // DLL
+            ".so" => "📦",        // Shared Object
+            ".app" => "📦",       // Application
+
+            // Presentation formats
+            ".ppt" => "📽️",       // PowerPoint
+            ".pptx" => "📽️",      // PowerPoint
+            ".odp" => "📽️",       // OpenOffice Presentation
+
+            // Config/System files
+            ".cfg" => "⚙️",       // Config
+            ".conf" => "⚙️",      // Config
+            ".ini" => "⚙️",       // INI
+            ".config" => "⚙️",    // Config
+            ".log" => "📋",       // Log
+
+            // Default
+            _ => "📄"
+        };
+    }
+
+    /// <summary>
+    /// Data structures for storign information about the displayed folders and files.
+    /// </summary>
+    private class FolderItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+    }
+
+    private class FileItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+        public string Extension { get; set; } = string.Empty;
+        public DateTime LastModified { get; set; }
+    }
+
+    private class BreadcrumbItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+    }
+}

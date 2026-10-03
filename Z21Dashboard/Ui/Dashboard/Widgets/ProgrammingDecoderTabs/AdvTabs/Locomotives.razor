@@ -1,0 +1,56 @@
+﻿@*
+    Locomotives.razor
+    Top level page for locomotives. Display the tab for the locomotive roster.
+*@
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Locomotives.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IStringLocalizer<LocomotivesResources> Localizer
+
+<p>
+    @Localizer["Locomotive"]: @(string.IsNullOrEmpty(LocomotiveSettings.LocomotiveMeta.Name) ? "-" : LocomotiveSettings.LocomotiveMeta.Name)
+    (@Localizer["Decoder"]: @(string.IsNullOrEmpty(LocomotiveSettings.DecoderSettings.DecoderModel) ? "-" : LocomotiveSettings.DecoderSettings.DecoderModel))
+</p>
+<DisplayMessages ErrorMessages="@_errorMessages" WorkingMessage="@_workingMessage" SuccessMessage="@_statusMessage" />
+
+<ProgTarget @bind-ProgTargetAddr="@ProgTargetAddr" />
+
+<CascadingValue Value="@ProgTargetAddr">
+    <CascadingValue Value="@LocomotiveSettings">
+
+        <CascadingValue Value="@LocomotiveSettings.DecoderSettings">
+            <CascadingValue Value="@DecoderRequestParent.Locomotive" Name="DecoderRequestParent">
+                <TabControl OnNotifyStateChange="OnTimeToRefresh">
+                    <TabPage Title="@Localizer["Locomotives"]">
+                        <LocosRosterListView @bind-ErrorMessages="@_errorMessages"
+                                             @bind-WorkingMessage="@_workingMessage"
+                                             @bind-SuccessMessage="@_statusMessage" />
+                    </TabPage>
+                </TabControl>
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    [Parameter, EditorRequired]
+    public LocomotiveSettings LocomotiveSettings { get; set; }
+
+    private ProgrammingTargetAddr ProgTargetAddr { get; set; } = new();
+
+    private List<string> _errorMessages = [];
+    private string? _workingMessage;
+    private string? _statusMessage;
+
+    /// <summary>
+    /// Allow children to request a update of the parent component.
+    /// This is used when a child component has changed some data and wants the parent to re-render.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnTimeToRefresh()
+    {
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+}

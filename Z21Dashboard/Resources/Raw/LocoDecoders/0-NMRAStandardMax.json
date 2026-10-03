@@ -1,0 +1,836 @@
+{
+  "meta": {
+    "manufacturer": "NMRA",
+    "manufacturer_id": 0,
+    "model": "NMRA Standard Max",
+    "version": "1.0",
+    "protocols": "DCC",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 12
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3
+    },
+    {
+      "type": "cv_single",
+      "cv": 2,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 3,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 4,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 5,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 6,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 7,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 9,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 10,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 11,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 12,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 13,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 14,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 15,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 16,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 17,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 18,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 19,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 21,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 22,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 23,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 24,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 25,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 27,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 28,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 30,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 31,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 32,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 33,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 34,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 35,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 36,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 37,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 38,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 39,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 40,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 41,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 42,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 43,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 44,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 45,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 46,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 65,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 66,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_range",
+      "cv_start": 67,
+      "cv_end": 94,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 95,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 105,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 106,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 894,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 895,
+      "source": "nmra"
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_basic",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Basic",
+        "da": "Grundlæggende",
+        "de": "Grundlagen",
+        "fr": "Général"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 12,
+              "bit": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 30
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Analog",
+        "da": "Analog",
+        "de": "Analog",
+        "fr": "Analogique"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_motor",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Motor",
+        "da": "Motor",
+        "de": "Motor",
+        "fr": "Moteur"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 9
+            },
+            {
+              "type": "cv_single",
+              "cv": 10
+            },
+            {
+              "type": "cv_single",
+              "cv": 23
+            },
+            {
+              "type": "cv_single",
+              "cv": 24
+            },
+            {
+              "type": "cv_single",
+              "cv": 25
+            },
+            {
+              "type": "cv_single",
+              "cv": 65
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_speed curve",
+      "type": "speed_curve_graph_3and28",
+      "title": {
+        "en": "Speed curve",
+        "da": "Hastighedskurve",
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 66
+            },
+            {
+              "type": "cv_range",
+              "cv_start": 67,
+              "cv_end": 94
+            },
+            {
+              "type": "cv_single",
+              "cv": 95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_railcom",
+      "type": "dynamic_list",
+      "title": {
+        "en": "RailCom",
+        "da": "RailCom",
+        "de": "RailCom",
+        "fr": "RailCom"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_consist",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Consist",
+        "da": "Multitraktion",
+        "de": "Mehrfachtraktion",
+        "fr": "Traction multiple"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 19
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 19,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_functions",
+      "type": "fkeymappingstandard",
+      "title": {
+        "en": "Functions",
+        "da": "Funktioner",
+        "de": "Funktionen",
+        "fr": "Fonctions"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 33
+            },
+            {
+              "type": "cv_single",
+              "cv": 34
+            },
+            {
+              "type": "cv_single",
+              "cv": 35
+            },
+            {
+              "type": "cv_single",
+              "cv": 36
+            },
+            {
+              "type": "cv_single",
+              "cv": 37
+            },
+            {
+              "type": "cv_single",
+              "cv": 38
+            },
+            {
+              "type": "cv_single",
+              "cv": 39
+            },
+            {
+              "type": "cv_single",
+              "cv": 40
+            },
+            {
+              "type": "cv_single",
+              "cv": 41
+            },
+            {
+              "type": "cv_single",
+              "cv": 42
+            },
+            {
+              "type": "cv_single",
+              "cv": 43
+            },
+            {
+              "type": "cv_single",
+              "cv": 44
+            },
+            {
+              "type": "cv_single",
+              "cv": 45
+            },
+            {
+              "type": "cv_single",
+              "cv": 46
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_miscellaneous",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Miscellaneous",
+        "da": "Diverse",
+        "de": "Sonstiges",
+        "fr": "Divers"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 15
+            },
+            {
+              "type": "cv_single",
+              "cv": 16
+            },
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            },
+            {
+              "type": "cv_single",
+              "cv": 894
+            },
+            {
+              "type": "cv_single",
+              "cv": 895
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_braking",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Braking",
+        "da": "Bremse",
+        "de": "Bremsen",
+        "fr": "Freinage"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

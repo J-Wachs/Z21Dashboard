@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "manufacturer": "NMRA",
+    "manufacturer_id": 0,
+    "model": "NMRA Standard Min",
+    "version": "1.0",
+    "protocols": "DCC",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 12
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3
+    },
+    {
+      "type": "cv_single",
+      "cv": 2,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 3,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 4,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 7,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 11,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 33,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 34,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 35,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 36,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 37,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 38,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 39,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 40,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 41,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 42,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 43,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 44,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 45,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 46,
+      "source": "nmra"
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Analog",
+        "da": "Analog",
+        "de": "Analog",
+        "fr": "Analogique"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_motor",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Motor",
+        "da": "Motor",
+        "de": "Motor",
+        "fr": "Moteur"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_speed curve",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Speed curve",
+        "da": "Hastighedskurve",
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_functions",
+      "type": "fkeymappingstandard",
+      "title": {
+        "en": "Functions",
+        "da": "Funktioner",
+        "de": "Funktionen",
+        "fr": "Fonctions"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 33
+            },
+            {
+              "type": "cv_single",
+              "cv": 34
+            },
+            {
+              "type": "cv_single",
+              "cv": 35
+            },
+            {
+              "type": "cv_single",
+              "cv": 36
+            },
+            {
+              "type": "cv_single",
+              "cv": 37
+            },
+            {
+              "type": "cv_single",
+              "cv": 38
+            },
+            {
+              "type": "cv_single",
+              "cv": 39
+            },
+            {
+              "type": "cv_single",
+              "cv": 40
+            },
+            {
+              "type": "cv_single",
+              "cv": 41
+            },
+            {
+              "type": "cv_single",
+              "cv": 42
+            },
+            {
+              "type": "cv_single",
+              "cv": 43
+            },
+            {
+              "type": "cv_single",
+              "cv": 44
+            },
+            {
+              "type": "cv_single",
+              "cv": 45
+            },
+            {
+              "type": "cv_single",
+              "cv": 46
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

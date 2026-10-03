@@ -1,0 +1,3730 @@
+{
+  "meta": {
+    "manufacturer": "ESU",
+    "manufacturer_id": 151,
+    "model": "ESU LokSound V5",
+    "version": "1.0",
+    "protocols": "DCC, MM, SX, M4",
+    "sound": true,
+    "type": "locomotivedecoder",
+    "fkeys": 31
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 2,
+      "source": "nmra",
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 3,
+      "source": "nmra",
+      "default_value": 28,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 4,
+      "source": "nmra",
+      "default_value": 21,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 5,
+      "source": "nmra",
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 6,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 7,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra",
+      "default_value": 151,
+      "value_bits": {
+        "min": 151,
+        "max": 151,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "readonly": true
+    },
+    {
+      "type": "cv_single",
+      "cv": 9,
+      "source": "nmra",
+      "default_value": 40,
+      "value_bits": {
+        "min": 10,
+        "max": 50,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "readonly": true
+    },
+    {
+      "type": "cv_single",
+      "cv": 13,
+      "source": "nmra",
+      "default_value": 1
+    },
+    {
+      "type": "cv_single",
+      "cv": 14,
+      "source": "custom",
+      "default_value": 1,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "At analog F0 is",
+            "da": "Ved analog er F0",
+            "de": "Bei Analogbetrieb ist F0",
+            "fr": "En mode analogique, F0 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "At analog F9 is",
+            "da": "Ved analog er F9",
+            "de": "Bei Analogbetrieb ist F9",
+            "fr": "En mode analogique, F9 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "At analog F10 is",
+            "da": "Ved analog er F10",
+            "de": "Bei Analogbetrieb ist F10",
+            "fr": "En mode analogique, F10 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "At analog F11 is",
+            "da": "Ved analog er F11",
+            "de": "Bei Analogbetrieb ist F11",
+            "fr": "En mode analogique, F11 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "At analog F12 is",
+            "da": "Ved analog er F12",
+            "de": "Bei Analogbetrieb ist F12",
+            "fr": "En mode analogique, F12 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "At analog F13 is",
+            "da": "Ved analog er F13",
+            "de": "Bei Analogbetrieb ist F13",
+            "fr": "En mode analogique, F13 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "At analog F14 is",
+            "da": "Ved analog er F14",
+            "de": "Bei Analogbetrieb ist F14",
+            "fr": "En mode analogique, F14 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "At analog F15 is",
+            "da": "Ved analog er F15",
+            "de": "Bei Analogbetrieb ist F15",
+            "fr": "En mode analogique, F15 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 15,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 16,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 17,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 18,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 19,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 21,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 22,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 23,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 127
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 24,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 127
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 27,
+      "source": "custom",
+      "name": {
+        "en": "Brake mode",
+        "da": "Bremsetilstand",
+        "de": "Bremsmodus",
+        "fr": "Mode de freinage"
+      },
+      "default_value": 28,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "ABC braking, voltage higher on the right hand side",
+            "da": "ABC-bremsning, højere spænding på højre skinne",
+            "de": "ABC-Bremsen, Spannung auf der rechten Seite höher",
+            "fr": "Freinage ABC, tension plus élevée du côté droit"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "ABC braking, voltage higher on the left hand side",
+            "da": "ABC-bremsning, højere spænding på venstre skinne",
+            "de": "ABC-Bremsen, Spannung auf der linken Seite höher",
+            "fr": "Freinage ABC, tension plus élevée du côté gauche"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "ZIMO® HLU brakes active",
+            "da": "ZIMO® HLU-bremser aktive",
+            "de": "ZIMO® HLU-Bremsen aktiv",
+            "fr": "Freins ZIMO® HLU actifs"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Brake on DC, if polarity against driving direction",
+            "da": "Bremsning ved DC, hvis polariteten er mod kørselsretningen",
+            "de": "Bremsen bei Gleichstrom, wenn die Polarität entgegen der Fahrtrichtung ist",
+            "fr": "Freinage en courant continu si la polarité est opposée au sens de marche"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Brake on DC, if polarity like driving direction",
+            "da": "Bremsning ved DC, hvis polariteten følger kørselsretningen",
+            "de": "Bremsen bei Gleichstrom, wenn die Polarität der Fahrtrichtung entspricht",
+            "fr": "Freinage en courant continu si la polarité correspond au sens de marche"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Selectrix brake diode, brakes if polarity is against driving direction",
+            "da": "Selectrix-bremsediode, bremser hvis polariteten er mod kørselsretningen",
+            "de": "Selectrix-Bremsdiode, bremst bei Polarität entgegen der Fahrtrichtung",
+            "fr": "Diode de freinage Selectrix, freine si la polarité est opposée au sens de marche"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Selectrix brake diode, rakes if polarity is like driving direction",
+            "da": "Selectrix-bremsediode, bremser hvis polariteten følger kørselsretningen",
+            "de": "Selectrix-Bremsdiode, bremst bei Polarität in Fahrtrichtung",
+            "fr": "Diode de freinage Selectrix, freine si la polarité correspond au sens de marche"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Loco brakes with constant brake distance if Speed=0",
+            "da": "Lokomotivet bremser med konstant bremselængde, hvis hastighed=0",
+            "de": "Lok bremst mit konstantem Bremsweg, wenn Geschwindigkeit=0",
+            "fr": "La locomotive freine avec une distance de freinage constante si vitesse=0"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 28,
+      "source": "nmra",
+      "name": {
+        "en": "RailCom configuration",
+        "da": "RailCom-konfiguration",
+        "de": "RailCom-Konfiguration",
+        "fr": "Configuration RailCom"
+      },
+      "default_value": 131
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra",
+      "default_value": 12
+    },
+    {
+      "type": "cv_single",
+      "cv": 47,
+      "source": "custom",
+      "name": {
+        "en": "Protocol selection",
+        "da": "Protokolvalg",
+        "de": "Protokollauswahl",
+        "fr": "Sélection du protocole"
+      },
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "DCC protocol",
+            "da": "DCC protokol",
+            "de": "DCC-Protokoll",
+            "fr": "Protocole DCC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "M4 protocol",
+            "da": "M4 protokol",
+            "de": "M4-Protokoll",
+            "fr": "Protocole M4"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Märklin Motorola protocol",
+            "da": "Märklin Motorola protokol",
+            "de": "Märklin-Motorola-Protokoll",
+            "fr": "Protocole Märklin Motorola"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Selectric protocol",
+            "da": "Selectric protokol",
+            "de": "Selectrix-Protokoll",
+            "fr": "Protocole Selectrix"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 49,
+      "source": "custom",
+      "name": {
+        "en": "Extended configuration #1",
+        "da": "Udvidet konfiguration #1",
+        "de": "Erweiterte Konfiguration #1",
+        "fr": "Configuration étendue n°1"
+      },
+      "default_value": 19,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Load control (Back-EMF)",
+            "da": "Belastningsregulering (mod-EMK)",
+            "de": "Lastregelung (Gegen-EMK)",
+            "fr": "Régulation de charge (FEM inverse)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Märklin consist address low bit",
+            "da": "Märklin efterfølgende adresse lavt bit",
+            "de": "Niederwertiges Bit der Märklin-Mehrfachtraktionsadresse",
+            "fr": "Bit de poids faible de l'adresse de traction multiple Märklin"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Automatic DCC speed-step detection",
+            "da": "Automatisk DCC hastighedstrins genkendelse",
+            "de": "Automatische DCC-Fahrstufenerkennung",
+            "fr": "Détection automatique des crans de vitesse DCC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "LGB function-button mode",
+            "da": "LGB funktionsknap tilstand",
+            "de": "LGB-Funktionstastenmodus",
+            "fr": "Mode de touche de fonction LGB"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "Märklin consist address high bit",
+            "da": "Märklin efterfølgende adresse højt bit",
+            "de": "Höherwertiges Bit der Märklin-Mehrfachtraktionsadresse",
+            "fr": "Bit de poids fort de l'adresse de traction multiple Märklin"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 50,
+      "source": "custom",
+      "name": {
+        "en": "Analog mode",
+        "da": "Analog tilstand",
+        "de": "Analogmodus",
+        "fr": "Mode analogique"
+      },
+      "default_value": 3,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "AC Analog mode",
+            "da": "Analog AC-tilstand",
+            "de": "AC-Analogmodus",
+            "fr": "Mode analogique CA"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "DC Analog mode",
+            "da": "Analog DC-tilstand",
+            "de": "DC-Analogmodus",
+            "fr": "Mode analogique CC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "QSI Quantum Engineer DC Support",
+            "da": "SQL Quantum Eng DC understøttelse",
+            "de": "QSI Quantum Engineer DC-Unterstützung",
+            "fr": "Prise en charge CC de QSI Quantum Engineer"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 51,
+      "source": "custom",
+      "name": {
+        "en": "«K Slow» Cutoff",
+        "da": "«K Slow»-afbrydelse",
+        "de": "Abschaltung «K Slow»",
+        "fr": "Coupure «K Slow»"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Internal Speedstep, until «K Slow» is active",
+        "da": "Internt hastighedstrin, indtil «K Slow» er aktiv",
+        "de": "Interne Fahrstufe, bis «K Slow» aktiv ist",
+        "fr": "Cran de vitesse interne jusqu’à l’activation de «K Slow»"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 52,
+      "source": "custom",
+      "name": {
+        "en": "BEMF Param. «K Slow»",
+        "da": "Mod-EMK-parameter «K Slow»",
+        "de": "Gegen-EMK-Parameter «K Slow»",
+        "fr": "Paramètre de FEM inverse «K Slow»"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "«K» -Portion of the PI-Controller valid for lower speed steps",
+        "da": "«K»-andel af PI-regulatoren, som gælder for de lavere hastighedstrin",
+        "de": "«K»-Anteil des PI-Reglers für niedrige Fahrstufen",
+        "fr": "Part «K» du régulateur PI valable pour les crans de vitesse inférieurs"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 53,
+      "source": "custom",
+      "name": {
+        "en": "Control Reference voltage",
+        "da": "Reguleringsreferencespænding",
+        "de": "Regelungsreferenzspannung",
+        "fr": "Tension de référence de régulation"
+      },
+      "default_value": 130,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Defines the Back EMF voltage, which the motor should generate at maximum speed. The higher the efficiency of the motor, the higher this value may be set. If the engine does not reach maximum speed, reduce this parameter.",
+        "da": "Definerer den mod-EMK-spænding, som motoren skal generere ved maksimal hastighed. Jo højere motorens virkningsgrad er, desto højere kan denne værdi indstilles. Hvis lokomotivet ikke når maksimal hastighed, skal denne parameter reduceres.",
+        "de": "Legt die Gegen-EMK-Spannung fest, die der Motor bei Höchstgeschwindigkeit erzeugen soll. Je höher der Wirkungsgrad des Motors, desto höher kann dieser Wert eingestellt werden. Erreicht die Lokomotive die Höchstgeschwindigkeit nicht, muss dieser Parameter verringert werden.",
+        "fr": "Définit la tension de FEM inverse que le moteur doit générer à vitesse maximale. Plus le rendement du moteur est élevé, plus cette valeur peut être réglée haut. Si la locomotive n’atteint pas la vitesse maximale, réduisez ce paramètre."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 54,
+      "source": "custom",
+      "name": {
+        "en": "Load control Parameter «K»",
+        "da": "Belastningsreguleringsparameter «K»",
+        "de": "Lastregelungsparameter «K»",
+        "fr": "Paramètre «K» de régulation de charge"
+      },
+      "default_value": 50,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "«K»–component of the internal PI-controller. Defines the effect of load control. The higher the value, the stronger the effect of Back EMF control.",
+        "da": "«K»-komponenten i den interne PI-regulator. Definerer virkningen af belastningsreguleringen. Jo højere værdien er, desto kraftigere virker mod-EMK-reguleringen.",
+        "de": "«K»-Komponente des internen PI-Reglers. Bestimmt die Wirkung der Lastregelung. Je höher der Wert, desto stärker wirkt die Gegen-EMK-Regelung.",
+        "fr": "Composante «K» du régulateur PI interne. Définit l’effet de la régulation de charge. Plus la valeur est élevée, plus la régulation par FEM inverse est forte."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 55,
+      "source": "custom",
+      "name": {
+        "en": "Load control Parameter «I»",
+        "da": "Belastningsreguleringsparameter «I»",
+        "de": "Lastregelungsparameter «I»",
+        "fr": "Paramètre «I» de régulation de charge"
+      },
+      "default_value": 100,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "«I»–component of the internal PI-controller. Defines the momentum (inertia) of the motor. The higher the momentum of the motor (large flywheel or bigger motor), the lower this value has to be set.",
+        "da": "«I»-komponenten i den interne PI-regulator. Definerer motorens inertimoment. Jo større motorens inertimoment er (stort svinghjul eller større motor), desto lavere skal denne værdi indstilles.",
+        "de": "«I»-Komponente des internen PI-Reglers. Bestimmt das Trägheitsmoment des Motors. Je größer das Trägheitsmoment des Motors ist (großes Schwungrad oder größerer Motor), desto niedriger muss dieser Wert eingestellt werden.",
+        "fr": "Composante «I» du régulateur PI interne. Définit l’inertie du moteur. Plus l’inertie du moteur est élevée (grand volant d’inertie ou moteur plus gros), plus cette valeur doit être réglée bas."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 56,
+      "source": "custom",
+      "name": {
+        "en": "BEMF Influence at VMin",
+        "da": "Mod-EMK-indflydelse ved VMin",
+        "de": "Gegen-EMK-Einfluss bei VMin",
+        "fr": "Influence de la FEM inverse à VMin"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "0 – 100 % Defines the “Strengh” of the BEMF at minimum speed step.",
+        "da": "0–100 % definerer styrken af mod-EMK-reguleringen ved det laveste hastighedstrin.",
+        "de": "0–100 % legt die Stärke der Gegen-EMK-Regelung bei der niedrigsten Fahrstufe fest.",
+        "fr": "0–100 % définit l’intensité de la régulation par FEM inverse au cran de vitesse minimal."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 57,
+      "source": "custom",
+      "name": {
+        "en": "Steam chuff synchronisation #1",
+        "da": "Synkronisering af dampslag #1",
+        "de": "Dampfschlag-Synchronisierung #1",
+        "fr": "Synchronisation des coups d’échappement vapeur n°1"
+      },
+      "default_value": 30,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 58,
+      "source": "custom",
+      "name": {
+        "en": "Steam chuff synchronisation #2",
+        "da": "Synkronisering af dampslag #2",
+        "de": "Dampfschlag-Synchronisierung #2",
+        "fr": "Synchronisation des coups d’échappement vapeur n°2"
+      },
+      "default_value": 20,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 63,
+      "source": "custom",
+      "name": {
+        "en": "Sound volume «Master»",
+        "da": "Samlet lydstyrke «Master»",
+        "de": "Gesamtlautstärke «Master»",
+        "fr": "Volume général «Master»"
+      },
+      "default_value": 128,
+      "value_bits": {
+        "min": 0,
+        "max": 192,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 64,
+      "source": "custom",
+      "name": {
+        "en": "Brake sound threshold «Brake On»",
+        "da": "Tærskel for bremselyd «Bremse til»",
+        "de": "Schwelle für Bremsgeräusch «Bremse ein»",
+        "fr": "Seuil du son de freinage «Frein activé»"
+      },
+      "default_value": 60,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 65,
+      "source": "custom",
+      "name": {
+        "en": "Brake sound threshold «Brake Off»",
+        "da": "Tærskel for bremselyd «Bremse fra»",
+        "de": "Schwelle für Bremsgeräusch «Bremse aus»",
+        "fr": "Seuil du son de freinage «Frein désactivé»"
+      },
+      "default_value": 7,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 66,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_range",
+      "cv_start": 67,
+      "cv_end": 94,
+      "source": "nmra"
+    },
+    {
+      "type": "cv_single",
+      "cv": 95,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_single",
+      "cv": 101,
+      "source": "custom",
+      "name": {
+        "en": "Shunting mode trim",
+        "da": "Justering af rangertilstand",
+        "de": "Rangiermodus-Anpassung",
+        "fr": "Réglage du mode manœuvre"
+      },
+      "default_value": 64,
+      "value_bits": {
+        "min": 0,
+        "max": 128,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 102,
+      "source": "custom",
+      "name": {
+        "en": "Brake mode exit delay",
+        "da": "Forsinkelse ved afslutning af bremsetilstand",
+        "de": "Verzögerung beim Verlassen des Bremsmodus",
+        "fr": "Temporisation de sortie du mode de freinage"
+      },
+      "default_value": 12,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 103,
+      "source": "custom",
+      "name": {
+        "en": "Load adjustment \"Optional Load\"",
+        "da": "Belastningsjustering \"Valgfri belastning\"",
+        "de": "Lastanpassung \"Optionale Last\"",
+        "fr": "Réglage de charge \"Charge optionnelle\""
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 104,
+      "source": "custom",
+      "name": {
+        "en": "Load adjustment \"Primary Load\"",
+        "da": "Belastningsjustering \"Primær belastning\"",
+        "de": "Lastanpassung \"Primärlast\"",
+        "fr": "Réglage de charge \"Charge principale\""
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 105,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 106,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 111,
+      "source": "custom",
+      "name": {
+        "en": "Gearbox backlash",
+        "da": "Tandhjulsslør",
+        "de": "Getriebespiel",
+        "fr": "Jeu d'engrenage"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 112,
+      "source": "custom",
+      "name": {
+        "en": "Flashing-light speed",
+        "da": "Hastighed for blink lys",
+        "de": "Blinklichtgeschwindigkeit",
+        "fr": "Vitesse de clignotement"
+      },
+      "default_value": 20,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 113,
+      "source": "custom",
+      "name": {
+        "en": "Power fail bypass",
+        "da": "Omgåelse ved strømsvigt",
+        "de": "Überbrückung bei Stromausfall",
+        "fr": "Contournement en cas de coupure de courant"
+      },
+      "default_value": 32,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 116,
+      "source": "custom",
+      "name": {
+        "en": "Slow speed BEMF sampling period",
+        "da": "Mod-EMK-samplingsperiode ved lav hastighed",
+        "de": "Gegen-EMK-Abtastperiode bei niedriger Geschwindigkeit",
+        "fr": "Période d'échantillonnage de la FEM inverse à basse vitesse"
+      },
+      "default_value": 50,
+      "value_bits": {
+        "min": 25,
+        "max": 200,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 117,
+      "source": "custom",
+      "name": {
+        "en": "Full speed BEMF sampling period",
+        "da": "Mod-EMK-samplingsperiode ved fuld hastighed",
+        "de": "Gegen-EMK-Abtastperiode bei voller Geschwindigkeit",
+        "fr": "Période d'échantillonnage de la FEM inverse à pleine vitesse"
+      },
+      "default_value": 150,
+      "value_bits": {
+        "min": 25,
+        "max": 200,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 118,
+      "source": "custom",
+      "name": {
+        "en": "Slow speed BEMF Measurement gap length VMin",
+        "da": "Mod-EMK-målepauselængde ved lav hastighed VMin",
+        "de": "Gegen-EMK-Messpausenlänge bei niedriger Geschwindigkeit VMin",
+        "fr": "Durée de pause de mesure de la FEM inverse à basse vitesse VMin"
+      },
+      "default_value": 15,
+      "value_bits": {
+        "min": 3,
+        "max": 40,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 119,
+      "source": "custom",
+      "name": {
+        "en": "Full speed BEMF Measurement gap length Vmax",
+        "da": "Mod-EMK-målepauselængde ved fuld hastighed VMax",
+        "de": "Gegen-EMK-Messpausenlänge bei voller Geschwindigkeit VMax",
+        "fr": "Durée de pause de mesure de la FEM inverse à pleine vitesse VMax"
+      },
+      "default_value": 20,
+      "value_bits": {
+        "min": 3,
+        "max": 40,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 123,
+      "source": "custom",
+      "name": {
+        "en": "ABC mode \"Slow drive\"",
+        "da": "ABC-tilstand \"Langsom kørsel\"",
+        "de": "ABC-Modus \"Langsamfahrt\"",
+        "fr": "Mode ABC \"Marche lente\""
+      },
+      "default_value": 100,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 124,
+      "source": "custom",
+      "name": {
+        "en": "Extended Configuration #2",
+        "da": "Udvidet konfiguration #2",
+        "de": "Erweiterte Konfiguration #2",
+        "fr": "Configuration étendue n°2"
+      },
+      "default_value": 28,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Bi-directional bit",
+            "da": "Tovejsbit: Bevar kørselsretningen",
+            "de": "Bidirektionales Bit",
+            "fr": "Bit bidirectionnel"
+          },
+          "values": {
+            "0": {
+              "en": "Do not keep driving direction",
+              "da": "Bevar ikke kørselsretningen",
+              "de": "Fahrtrichtung nicht beibehalten",
+              "fr": "Ne pas conserver le sens de marche"
+            },
+            "1": {
+              "en": "Keep driving direction",
+              "da": "Bevar kørselsretningen",
+              "de": "Fahrtrichtung beibehalten",
+              "fr": "Conserver le sens de marche"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "SUSI slave protocol",
+            "da": "SUSI-slaveprotokol",
+            "de": "SUSI-Slave-Protokoll",
+            "fr": "Protocole esclave SUSI"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Prime mover startup delay",
+            "da": "Forsinkelse ved start af drivmotor",
+            "de": "Startverzögerung des Antriebsmotors",
+            "fr": "Temporisation de démarrage du moteur principal"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "SUSI serial protocol",
+            "da": "SUSI seriel protokol",
+            "de": "Serielles SUSI-Protokoll",
+            "fr": "Protocole série SUSI"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "AUX 9/wheel sensor",
+            "da": "AUX 9/hjulsensor",
+            "de": "AUX 9/Radsensor",
+            "fr": "AUX 9/capteur de roue"
+          },
+          "values": {
+            "0": {
+              "en": "Enable output AUX 9",
+              "da": "Aktivér udgang AUX 9",
+              "de": "Ausgang AUX 9 aktivieren",
+              "fr": "Activer la sortie AUX 9"
+            },
+            "1": {
+              "en": "Enable wheel sensor input",
+              "da": "Aktivér hjulsensorindgang",
+              "de": "Radsensoreingang aktivieren",
+              "fr": "Activer l’entrée du capteur de roue"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Motor Overload Protection",
+            "da": "Motoroverbelastningsbeskyttelse",
+            "de": "Motorüberlastschutz",
+            "fr": "Protection contre la surcharge du moteur"
+          },
+          "values": {
+            "0": {
+              "en": "Motor is not switched off when blocked",
+              "da": "Motor slukkes ikke, når den er blokeret",
+              "de": "Motor wird bei Blockierung nicht abgeschaltet",
+              "fr": "Le moteur n’est pas coupé lorsqu’il est bloqué"
+            },
+            "1": {
+              "en": "Motor is switched off for a few seconds when blocked",
+              "da": "Motoren slukkes i nogle sekunder, når den er blokeret",
+              "de": "Motor wird bei Blockierung für einige Sekunden abgeschaltet",
+              "fr": "Le moteur est coupé pendant quelques secondes lorsqu’il est bloqué"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "Automatic parking Brake Enable Automatic parking Brake (EMK Braking)",
+            "da": "Automatisk parkeringsbremse (EMK bremsning)",
+            "de": "Automatische Feststellbremse aktivieren (EMK-Bremsung)",
+            "fr": "Activer le frein de stationnement automatique (freinage FEM)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 125,
+      "source": "custom",
+      "name": {
+        "en": "Start voltage analog DC",
+        "da": "Startspænding, analog DC",
+        "de": "Anfahrspannung Analog DC",
+        "fr": "Tension de démarrage analogique CC"
+      },
+      "default_value": 90,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 126,
+      "source": "custom",
+      "name": {
+        "en": "Maximum speed Analog DC",
+        "da": "Maksimal hastighed, analog DC",
+        "de": "Höchstgeschwindigkeit Analog DC",
+        "fr": "Vitesse maximale analogique CC"
+      },
+      "default_value": 130,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 127,
+      "source": "custom",
+      "name": {
+        "en": "Start voltage analog AC",
+        "da": "Startspænding, analog AC",
+        "de": "Anfahrspannung Analog AC",
+        "fr": "Tension de démarrage analogique CA"
+      },
+      "default_value": 90,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 128,
+      "source": "custom",
+      "name": {
+        "en": "Maximum voltate Analog AC",
+        "da": "Maksimal spænding, analog AC",
+        "de": "Maximalspannung Analog AC",
+        "fr": "Tension maximale analogique CA"
+      },
+      "default_value": 130,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 129,
+      "source": "custom",
+      "name": {
+        "en": "Analog functions hysterese",
+        "da": "Hysterese for analoge funktioner",
+        "de": "Hysterese der Analogfunktionen",
+        "fr": "Hystérésis des fonctions analogiques"
+      },
+      "default_value": 15,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 130,
+      "source": "custom",
+      "name": {
+        "en": "Analog motor hysterese",
+        "da": "Analog motorhysterese",
+        "de": "Analoge Motorhysterese",
+        "fr": "Hystérésis analogique du moteur"
+      },
+      "default_value": 5,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 132,
+      "source": "custom",
+      "name": {
+        "en": "Grade crossing hold time",
+        "da": "Holdetid ved jernbaneoverskæring",
+        "de": "Haltezeit am Bahnübergang",
+        "fr": "Durée de maintien au passage à niveau"
+      },
+      "default_value": 80,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 133,
+      "source": "custom",
+      "name": {
+        "en": "Sound fader",
+        "da": "Lyd fader",
+        "de": "Sound-Fader",
+        "fr": "Fondu sonore"
+      },
+      "default_value": 128,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 134,
+      "source": "custom",
+      "name": {
+        "en": "ABC mode sensibility",
+        "da": "ABC-tilstandens følsomhed",
+        "de": "Empfindlichkeit des ABC-Modus",
+        "fr": "Sensibilité du mode ABC"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 4,
+        "max": 32,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 138,
+      "source": "custom",
+      "name": {
+        "en": "Smoke unit trin fan",
+        "da": "Blæsertrimning for røggenerator",
+        "de": "Lüftertrimmung der Raucheinheit",
+        "fr": "Réglage du ventilateur du générateur de fumée"
+      },
+      "default_value": 128,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Divided by 128, this gives the factor by which the fan speed of synchronized",
+        "da": "Divideret med 128 giver dette den faktor, hvormed blæserhastigheden for synkroniserede",
+        "de": "Durch 128 geteilt ergibt dies den Faktor für die Lüftergeschwindigkeit synchronisierter Raucheinheiten",
+        "fr": "Divisé par 128, cela donne le facteur appliqué à la vitesse du ventilateur des générateurs de fumée synchronisés"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 139,
+      "source": "custom",
+      "name": {
+        "en": "Smoke Unit Trim Temperature",
+        "da": "Temperaturtrimning for røggenerator",
+        "de": "Temperaturtrimmung der Raucheinheit",
+        "fr": "Réglage de la température du générateur de fumée"
+      },
+      "default_value": 128,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Divided by 128, this gives the factor by which the temperature of synchronized smoke units can be adjusted.",
+        "da": "Divideret med 128 giver dette den faktor, hvormed temperaturen for synkroniserede røggeneratorer kan justeres.",
+        "de": "Durch 128 geteilt ergibt dies den Faktor, mit dem die Temperatur synchronisierter Raucheinheiten angepasst werden kann.",
+        "fr": "Divisé par 128, cela donne le facteur permettant de régler la température des générateurs de fumée synchronisés."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 140,
+      "source": "custom",
+      "name": {
+        "en": "Smoke TimeOut",
+        "da": "Tidsgrænse for røggenerator",
+        "de": "Zeitbegrenzung der Raucheinheit",
+        "fr": "Temporisation du générateur de fumée"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Time until automatic shutdown of the smoke unit",
+        "da": "Tid indtil automatisk slukning af røggeneratoren",
+        "de": "Zeit bis zur automatischen Abschaltung der Raucheinheit",
+        "fr": "Délai avant l’arrêt automatique du générateur de fumée"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 141,
+      "source": "custom",
+      "name": {
+        "en": "Smoke Chuff Min",
+        "da": "Mindste røgpust ved dampslag",
+        "de": "Minimaler Rauchstoß beim Dampfschlag",
+        "fr": "Souffle de fumée minimal par coup d’échappement"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Minimum duration of a steam chuff of an external smoke unit in 0.041 seconds resolution.",
+        "da": "Mindste varighed af et dampslag fra en ekstern røggenerator med en opløsning på 0,041 sekunder.",
+        "de": "Mindestdauer eines Dampfschlags einer externen Raucheinheit mit einer Auflösung von 0,041 Sekunden.",
+        "fr": "Durée minimale d’un coup d’échappement vapeur d’un générateur de fumée externe, avec une résolution de 0,041 seconde."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 142,
+      "source": "custom",
+      "name": {
+        "en": "Smoke Chuff Max",
+        "da": "Største røgpust ved dampslag",
+        "de": "Maximaler Rauchstoß beim Dampfschlag",
+        "fr": "Souffle de fumée maximal par coup d’échappement"
+      },
+      "default_value": 125,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Maximum duration of a steam chuff of an external smoke unit in 0.041 seconds resolution",
+        "da": "Største varighed af et dampslag fra en ekstern røggenerator med en opløsning på 0,041 sekunder",
+        "de": "Höchstdauer eines Dampfschlags einer externen Raucheinheit mit einer Auflösung von 0,041 Sekunden",
+        "fr": "Durée maximale d’un coup d’échappement vapeur d’un générateur de fumée externe, avec une résolution de 0,041 seconde"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 143,
+      "source": "custom",
+      "name": {
+        "en": "Smoke Chuff Length",
+        "da": "Varighed af røgpust ved dampslag",
+        "de": "Dauer des Rauchstoßes beim Dampfschlag",
+        "fr": "Durée du souffle de fumée par coup d’échappement"
+      },
+      "default_value": 100,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Divided by 128, this gives the factor by which the duration of the steam chuffs can be adjusted relative to the trigger pulses.",
+        "da": "Divideret med 128 giver dette den faktor, hvormed dampslagenes varighed kan justeres i forhold til udløserimpulserne.",
+        "de": "Durch 128 geteilt ergibt dies den Faktor, mit dem die Dauer der Dampfschläge relativ zu den Auslöseimpulsen angepasst werden kann.",
+        "fr": "Divisé par 128, cela donne le facteur permettant de régler la durée des coups d’échappement vapeur par rapport aux impulsions de déclenchement."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 144,
+      "source": "custom",
+      "name": {
+        "en": "Smoke Pre Heat Temperature",
+        "da": "Forvarmningstemperatur for røggenerator",
+        "de": "Vorheiztemperatur der Raucheinheit",
+        "fr": "Température de préchauffage du générateur de fumée"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Preheating temperature in degrees Celsius for secondary smoke generators (cylinder smoke unit)",
+        "da": "Forvarmningstemperatur i grader Celsius for sekundære røggeneratorer (cylinderrøggenerator)",
+        "de": "Vorheiztemperatur in Grad Celsius für sekundäre Raucherzeuger (Zylinderraucheinheit)",
+        "fr": "Température de préchauffage en degrés Celsius pour les générateurs de fumée secondaires (fumigène de cylindre)"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 149,
+      "source": "custom",
+      "name": {
+        "en": "ABC shuttle train holdtimet",
+        "da": "ABC-pendeltogs holdetid",
+        "de": "Haltezeit des ABC-Pendelzugs",
+        "fr": "Temps d'arrêt de la navette ABC"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 150,
+      "source": "custom",
+      "name": {
+        "en": "HLU Speedlimit 1",
+        "da": "HLU-hastighedsgrænse 1",
+        "de": "HLU-Geschwindigkeitsgrenze 1",
+        "fr": "Limite de vitesse HLU 1"
+      },
+      "default_value": 42,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "HLU Speed limit 1. Internal speedstep.",
+        "da": "HLU-hastighedsgrænse 1. Internt hastighedstrin.",
+        "de": "HLU-Geschwindigkeitsgrenze 1. Interne Fahrstufe.",
+        "fr": "Limite de vitesse HLU 1. Cran de vitesse interne."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 151,
+      "source": "custom",
+      "name": {
+        "en": "HLU Speedlimit 2 (U)",
+        "da": "HLU-hastighedsgrænse 2 (U)",
+        "de": "HLU-Geschwindigkeitsgrenze 2 (U)",
+        "fr": "Limite de vitesse HLU 2 (U)"
+      },
+      "default_value": 85,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "HLU Speed limit 2 (U). Internal speedstep.",
+        "da": "HLU-hastighedsgrænse 2 (U). Internt hastighedstrin.",
+        "de": "HLU-Geschwindigkeitsgrenze 2 (U). Interne Fahrstufe.",
+        "fr": "Limite de vitesse HLU 2 (U). Cran de vitesse interne."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 152,
+      "source": "custom",
+      "name": {
+        "en": "HLU Speedlimit 3",
+        "da": "HLU-hastighedsgrænse 3",
+        "de": "HLU-Geschwindigkeitsgrenze 3",
+        "fr": "Limite de vitesse HLU 3"
+      },
+      "default_value": 127,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "HLU Speed limit 3. Internal speedstep.",
+        "da": "HLU-hastighedsgrænse 3. Internt hastighedstrin.",
+        "de": "HLU-Geschwindigkeitsgrenze 3. Interne Fahrstufe.",
+        "fr": "Limite de vitesse HLU 3. Cran de vitesse interne."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 153,
+      "source": "custom",
+      "name": {
+        "en": "HLU Speedlimit 4 (L)",
+        "da": "HLU-hastighedsgrænse 4 (L)",
+        "de": "HLU-Geschwindigkeitsgrenze 4 (L)",
+        "fr": "Limite de vitesse HLU 4 (L)"
+      },
+      "default_value": 170,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "HLU Speed limit 4 (L). Internal speedstep.",
+        "da": "HLU-hastighedsgrænse 4 (L). Internt hastighedstrin.",
+        "de": "HLU-Geschwindigkeitsgrenze 4 (L). Interne Fahrstufe.",
+        "fr": "Limite de vitesse HLU 4 (L). Cran de vitesse interne."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 154,
+      "source": "custom",
+      "name": {
+        "en": "HLU Speedlimit 5",
+        "da": "HLU-hastighedsgrænse 5",
+        "de": "HLU-Geschwindigkeitsgrenze 5",
+        "fr": "Limite de vitesse HLU 5"
+      },
+      "default_value": 212,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "HLU Speed limit 5. Internal speedstep.",
+        "da": "HLU-hastighedsgrænse 5. Internt hastighedstrin.",
+        "de": "HLU-Geschwindigkeitsgrenze 5. Interne Fahrstufe.",
+        "fr": "Limite de vitesse HLU 5. Cran de vitesse interne."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 155,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 1",
+        "da": "Lyd-CV 1",
+        "de": "Sound-CV 1",
+        "fr": "CV sonore 1"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 156,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 2",
+        "da": "Lyd-CV 2",
+        "de": "Sound-CV 2",
+        "fr": "CV sonore 2"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 157,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 3",
+        "da": "Lyd-CV 3",
+        "de": "Sound-CV 3",
+        "fr": "CV sonore 3"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 159,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 4",
+        "da": "Lyd-CV 4",
+        "de": "Sound-CV 4",
+        "fr": "CV sonore 4"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 160,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 5",
+        "da": "Lyd-CV 5",
+        "de": "Sound-CV 5",
+        "fr": "CV sonore 5"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 161,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 6",
+        "da": "Lyd-CV 6",
+        "de": "Sound-CV 6",
+        "fr": "CV sonore 6"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 162,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 7",
+        "da": "Lyd-CV 7",
+        "de": "Sound-CV 7",
+        "fr": "CV sonore 7"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 163,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 8",
+        "da": "Lyd-CV 8",
+        "de": "Sound-CV 8",
+        "fr": "CV sonore 8"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 164,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 9",
+        "da": "Lyd-CV 9",
+        "de": "Sound-CV 9",
+        "fr": "CV sonore 9"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 165,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 10",
+        "da": "Lyd-CV 10",
+        "de": "Sound-CV 10",
+        "fr": "CV sonore 10"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 166,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 11",
+        "da": "Lyd-CV 11",
+        "de": "Sound-CV 11",
+        "fr": "CV sonore 11"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 167,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 12",
+        "da": "Lyd-CV 12",
+        "de": "Sound-CV 12",
+        "fr": "CV sonore 12"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 168,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 13",
+        "da": "Lyd-CV 13",
+        "de": "Sound-CV 13",
+        "fr": "CV sonore 13"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 169,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 14",
+        "da": "Lyd-CV 14",
+        "de": "Sound-CV 14",
+        "fr": "CV sonore 14"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 170,
+      "source": "custom",
+      "name": {
+        "en": "Sound CV 15",
+        "da": "Lyd-CV 15",
+        "de": "Sound-CV 15",
+        "fr": "CV sonore 15"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "See the sound project documentation for meaning of this CV.",
+        "da": "Se dokumentationen til lydprojektet for en forklaring af denne CV.",
+        "de": "Die Bedeutung dieser CV ist in der Dokumentation des Soundprojekts beschrieben.",
+        "fr": "Consultez la documentation du projet sonore pour connaître la signification de cette CV."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 179,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 1 Deceleration",
+        "da": "Bremsefunktion 1, deceleration",
+        "de": "Verzögerung Bremsfunktion 1",
+        "fr": "Décélération de la fonction de freinage 1"
+      },
+      "default_value": 80,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Value of which 33% of CV 4 will be deducted if the Brake Function 1 is active. See section 10.6.",
+        "da": "Værdi, hvoraf 33 % trækkes fra CV 4, når bremsefunktion 1 er aktiv. Se afsnit 10.6.",
+        "de": "Wert, von dem 33 % von CV 4 abgezogen werden, wenn Bremsfunktion 1 aktiv ist. Siehe Abschnitt 10.6.",
+        "fr": "Valeur dont 33 % sont déduits de la CV 4 lorsque la fonction de freinage 1 est active. Voir section 10.6."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 180,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 2 Deceleration",
+        "da": "Bremsefunktion 2, deceleration",
+        "de": "Verzögerung Bremsfunktion 2",
+        "fr": "Décélération de la fonction de freinage 2"
+      },
+      "default_value": 40,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Value of which 33% of CV 4 will be deducted if the Brake Function 2 is active. See section 10.6.",
+        "da": "Værdi, hvoraf 33 % trækkes fra CV 4, når bremsefunktion 2 er aktiv. Se afsnit 10.6.",
+        "de": "Wert, von dem 33 % von CV 4 abgezogen werden, wenn Bremsfunktion 2 aktiv ist. Siehe Abschnitt 10.6.",
+        "fr": "Valeur dont 33 % sont déduits de la CV 4 lorsque la fonction de freinage 2 est active. Voir section 10.6."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 181,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 3 Deceleration",
+        "da": "Bremsefunktion 3, deceleration",
+        "de": "Verzögerung Bremsfunktion 3",
+        "fr": "Décélération de la fonction de freinage 3"
+      },
+      "default_value": 40,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Value of which 33% of CV 4 will be deducted if the Brake Function 3 is active. See section 10.6.",
+        "da": "Værdi, hvoraf 33 % trækkes fra CV 4, når bremsefunktion 3 er aktiv. Se afsnit 10.6.",
+        "de": "Wert, von dem 33 % von CV 4 abgezogen werden, wenn Bremsfunktion 3 aktiv ist. Siehe Abschnitt 10.6.",
+        "fr": "Valeur dont 33 % sont déduits de la CV 4 lorsque la fonction de freinage 3 est active. Voir section 10.6."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 182,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 1 max. Speed",
+        "da": "Bremsefunktion 1, maksimal hastighed",
+        "de": "Bremsfunktion 1 max. Geschwindigkeit",
+        "fr": "Vitesse max. de la fonction de freinage 1"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 126,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Highest speed step that can be reached when Brake function 1 is active.",
+        "da": "Højeste hastighedstrin, der kan nås, når bremsefunktion 1 er aktiv.",
+        "de": "Höchste Fahrstufe, die bei aktiver Bremsfunktion 1 erreicht werden kann.",
+        "fr": "Cran de vitesse maximal pouvant être atteint lorsque la fonction de freinage 1 est active."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 183,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 2 max. Speed",
+        "da": "Bremsefunktion 2, maksimal hastighed",
+        "de": "Bremsfunktion 2 max. Geschwindigkeit",
+        "fr": "Vitesse max. de la fonction de freinage 2"
+      },
+      "default_value": 126,
+      "value_bits": {
+        "min": 0,
+        "max": 126,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Highest speed step that can be reached when Brake function 2 is active.",
+        "da": "Højeste hastighedstrin, der kan nås, når bremsefunktion 2 er aktiv.",
+        "de": "Höchste Fahrstufe, die bei aktiver Bremsfunktion 2 erreicht werden kann.",
+        "fr": "Cran de vitesse maximal pouvant être atteint lorsque la fonction de freinage 2 est active."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 184,
+      "source": "custom",
+      "name": {
+        "en": "Brake Function 3 max. Speed",
+        "da": "Bremsefunktion 3, maksimal hastighed",
+        "de": "Bremsfunktion 3 max. Geschwindigkeit",
+        "fr": "Vitesse max. de la fonction de freinage 3"
+      },
+      "default_value": 126,
+      "value_bits": {
+        "min": 0,
+        "max": 126,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Highest speed step that can be reached when Brake function 3 is active.",
+        "da": "Højeste hastighedstrin, der kan nås, når bremsefunktion 3 er aktiv.",
+        "de": "Höchste Fahrstufe, die bei aktiver Bremsfunktion 3 erreicht werden kann.",
+        "fr": "Cran de vitesse maximal pouvant être atteint lorsque la fonction de freinage 3 est active."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 246,
+      "source": "custom",
+      "name": {
+        "en": "Automatic decoupling Driving speed",
+        "da": "Kørehastighed ved automatisk afkobling",
+        "de": "Fahrgeschwindigkeit beim automatischen Entkuppeln",
+        "fr": "Vitesse de marche lors du dételage automatique"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Speed of the loco while decoupling; the higher the value, the faster the loco. Value 0 switches the automatic coupler off. Automatic decoupling is only active if the function output is adjusted to „pulse“ or „coupler“.",
+        "da": "Lokomotivets hastighed under afkobling; jo højere værdien er, desto hurtigere kører lokomotivet. Værdien 0 deaktiverer den automatiske kobling. Automatisk afkobling er kun aktiv, hvis funktionsudgangen er indstillet til „impuls“ eller „kobling“.",
+        "de": "Geschwindigkeit der Lok beim Entkuppeln; je höher der Wert, desto schneller fährt die Lok. Wert 0 schaltet die automatische Kupplung aus. Das automatische Entkuppeln ist nur aktiv, wenn der Funktionsausgang auf „Impuls“ oder „Kupplung“ eingestellt ist.",
+        "fr": "Vitesse de la locomotive pendant le dételage ; plus la valeur est élevée, plus la locomotive roule vite. La valeur 0 désactive l’attelage automatique. Le dételage automatique n’est actif que si la sortie de fonction est réglée sur « impulsion » ou « attelage »."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 247,
+      "source": "custom",
+      "name": {
+        "en": "Decoupling - Removing time",
+        "da": "Afkobling – frakørselstid",
+        "de": "Entkuppeln – Wegfahrzeit",
+        "fr": "Dételage – durée d'éloignement"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "This value multiplied with 0.016 defines the time the loco needs for moving away from the train (automatic decoupling).",
+        "da": "Denne værdi ganget med 0,016 angiver den tid, lokomotivet bruger på at køre væk fra toget (automatisk afkobling).",
+        "de": "Dieser Wert multipliziert mit 0,016 legt die Zeit fest, die die Lok zum Wegfahren vom Zug benötigt (automatisches Entkuppeln).",
+        "fr": "Cette valeur multipliée par 0,016 définit le temps nécessaire à la locomotive pour s’éloigner du train (dételage automatique)."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 248,
+      "source": "custom",
+      "name": {
+        "en": "Decoupling - Pushing time",
+        "da": "Afkobling – skubbetid",
+        "de": "Entkuppeln – Andrückzeit",
+        "fr": "Dételage – durée de poussée"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 249,
+      "source": "custom",
+      "name": {
+        "en": "Minimum steam chuff distance",
+        "da": "Mindste afstand mellem dampslag",
+        "de": "Mindestabstand zwischen Dampfschlägen",
+        "fr": "Distance minimale entre les coups d’échappement vapeur"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 250,
+      "source": "custom",
+      "name": {
+        "en": "Secondary steam chuff trigger",
+        "da": "Sekundær udløser for dampslag",
+        "de": "Sekundärer Auslöser für Dampfschläge",
+        "fr": "Déclencheur secondaire des coups d’échappement vapeur"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Defines the distance between two consecutive steam chuffs for the secondary steam chuff generator.",
+        "da": "Definerer afstanden mellem to på hinanden følgende dampslag for den sekundære dampslagsgenerator.",
+        "de": "Legt den Abstand zwischen zwei aufeinanderfolgenden Dampfschlägen des sekundären Dampfschlaggenerators fest.",
+        "fr": "Définit la distance entre deux coups d’échappement vapeur consécutifs du générateur secondaire."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 253,
+      "source": "custom",
+      "name": {
+        "en": "Constant brake mode",
+        "da": "Tilstand med konstant bremselængde",
+        "de": "Modus mit konstantem Bremsweg",
+        "fr": "Mode de freinage à distance constante"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Determines the constant brake mode. Only active, if CV254 > 0 CV 253 = 0: Decoder stops linearly CV 253 > 0: Decoder stops constantly linear",
+        "da": "Bestemmer tilstanden for konstant bremselængde. Kun aktiv, hvis CV 254 > 0 CV 253 = 0: Dekoderen standser lineært CV 253 > 0: Dekoderen standser med konstant bremselængde",
+        "de": "Bestimmt den Modus mit konstantem Bremsweg. Nur aktiv, wenn CV 254 > 0. CV 253 = 0: Der Decoder hält linear an. CV 253 > 0: Der Decoder hält mit konstantem Bremsweg an.",
+        "fr": "Détermine le mode de freinage à distance constante. Actif uniquement si CV 254 > 0. CV 253 = 0 : le décodeur s’arrête linéairement. CV 253 > 0 : le décodeur s’arrête avec une distance de freinage constante."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 254,
+      "source": "custom",
+      "name": {
+        "en": "Constant braking distance forward",
+        "da": "Konstant bremselængde fremad",
+        "de": "Konstanter Bremsweg vorwärts",
+        "fr": "Distance de freinage constante en marche avant"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "A value > 0 determines the way of brake distance it adheres to, independent from speed.",
+        "da": "En værdi > 0 bestemmer den bremselængde, der overholdes uafhængigt af hastigheden.",
+        "de": "Ein Wert > 0 legt den einzuhaltenden Bremsweg unabhängig von der Geschwindigkeit fest.",
+        "fr": "Une valeur > 0 définit la distance de freinage respectée indépendamment de la vitesse."
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 255,
+      "source": "custom",
+      "name": {
+        "en": "Constant braking distance backwards",
+        "da": "Konstant bremselængde baglæns",
+        "de": "Konstanter Bremsweg rückwärts",
+        "fr": "Distance de freinage constante en marche arrière"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Constant braking distances during reverse driving. Only active, if value > 0, otherwise the value of CV 254 is used. Useful for reversible trains.",
+        "da": "Konstant bremselængde ved baglænskørsel. Kun aktiv, hvis værdien er > 0; ellers anvendes værdien i CV 254. Nyttig til vendetog.",
+        "de": "Konstanter Bremsweg bei Rückwärtsfahrt. Nur aktiv, wenn der Wert > 0 ist; andernfalls wird der Wert von CV 254 verwendet. Nützlich für Wendezüge.",
+        "fr": "Distance de freinage constante en marche arrière. Active uniquement si la valeur est > 0 ; sinon, la valeur de la CV 254 est utilisée. Utile pour les rames réversibles."
+      }
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_basic",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Basic",
+        "da": "Grundlæggende",
+        "de": "Grundlagen",
+        "fr": "Général"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 113
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Analog",
+        "da": "Analog",
+        "de": "Analog",
+        "fr": "Analogique"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 125
+            },
+            {
+              "type": "cv_single",
+              "cv": 126
+            },
+            {
+              "type": "cv_single",
+              "cv": 127
+            },
+            {
+              "type": "cv_single",
+              "cv": 128
+            },
+            {
+              "type": "cv_single",
+              "cv": 129
+            },
+            {
+              "type": "cv_single",
+              "cv": 130
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_motor",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Motor",
+        "da": "Motor",
+        "de": "Motor",
+        "fr": "Moteur"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 9
+            },
+            {
+              "type": "cv_single",
+              "cv": 23
+            },
+            {
+              "type": "cv_single",
+              "cv": 24
+            },
+            {
+              "type": "cv_single",
+              "cv": 101
+            },
+            {
+              "type": "cv_single",
+              "cv": 103
+            },
+            {
+              "type": "cv_single",
+              "cv": 104
+            },
+            {
+              "type": "cv_single",
+              "cv": 111
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_speed curve",
+      "type": "speed_curve_graph_3and28",
+      "title": {
+        "en": "Speed curve",
+        "da": "Hastighedskurve",
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 66
+            },
+            {
+              "type": "cv_range",
+              "cv_start": 67,
+              "cv_end": 94
+            },
+            {
+              "type": "cv_single",
+              "cv": 95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_railcom",
+      "type": "dynamic_list",
+      "title": {
+        "en": "RailCom",
+        "da": "RailCom",
+        "de": "RailCom",
+        "fr": "RailCom"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 28,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_consist",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Consist",
+        "da": "Multitraktion",
+        "de": "Mehrfachtraktion",
+        "fr": "Traction multiple"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 19
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 19,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_lighting",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Lighting",
+        "da": "Lys",
+        "de": "Beleuchtung",
+        "fr": "Éclairage"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 112
+            },
+            {
+              "type": "cv_single",
+              "cv": 132
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sound",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Sound",
+        "da": "Lyd",
+        "de": "Sound",
+        "fr": "Son"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 57
+            },
+            {
+              "type": "cv_single",
+              "cv": 58
+            },
+            {
+              "type": "cv_single",
+              "cv": 63
+            },
+            {
+              "type": "cv_single",
+              "cv": 64
+            },
+            {
+              "type": "cv_single",
+              "cv": 65
+            },
+            {
+              "type": "cv_single",
+              "cv": 133
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sound conf.",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Sound conf.",
+        "da": "Lyd konf.",
+        "de": "Sound-Konfig.",
+        "fr": "Config. son"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 155
+            },
+            {
+              "type": "cv_single",
+              "cv": 156
+            },
+            {
+              "type": "cv_single",
+              "cv": 157
+            },
+            {
+              "type": "cv_single",
+              "cv": 159
+            },
+            {
+              "type": "cv_single",
+              "cv": 160
+            },
+            {
+              "type": "cv_single",
+              "cv": 161
+            },
+            {
+              "type": "cv_single",
+              "cv": 162
+            },
+            {
+              "type": "cv_single",
+              "cv": 163
+            },
+            {
+              "type": "cv_single",
+              "cv": 164
+            },
+            {
+              "type": "cv_single",
+              "cv": 165
+            },
+            {
+              "type": "cv_single",
+              "cv": 166
+            },
+            {
+              "type": "cv_single",
+              "cv": 167
+            },
+            {
+              "type": "cv_single",
+              "cv": 168
+            },
+            {
+              "type": "cv_single",
+              "cv": 169
+            },
+            {
+              "type": "cv_single",
+              "cv": 170
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_smoke",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Smoke",
+        "da": "Røg",
+        "de": "Rauch",
+        "fr": "Fumée"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 138
+            },
+            {
+              "type": "cv_single",
+              "cv": 139
+            },
+            {
+              "type": "cv_single",
+              "cv": 140
+            },
+            {
+              "type": "cv_single",
+              "cv": 141
+            },
+            {
+              "type": "cv_single",
+              "cv": 142
+            },
+            {
+              "type": "cv_single",
+              "cv": 143
+            },
+            {
+              "type": "cv_single",
+              "cv": 144
+            },
+            {
+              "type": "cv_single",
+              "cv": 250
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_miscellaneous",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Miscellaneous",
+        "da": "Diverse",
+        "de": "Sonstiges",
+        "fr": "Divers"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 15
+            },
+            {
+              "type": "cv_single",
+              "cv": 16
+            },
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 249
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_braking",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Braking",
+        "da": "Bremse",
+        "de": "Bremsen",
+        "fr": "Freinage"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 7
+            },
+            {
+              "type": "cv_single",
+              "cv": 102
+            },
+            {
+              "type": "cv_single",
+              "cv": 123
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 6
+            },
+            {
+              "type": "cv_single",
+              "cv": 134
+            },
+            {
+              "type": "cv_single",
+              "cv": 149
+            },
+            {
+              "type": "cv_single",
+              "cv": 179
+            },
+            {
+              "type": "cv_single",
+              "cv": 180
+            },
+            {
+              "type": "cv_single",
+              "cv": 181
+            },
+            {
+              "type": "cv_single",
+              "cv": 182
+            },
+            {
+              "type": "cv_single",
+              "cv": 183
+            },
+            {
+              "type": "cv_single",
+              "cv": 184
+            },
+            {
+              "type": "cv_single",
+              "cv": 253
+            },
+            {
+              "type": "cv_single",
+              "cv": 254
+            },
+            {
+              "type": "cv_single",
+              "cv": 255
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_bemf",
+      "type": "dynamic_list",
+      "title": {
+        "en": "BEMF",
+        "da": "BEMF",
+        "de": "Gegen-EMK",
+        "fr": "FEM inverse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 49,
+              "bit": 0
+            },
+            {
+              "type": "cv_single",
+              "cv": 51
+            },
+            {
+              "type": "cv_single",
+              "cv": 52
+            },
+            {
+              "type": "cv_single",
+              "cv": 53
+            },
+            {
+              "type": "cv_single",
+              "cv": 54
+            },
+            {
+              "type": "cv_single",
+              "cv": 55
+            },
+            {
+              "type": "cv_single",
+              "cv": 56
+            },
+            {
+              "type": "cv_single",
+              "cv": 116
+            },
+            {
+              "type": "cv_single",
+              "cv": 117
+            },
+            {
+              "type": "cv_single",
+              "cv": 118
+            },
+            {
+              "type": "cv_single",
+              "cv": 119
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_hlu",
+      "type": "dynamic_list",
+      "title": {
+        "en": "HLU",
+        "da": "HLU",
+        "de": "HLU",
+        "fr": "HLU"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 150
+            },
+            {
+              "type": "cv_single",
+              "cv": 151
+            },
+            {
+              "type": "cv_single",
+              "cv": 152
+            },
+            {
+              "type": "cv_single",
+              "cv": 153
+            },
+            {
+              "type": "cv_single",
+              "cv": 154
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_coupling",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Coupling",
+        "da": "Kobling",
+        "de": "Kupplung",
+        "fr": "Attelage"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 246
+            },
+            {
+              "type": "cv_single",
+              "cv": 247
+            },
+            {
+              "type": "cv_single",
+              "cv": 248
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_susi",
+      "type": "dynamic_list",
+      "title": {
+        "en": "SUSI",
+        "da": "SUSI",
+        "de": "SUSI",
+        "fr": "SUSI"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 124,
+              "bit": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

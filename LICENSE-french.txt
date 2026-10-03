@@ -1,0 +1,27 @@
+Licence MIT
+
+Copyright (c) 2025–2026 Jesper Wachs
+
+La présente licence est accordée gratuitement à toute personne obtenant
+une copie de ce logiciel et des fichiers de documentation associés
+(le « Logiciel »), afin de traiter le Logiciel sans restriction, y
+compris, sans limitation, les droits d'utiliser, de copier, de modifier,
+de fusionner, de publier, de distribuer, de sous-licencier et/ou de
+vendre des copies du Logiciel, ainsi que d'autoriser les personnes
+auxquelles le Logiciel est fourni à en faire de même, sous réserve des
+conditions suivantes :
+
+L'avis de droit d'auteur ci-dessus ainsi que le présent avis
+d'autorisation doivent être inclus dans toutes les copies ou parties
+substantielles du Logiciel.
+
+LE LOGICIEL EST FOURNI « EN L'ÉTAT », SANS GARANTIE D'AUCUNE SORTE,
+EXPRESSE OU IMPLICITE, Y COMPRIS, SANS LIMITATION, LES GARANTIES DE
+QUALITÉ MARCHANDE, D'ADÉQUATION À UN USAGE PARTICULIER ET
+D'ABSENCE DE CONTREFAÇON. EN AUCUN CAS LES AUTEURS OU LES
+DÉTENTEURS DES DROITS D'AUTEUR NE POURRONT ÊTRE TENUS RESPONSABLES
+DE TOUTE RÉCLAMATION, DE TOUT DOMMAGE OU DE TOUTE AUTRE
+RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D'UNE ACTION CONTRACTUELLE,
+D'UNE ACTION EN RESPONSABILITÉ DÉLICTUELLE OU DE TOUTE AUTRE
+THÉORIE JURIDIQUE, DÉCOULANT DE, RÉSULTANT DE OU LIÉE AU LOGICIEL
+OU À L'UTILISATION OU À TOUTE AUTRE UTILISATION DU LOGICIEL.

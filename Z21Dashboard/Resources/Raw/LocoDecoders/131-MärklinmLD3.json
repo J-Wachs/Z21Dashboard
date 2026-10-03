@@ -1,0 +1,4373 @@
+{
+  "meta": {
+    "manufacturer": "Märklin",
+    "manufacturer_id": 131,
+    "model": "Märklin mLD3",
+    "version": "1.0",
+    "protocols": "mfx, DCC, MM",
+    "sound": false,
+    "type": "locomotivedecoder",
+    "fkeys": 31
+  },
+  "cv_definitions": [
+    {
+      "type": "cv_single",
+      "cv": 1,
+      "source": "nmra",
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 2,
+      "source": "nmra",
+      "default_value": 5
+    },
+    {
+      "type": "cv_single",
+      "cv": 3,
+      "source": "nmra",
+      "default_value": 25,
+      "value_bits": {
+        "min": 0,
+        "max": 71,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 4,
+      "source": "nmra",
+      "default_value": 16,
+      "value_bits": {
+        "min": 0,
+        "max": 71,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 5,
+      "source": "nmra",
+      "default_value": 255
+    },
+    {
+      "type": "cv_single",
+      "cv": 7,
+      "source": "nmra",
+      "readonly": true
+    },
+    {
+      "type": "cv_single",
+      "cv": 8,
+      "source": "nmra",
+      "default_value": 131,
+      "readonly": true
+    },
+    {
+      "type": "cv_single",
+      "cv": 13,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 14,
+      "source": "custom",
+      "default_value": 1,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "At analog FL is",
+            "da": "Ved analog er FL",
+            "de": "Bei Analogbetrieb ist FL",
+            "fr": "En mode analogique, FL est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "At analog F9 is",
+            "da": "Ved analog er F9",
+            "de": "Bei Analogbetrieb ist F9",
+            "fr": "En mode analogique, F9 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "At analog F10 is",
+            "da": "Ved analog er F10",
+            "de": "Bei Analogbetrieb ist F10",
+            "fr": "En mode analogique, F10 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "At analog F11 is",
+            "da": "Ved analog er F11",
+            "de": "Bei Analogbetrieb ist F11",
+            "fr": "En mode analogique, F11 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "At analog F12 is",
+            "da": "Ved analog er F12",
+            "de": "Bei Analogbetrieb ist F12",
+            "fr": "En mode analogique, F12 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "At analog F13 is",
+            "da": "Ved analog er F13",
+            "de": "Bei Analogbetrieb ist F13",
+            "fr": "En mode analogique, F13 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "At analog F14 is",
+            "da": "Ved analog er F14",
+            "de": "Bei Analogbetrieb ist F14",
+            "fr": "En mode analogique, F14 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "At analog F15 is",
+            "da": "Ved analog er F15",
+            "de": "Bei Analogbetrieb ist F15",
+            "fr": "En mode analogique, F15 est"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 17,
+      "source": "nmra",
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 18,
+      "source": "nmra",
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 19,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 127,
+        "from_bit": 0,
+        "to_bit": 6
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 21,
+      "source": "nmra",
+      "default_value": 0
+    },
+    {
+      "type": "cv_single",
+      "cv": 22,
+      "source": "nmra",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "FL follows consist",
+            "da": "FL følger multitraktion",
+            "de": "FL folgt der Mehrfachtraktion",
+            "fr": "FL suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "F9 follows consist",
+            "da": "F9 følger multitraktion",
+            "de": "F9 folgt der Mehrfachtraktion",
+            "fr": "F9 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "F10 follows consist",
+            "da": "F10 følger multitraktion",
+            "de": "F10 folgt der Mehrfachtraktion",
+            "fr": "F10 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "F11 follows consist",
+            "da": "F11 følger multitraktion",
+            "de": "F11 folgt der Mehrfachtraktion",
+            "fr": "F11 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "F12 follows consist",
+            "da": "F12 følger multitraktion",
+            "de": "F12 folgt der Mehrfachtraktion",
+            "fr": "F12 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "F13 follows consist",
+            "da": "F13 følger multitraktion",
+            "de": "F13 folgt der Mehrfachtraktion",
+            "fr": "F13 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 6,
+          "name": {
+            "en": "F14 follows consist",
+            "da": "F14 følger multitraktion",
+            "de": "F14 folgt der Mehrfachtraktion",
+            "fr": "F14 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 7,
+          "name": {
+            "en": "F15 follows consist",
+            "da": "F15 følger multitraktion",
+            "de": "F15 folgt der Mehrfachtraktion",
+            "fr": "F15 suit la traction multiple"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 27,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 4,
+          "name": {
+            "en": "DC brake, opposite direction",
+            "da": "DC-bremse, modsat retning",
+            "de": "DC-Bremse, entgegengesetzte Richtung",
+            "fr": "Freinage CC, sens opposé"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "DC brake, same direction",
+            "da": "DC-bremse, samme retning",
+            "de": "DC-Bremse, gleiche Richtung",
+            "fr": "Freinage CC, même sens"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 29,
+      "source": "nmra",
+      "default_value": 6
+    },
+    {
+      "type": "cv_single",
+      "cv": 30,
+      "source": "custom",
+      "default_value": 0,
+      "readonly": true,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 7,
+          "name": {
+            "en": "Error information",
+            "da": "Fejlinformation",
+            "de": "Fehlerinformation",
+            "fr": "Informations d’erreur"
+          },
+          "values": {
+            "0": {
+              "en": "No error",
+              "da": "Ingen fejl",
+              "de": "Kein Fehler",
+              "fr": "Aucune erreur"
+            },
+            "1": {
+              "en": "Overload",
+              "da": "Overbelastning",
+              "de": "Überlast",
+              "fr": "Surcharge"
+            },
+            "2": {
+              "en": "Short circuit",
+              "da": "Kortslutning",
+              "de": "Kurzschluss",
+              "fr": "Court-circuit"
+            },
+            "3": {
+              "en": "No motor",
+              "da": "Ingen motor",
+              "de": "Kein Motor",
+              "fr": "Aucun moteur"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 47,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Motor control, analog control",
+            "da": "Motorregulering, analog styring",
+            "de": "Motorregelung, Analogsteuerung",
+            "fr": "Commande du moteur, commande analogique"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 48,
+      "source": "custom",
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 1,
+          "name": {
+            "en": "Motor controller",
+            "da": "Motorregulator",
+            "de": "Motorregler",
+            "fr": "Régulateur moteur"
+          },
+          "values": {
+            "0": {
+              "en": "2-point controller",
+              "da": "2-punktsregulator",
+              "de": "Zweipunktregler",
+              "fr": "Régulateur à 2 points"
+            },
+            "1": {
+              "en": "Automatic PI controller",
+              "da": "Automatisk PI-regulator",
+              "de": "Automatischer PI-Regler",
+              "fr": "Régulateur PI automatique"
+            },
+            "2": {
+              "en": "PID controller",
+              "da": "PID-regulator",
+              "de": "PID-Regler",
+              "fr": "Régulateur PID"
+            },
+            "3": {
+              "en": "State controller",
+              "da": "Tilstandsregulator",
+              "de": "Zustandsregler",
+              "fr": "Régulateur d’état"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 50,
+      "source": "custom",
+      "default_value": 15,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Recognize analog AC",
+            "da": "Genkend analog AC",
+            "de": "Analog AC erkennen",
+            "fr": "Reconnaître le mode analogique CA"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Recognize analog DC",
+            "da": "Genkend analog DC",
+            "de": "Analog DC erkennen",
+            "fr": "Reconnaître le mode analogique CC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Recognize Märklin Motorola",
+            "da": "Genkend Märklin Motorola",
+            "de": "Märklin Motorola erkennen",
+            "fr": "Reconnaître Märklin Motorola"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Recognize mfx",
+            "da": "Genkend mfx",
+            "de": "mfx erkennen",
+            "fr": "Reconnaître mfx"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 51,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Motor polarity reversal",
+            "da": "Omvendt motorpolaritet",
+            "de": "Umpolung des Motors",
+            "fr": "Inversion de polarité du moteur"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Headlight polarity reversal",
+            "da": "Omvendt forlyspolaritet",
+            "de": "Umpolung des Frontlichts",
+            "fr": "Inversion de polarité du feu avant"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Track polarity reversal",
+            "da": "Omvendt sporpolaritet",
+            "de": "Umpolung des Gleises",
+            "fr": "Inversion de polarité de la voie"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "AUX 3 amplified / logic",
+            "da": "AUX 3 forstærket / logik",
+            "de": "AUX 3 verstärkt / Logik",
+            "fr": "AUX 3 amplifiée / logique"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "AUX 4 amplified / logic",
+            "da": "AUX 4 forstærket / logik",
+            "de": "AUX 4 verstärkt / Logik",
+            "fr": "AUX 4 amplifiée / logique"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 52,
+      "source": "custom",
+      "default_value": 3,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 4,
+          "name": {
+            "en": "Digital motor control",
+            "da": "Digital motorregulering",
+            "de": "Motor-Digitalregelung",
+            "fr": "Régulation numérique du moteur"
+          },
+          "values": {
+            "0": {
+              "en": "AUX A5 and A6",
+              "da": "AUX A5 og A6",
+              "de": "AUX A5 und A6",
+              "fr": "AUX A5 et A6"
+            },
+            "1": {
+              "en": "Softdrive Sinus motor",
+              "da": "Softdrive Sinus-motor",
+              "de": "Motor Softdrive Sinus",
+              "fr": "Moteur Softdrive Sinus"
+            },
+            "2": {
+              "en": "Unregulated motor",
+              "da": "Ureguleret motor",
+              "de": "Motor ungeregelt",
+              "fr": "Moteur non régulé"
+            },
+            "3": {
+              "en": "C90 high-performance drive",
+              "da": "C90-højtydende drev",
+              "de": "Hochleistungsantrieb C90",
+              "fr": "Entraînement haute performance C90"
+            },
+            "4": {
+              "en": "Coreless motor",
+              "da": "Klokkeankermotor",
+              "de": "Glockenankermotor",
+              "fr": "Moteur sans fer"
+            },
+            "5": {
+              "en": "DC motor, soft",
+              "da": "DC-motor, blød",
+              "de": "Gleichstrommotor, weich",
+              "fr": "Moteur CC, doux"
+            },
+            "6": {
+              "en": "DC motor, hard",
+              "da": "DC-motor, hård",
+              "de": "Gleichstrommotor, hart",
+              "fr": "Moteur CC, dur"
+            },
+            "7": {
+              "en": "Gauge 1 DC motor",
+              "da": "Spor 1 DC-motor",
+              "de": "Gleichstrommotor Spur 1",
+              "fr": "Moteur CC échelle 1"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Analog control",
+            "da": "Analog regulering",
+            "de": "Analogregelung",
+            "fr": "Régulation analogique"
+          },
+          "values": {
+            "0": {
+              "en": "Regulated with analog mode",
+              "da": "Reguleret med analog tilstand",
+              "de": "Mit Analogbetrieb geregelt",
+              "fr": "Régulé avec le mode analogique"
+            },
+            "1": {
+              "en": "Regulated without analog mode",
+              "da": "Reguleret uden analog tilstand",
+              "de": "Ohne Analogbetrieb geregelt",
+              "fr": "Régulé sans le mode analogique"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 53,
+      "source": "custom",
+      "name": {
+        "en": "Motor control – control reference",
+        "da": "Motorregulering – reguleringsreference",
+        "de": "Motorregelung – Regelreferenz",
+        "fr": "Régulation moteur – référence de régulation"
+      },
+      "default_value": 150,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 54,
+      "source": "custom",
+      "name": {
+        "en": "Motor control – control parameter K",
+        "da": "Motorregulering – reguleringsparameter K",
+        "de": "Motorregelung – Regelparameter K",
+        "fr": "Régulation moteur – paramètre K"
+      },
+      "default_value": 64,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 55,
+      "source": "custom",
+      "name": {
+        "en": "Motor control – control parameter I",
+        "da": "Motorregulering – reguleringsparameter I",
+        "de": "Motorregelung – Regelparameter I",
+        "fr": "Régulation moteur – paramètre I"
+      },
+      "default_value": 64,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 56,
+      "source": "custom",
+      "name": {
+        "en": "Motor control – control influence",
+        "da": "Motorregulering – reguleringsindflydelse",
+        "de": "Motorregelung – Regeleinfluss",
+        "fr": "Régulation moteur – influence de régulation"
+      },
+      "default_value": 24,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 66,
+      "source": "nmra",
+      "default_value": 5,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 67,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 1",
+        "da": "Hastighedstrin 1",
+        "de": "Fahrstufe 1",
+        "fr": "Cran de vitesse 1"
+      },
+      "default_value": 5,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 68,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 2",
+        "da": "Hastighedstrin 2",
+        "de": "Fahrstufe 2",
+        "fr": "Cran de vitesse 2"
+      },
+      "default_value": 3,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 69,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 3",
+        "da": "Hastighedstrin 3",
+        "de": "Fahrstufe 3",
+        "fr": "Cran de vitesse 3"
+      },
+      "default_value": 7,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 70,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 4",
+        "da": "Hastighedstrin 4",
+        "de": "Fahrstufe 4",
+        "fr": "Cran de vitesse 4"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 71,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 5",
+        "da": "Hastighedstrin 5",
+        "de": "Fahrstufe 5",
+        "fr": "Cran de vitesse 5"
+      },
+      "default_value": 14,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 72,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 6",
+        "da": "Hastighedstrin 6",
+        "de": "Fahrstufe 6",
+        "fr": "Cran de vitesse 6"
+      },
+      "default_value": 18,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 73,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 7",
+        "da": "Hastighedstrin 7",
+        "de": "Fahrstufe 7",
+        "fr": "Cran de vitesse 7"
+      },
+      "default_value": 23,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 74,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 8",
+        "da": "Hastighedstrin 8",
+        "de": "Fahrstufe 8",
+        "fr": "Cran de vitesse 8"
+      },
+      "default_value": 29,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 75,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 9",
+        "da": "Hastighedstrin 9",
+        "de": "Fahrstufe 9",
+        "fr": "Cran de vitesse 9"
+      },
+      "default_value": 36,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 76,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 10",
+        "da": "Hastighedstrin 10",
+        "de": "Fahrstufe 10",
+        "fr": "Cran de vitesse 10"
+      },
+      "default_value": 43,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 77,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 11",
+        "da": "Hastighedstrin 11",
+        "de": "Fahrstufe 11",
+        "fr": "Cran de vitesse 11"
+      },
+      "default_value": 50,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 78,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 12",
+        "da": "Hastighedstrin 12",
+        "de": "Fahrstufe 12",
+        "fr": "Cran de vitesse 12"
+      },
+      "default_value": 59,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 79,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 13",
+        "da": "Hastighedstrin 13",
+        "de": "Fahrstufe 13",
+        "fr": "Cran de vitesse 13"
+      },
+      "default_value": 69,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 80,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 14",
+        "da": "Hastighedstrin 14",
+        "de": "Fahrstufe 14",
+        "fr": "Cran de vitesse 14"
+      },
+      "default_value": 79,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 81,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 15",
+        "da": "Hastighedstrin 15",
+        "de": "Fahrstufe 15",
+        "fr": "Cran de vitesse 15"
+      },
+      "default_value": 89,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 82,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 16",
+        "da": "Hastighedstrin 16",
+        "de": "Fahrstufe 16",
+        "fr": "Cran de vitesse 16"
+      },
+      "default_value": 100,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 83,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 17",
+        "da": "Hastighedstrin 17",
+        "de": "Fahrstufe 17",
+        "fr": "Cran de vitesse 17"
+      },
+      "default_value": 111,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 84,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 18",
+        "da": "Hastighedstrin 18",
+        "de": "Fahrstufe 18",
+        "fr": "Cran de vitesse 18"
+      },
+      "default_value": 122,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 85,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 19",
+        "da": "Hastighedstrin 19",
+        "de": "Fahrstufe 19",
+        "fr": "Cran de vitesse 19"
+      },
+      "default_value": 133,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 86,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 20",
+        "da": "Hastighedstrin 20",
+        "de": "Fahrstufe 20",
+        "fr": "Cran de vitesse 20"
+      },
+      "default_value": 146,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 87,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 21",
+        "da": "Hastighedstrin 21",
+        "de": "Fahrstufe 21",
+        "fr": "Cran de vitesse 21"
+      },
+      "default_value": 159,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 88,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 22",
+        "da": "Hastighedstrin 22",
+        "de": "Fahrstufe 22",
+        "fr": "Cran de vitesse 22"
+      },
+      "default_value": 172,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 89,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 23",
+        "da": "Hastighedstrin 23",
+        "de": "Fahrstufe 23",
+        "fr": "Cran de vitesse 23"
+      },
+      "default_value": 186,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 90,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 24",
+        "da": "Hastighedstrin 24",
+        "de": "Fahrstufe 24",
+        "fr": "Cran de vitesse 24"
+      },
+      "default_value": 198,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 91,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 25",
+        "da": "Hastighedstrin 25",
+        "de": "Fahrstufe 25",
+        "fr": "Cran de vitesse 25"
+      },
+      "default_value": 212,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 92,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 26",
+        "da": "Hastighedstrin 26",
+        "de": "Fahrstufe 26",
+        "fr": "Cran de vitesse 26"
+      },
+      "default_value": 225,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 93,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 27",
+        "da": "Hastighedstrin 27",
+        "de": "Fahrstufe 27",
+        "fr": "Cran de vitesse 27"
+      },
+      "default_value": 240,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 94,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 28",
+        "da": "Hastighedstrin 28",
+        "de": "Fahrstufe 28",
+        "fr": "Cran de vitesse 28"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 95,
+      "source": "nmra",
+      "default_value": 128
+    },
+    {
+      "type": "cv_single",
+      "cv": 105,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 106,
+      "source": "nmra",
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 112,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "Front light effect",
+            "da": "Forlyseffekt",
+            "de": "Frontlichteffekt",
+            "fr": "Effet du feu avant"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 113,
+      "source": "custom",
+      "name": {
+        "en": "Front light dimmer",
+        "da": "Forlysdæmpning",
+        "de": "Frontlichtdimmer",
+        "fr": "Variateur du feu avant"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 114,
+      "source": "custom",
+      "name": {
+        "en": "Front light period",
+        "da": "Forlysperiode",
+        "de": "Frontlichtperiode",
+        "fr": "Période du feu avant"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 115,
+      "source": "custom",
+      "name": {
+        "en": "Shut-off delay",
+        "da": "Slukningsforsinkelse",
+        "de": "Ausschaltverzögerung",
+        "fr": "Temporisation d’extinction"
+      },
+      "default_value": 0,
+      "value_bits": {
+        "min": 0,
+        "max": 31,
+        "from_bit": 0,
+        "to_bit": 3
+      },
+      "flag_bits": [
+        {
+          "bit": 4,
+          "bit_to": 7,
+          "name": {
+            "en": "Turn-on delay",
+            "da": "Tændingsforsinkelse",
+            "de": "Einschaltverzögerung",
+            "fr": "Temporisation d’allumage"
+          },
+          "values": {}
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 116,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "Rear light effect",
+            "da": "Baglyseffekt",
+            "de": "Rücklichteffekt",
+            "fr": "Effet du feu arrière"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 117,
+      "source": "custom",
+      "name": {
+        "en": "Rear light dimmer",
+        "da": "Baglysdæmpning",
+        "de": "Rücklichtdimmer",
+        "fr": "Variateur du feu arrière"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 118,
+      "source": "custom",
+      "name": {
+        "en": "Rear light period",
+        "da": "Baglysperiode",
+        "de": "Rücklichtperiode",
+        "fr": "Période du feu arrière"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 120,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 1 light effect",
+            "da": "AUX 1-lyseffekt",
+            "de": "AUX 1-Lichteffekt",
+            "fr": "Effet lumineux AUX 1"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 121,
+      "source": "custom",
+      "name": {
+        "en": "AUX 1 light dimmer",
+        "da": "AUX 1-lysdæmpning",
+        "de": "AUX 1-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 1"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 122,
+      "source": "custom",
+      "name": {
+        "en": "AUX 1 light period",
+        "da": "AUX 1-lysperiode",
+        "de": "AUX 1-Lichtperiode",
+        "fr": "Période lumineuse AUX 1"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 123,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 2 light effect",
+            "da": "AUX 2-lyseffekt",
+            "de": "AUX 2-Lichteffekt",
+            "fr": "Effet lumineux AUX 2"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 124,
+      "source": "custom",
+      "name": {
+        "en": "AUX 2 light dimmer",
+        "da": "AUX 2-lysdæmpning",
+        "de": "AUX 2-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 2"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 125,
+      "source": "custom",
+      "name": {
+        "en": "AUX 2 light period",
+        "da": "AUX 2-lysperiode",
+        "de": "AUX 2-Lichtperiode",
+        "fr": "Période lumineuse AUX 2"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 126,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 3 light effect",
+            "da": "AUX 3-lyseffekt",
+            "de": "AUX 3-Lichteffekt",
+            "fr": "Effet lumineux AUX 3"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 127,
+      "source": "custom",
+      "name": {
+        "en": "AUX 3 light dimmer",
+        "da": "AUX 3-lysdæmpning",
+        "de": "AUX 3-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 3"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 128,
+      "source": "custom",
+      "name": {
+        "en": "AUX 3 light period",
+        "da": "AUX 3-lysperiode",
+        "de": "AUX 3-Lichtperiode",
+        "fr": "Période lumineuse AUX 3"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 129,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 4 light effect",
+            "da": "AUX 4-lyseffekt",
+            "de": "AUX 4-Lichteffekt",
+            "fr": "Effet lumineux AUX 4"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 130,
+      "source": "custom",
+      "name": {
+        "en": "AUX 4 light dimmer",
+        "da": "AUX 4-lysdæmpning",
+        "de": "AUX 4-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 4"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 131,
+      "source": "custom",
+      "name": {
+        "en": "AUX 4 light period",
+        "da": "AUX 4-lysperiode",
+        "de": "AUX 4-Lichtperiode",
+        "fr": "Période lumineuse AUX 4"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 132,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 5 light effect",
+            "da": "AUX 5-lyseffekt",
+            "de": "AUX 5-Lichteffekt",
+            "fr": "Effet lumineux AUX 5"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 133,
+      "source": "custom",
+      "name": {
+        "en": "AUX 5 light dimmer",
+        "da": "AUX 5-lysdæmpning",
+        "de": "AUX 5-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 5"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 134,
+      "source": "custom",
+      "name": {
+        "en": "AUX 5 light period",
+        "da": "AUX 5-lysperiode",
+        "de": "AUX 5-Lichtperiode",
+        "fr": "Période lumineuse AUX 5"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 135,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "bit_to": 2,
+          "name": {
+            "en": "AUX 6 light effect",
+            "da": "AUX 6-lyseffekt",
+            "de": "AUX 6-Lichteffekt",
+            "fr": "Effet lumineux AUX 6"
+          },
+          "values": {
+            "0": {
+              "en": "Output off",
+              "da": "Udgang slukket",
+              "de": "Ausgang aus",
+              "fr": "Sortie désactivée"
+            },
+            "1": {
+              "en": "Dimmer",
+              "da": "Lysdæmper",
+              "de": "Dimmer",
+              "fr": "Variateur"
+            },
+            "2": {
+              "en": "Blinking light 1",
+              "da": "Blinklys 1",
+              "de": "Blinklicht 1",
+              "fr": "Feu clignotant 1"
+            },
+            "3": {
+              "en": "Blinking light 2",
+              "da": "Blinklys 2",
+              "de": "Blinklicht 2",
+              "fr": "Feu clignotant 2"
+            },
+            "4": {
+              "en": "Single blinking light",
+              "da": "Enkelt blinklys",
+              "de": "Einfaches Blinklicht",
+              "fr": "Feu clignotant simple"
+            },
+            "5": {
+              "en": "Double blinking light",
+              "da": "Dobbelt blinklys",
+              "de": "Doppelblinklicht",
+              "fr": "Feu à double clignotement"
+            },
+            "6": {
+              "en": "Random generator (e.g. firebox)",
+              "da": "Tilfældighedsgenerator (f.eks. fyrkasse)",
+              "de": "Zufallsgenerator (z. B. Feuerbüchse)",
+              "fr": "Générateur aléatoire (p. ex. foyer)"
+            },
+            "7": {
+              "en": "Smoke generator",
+              "da": "Røggenerator",
+              "de": "Raucherzeuger",
+              "fr": "Générateur de fumée"
+            },
+            "8": {
+              "en": "Light fade in / out",
+              "da": "Blød op-/nedblænding",
+              "de": "Sanftes Ein-/Ausblenden",
+              "fr": "Allumage/extinction progressifs"
+            },
+            "9": {
+              "en": "Mars Light",
+              "da": "Mars-lys",
+              "de": "Mars Light",
+              "fr": "Feu Mars"
+            },
+            "10": {
+              "en": "Gyro Light",
+              "da": "Gyrolys",
+              "de": "Gyra-Licht",
+              "fr": "Gyrophare"
+            },
+            "11": {
+              "en": "Light by \"Rule 17\" forward",
+              "da": "Lys efter \"Rule 17\" fremad",
+              "de": "Licht nach \"Rule 17\" vorwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche avant"
+            },
+            "12": {
+              "en": "Light by \"Rule 17\" reverse",
+              "da": "Lys efter \"Rule 17\" baglæns",
+              "de": "Licht nach \"Rule 17\" rückwärts",
+              "fr": "Feu selon la \"Rule 17\" en marche arrière"
+            },
+            "13": {
+              "en": "Neon lights",
+              "da": "Neonbelysning",
+              "de": "Neonbeleuchtung",
+              "fr": "Éclairage au néon"
+            },
+            "14": {
+              "en": "Energy-saving lamp",
+              "da": "Energisparelampe",
+              "de": "Energiesparlampe",
+              "fr": "Lampe à économie d’énergie"
+            },
+            "15": {
+              "en": "Telex",
+              "da": "Telex",
+              "de": "Telex",
+              "fr": "Telex"
+            },
+            "16": {
+              "en": "Switching exact time",
+              "da": "Skift på præcist tidspunkt",
+              "de": "Schalten zum exakten Zeitpunkt",
+              "fr": "Commutation à l’instant précis"
+            },
+            "17": {
+              "en": "Switching minimum time",
+              "da": "Mindste skiftetid",
+              "de": "Mindestschaltzeit",
+              "fr": "Durée minimale de commutation"
+            },
+            "18": {
+              "en": "Exact time on, turn off with sensor",
+              "da": "Tænd på præcist tidspunkt, sluk med sensor",
+              "de": "Zum exakten Zeitpunkt einschalten, mit Sensor ausschalten",
+              "fr": "Allumer à l’instant précis, éteindre par capteur"
+            },
+            "19": {
+              "en": "Turn on continuously",
+              "da": "Tænd konstant",
+              "de": "Dauerhaft einschalten",
+              "fr": "Allumer en continu"
+            },
+            "20": {
+              "en": "Buffer control",
+              "da": "Bufferstyring",
+              "de": "Puffersteuerung",
+              "fr": "Commande du tampon"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 136,
+      "source": "custom",
+      "name": {
+        "en": "AUX 6 light dimmer",
+        "da": "AUX 6-lysdæmpning",
+        "de": "AUX 6-Lichtdimmer",
+        "fr": "Variateur lumineux AUX 6"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 137,
+      "source": "custom",
+      "name": {
+        "en": "AUX 6 light period",
+        "da": "AUX 6-lysperiode",
+        "de": "AUX 6-Lichtperiode",
+        "fr": "Période lumineuse AUX 6"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 165,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: Control D",
+        "da": "Motorregulering: Regulering D",
+        "de": "Motorregelung: Regelung D",
+        "fr": "Régulation moteur : régulation D"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Differential part of the control",
+        "da": "Reguleringens differentialdel",
+        "de": "Differentialanteil der Regelung",
+        "fr": "Composante différentielle de la régulation"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 166,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: Slow limit",
+        "da": "Motorregulering: Langsom grænse",
+        "de": "Motorregelung: Langsamgrenze",
+        "fr": "Régulation moteur : limite lente"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      },
+      "description": {
+        "en": "Transition from 2-point to PI control",
+        "da": "Overgang fra 2-punkts- til PI-regulering",
+        "de": "Übergang von Zweipunkt- zu PI-Regelung",
+        "fr": "Transition d’une régulation à 2 points vers une régulation PI"
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 167,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: Slow K",
+        "da": "Motorregulering: Langsom K",
+        "de": "Motorregelung: Langsam K",
+        "fr": "Régulation moteur : K lent"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 168,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: Slow I",
+        "da": "Motorregulering: Langsom I",
+        "de": "Motorregelung: Langsam I",
+        "fr": "Régulation moteur : I lent"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 169,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: Slow D",
+        "da": "Motorregulering: Langsom D",
+        "de": "Motorregelung: Langsam D",
+        "fr": "Régulation moteur : D lent"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 170,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: PWM start",
+        "da": "Motorregulering: PWM-start",
+        "de": "Motorregelung: PWM-Start",
+        "fr": "Régulation moteur : démarrage PWM"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 171,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: EMF max",
+        "da": "Motorregulering: Maks. EMK",
+        "de": "Motorregelung: EMK max.",
+        "fr": "Régulation moteur : FEM max."
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 172,
+      "source": "custom",
+      "name": {
+        "en": "Motor control: PWM offset",
+        "da": "Motorregulering: PWM-forskydning",
+        "de": "Motorregelung: PWM-Offset",
+        "fr": "Régulation moteur : décalage PWM"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 173,
+      "source": "custom",
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Save states",
+            "da": "Gem tilstande",
+            "de": "Zustände speichern",
+            "fr": "Enregistrer les états"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Save speed",
+            "da": "Gem hastighed",
+            "de": "Geschwindigkeit speichern",
+            "fr": "Enregistrer la vitesse"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Start after reset",
+            "da": "Start efter nulstilling",
+            "de": "Start nach Reset",
+            "fr": "Démarrage après réinitialisation"
+          },
+          "values": {
+            "0": {
+              "en": "Without ABV",
+              "da": "Uden ABV",
+              "de": "Ohne ABV",
+              "fr": "Sans ABV"
+            },
+            "1": {
+              "en": "With ABV",
+              "da": "Med ABV",
+              "de": "Mit ABV",
+              "fr": "Avec ABV"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 176,
+      "source": "custom",
+      "name": {
+        "en": "Minimum speed, analog DC",
+        "da": "Minimumshastighed, analog DC",
+        "de": "Mindestgeschwindigkeit, Analog DC",
+        "fr": "Vitesse minimale, analogique CC"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 177,
+      "source": "custom",
+      "name": {
+        "en": "Maximum speed, analog DC",
+        "da": "Maksimumshastighed, analog DC",
+        "de": "Höchstgeschwindigkeit, Analog DC",
+        "fr": "Vitesse maximale, analogique CC"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 178,
+      "source": "custom",
+      "name": {
+        "en": "Minimum speed, analog AC",
+        "da": "Minimumshastighed, analog AC",
+        "de": "Mindestgeschwindigkeit, Analog AC",
+        "fr": "Vitesse minimale, analogique CA"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 179,
+      "source": "custom",
+      "name": {
+        "en": "Maximum speed, analog AC",
+        "da": "Maksimumshastighed, analog AC",
+        "de": "Höchstgeschwindigkeit, Analog AC",
+        "fr": "Vitesse maximale, analogique CA"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 248,
+      "source": "custom",
+      "name": {
+        "en": "Distance: Base EMF voltage",
+        "da": "Afstand: Grundspænding for EMK",
+        "de": "Weg: EMK-Basisspannung",
+        "fr": "Distance : tension FEM de base"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 249,
+      "source": "custom",
+      "name": {
+        "en": "Distance: EMF slope",
+        "da": "Afstand: EMK-hældning",
+        "de": "Weg: EMK-Steigung",
+        "fr": "Distance : pente FEM"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 250,
+      "source": "custom",
+      "name": {
+        "en": "Distance: Gear ratio",
+        "da": "Afstand: Udvekslingsforhold",
+        "de": "Weg: Übersetzungsverhältnis",
+        "fr": "Distance : rapport de transmission"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 251,
+      "source": "custom",
+      "name": {
+        "en": "Distance: Wheel circumference, high byte [mm]",
+        "da": "Afstand: Hjulomkreds, høj byte [mm]",
+        "de": "Weg: Radumfang, High-Byte [mm]",
+        "fr": "Distance : circonférence de roue, octet haut [mm]"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 252,
+      "source": "custom",
+      "name": {
+        "en": "Distance: Wheel circumference, low byte [mm]",
+        "da": "Afstand: Hjulomkreds, lav byte [mm]",
+        "de": "Weg: Radumfang, Low-Byte [mm]",
+        "fr": "Distance : circonférence de roue, octet bas [mm]"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 253,
+      "source": "custom",
+      "name": {
+        "en": "Activate constant braking distance",
+        "da": "Aktivér konstant bremselængde",
+        "de": "Konstanten Bremsweg aktivieren",
+        "fr": "Activer la distance de freinage constante"
+      },
+      "default_value": 0,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "Braking distance in the braking section",
+            "da": "Bremselængde i bremsestrækningen",
+            "de": "Bremsweg in der Bremsstrecke",
+            "fr": "Distance de freinage dans la section de freinage"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "Braking distance outside the braking section",
+            "da": "Bremselængde uden for bremsestrækningen",
+            "de": "Bremsweg außerhalb der Bremsstrecke",
+            "fr": "Distance de freinage hors de la section de freinage"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "cv_single",
+      "cv": 254,
+      "source": "custom",
+      "name": {
+        "en": "Constant braking distance forward",
+        "da": "Konstant bremselængde fremad",
+        "de": "Konstanter Bremsweg vorwärts",
+        "fr": "Distance de freinage constante en marche avant"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 255,
+      "source": "custom",
+      "name": {
+        "en": "Constant braking distance reverse",
+        "da": "Konstant bremselængde baglæns",
+        "de": "Konstanter Bremsweg rückwärts",
+        "fr": "Distance de freinage constante en marche arrière"
+      },
+      "value_bits": {
+        "min": 0,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    }
+  ],
+  "ui_pages": [
+    {
+      "id": "page_basic",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Basic",
+        "da": "Grundlæggende",
+        "de": "Grundlagen",
+        "fr": "Général"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 30,
+              "bit": 0,
+              "bit_to": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 50,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_analog",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Analog",
+        "da": "Analog",
+        "de": "Analog",
+        "fr": "Analogique"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 13,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 14,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 47,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 52,
+              "bit": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 176
+            },
+            {
+              "type": "cv_single",
+              "cv": 177
+            },
+            {
+              "type": "cv_single",
+              "cv": 178
+            },
+            {
+              "type": "cv_single",
+              "cv": 179
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_motor",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Motor",
+        "da": "Motor",
+        "de": "Motor",
+        "fr": "Moteur"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 3
+            },
+            {
+              "type": "cv_single",
+              "cv": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 48,
+              "bit": 0,
+              "bit_to": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 52,
+              "bit": 0,
+              "bit_to": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 53
+            },
+            {
+              "type": "cv_single",
+              "cv": 54
+            },
+            {
+              "type": "cv_single",
+              "cv": 55
+            },
+            {
+              "type": "cv_single",
+              "cv": 56
+            },
+            {
+              "type": "cv_single",
+              "cv": 165
+            },
+            {
+              "type": "cv_single",
+              "cv": 166
+            },
+            {
+              "type": "cv_single",
+              "cv": 167
+            },
+            {
+              "type": "cv_single",
+              "cv": 168
+            },
+            {
+              "type": "cv_single",
+              "cv": 169
+            },
+            {
+              "type": "cv_single",
+              "cv": 170
+            },
+            {
+              "type": "cv_single",
+              "cv": 171
+            },
+            {
+              "type": "cv_single",
+              "cv": 172
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 173,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 173,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 173,
+              "bit": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_speed curve",
+      "type": "speed_curve_graph_28",
+      "title": {
+        "en": "Speed curve",
+        "da": "Hastighedskurve",
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 66
+            },
+            {
+              "type": "cv_single",
+              "cv": 67
+            },
+            {
+              "type": "cv_single",
+              "cv": 68
+            },
+            {
+              "type": "cv_single",
+              "cv": 69
+            },
+            {
+              "type": "cv_single",
+              "cv": 70
+            },
+            {
+              "type": "cv_single",
+              "cv": 71
+            },
+            {
+              "type": "cv_single",
+              "cv": 72
+            },
+            {
+              "type": "cv_single",
+              "cv": 73
+            },
+            {
+              "type": "cv_single",
+              "cv": 74
+            },
+            {
+              "type": "cv_single",
+              "cv": 75
+            },
+            {
+              "type": "cv_single",
+              "cv": 76
+            },
+            {
+              "type": "cv_single",
+              "cv": 77
+            },
+            {
+              "type": "cv_single",
+              "cv": 78
+            },
+            {
+              "type": "cv_single",
+              "cv": 79
+            },
+            {
+              "type": "cv_single",
+              "cv": 80
+            },
+            {
+              "type": "cv_single",
+              "cv": 81
+            },
+            {
+              "type": "cv_single",
+              "cv": 82
+            },
+            {
+              "type": "cv_single",
+              "cv": 83
+            },
+            {
+              "type": "cv_single",
+              "cv": 84
+            },
+            {
+              "type": "cv_single",
+              "cv": 85
+            },
+            {
+              "type": "cv_single",
+              "cv": 86
+            },
+            {
+              "type": "cv_single",
+              "cv": 87
+            },
+            {
+              "type": "cv_single",
+              "cv": 88
+            },
+            {
+              "type": "cv_single",
+              "cv": 89
+            },
+            {
+              "type": "cv_single",
+              "cv": 90
+            },
+            {
+              "type": "cv_single",
+              "cv": 91
+            },
+            {
+              "type": "cv_single",
+              "cv": 92
+            },
+            {
+              "type": "cv_single",
+              "cv": 93
+            },
+            {
+              "type": "cv_single",
+              "cv": 94
+            },
+            {
+              "type": "cv_single",
+              "cv": 95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_consist",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Consist",
+        "da": "Multitraktion",
+        "de": "Mehrfachtraktion",
+        "fr": "Traction multiple"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 19
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 19,
+              "bit": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 21,
+              "bit": 7
+            },
+            {
+              "type": "cv_single",
+              "cv": 22
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 1
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 6
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 22,
+              "bit": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_outputs",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Outputs",
+        "da": "Udgange",
+        "de": "Ausgänge",
+        "fr": "Sorties"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 51,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 112,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 113
+            },
+            {
+              "type": "cv_single",
+              "cv": 114
+            },
+            {
+              "type": "cv_single",
+              "cv": 115
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 115,
+              "bit": 4,
+              "bit_to": 7
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 116,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 117
+            },
+            {
+              "type": "cv_single",
+              "cv": 118
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 120,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 121
+            },
+            {
+              "type": "cv_single",
+              "cv": 122
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 123,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 124
+            },
+            {
+              "type": "cv_single",
+              "cv": 125
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 126,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 127
+            },
+            {
+              "type": "cv_single",
+              "cv": 128
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 129,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 130
+            },
+            {
+              "type": "cv_single",
+              "cv": 131
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 132,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 133
+            },
+            {
+              "type": "cv_single",
+              "cv": 134
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 135,
+              "bit": 0,
+              "bit_to": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 136
+            },
+            {
+              "type": "cv_single",
+              "cv": 137
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_braking",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Braking",
+        "da": "Bremse",
+        "de": "Bremsen",
+        "fr": "Freinage"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 4
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 27,
+              "bit": 5
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 253,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 253,
+              "bit": 1
+            },
+            {
+              "type": "cv_single",
+              "cv": 254
+            },
+            {
+              "type": "cv_single",
+              "cv": 255
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_miscellaneous",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Miscellaneous",
+        "da": "Diverse",
+        "de": "Sonstiges",
+        "fr": "Divers"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_bemf",
+      "type": "dynamic_list",
+      "title": {
+        "en": "BEMF",
+        "da": "BEMF",
+        "de": "Gegen-EMK",
+        "fr": "FEM inverse"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 248
+            },
+            {
+              "type": "cv_single",
+              "cv": 249
+            },
+            {
+              "type": "cv_single",
+              "cv": 250
+            },
+            {
+              "type": "cv_single",
+              "cv": 251
+            },
+            {
+              "type": "cv_single",
+              "cv": 252
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

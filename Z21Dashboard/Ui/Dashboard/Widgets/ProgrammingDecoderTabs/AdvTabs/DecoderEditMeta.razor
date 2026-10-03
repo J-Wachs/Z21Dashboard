@@ -1,0 +1,202 @@
+@*
+    DecoderEditBase.razor
+    Allows user to edit basic information about a decoder.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IStringLocalizer<DecoderEditMetaResources> Localizer
+
+@if (DecoderRequestParent is DecoderRequestParent.Decoder &&
+     DecoderSettings.DecoderFileLocation is DecoderFileLocation.Application)
+{
+    <div class="alert alert-info py-2 mb-3">@Localizer["DecoderIsAppDef"]</div>
+}
+else if (DecoderRequestParent is DecoderRequestParent.Locomotive)
+{
+    <div class="alert alert-info py-2 mb-3">@Localizer["InLocoMode"]</div>
+}
+
+<EditForm EditContext="_editContext" OnValidSubmit="@(async () => await OnValidSubmitAsync())">
+    <DataAnnotationsValidator />
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Manufacturer"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@DecoderSettings.DecoderMfg"
+                       class="form-control form-control-sm"
+                       maxlength="50"
+                       @attributes="SetAttributes()" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => DecoderSettings.DecoderMfg)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["ManufacturerId"]:</label>
+        </div>
+        <div class="col-7">
+            <InputNumericIntValue @bind-Value="@DecoderSettings.DecoderMfgId"
+                                  class="form-control form-control-sm"
+                                  Min="0" Max="999" 
+                                  @attributes="SetAttributes()" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => DecoderSettings.DecoderMfgId)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Model"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@DecoderSettings.DecoderModel"
+                       class="form-control form-control-sm"
+                       maxlength="30" 
+                       @attributes="SetAttributes()" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => DecoderSettings.DecoderModel)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Version"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@DecoderSettings.DecoderDefVersion"
+                       class="form-control form-control-sm"
+                       maxlength="10"
+                       @attributes="SetAttributes()" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => DecoderSettings.DecoderDefVersion)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Protocols"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@DecoderSettings.DecoderProtocols"
+                       class="form-control form-control-sm"
+                       maxlength="30" 
+                       @attributes="SetAttributes()" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => DecoderSettings.DecoderProtocols)" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [CascadingParameter(Name = "DecoderRequestParent")]
+    public DecoderRequestParent DecoderRequestParent { get; set; }
+
+    [Parameter]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+
+    private EditContext? _editContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _editContext = new EditContext(DecoderSettings);
+
+        await BlankMessagesAsync();
+    }
+
+    /// <summary>
+    /// Dummy method for EditForm.
+    /// The method is actually not used.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+    }
+
+    /// <summary>
+    /// If the selected decoder is an Application 
+    /// Defined one, and we are NOT i n the Decoder flow
+    /// then editing the information is not allowed.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerable<KeyValuePair<string, object>> SetAttributes()
+    {
+        Dictionary<string, object> dict = [];
+
+        // Only one scenario where the user is allowed to edit the decoder information,
+        // and that is when the decoder is found on local storgage and the user is in the 
+        // Decoder flow (not Locomotive flow). One could argue that anything but
+        // Application Defined, but as we do not know the future, we will only allow
+        // local storage editing for now.
+        if (DecoderRequestParent is DecoderRequestParent.Locomotive || 
+            DecoderSettings.DecoderFileLocation is not DecoderFileLocation.LocalStorage)
+        {
+            dict.Add("readonly", "readonly");
+        }
+
+        // Dictionary is wrapped in collection markers in order to avoid compiler warning
+        // about WindRT. 
+        return [.. dict];
+    }
+
+    /// <summary>
+    /// Reset the message list/fields to none/null.
+    /// </summary>
+    /// <returns></returns>
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+
+}

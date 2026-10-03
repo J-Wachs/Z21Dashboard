@@ -1,0 +1,571 @@
+@*
+    SpeedCurve3And28.razor
+    Component to let user drag and drop points on a speed curve graph to set CV2, CV5, CV6 or the 28 point speed table.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Logging
+@using Z21Client.Models
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.NmraDccStandard
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Models
+@inject IDecoderProgHelperService DecoderProgHelperService
+@inject ILogger<SpeedCurve3And28> Logger
+@inject IStringLocalizer<SpeedCurve3And28Resources> Localizer
+
+<div class="alert alert-info py-2 mb-3">@Localizer["SpeedCurveInfo"]</div>
+
+<div class="row mb-3 align-items-center">
+    <div class="col-auto">
+        <label class="form-check-label fw-bold">@Localizer["CurveType"]:</label>
+    </div>
+    <div class="col-auto">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="curveModeSwitch"
+                   checked="@(_useSpeedTable is true)"
+                   @onchange="OnModeChanged" />
+            <label class="form-check-label" for="curveModeSwitch">
+                @(_useSpeedTable is true ? Localizer["Advanced28Point"] : Localizer["Simple3Point"])
+            </label>
+        </div>
+    </div>
+
+    <div class="col-auto">
+        <select class="form-select" style="min-width: 180px"
+                value="@_selectedCurveType.ToString()"
+                @onchange="OnCurveTypeChanged">
+            <option value="Linear">@Localizer["Linear"]</option>
+            <option value="Exponential">@Localizer["Exponential"]</option>
+            <option value="Logarithmic">@Localizer["Logarithmic"]</option>
+        </select>
+    </div>
+</div>
+
+<div class="border rounded p-3 bg-light"
+     style="user-select: none; touch-action: none;"
+     @onmousemove="OnMouseMove"
+     @onmouseup="OnMouseUp"
+     @onmouseleave="OnMouseUp">
+
+    <svg width="100%" height="@_svgHeight" viewBox="0 0 @_viewBoxWidth @_svgHeight" preserveAspectRatio="none">
+        <rect x="0" y="0" width="10" height="255"
+              fill="#0d6efd" opacity="0.5" />
+
+        @for (int i = 0; i <= 255; i += 64)
+        {
+            <line x1="0" y1="@(MapValueToY((byte)i))" x2="@_viewBoxWidth" y2="@(MapValueToY((byte)i))" stroke="#000000" stroke-width="1" />
+        }
+
+        @{
+            var dataPoints = GetCurrentDataPoints();
+            int stepWidth = (int)(_viewBoxWidth / (double)dataPoints.Count);
+            int barWidth = (int)(stepWidth * 0.6);
+
+            string polyPoints = string.Empty;
+            for (int i = 0; i < dataPoints.Count; i++)
+            {
+                int cx = (int)((i * stepWidth) + (stepWidth / 2));
+                int cy = MapValueToY(dataPoints[i]);
+                polyPoints += $"{cx},{cy} ";
+            }
+            <polyline points="@polyPoints" fill="none" stroke="gray" stroke-width="2" />
+
+            for (int i = 0; i < dataPoints.Count; i++)
+            {
+                int index = i;
+                byte val = dataPoints[i];
+                int xCenter = (int)((i * stepWidth) + (stepWidth / 2));
+                int yTop = MapValueToY(val);
+                int barHeight = _svgHeight - yTop;
+
+                <rect x="@((int)(xCenter - barWidth / 2))" y="@yTop" width="@barWidth" height="@barHeight"
+                      fill="@(_isDragging && _dragIndex == index ? "#0d6efd" : "#6c757d")" opacity="0.5" />
+
+                int handleSize = 14;
+                int half = handleSize / 2;
+                <rect x="@(xCenter - half)" y="@(yTop - half)" width="@handleSize" height="@handleSize"
+                      rx="3" ry="3"
+                      fill="@(_isDragging && _dragIndex == index ? "#0d6efd" : "#0dcaf0")"
+                      stroke="white" stroke-width="2"
+                      style="cursor: ns-resize;"
+                      @onmousedown="@(e => OnMouseDown(e, index))" />
+
+                @if (_isDragging && _dragIndex == index)
+                {
+                    @if (yTop < 25)
+                    {
+                        @* Blazor wrapper *@
+                        <text>
+                            @* SVG text *@
+                            <text x="@(xCenter + 10)" y="@(yTop + 15)" font-size="14" fill="black">@val</text>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <text x="@(xCenter + 10)" y="@(yTop - 10)" font-size="14" fill="black">@val</text>
+                        </text>
+                    }
+                }
+            }
+        }
+    </svg>
+</div>
+
+@* Trim Controls *@
+@if (_useSpeedTable is true)
+{
+    <EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmitAsync">
+        @if (DecoderSettings.CvValues.TryGetValue(Cvs.ForwardTrim, out var currentCvStateFT))
+        {
+            var metadataFT = DecoderSettings.CvMetadata[Cvs.ForwardTrim];
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label class="form-label">@Localizer["ForwardTrim"] (CV 66):</label>
+                </div>
+                <div class="col-md-2">
+                    <InputNumericValue @bind-Value="@currentCvStateFT.Value"
+                                       class="form-control form-control-sm"
+                                       min="@(metadataFT?.ValueBits?.Min ?? 0)" max="@(metadataFT?.ValueBits?.Max ?? 255)" />
+                </div>
+                <div class="col-md-5">
+                    <small class="text-muted">128 = 100%</small>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-5"></div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => currentCvStateFT.Value)" />
+                </div>
+            </div>
+        }
+
+        @if (DecoderSettings.CvValues.TryGetValue(Cvs.ReverseTrim, out var currentCvStateRT))
+        {
+            var metadataRT = DecoderSettings.CvMetadata[Cvs.ReverseTrim];
+
+            <div class="row">
+                <div class="col-md-5">
+                    <label class="form-label">@Localizer["ReverseTrim"] (CV 95):</label>
+                </div>
+                <div class="col-md-2">
+                    <InputNumericValue @bind-Value="@currentCvStateRT.Value"
+                                       class="form-control form-control-sm"
+                                       min="@(metadataRT?.ValueBits?.Min ?? 0)" max="@(metadataRT?.ValueBits?.Max ?? 255)" />
+                </div>
+                <div class="col-md-5">
+                    <small class="text-muted">128 = 100%</small>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-5"></div>
+                <div class="col-7">
+                    <ValidationMessage For="@(() => currentCvStateRT.Value)" />
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Write)">
+                    @Localizer["WriteToLocoDecoder"]
+                </button>
+                <button type="submit" class="btn btn-primary" disabled="@_buttonsDisabled"
+                        @onclick="@(() => _buttonPressed = ButtonPressed.Read)">
+                    @Localizer["ReadFromLocoDecoder"]
+                </button>
+            </div>
+        </div>
+    </EditForm>
+}
+else
+{
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end gap-2">
+            <button class="btn btn-primary" disabled="@_buttonsDisabled" @onclick="WriteCVs">
+                @Localizer["WriteToLocoDecoder"]
+            </button>
+            <button class="btn btn-primary" disabled="@_buttonsDisabled" @onclick="ReadCVs">
+                @Localizer["ReadFromLocoDecoder"]
+            </button>
+        </div>
+    </div>
+}
+
+@code {
+    [CascadingParameter]
+    public required ProgrammingTargetAddr ProgTargetAddr { get; set; }
+
+    [CascadingParameter]
+    public required DecoderSettings DecoderSettings { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? TabId { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> ErrorMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<List<string>> ErrorMessagesChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? WorkingMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> WorkingMessageChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? SuccessMessage { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SuccessMessageChanged { get; set; }
+
+    private EditContext? _editContext;
+    private DecoderPage? _currentPage;
+    private bool _buttonsDisabled = false;
+    private ButtonPressed _buttonPressed = ButtonPressed.None;
+
+    // This field is used to check if we are still on the same page, if not we need to build the form again.
+    private string? saveTabId = null;
+
+    // Proxy object for EditContext. We binds directly to DecoderSettings.CvValues
+    // but EditContext needs an object to validate on.
+    private Dictionary<ushort, CvState> CvValuesProxy => DecoderSettings.CvValues;
+
+    private bool? _useSpeedTable = null;
+
+    // SVG
+    private int _svgHeight = 260;
+    private int _viewBoxWidth = 800;
+    private bool _isDragging = false;
+    private int _dragIndex = -1;
+
+    // Dropdown
+    public enum SpeedCurveType { Linear, Exponential, Logarithmic }
+    private SpeedCurveType _selectedCurveType = SpeedCurveType.Linear;
+
+    /// <summary>
+    /// As the DynamicList component is used for all the different pages defined in
+    /// the decoder definition, we need to check if we are still on the same page.
+    /// If we are on a new page, we need to build the form again based on the content defined
+    /// </summary>
+    /// <returns></returns>
+    protected override Task OnParametersSetAsync()
+    {
+        //await base.OnParametersSetAsync();
+
+        // Check if we are still on the same page.
+        if (TabId != saveTabId)
+        {
+            saveTabId = TabId;
+            _currentPage = DecoderSettings.Pages.FirstOrDefault(p => p.Id == TabId);
+            _useSpeedTable = DecoderSettings.GetCvBit(Cvs.ConfigurationData1, Bits.Four);
+
+            if (_currentPage is not null)
+            {
+                // Build the graph
+                ReadCurve();
+
+                // Because this page might have been show with the content of
+                // another page defined in the decoder file, we receive this event
+                // (OnParamertsSetAcsync) several times. If we create a new editContext
+                // we are in trouble.
+                if (_editContext is null || _editContext.Model != DecoderSettings)
+                {
+                    _editContext = new EditContext(DecoderSettings);
+                }
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await BlankMessagesAsync();
+
+        _useSpeedTable = DecoderSettings.GetCvBit(Cvs.ConfigurationData1, Bits.Four);
+    }
+
+    /// <summary>
+    /// Handles the form submission when the form is valid.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+        if (_buttonPressed == ButtonPressed.Read)
+        {
+            await ReadCVs();
+        }
+        else if (_buttonPressed == ButtonPressed.Write)
+        {
+            await WriteCVs();
+        }
+    }
+
+
+    private List<byte> GetCurrentDataPoints()
+    {
+        if (_useSpeedTable is true)
+        {
+            var speedTable = new byte[28];
+            for (int i = 0; i < 28; i++)
+            {
+                speedTable[i] = DecoderSettings.GetCvValue((ushort)(Cvs.SpeedTableStart + i)) ?? 0;
+            }
+
+            return speedTable.ToList();
+        }
+        else
+        {
+            return [DecoderSettings.GetCvValue(Cvs.VStart) ?? 0,
+                    DecoderSettings.GetCvValue(Cvs.VMid) ?? 126,
+                    DecoderSettings.GetCvValue(Cvs.VHigh) ?? 255];
+        }
+    }
+
+    private void UpdateDataPoint(int index, byte value)
+    {
+        if (_useSpeedTable is true && index >= 0 && index <= 28)
+        {
+            DecoderSettings.SetCvValue((ushort)(Cvs.SpeedTableStart + index), value);
+        }
+        else if (_useSpeedTable is false)
+        {
+            if (index == 0) DecoderSettings.SetCvValue(Cvs.VStart, value);
+            else if (index == 1) DecoderSettings.SetCvValue(Cvs.VMid, value);
+            else if (index == 2) DecoderSettings.SetCvValue(Cvs.VHigh, value);
+        }
+    }
+
+    private void OnModeChanged(ChangeEventArgs e)
+    {
+        if (bool.TryParse(e.Value?.ToString(), out bool val))
+        {
+            // Cvs.CV29_Bit4_SpeedTable
+            DecoderSettings.SetCvBitValue(Cvs.ConfigurationData1, Bits.Four, val);
+            _useSpeedTable = val;
+        }
+    }
+
+    // --- Dropdown ---
+    private void OnCurveTypeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<SpeedCurveType>(e.Value?.ToString(), out var selected))
+        {
+            _selectedCurveType = selected;
+            ApplyCurve();
+        }
+    }
+
+    private void ReadCurve()
+    {
+        const int pointCount = 28;
+        for (int i = 0; i < pointCount; i++)
+        {
+            var speedValue = DecoderSettings.GetCvValue((ushort)(Cvs.SpeedTableStart + i)) ?? 0;
+            UpdateDataPoint(i, speedValue);
+        }
+    }
+
+    private void ApplyCurve()
+    {
+        int pointCount = _useSpeedTable is true ? 28 : 3;
+        for (int i = 0; i < pointCount; i++)
+        {
+            double t = pointCount == 1 ? 1.0 : (double)i / (pointCount - 1);
+            byte value = _selectedCurveType switch
+            {
+                SpeedCurveType.Linear => LinearCurve(t),
+                SpeedCurveType.Exponential => ExponentialCurve(t),
+                SpeedCurveType.Logarithmic => LogarithmicCurve(t),
+                _ => LinearCurve(t)
+            };
+            UpdateDataPoint(i, value);
+        }
+    }
+
+    private byte LinearCurve(double t) => (byte)Math.Round(255 * t);
+    private byte ExponentialCurve(double t) => (byte)Math.Round(255 * Math.Pow(t, 2.5));
+    private byte LogarithmicCurve(double t) => (byte)Math.Round(255 * (Math.Log10(1 + t * 8) / Math.Log10(9)));
+
+    // --- Mouse ---
+    private int MapValueToY(byte value)
+    {
+        double padding = 3;
+        double effectiveHeight = _svgHeight - 2 * padding;
+        double percentage = value / 255.0;
+        return (int)(padding + (effectiveHeight - (percentage * effectiveHeight)));
+    }
+
+    private byte MapYToValue(double y)
+    {
+        double padding = 3;
+        double effectiveHeight = _svgHeight - 2 * padding;
+        double posFromBottom = effectiveHeight - (y - padding);
+        double val = (posFromBottom / effectiveHeight) * 255.0;
+        return (byte)Math.Clamp(val, 0, 255);
+    }
+
+    private void OnMouseDown(MouseEventArgs e, int index)
+    {
+        _isDragging = true; _dragIndex = index;
+    }
+
+    private void OnMouseUp(MouseEventArgs e)
+    {
+        _isDragging = false; _dragIndex = -1;
+    }
+
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        if (_isDragging is false || _dragIndex == -1)
+        {
+            return;
+        }
+
+        byte newValue = MapYToValue(e.OffsetY);
+        UpdateDataPoint(_dragIndex, newValue);
+
+        var currentPoints = GetCurrentDataPoints();
+        for (int i = _dragIndex - 1; i >= 0; i--)
+        {
+            if (currentPoints[i] > newValue)
+            {
+                UpdateDataPoint(i, newValue);
+            }
+        }
+
+        for (int i = _dragIndex + 1; i < currentPoints.Count; i++)
+        {
+            if (currentPoints[i] < newValue)
+            {
+                UpdateDataPoint(i, newValue);
+            }
+        }
+    }
+
+    // --- Read / Write ---
+
+    /// <summary>
+    /// Read the Cvs used on this page from the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task ReadCVs()
+    {
+        await BlankMessagesAsync();
+
+        // In this widget, there must be a Content defined:
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVReading"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndReadFromDecoderAsync(
+             ProgTargetAddr.ProgTarget,
+             (ushort?)ProgTargetAddr.LocoAddress,
+             _currentPage.Id,
+             DecoderSettings
+        );
+
+        if (result.IsSuccess)
+        {
+            _useSpeedTable = DecoderSettings.GetCvBit(Cvs.ConfigurationData1, Bits.Four);
+            SuccessMessage = Localizer["CVRead"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+        else
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        _buttonsDisabled = false;
+    }
+
+    /// <summary>
+    /// Wite the Cvs and/or bits to the decoder.
+    /// </summary>
+    /// <returns></returns>
+    private async Task WriteCVs()
+    {
+        await BlankMessagesAsync();
+
+        if (_currentPage?.PageContent is null)
+        {
+            ErrorMessages.Add(Localizer["ContentMissing"]);
+            await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            return;
+        }
+
+        _buttonsDisabled = true;
+        WorkingMessage = Localizer["CVWriting"];
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+        var result = await DecoderProgHelperService.ExtractCvsAndBitsAndWriteToDecoderAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress,
+            _currentPage.Id,
+            DecoderSettings
+        );
+
+        if (result.IsSuccess is false)
+        {
+            if (result.Messages.Count > 0)
+            {
+                List<string> lstErrorMessages = [];
+                foreach (var fileMessages in result.Messages)
+                {
+                    lstErrorMessages.AddRange(fileMessages.Messages);
+                }
+                ErrorMessages = lstErrorMessages;
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
+        }
+        else
+        {
+            SuccessMessage = Localizer["CVWritten"];
+            await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+        }
+
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        _buttonsDisabled = false;
+    }
+
+
+    private async Task BlankMessagesAsync()
+    {
+        ErrorMessages.Clear();
+        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+        WorkingMessage = null;
+        await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+        SuccessMessage = null;
+        await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+    }
+}

@@ -3,7 +3,12 @@
     "standard": "NMRA S-9.2.2",
     "document": "s-9.2.2_decoder_cvs_2012.07",
     "scope": "locomotive_decoder",
-    "languages": [ "en", "da" ]
+    "languages": [
+      "en",
+      "da",
+      "de",
+      "fr"
+    ]
   },
   "cv_definitions": [
     {
@@ -11,27 +16,36 @@
       "status": "mandatory",
       "name": {
         "en": "Primary Address",
-        "da": "Primær adresse (kort)"
+        "da": "Primær adresse (kort)",
+        "de": "Primäradresse (kurz)",
+        "fr": "Adresse primaire (courte)"
       },
       "description": {
         "en": "Short DCC address (1–127).",
-        "da": "Kort DCC-adresse (1–127)."
+        "da": "Kort DCC-adresse (1–127).",
+        "de": "Kurze DCC-Adresse (1–127).",
+        "fr": "Adresse DCC courte (1–127)."
       },
       "value_bits": {
         "min": 1,
         "max": 127
-      }
+      },
+      "default_value": 3
     },
     {
       "cv": 2,
       "status": "recommended",
       "name": {
         "en": "Vstart",
-        "da": "Startspænding (Vstart)"
+        "da": "Startspænding (Vstart)",
+        "de": "Anfahrspannung (Vstart)",
+        "fr": "Tension de démarrage (Vstart)"
       },
       "description": {
         "en": "Voltage applied at speed step 1.",
-        "da": "Spænding ved køretrin 1."
+        "da": "Spænding ved køretrin 1.",
+        "de": "Spannung bei Fahrstufe 1.",
+        "fr": "Tension appliquée au cran de vitesse 1."
       },
       "value_bits": {
         "min": 0,
@@ -43,11 +57,15 @@
       "status": "recommended",
       "name": {
         "en": "Acceleration Rate",
-        "da": "Accelerationshastighed"
+        "da": "Accelerationshastighed",
+        "de": "Beschleunigungsrate",
+        "fr": "Taux d'accélération"
       },
       "description": {
         "en": "Rate of acceleration.",
-        "da": "Hvor hurtigt lokomotivet accelererer."
+        "da": "Hvor hurtigt lokomotivet accelererer.",
+        "de": "Wie schnell die Lok beschleunigt.",
+        "fr": "Vitesse d'accélération de la locomotive."
       },
       "value_bits": {
         "min": 0,
@@ -58,12 +76,16 @@
       "cv": 4,
       "status": "recommended",
       "name": {
-        "en": "Deceleration Rate",
-        "da": "Bremseforsinkelse"
+        "en": "Deceleration rate",
+        "da": "Deceleration hastighed",
+        "de": "Bremsrate",
+        "fr": "Taux de décélération"
       },
       "description": {
         "en": "Rate of deceleration.",
-        "da": "Hvor hurtigt lokomotivet bremser."
+        "da": "Hvor hurtigt lokomotivets hastighed aftager.",
+        "de": "Wie schnell die Lok bremst.",
+        "fr": "Vitesse de décélération de la locomotive."
       },
       "value_bits": {
         "min": 0,
@@ -75,11 +97,15 @@
       "status": "optional",
       "name": {
         "en": "Vhigh",
-        "da": "Tophastighed (Vhigh)"
+        "da": "Tophastighed (Vhigh)",
+        "de": "Höchstgeschwindigkeit (Vhigh)",
+        "fr": "Vitesse maximale (Vhigh)"
       },
       "description": {
         "en": "Voltage at maximum speed.",
-        "da": "Spænding ved maksimal hastighed."
+        "da": "Spænding ved maksimal hastighed.",
+        "de": "Spannung bei maximaler Geschwindigkeit.",
+        "fr": "Tension à vitesse maximale."
       },
       "value_bits": {
         "min": 0,
@@ -91,11 +117,15 @@
       "status": "optional",
       "name": {
         "en": "Vmid",
-        "da": "Middelhastighed (Vmid)"
+        "da": "Middelhastighed (Vmid)",
+        "de": "Mittlere Geschwindigkeit (Vmid)",
+        "fr": "Vitesse moyenne (Vmid)"
       },
       "description": {
         "en": "Voltage at mid speed.",
-        "da": "Spænding ved mellemhastighed."
+        "da": "Spænding ved mellemhastighed.",
+        "de": "Spannung bei mittlerer Geschwindigkeit.",
+        "fr": "Tension à vitesse moyenne."
       },
       "value_bits": {
         "min": 0,
@@ -108,11 +138,15 @@
       "read_only": true,
       "name": {
         "en": "Manufacturer Version Number",
-        "da": "Producentens versionsnummer"
+        "da": "Producentens versionsnummer",
+        "de": "Hersteller-Versionsnummer",
+        "fr": "Numéro de version du fabricant"
       },
       "description": {
         "en": "Decoder software version.",
-        "da": "Dekoderens softwareversion."
+        "da": "Dekoderens softwareversion.",
+        "de": "Softwareversion des Decoders.",
+        "fr": "Version logicielle du décodeur."
       },
       "value_bits": {
         "min": 0,
@@ -125,11 +159,15 @@
       "read_only": true,
       "name": {
         "en": "Manufacturer ID",
-        "da": "Producent-ID"
+        "da": "Producent-ID",
+        "de": "Hersteller-ID",
+        "fr": "ID du fabricant"
       },
       "description": {
         "en": "NMRA-assigned manufacturer identifier.",
-        "da": "NMRA-tildelt producentidentifikation."
+        "da": "NMRA-tildelt producentidentifikation.",
+        "de": "Von der NMRA zugewiesene Herstellerkennung.",
+        "fr": "Identifiant du fabricant attribué par la NMRA."
       },
       "value_bits": {
         "min": 0,
@@ -141,11 +179,15 @@
       "status": "optional",
       "name": {
         "en": "PWM Period",
-        "da": "PWM-periode"
+        "da": "PWM-periode",
+        "de": "PWM-Periode",
+        "fr": "Période PWM"
       },
       "description": {
         "en": "Motor PWM repetition rate.",
-        "da": "PWM-frekvens for motorstyring."
+        "da": "PWM-frekvens for motorstyring.",
+        "de": "Motor-PWM-Frequenz.",
+        "fr": "Fréquence de répétition PWM du moteur."
       },
       "value_bits": {
         "min": 0,
@@ -157,11 +199,15 @@
       "status": "optional",
       "name": {
         "en": "EMF Feedback Cutout",
-        "da": "EMF-feedback frakobling"
+        "da": "EMF-feedback frakobling",
+        "de": "Lastregelung (EMK) Abschaltung",
+        "fr": "Coupure de la régulation EMF"
       },
       "description": {
         "en": "Back-EMF cutout configuration.",
-        "da": "Konfiguration af lastregulering."
+        "da": "Konfiguration af lastregulering.",
+        "de": "Konfiguration der Lastregelung.",
+        "fr": "Configuration de la coupure EMF."
       },
       "value_bits": {
         "from_bit": 0,
@@ -174,16 +220,22 @@
           "bit": 7,
           "name": {
             "en": "Disable Back-EMF",
-            "da": "Deaktiver lastregulering"
+            "da": "Deaktiver lastregulering",
+            "de": "Lastregelung deaktivieren",
+            "fr": "Désactiver l'EMF"
           },
           "values": {
             "0": {
               "en": "Not disabled",
-              "da": "Ikke deaktiveret"
+              "da": "Ikke deaktiveret",
+              "de": "Nicht deaktiviert",
+              "fr": "Non désactivé"
             },
             "1": {
               "en": "Disabled",
-              "da": "Deaktiveret"
+              "da": "Deaktiveret",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             }
           }
         }
@@ -194,11 +246,15 @@
       "status": "recommended",
       "name": {
         "en": "Packet Timeout Value",
-        "da": "Pakke-timeout"
+        "da": "Pakke-timeout",
+        "de": "Paket-Timeout-Wert",
+        "fr": "Valeur de temporisation des paquets"
       },
       "description": {
         "en": "Time decoder waits for valid packets before stopping.",
-        "da": "Tid uden gyldige pakker før stop."
+        "da": "Tid uden gyldige pakker før stop.",
+        "de": "Zeit, die der Decoder auf gültige Pakete wartet, bevor er stoppt.",
+        "fr": "Temps d'attente du décodeur pour des paquets valides avant l'arrêt."
       },
       "value_bits": {
         "min": 0,
@@ -210,27 +266,37 @@
       "status": "recommended",
       "name": {
         "en": "Power Source Conversion",
-        "da": "Strømkilde-konfiguration"
+        "da": "Strømkilde-konfiguration",
+        "de": "Stromquellen-Konfiguration",
+        "fr": "Configuration de la source d'alimentation"
       },
       "description": {
         "en": "Allowed analog power sources.",
-        "da": "Tilladte analoge strømkilder."
+        "da": "Tilladte analoge strømkilder.",
+        "de": "Zulässige analoge Stromquellen.",
+        "fr": "Sources d'alimentation analogiques autorisées."
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Analog power conversion",
-            "da": "Skift til analog drift"
+            "da": "Skift til analog drift",
+            "de": "Analoge Stromumwandlung",
+            "fr": "Conversion d'alimentation analogique"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -238,16 +304,22 @@
           "bit": 1,
           "name": {
             "en": "Radio",
-            "da": "Radio"
+            "da": "Radio",
+            "de": "Radio",
+            "fr": "Radio"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -255,16 +327,22 @@
           "bit": 2,
           "name": {
             "en": "Zero-1",
-            "da": "Zero-1"
+            "da": "Zero-1",
+            "de": "Zero-1",
+            "fr": "Zero-1"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -272,16 +350,22 @@
           "bit": 3,
           "name": {
             "en": "TRIX",
-            "da": "TRIX"
+            "da": "TRIX",
+            "de": "TRIX",
+            "fr": "TRIX"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -289,16 +373,22 @@
           "bit": 4,
           "name": {
             "en": "CTC 16 / Railcommand",
-            "da": "CTC 16 / Railcommand"
+            "da": "CTC 16 / Railcommand",
+            "de": "CTC 16 / Railcommand",
+            "fr": "CTC 16 / Railcommand"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -306,16 +396,22 @@
           "bit": 5,
           "name": {
             "en": "FMZ (Fleischmann)",
-            "da": "FMZ (Fleischmann)"
+            "da": "FMZ (Fleischmann)",
+            "de": "FMZ (Fleischmann)",
+            "fr": "FMZ (Fleischmann)"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         }
@@ -326,27 +422,37 @@
       "status": "recommended",
       "name": {
         "en": "Analog Function Status F1-F8",
-        "da": "Analog Funktion Status F1-F8"
+        "da": "Analog Funktion Status F1-F8",
+        "de": "Analoger Funktionsstatus F1-F8",
+        "fr": "État des fonctions analogiques F1-F8"
       },
       "description": {
         "en": "Status of functions F1-F8 when in analog mode.",
-        "da": "Status for funktioner F1-F8 ved analog kørsel."
+        "da": "Status for funktioner F1-F8 ved analog kørsel.",
+        "de": "Status der Funktionen F1-F8 im Analogmodus.",
+        "fr": "État des fonctions F1-F8 en mode analogique."
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "At analog F1 is",
-            "da": "Ved analog er F1"
+            "da": "Ved analog er F1",
+            "de": "Bei Analog ist F1",
+            "fr": "En analogique, F1 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -354,16 +460,22 @@
           "bit": 1,
           "name": {
             "en": "At analog F2 is",
-            "da": "Ved analog er F2"
+            "da": "Ved analog er F2",
+            "de": "Bei Analog ist F2",
+            "fr": "En analogique, F2 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -371,16 +483,22 @@
           "bit": 2,
           "name": {
             "en": "At analog F3 is",
-            "da": "Ved analog er F3"
+            "da": "Ved analog er F3",
+            "de": "Bei Analog ist F3",
+            "fr": "En analogique, F3 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -388,16 +506,22 @@
           "bit": 3,
           "name": {
             "en": "At analog F4 is",
-            "da": "Ved analog er F4"
+            "da": "Ved analog er F4",
+            "de": "Bei Analog ist F4",
+            "fr": "En analogique, F4 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -405,16 +529,22 @@
           "bit": 4,
           "name": {
             "en": "At analog F5 is",
-            "da": "Ved analog er F5"
+            "da": "Ved analog er F5",
+            "de": "Bei Analog ist F5",
+            "fr": "En analogique, F5 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -422,16 +552,22 @@
           "bit": 5,
           "name": {
             "en": "At analog F6 is",
-            "da": "Ved analog er F6"
+            "da": "Ved analog er F6",
+            "de": "Bei Analog ist F6",
+            "fr": "En analogique, F6 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -439,16 +575,22 @@
           "bit": 6,
           "name": {
             "en": "At analog F7 is",
-            "da": "Ved analog er F7"
+            "da": "Ved analog er F7",
+            "de": "Bei Analog ist F7",
+            "fr": "En analogique, F7 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -456,16 +598,22 @@
           "bit": 7,
           "name": {
             "en": "At analog F8 is",
-            "da": "Ved analog er F8"
+            "da": "Ved analog er F8",
+            "de": "Bei Analog ist F8",
+            "fr": "En analogique, F8 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         }
@@ -475,45 +623,61 @@
       "cv": 14,
       "status": "recommended",
       "name": {
-        "en": "Analog Function Status FL,F9-F12",
-        "da": "Analog Funktion Status FL,F9-F12"
+        "en": "Analog Function Status F0,F9-F12",
+        "da": "Analog Funktion Status F0,F9-F12",
+        "de": "Analoger Funktionsstatus F0,F9-F12",
+        "fr": "État des fonctions analogiques F0,F9-F12"
       },
       "description": {
-        "en": "Status of functions FL and F9-F12 when in analog mode.",
-        "da": "Status for funktioner FL og F9-F12 ved analog kørsel."
+        "en": "Status of functions F0 and F9-F12 when in analog mode.",
+        "da": "Status for funktioner F0 og F9-F12 ved analog kørsel.",
+        "de": "Status der Funktionen F0 und F9-F12 im Analogmodus.",
+        "fr": "État des fonctions F0 et F9-F12 en mode analogique."
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "en": "At analog FL (Forward) is",
-            "da": "Ved analog er FL (Frem)"
+            "en": "At analog F0 (Forward) is",
+            "da": "Ved analog er F0 (Frem)",
+            "de": "Bei Analog ist F0 (Vorwärts)",
+            "fr": "En analogique, F0 (Avant) est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
         {
           "bit": 1,
           "name": {
-            "en": "At analog FL (Reverse) is",
-            "da": "Ved analog er FL (Bak)"
+            "en": "At analog F0 (Reverse) is",
+            "da": "Ved analog er F0 (Baglæns)",
+            "de": "Bei Analog ist F0 (Rückwärts)",
+            "fr": "En analogique, F0 (Arrière) est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -521,16 +685,22 @@
           "bit": 2,
           "name": {
             "en": "At analog F9 is",
-            "da": "Ved analog er F9"
+            "da": "Ved analog er F9",
+            "de": "Bei Analog ist F9",
+            "fr": "En analogique, F9 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -538,16 +708,22 @@
           "bit": 3,
           "name": {
             "en": "At analog F10 is",
-            "da": "Ved analog er F10"
+            "da": "Ved analog er F10",
+            "de": "Bei Analog ist F10",
+            "fr": "En analogique, F10 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -555,16 +731,22 @@
           "bit": 4,
           "name": {
             "en": "At analog F11 is",
-            "da": "Ved analog er F11"
+            "da": "Ved analog er F11",
+            "de": "Bei Analog ist F11",
+            "fr": "En analogique, F11 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         },
@@ -572,16 +754,22 @@
           "bit": 5,
           "name": {
             "en": "At analog F12 is",
-            "da": "Ved analog er F12"
+            "da": "Ved analog er F12",
+            "de": "Bei Analog ist F12",
+            "fr": "En analogique, F12 est"
           },
           "values": {
             "0": {
               "en": "Off",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Arrêt"
             },
             "1": {
               "en": "On",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Marche"
             }
           }
         }
@@ -592,7 +780,9 @@
       "status": "recommended",
       "name": {
         "en": "Decoder Lock",
-        "da": "Dekoderlås"
+        "da": "Dekoderlås",
+        "de": "Decoder-Sperre",
+        "fr": "Verrouillage du décodeur"
       },
       "value_bits": {
         "min": 0,
@@ -604,7 +794,9 @@
       "status": "recommended",
       "name": {
         "en": "Decoder Lock ID",
-        "da": "Dekoder låse-ID"
+        "da": "Dekoder låse-ID",
+        "de": "Decoder-Sperr-ID",
+        "fr": "ID de verrouillage du décodeur"
       },
       "value_bits": {
         "min": 0,
@@ -616,7 +808,9 @@
       "status": "recommended",
       "name": {
         "en": "Extended Address High Byte",
-        "da": "Lang adresse Høj byte"
+        "da": "Lang adresse Høj byte",
+        "de": "Erweiterte Adresse High-Byte",
+        "fr": "Octet haut de l'adresse étendue"
       },
       "value_bits": {
         "min": 0,
@@ -628,7 +822,9 @@
       "status": "recommended",
       "name": {
         "en": "Extended Address Low Byte",
-        "da": "Lang adresse Lav byte"
+        "da": "Lang adresse Lav byte",
+        "de": "Erweiterte Adresse Low-Byte",
+        "fr": "Octet bas de l'adresse étendue"
       },
       "value_bits": {
         "min": 0,
@@ -640,7 +836,9 @@
       "status": "recommended",
       "name": {
         "en": "Consist Address",
-        "da": "Multitraktion-adresse"
+        "da": "Multitraktionadresse",
+        "de": "Mehrfachtraktionsadresse",
+        "fr": "Adresse de composition"
       },
       "value_bits": {
         "from_bit": 0,
@@ -653,16 +851,22 @@
           "bit": 7,
           "name": {
             "en": "Direction",
-            "da": "Retning"
+            "da": "Retning",
+            "de": "Richtung",
+            "fr": "Direction"
           },
           "values": {
             "0": {
               "en": "Normal",
-              "da": "Normal"
+              "da": "Normal",
+              "de": "Normal",
+              "fr": "Normal"
             },
             "1": {
               "en": "Reverse relative to consist",
-              "da": "Omvendt ift. multitraktion"
+              "da": "Omvendt ift. multitraktion",
+              "de": "Umgekehrt relativ zur Mehrfachtraktion",
+              "fr": "Inversé par rapport à la composition"
             }
           }
         }
@@ -673,142 +877,192 @@
       "status": "recommended",
       "name": {
         "en": "Consist Function Control #1",
-        "da": "Multitraktion funktionskontrol #1"
+        "da": "Multitraktion funktionskontrol #1",
+        "de": "Mehrfachtraktion Funktionssteuerung #1",
+        "fr": "Contrôle des fonctions de composition #1"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "en": "F0 follows consist",
-            "da": "F0 følger multitraktion"
+            "en": "F1 follows consist",
+            "da": "F1 følger multitraktion",
+            "de": "F1 folgt der Mehrfachtraktion",
+            "fr": "F1 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 1,
           "name": {
-            "en": "F1 follows consist",
-            "da": "F1 følger multitraktion"
+            "en": "F2 follows consist",
+            "da": "F2 følger multitraktion",
+            "de": "F2 folgt der Mehrfachtraktion",
+            "fr": "F2 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 2,
           "name": {
-            "en": "F2 follows consist",
-            "da": "F2 følger multitraktion"
+            "en": "F3 follows consist",
+            "da": "F3 følger multitraktion",
+            "de": "F3 folgt der Mehrfachtraktion",
+            "fr": "F3 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 3,
           "name": {
-            "en": "F3 follows consist",
-            "da": "F3 følger multitraktion"
+            "en": "F4 follows consist",
+            "da": "F4 følger multitraktion",
+            "de": "F4 folgt der Mehrfachtraktion",
+            "fr": "F4 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 4,
           "name": {
-            "en": "F4 follows consist",
-            "da": "F4 følger multitraktion"
+            "en": "F5 follows consist",
+            "da": "F5 følger multitraktion",
+            "de": "F5 folgt der Mehrfachtraktion",
+            "fr": "F5 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 5,
           "name": {
-            "en": "F5 follows consist",
-            "da": "F5 følger multitraktion"
+            "en": "F6 follows consist",
+            "da": "F6 følger multitraktion",
+            "de": "F6 folgt der Mehrfachtraktion",
+            "fr": "F6 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 6,
           "name": {
-            "en": "F6 follows consist",
-            "da": "F6 følger multitraktion"
+            "en": "F7 follows consist",
+            "da": "F7 følger multitraktion",
+            "de": "F7 folgt der Mehrfachtraktion",
+            "fr": "F7 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
         {
           "bit": 7,
           "name": {
-            "en": "F7 follows consist",
-            "da": "F7 følger multitraktion"
+            "en": "F8 follows consist",
+            "da": "F8 følger multitraktion",
+            "de": "F8 folgt der Mehrfachtraktion",
+            "fr": "F8 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         }
@@ -819,23 +1073,31 @@
       "status": "recommended",
       "name": {
         "en": "Consist Function Control #2",
-        "da": "Multitraktion funktionskontrol #2"
+        "da": "Multitraktion funktionskontrol #2",
+        "de": "Mehrfachtraktion Funktionssteuerung #2",
+        "fr": "Contrôle des fonctions de composition #2"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "en": "F8 follows consist",
-            "da": "F8 følger multitraktion"
+            "en": "FL follows consist",
+            "da": "FL følger multitraktion",
+            "de": "FL folgt der Mehrfachtraktion",
+            "fr": "FL suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
@@ -843,16 +1105,22 @@
           "bit": 1,
           "name": {
             "en": "F9 follows consist",
-            "da": "F9 følger multitraktion"
+            "da": "F9 følger multitraktion",
+            "de": "F9 folgt der Mehrfachtraktion",
+            "fr": "F9 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
@@ -860,16 +1128,22 @@
           "bit": 2,
           "name": {
             "en": "F10 follows consist",
-            "da": "F10 følger multitraktion"
+            "da": "F10 følger multitraktion",
+            "de": "F10 folgt der Mehrfachtraktion",
+            "fr": "F10 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
@@ -877,16 +1151,22 @@
           "bit": 3,
           "name": {
             "en": "F11 follows consist",
-            "da": "F11 følger multitraktion"
+            "da": "F11 følger multitraktion",
+            "de": "F11 folgt der Mehrfachtraktion",
+            "fr": "F11 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
@@ -894,16 +1174,22 @@
           "bit": 4,
           "name": {
             "en": "F12 follows consist",
-            "da": "F12 følger multitraktion"
+            "da": "F12 følger multitraktion",
+            "de": "F12 folgt der Mehrfachtraktion",
+            "fr": "F12 suit la composition"
           },
           "values": {
             "0": {
               "en": "No",
-              "da": "Nej"
+              "da": "Nej",
+              "de": "Nein",
+              "fr": "Non"
             },
             "1": {
               "en": "Yes",
-              "da": "Ja"
+              "da": "Ja",
+              "de": "Ja",
+              "fr": "Oui"
             }
           }
         },
@@ -911,21 +1197,27 @@
           "bit": 5,
           "name": {
             "en": "Reserved",
-            "da": "Reserveret"
+            "da": "Reserveret",
+            "de": "Reserviert",
+            "fr": "Réservé"
           }
         },
         {
           "bit": 6,
           "name": {
             "en": "Reserved",
-            "da": "Reserveret"
+            "da": "Reserveret",
+            "de": "Reserviert",
+            "fr": "Réservé"
           }
         },
         {
           "bit": 7,
           "name": {
             "en": "Reserved",
-            "da": "Reserveret"
+            "da": "Reserveret",
+            "de": "Reserviert",
+            "fr": "Réservé"
           }
         }
       ]
@@ -935,7 +1227,9 @@
       "status": "optional",
       "name": {
         "en": "Acceleration Adjustment",
-        "da": "Justering af acceleration"
+        "da": "Justering af acceleration",
+        "de": "Beschleunigungsanpassung",
+        "fr": "Ajustement de l'accélération"
       },
       "value_bits": {
         "min": 0,
@@ -947,7 +1241,9 @@
       "status": "optional",
       "name": {
         "en": "Deceleration Adjustment",
-        "da": "Justering af deacceleration"
+        "da": "Justering af deacceleration",
+        "de": "Bremsanpassung",
+        "fr": "Ajustement de la décélération"
       },
       "value_bits": {
         "min": 0,
@@ -959,7 +1255,9 @@
       "status": "optional",
       "name": {
         "en": "Acceleration / Deceleration Adjustment",
-        "da": "Justering af acceleration/bremsning"
+        "da": "Justering af acceleration/bremsning",
+        "de": "Beschleunigungs-/Bremsanpassung",
+        "fr": "Ajustement de l'accélération/décélération"
       },
       "value_bits": {
         "min": 0,
@@ -971,23 +1269,31 @@
       "status": "optional",
       "name": {
         "en": "Automatic Braking Configuration",
-        "da": "Automatisk bremsning"
+        "da": "Automatisk bremsning",
+        "de": "Automatische Bremskonfiguration",
+        "fr": "Configuration du freinage automatique"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Auto stop when asymmetrical DCC signal, more positive on the right rail",
-            "da": "Auto stop ved asymetrisk DCC signal, mere positiv på højre skinne"
+            "da": "Auto stop ved asymetrisk DCC signal, mere positiv på højre skinne",
+            "de": "Automatischer Stopp bei asymmetrischem DCC-Signal, positiver auf dem rechten Gleis",
+            "fr": "Arrêt automatique en cas de signal DCC asymétrique, plus positif sur le rail droit"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -995,16 +1301,22 @@
           "bit": 1,
           "name": {
             "en": "Auto stop when asymmetrical DCC signal, more positive on the left rail",
-            "da": "Autostop ved asymetrisk DCC signal, mere positiv på ventre skinne"
+            "da": "Autostop ved asymetrisk DCC signal, mere positiv på ventre skinne",
+            "de": "Automatischer Stopp bei asymmetrischem DCC-Signal, positiver auf dem linken Gleis",
+            "fr": "Arrêt automatique en cas de signal DCC asymétrique, plus positif sur le rail gauche"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1012,16 +1324,22 @@
           "bit": 2,
           "name": {
             "en": "Auto stop when 'Signal Controlled Influence' cutout signal",
-            "da": "Autostop ved 'Signal Controlled Influence' cutout signal"
+            "da": "Autostop ved 'Signal Controlled Influence' cutout signal",
+            "de": "Automatischer Stopp bei 'Signal Controlled Influence'-Abschaltsignal",
+            "fr": "Arrêt automatique en cas de signal de coupure 'Signal Controlled Influence'"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1029,16 +1347,22 @@
           "bit": 4,
           "name": {
             "en": "Auto stop when reverse polarity DC",
-            "da": "Autostop ved baglæns polaritet DC"
+            "da": "Autostop ved baglæns polaritet DC",
+            "de": "Automatischer Stopp bei umgekehrter Polarität DC",
+            "fr": "Arrêt automatique en cas de polarité inversée DC"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1046,16 +1370,22 @@
           "bit": 5,
           "name": {
             "en": "Auto stop when forward polarity DC",
-            "da": "Autostop ved fremad polaritet DC"
+            "da": "Autostop ved fremad polaritet DC",
+            "de": "Automatischer Stopp bei vorwärts Polarität DC",
+            "fr": "Arrêt automatique en cas de polarité avant DC"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         }
@@ -1066,27 +1396,37 @@
       "status": "recommended",
       "name": {
         "en": "Bi-Directional Communication Config",
-        "da": "RailCom-konfiguration"
+        "da": "RailCom-konfiguration",
+        "de": "Bidirektionale Kommunikationskonfiguration",
+        "fr": "Configuration de communication bidirectionnelle"
       },
       "description": {
         "en": "Configures RailCom channels (requires CV29 bit 3 ON).",
-        "da": "Konfigurerer RailCom kanaler (kræver CV29 bit 3 TÆNDT)."
+        "da": "Konfigurerer RailCom kanaler (kræver CV29 bit 3 TÆNDT).",
+        "de": "Konfiguriert RailCom-Kanäle (erfordert CV29 Bit 3 EIN).",
+        "fr": "Configure les canaux RailCom (nécessite CV29 bit 3 activé)."
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Channel 1 (Broadcast)",
-            "da": "Kanal 1 (Broadcast)"
+            "da": "Kanal 1 (Broadcast)",
+            "de": "Kanal 1 (Broadcast)",
+            "fr": "Canal 1 (Diffusion)"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1094,16 +1434,22 @@
           "bit": 1,
           "name": {
             "en": "Channel 2 (Data)",
-            "da": "Kanal 2 (Data)"
+            "da": "Kanal 2 (Data)",
+            "de": "Kanal 2 (Daten)",
+            "fr": "Canal 2 (Données)"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1111,16 +1457,22 @@
           "bit": 7,
           "name": {
             "en": "RailCom Plus automatic loco recognition",
-            "da": "RailCom Plus automatisk lok. registrering"
+            "da": "RailCom Plus automatisk lok. registrering",
+            "de": "RailCom Plus automatische Lokerkennung",
+            "fr": "Reconnaissance automatique de locomotive RailCom Plus"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Slukket"
+              "da": "Fra",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Tændt"
+              "da": "Til",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         }
@@ -1131,27 +1483,37 @@
       "status": "mandatory",
       "name": {
         "en": "Configuration Data #1",
-        "da": "Konfigurationsdata #1"
+        "da": "Konfigurationsdata #1",
+        "de": "Konfigurationsdaten #1",
+        "fr": "Données de configuration #1"
       },
       "description": {
         "en": "Master configuration for direction, steps, analog and addressing.",
-        "da": "Hovedkonfiguration for retning, køretrin, analog og adressering."
+        "da": "Hovedkonfiguration for retning, køretrin, analog og adressering.",
+        "de": "Hauptkonfiguration für Richtung, Fahrstufen, Analog und Adressierung.",
+        "fr": "Configuration principale pour la direction, les crans, l'analogique et l'adressage."
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Direction",
-            "da": "Kørselsretning"
+            "da": "Kørselsretning",
+            "de": "Richtung",
+            "fr": "Direction"
           },
           "values": {
             "0": {
               "en": "Normal",
-              "da": "Normal"
+              "da": "Normal",
+              "de": "Normal",
+              "fr": "Normal"
             },
             "1": {
               "en": "Reversed",
-              "da": "Omvendt"
+              "da": "Omvendt",
+              "de": "Umgekehrt",
+              "fr": "Inversé"
             }
           }
         },
@@ -1159,16 +1521,22 @@
           "bit": 1,
           "name": {
             "en": "Speed Steps",
-            "da": "Køretrin"
+            "da": "Køretrin",
+            "de": "Fahrstufen",
+            "fr": "Crans de vitesse"
           },
           "values": {
             "0": {
               "en": "14 Steps",
-              "da": "14 Trin"
+              "da": "14 Trin",
+              "de": "14 Fahrstufen",
+              "fr": "14 crans"
             },
             "1": {
               "en": "28/128 Steps",
-              "da": "28/128 Trin"
+              "da": "28/128 Trin",
+              "de": "28/128 Fahrstufen",
+              "fr": "28/128 crans"
             }
           }
         },
@@ -1176,16 +1544,22 @@
           "bit": 2,
           "name": {
             "en": "Digital/analog mode",
-            "da": "Digital/analog drift"
+            "da": "Digital/analog drift",
+            "de": "Digital-/Analogmodus",
+            "fr": "Mode numérique/analogique"
           },
           "values": {
             "0": {
               "en": "Digital Only",
-              "da": "Kun Digital"
+              "da": "Kun Digital",
+              "de": "Nur Digital",
+              "fr": "Numérique uniquement"
             },
             "1": {
               "en": "Digital and analog",
-              "da": "Digital og analog"
+              "da": "Digital og analog",
+              "de": "Digital und Analog",
+              "fr": "Numérique et analogique"
             }
           }
         },
@@ -1193,16 +1567,22 @@
           "bit": 3,
           "name": {
             "en": "RailCom",
-            "da": "RailCom"
+            "da": "RailCom",
+            "de": "RailCom",
+            "fr": "RailCom"
           },
           "values": {
             "0": {
               "en": "Disabled",
-              "da": "Deaktiveret"
+              "da": "Deaktiveret",
+              "de": "Deaktiviert",
+              "fr": "Désactivé"
             },
             "1": {
               "en": "Enabled",
-              "da": "Aktiveret"
+              "da": "Aktiveret",
+              "de": "Aktiviert",
+              "fr": "Activé"
             }
           }
         },
@@ -1210,16 +1590,22 @@
           "bit": 4,
           "name": {
             "en": "Speed Curve",
-            "da": "Hastighedskurve"
+            "da": "Hastighedskurve",
+            "de": "Geschwindigkeitskurve",
+            "fr": "Courbe de vitesse"
           },
           "values": {
             "0": {
               "en": "Basic (CV2,5,6)",
-              "da": "Basis (CV2,5,6)"
+              "da": "Basis (CV2,5,6)",
+              "de": "Basis (CV2,5,6)",
+              "fr": "De base (CV2,5,6)"
             },
             "1": {
               "en": "Table (CV67-94)",
-              "da": "Tabel (CV67-94)"
+              "da": "Tabel (CV67-94)",
+              "de": "Tabelle (CV67-94)",
+              "fr": "Table (CV67-94)"
             }
           }
         },
@@ -1227,16 +1613,22 @@
           "bit": 5,
           "name": {
             "en": "Address Select",
-            "da": "Adressevalg"
+            "da": "Adressevalg",
+            "de": "Adressauswahl",
+            "fr": "Sélection d'adresse"
           },
           "values": {
             "0": {
               "en": "Short (CV1)",
-              "da": "Kort (CV1)"
+              "da": "Kort (CV1)",
+              "de": "Kurz (CV1)",
+              "fr": "Courte (CV1)"
             },
             "1": {
               "en": "Long (CV17/18)",
-              "da": "Lang (CV17/18)"
+              "da": "Lang (CV17/18)",
+              "de": "Lang (CV17/18)",
+              "fr": "Longue (CV17/18)"
             }
           }
         },
@@ -1244,16 +1636,22 @@
           "bit": 7,
           "name": {
             "en": "Decoder Type",
-            "da": "Dekodertype"
+            "da": "Dekodertype",
+            "de": "Decodertyp",
+            "fr": "Type de décodeur"
           },
           "values": {
             "0": {
               "en": "Multifunction (Loco)",
-              "da": "Lokomotiv"
+              "da": "Lokomotiv",
+              "de": "Multifunktion (Lok)",
+              "fr": "Multifonction (Loco)"
             },
             "1": {
               "en": "Accessory",
-              "da": "Tilbehør"
+              "da": "Tilbehør",
+              "de": "Zubehör",
+              "fr": "Accessoire"
             }
           }
         }
@@ -1264,7 +1662,15 @@
       "status": "optional",
       "name": {
         "en": "Error Information",
-        "da": "Fejlinformation"
+        "da": "Fejlinformation",
+        "de": "Fehlerinformation",
+        "fr": "Informations d'erreur"
+      },
+      "description": {
+        "en": "When decoder has an error condition this CV shall contain the error condition as specified by the manufacturer.",
+        "da": "Når dekoderen har en fejlbetingelse, skal denne CV indeholde fejlbetingelsen som angivet af producen.",
+        "de": "Wenn der Decoder einen Fehlerzustand hat, enthält dieser CV den Fehlerzustand gemäß Herstellerangabe.",
+        "fr": "Lorsque le décodeur présente une condition d'erreur, ce CV contient la condition d'erreur spécifiée par le fabricant."
       },
       "value_bits": {
         "min": 0,
@@ -1276,7 +1682,9 @@
       "status": "mandatory",
       "name": {
         "en": "Indexed CV Address High Byte",
-        "da": "Indekseret CV-adresse Høj byte"
+        "da": "Indekseret CV-adresse Høj byte",
+        "de": "Indizierte CV-Adresse High-Byte",
+        "fr": "Octet haut de l'adresse CV indexée"
       },
       "value_bits": {
         "min": 0,
@@ -1288,7 +1696,9 @@
       "status": "mandatory",
       "name": {
         "en": "Indexed CV Address Low Byte",
-        "da": "Indekseret CV-adresse Lav byte"
+        "da": "Indekseret CV-adresse Lav byte",
+        "de": "Indizierte CV-Adresse Low-Byte",
+        "fr": "Octet bas de l'adresse CV indexée"
       },
       "value_bits": {
         "min": 0,
@@ -1300,23 +1710,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F0 forward to outputs",
-        "da": "Mapning af F0 fremad til udgange"
+        "da": "Mapning af F0 fremad til udgange",
+        "de": "Zuordnung von F0 vorwärts zu Ausgängen",
+        "fr": "Mappage de F0 avant vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F0 to Output 1",
-            "da": "Map F0 til Udgang 1"
+            "da": "Map F0 til Udgang 1",
+            "de": "F0 Ausgang 1 zuordnen",
+            "fr": "Mapper F0 sur la sortie 1"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1324,16 +1742,22 @@
           "bit": 1,
           "name": {
             "en": "Map F0 to Output 2",
-            "da": "Map F0 til Udgang 2"
+            "da": "Map F0 til Udgang 2",
+            "de": "F0 Ausgang 2 zuordnen",
+            "fr": "Mapper F0 sur la sortie 2"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1341,16 +1765,22 @@
           "bit": 2,
           "name": {
             "en": "Map F0 to Output 3",
-            "da": "Map F0 til Udgang 3"
+            "da": "Map F0 til Udgang 3",
+            "de": "F0 Ausgang 3 zuordnen",
+            "fr": "Mapper F0 sur la sortie 3"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1358,16 +1788,22 @@
           "bit": 3,
           "name": {
             "en": "Map F0 to Output 4",
-            "da": "Map F0 til Udgang 4"
+            "da": "Map F0 til Udgang 4",
+            "de": "F0 Ausgang 4 zuordnen",
+            "fr": "Mapper F0 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1375,16 +1811,22 @@
           "bit": 4,
           "name": {
             "en": "Map F0 to Output 5",
-            "da": "Map F0 til Udgang 5"
+            "da": "Map F0 til Udgang 5",
+            "de": "F0 Ausgang 5 zuordnen",
+            "fr": "Mapper F0 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1392,16 +1834,22 @@
           "bit": 5,
           "name": {
             "en": "Map F0 to Output 6",
-            "da": "Map F0 til Udgang 6"
+            "da": "Map F0 til Udgang 6",
+            "de": "F0 Ausgang 6 zuordnen",
+            "fr": "Mapper F0 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1409,16 +1857,22 @@
           "bit": 6,
           "name": {
             "en": "Map F0 to Output 7",
-            "da": "Map F0 til Udgang 7"
+            "da": "Map F0 til Udgang 7",
+            "de": "F0 Ausgang 7 zuordnen",
+            "fr": "Mapper F0 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1426,16 +1880,22 @@
           "bit": 7,
           "name": {
             "en": "Map F0 to Output 8",
-            "da": "Map F0 til Udgang 8"
+            "da": "Map F0 til Udgang 8",
+            "de": "F0 Ausgang 8 zuordnen",
+            "fr": "Mapper F0 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -1446,23 +1906,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F0 reverse to outputs",
-        "da": "Mapning af F0 baglæns til udgange"
+        "da": "Mapning af F0 baglæns til udgange",
+        "de": "Zuordnung von F0 rückwärts zu Ausgängen",
+        "fr": "Mappage de F0 arrière vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F0 to Output 1",
-            "da": "Map F0 til Udgang 1"
+            "da": "Map F0 til Udgang 1",
+            "de": "F0 Ausgang 1 zuordnen",
+            "fr": "Mapper F0 sur la sortie 1"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1470,16 +1938,22 @@
           "bit": 1,
           "name": {
             "en": "Map F0 to Output 2",
-            "da": "Map F0 til Udgang 2"
+            "da": "Map F0 til Udgang 2",
+            "de": "F0 Ausgang 2 zuordnen",
+            "fr": "Mapper F0 sur la sortie 2"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1487,16 +1961,22 @@
           "bit": 2,
           "name": {
             "en": "Map F0 to Output 3",
-            "da": "Map F0 til Udgang 3"
+            "da": "Map F0 til Udgang 3",
+            "de": "F0 Ausgang 3 zuordnen",
+            "fr": "Mapper F0 sur la sortie 3"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1504,16 +1984,22 @@
           "bit": 3,
           "name": {
             "en": "Map F0 to Output 4",
-            "da": "Map F0 til Udgang 4"
+            "da": "Map F0 til Udgang 4",
+            "de": "F0 Ausgang 4 zuordnen",
+            "fr": "Mapper F0 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1521,16 +2007,22 @@
           "bit": 4,
           "name": {
             "en": "Map F0 to Output 5",
-            "da": "Map F0 til Udgang 5"
+            "da": "Map F0 til Udgang 5",
+            "de": "F0 Ausgang 5 zuordnen",
+            "fr": "Mapper F0 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1538,16 +2030,22 @@
           "bit": 5,
           "name": {
             "en": "Map F0 to Output 6",
-            "da": "Map F0 til Udgang 6"
+            "da": "Map F0 til Udgang 6",
+            "de": "F0 Ausgang 6 zuordnen",
+            "fr": "Mapper F0 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1555,16 +2053,22 @@
           "bit": 6,
           "name": {
             "en": "Map F0 to Output 7",
-            "da": "Map F0 til Udgang 7"
+            "da": "Map F0 til Udgang 7",
+            "de": "F0 Ausgang 7 zuordnen",
+            "fr": "Mapper F0 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1572,16 +2076,22 @@
           "bit": 7,
           "name": {
             "en": "Map F0 to Output 8",
-            "da": "Map F0 til Udgang 8"
+            "da": "Map F0 til Udgang 8",
+            "de": "F0 Ausgang 8 zuordnen",
+            "fr": "Mapper F0 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -1592,23 +2102,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F1 to outputs",
-        "da": "Mapning af F1 til udgange"
+        "da": "Mapning af F1 til udgange",
+        "de": "Zuordnung von F1 zu Ausgängen",
+        "fr": "Mappage de F1 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F1 to Output 1",
-            "da": "Map F1 til Udgang 1"
+            "da": "Map F1 til Udgang 1",
+            "de": "F1 Ausgang 1 zuordnen",
+            "fr": "Mapper F1 sur la sortie 1"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1616,16 +2134,22 @@
           "bit": 1,
           "name": {
             "en": "Map F1 to Output 2",
-            "da": "Map F1 til Udgang 2"
+            "da": "Map F1 til Udgang 2",
+            "de": "F1 Ausgang 2 zuordnen",
+            "fr": "Mapper F1 sur la sortie 2"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1633,16 +2157,22 @@
           "bit": 2,
           "name": {
             "en": "Map F1 to Output 3",
-            "da": "Map F1 til Udgang 3"
+            "da": "Map F1 til Udgang 3",
+            "de": "F1 Ausgang 3 zuordnen",
+            "fr": "Mapper F1 sur la sortie 3"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1650,16 +2180,22 @@
           "bit": 3,
           "name": {
             "en": "Map F1 to Output 4",
-            "da": "Map F1 til Udgang 4"
+            "da": "Map F1 til Udgang 4",
+            "de": "F1 Ausgang 4 zuordnen",
+            "fr": "Mapper F1 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1667,16 +2203,22 @@
           "bit": 4,
           "name": {
             "en": "Map F1 to Output 5",
-            "da": "Map F1 til Udgang 5"
+            "da": "Map F1 til Udgang 5",
+            "de": "F1 Ausgang 5 zuordnen",
+            "fr": "Mapper F1 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1684,16 +2226,22 @@
           "bit": 5,
           "name": {
             "en": "Map F1 to Output 6",
-            "da": "Map F1 til Udgang 6"
+            "da": "Map F1 til Udgang 6",
+            "de": "F1 Ausgang 6 zuordnen",
+            "fr": "Mapper F1 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1701,16 +2249,22 @@
           "bit": 6,
           "name": {
             "en": "Map F1 to Output 7",
-            "da": "Map F1 til Udgang 7"
+            "da": "Map F1 til Udgang 7",
+            "de": "F1 Ausgang 7 zuordnen",
+            "fr": "Mapper F1 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1718,16 +2272,22 @@
           "bit": 7,
           "name": {
             "en": "Map F1 to Output 8",
-            "da": "Map F1 til Udgang 8"
+            "da": "Map F1 til Udgang 8",
+            "de": "F1 Ausgang 8 zuordnen",
+            "fr": "Mapper F1 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -1738,23 +2298,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F2 to outputs",
-        "da": "Mapning af F2 til udgange"
+        "da": "Mapning af F2 til udgange",
+        "de": "Zuordnung von F2 zu Ausgängen",
+        "fr": "Mappage de F2 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F2 to Output 1",
-            "da": "Map F2 til Udgang 1"
+            "da": "Map F2 til Udgang 1",
+            "de": "F2 Ausgang 1 zuordnen",
+            "fr": "Mapper F2 sur la sortie 1"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1762,16 +2330,22 @@
           "bit": 1,
           "name": {
             "en": "Map F2 to Output 2",
-            "da": "Map F2 til Udgang 2"
+            "da": "Map F2 til Udgang 2",
+            "de": "F2 Ausgang 2 zuordnen",
+            "fr": "Mapper F2 sur la sortie 2"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1779,16 +2353,22 @@
           "bit": 2,
           "name": {
             "en": "Map F2 to Output 3",
-            "da": "Map F2 til Udgang 3"
+            "da": "Map F2 til Udgang 3",
+            "de": "F2 Ausgang 3 zuordnen",
+            "fr": "Mapper F2 sur la sortie 3"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1796,16 +2376,22 @@
           "bit": 3,
           "name": {
             "en": "Map F2 to Output 4",
-            "da": "Map F2 til Udgang 4"
+            "da": "Map F2 til Udgang 4",
+            "de": "F2 Ausgang 4 zuordnen",
+            "fr": "Mapper F2 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1813,16 +2399,22 @@
           "bit": 4,
           "name": {
             "en": "Map F2 to Output 5",
-            "da": "Map F2 til Udgang 5"
+            "da": "Map F2 til Udgang 5",
+            "de": "F2 Ausgang 5 zuordnen",
+            "fr": "Mapper F2 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1830,16 +2422,22 @@
           "bit": 5,
           "name": {
             "en": "Map F2 to Output 6",
-            "da": "Map F2 til Udgang 6"
+            "da": "Map F2 til Udgang 6",
+            "de": "F2 Ausgang 6 zuordnen",
+            "fr": "Mapper F2 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1847,16 +2445,22 @@
           "bit": 6,
           "name": {
             "en": "Map F2 to Output 7",
-            "da": "Map F2 til Udgang 7"
+            "da": "Map F2 til Udgang 7",
+            "de": "F2 Ausgang 7 zuordnen",
+            "fr": "Mapper F2 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1864,16 +2468,22 @@
           "bit": 7,
           "name": {
             "en": "Map F2 to Output 8",
-            "da": "Map F2 til Udgang 8"
+            "da": "Map F2 til Udgang 8",
+            "de": "F2 Ausgang 8 zuordnen",
+            "fr": "Mapper F2 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -1884,23 +2494,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F3 to outputs",
-        "da": "Mapning af F3 til udgange"
+        "da": "Mapning af F3 til udgange",
+        "de": "Zuordnung von F3 zu Ausgängen",
+        "fr": "Mappage de F3 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F3 to Output 1",
-            "da": "Map F3 til Udgang 1"
+            "da": "Map F3 til Udgang 1",
+            "de": "F3 Ausgang 1 zuordnen",
+            "fr": "Mapper F3 sur la sortie 1"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1908,16 +2526,22 @@
           "bit": 1,
           "name": {
             "en": "Map F3 to Output 2",
-            "da": "Map F3 til Udgang 2"
+            "da": "Map F3 til Udgang 2",
+            "de": "F3 Ausgang 2 zuordnen",
+            "fr": "Mapper F3 sur la sortie 2"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1925,16 +2549,22 @@
           "bit": 2,
           "name": {
             "en": "Map F3 to Output 3",
-            "da": "Map F3 til Udgang 3"
+            "da": "Map F3 til Udgang 3",
+            "de": "F3 Ausgang 3 zuordnen",
+            "fr": "Mapper F3 sur la sortie 3"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1942,16 +2572,22 @@
           "bit": 3,
           "name": {
             "en": "Map F3 to Output 4",
-            "da": "Map F3 til Udgang 4"
+            "da": "Map F3 til Udgang 4",
+            "de": "F3 Ausgang 4 zuordnen",
+            "fr": "Mapper F3 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1959,16 +2595,22 @@
           "bit": 4,
           "name": {
             "en": "Map F3 to Output 5",
-            "da": "Map F3 til Udgang 5"
+            "da": "Map F3 til Udgang 5",
+            "de": "F3 Ausgang 5 zuordnen",
+            "fr": "Mapper F3 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1976,16 +2618,22 @@
           "bit": 5,
           "name": {
             "en": "Map F3 to Output 6",
-            "da": "Map F3 til Udgang 6"
+            "da": "Map F3 til Udgang 6",
+            "de": "F3 Ausgang 6 zuordnen",
+            "fr": "Mapper F3 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -1993,16 +2641,22 @@
           "bit": 6,
           "name": {
             "en": "Map F3 to Output 7",
-            "da": "Map F3 til Udgang 7"
+            "da": "Map F3 til Udgang 7",
+            "de": "F3 Ausgang 7 zuordnen",
+            "fr": "Mapper F3 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2010,16 +2664,22 @@
           "bit": 7,
           "name": {
             "en": "Map F3 to Output 8",
-            "da": "Map F3 til Udgang 8"
+            "da": "Map F3 til Udgang 8",
+            "de": "F3 Ausgang 8 zuordnen",
+            "fr": "Mapper F3 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2030,23 +2690,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F4 to outputs",
-        "da": "Mapning af F4 til udgange"
+        "da": "Mapning af F4 til udgange",
+        "de": "Zuordnung von F4 zu Ausgängen",
+        "fr": "Mappage de F4 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F4 to Output 4",
-            "da": "Map F4 til Udgang 4"
+            "da": "Map F4 til Udgang 4",
+            "de": "F4 Ausgang 4 zuordnen",
+            "fr": "Mapper F4 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2054,16 +2722,22 @@
           "bit": 1,
           "name": {
             "en": "Map F4 to Output 5",
-            "da": "Map F4 til Udgang 5"
+            "da": "Map F4 til Udgang 5",
+            "de": "F4 Ausgang 5 zuordnen",
+            "fr": "Mapper F4 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2071,16 +2745,22 @@
           "bit": 2,
           "name": {
             "en": "Map F4 to Output 6",
-            "da": "Map F4 til Udgang 6"
+            "da": "Map F4 til Udgang 6",
+            "de": "F4 Ausgang 6 zuordnen",
+            "fr": "Mapper F4 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2088,16 +2768,22 @@
           "bit": 3,
           "name": {
             "en": "Map F4 to Output 7",
-            "da": "Map F4 til Udgang 7"
+            "da": "Map F4 til Udgang 7",
+            "de": "F4 Ausgang 7 zuordnen",
+            "fr": "Mapper F4 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2105,16 +2791,22 @@
           "bit": 4,
           "name": {
             "en": "Map F4 to Output 8",
-            "da": "Map F4 til Udgang 8"
+            "da": "Map F4 til Udgang 8",
+            "de": "F4 Ausgang 8 zuordnen",
+            "fr": "Mapper F4 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2122,16 +2814,22 @@
           "bit": 5,
           "name": {
             "en": "Map F4 to Output 9",
-            "da": "Map F4 til Udgang 9"
+            "da": "Map F4 til Udgang 9",
+            "de": "F4 Ausgang 9 zuordnen",
+            "fr": "Mapper F4 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2139,16 +2837,22 @@
           "bit": 6,
           "name": {
             "en": "Map F4 to Output 10",
-            "da": "Map F4 til Udgang 10"
+            "da": "Map F4 til Udgang 10",
+            "de": "F4 Ausgang 10 zuordnen",
+            "fr": "Mapper F4 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2156,16 +2860,22 @@
           "bit": 7,
           "name": {
             "en": "Map F4 to Output 11",
-            "da": "Map F4 til Udgang 11"
+            "da": "Map F4 til Udgang 11",
+            "de": "F4 Ausgang 11 zuordnen",
+            "fr": "Mapper F4 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2176,23 +2886,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F5 to outputs",
-        "da": "Mapning af F5 til udgange"
+        "da": "Mapning af F5 til udgange",
+        "de": "Zuordnung von F5 zu Ausgängen",
+        "fr": "Mappage de F5 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F5 to Output 4",
-            "da": "Map F5 til Udgang 4"
+            "da": "Map F5 til Udgang 4",
+            "de": "F5 Ausgang 4 zuordnen",
+            "fr": "Mapper F5 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2200,16 +2918,22 @@
           "bit": 1,
           "name": {
             "en": "Map F5 to Output 5",
-            "da": "Map F5 til Udgang 5"
+            "da": "Map F5 til Udgang 5",
+            "de": "F5 Ausgang 5 zuordnen",
+            "fr": "Mapper F5 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2217,16 +2941,22 @@
           "bit": 2,
           "name": {
             "en": "Map F5 to Output 6",
-            "da": "Map F5 til Udgang 6"
+            "da": "Map F5 til Udgang 6",
+            "de": "F5 Ausgang 6 zuordnen",
+            "fr": "Mapper F5 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2234,16 +2964,22 @@
           "bit": 3,
           "name": {
             "en": "Map F5 to Output 7",
-            "da": "Map F5 til Udgang 7"
+            "da": "Map F5 til Udgang 7",
+            "de": "F5 Ausgang 7 zuordnen",
+            "fr": "Mapper F5 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2251,16 +2987,22 @@
           "bit": 4,
           "name": {
             "en": "Map F5 to Output 8",
-            "da": "Map F5 til Udgang 8"
+            "da": "Map F5 til Udgang 8",
+            "de": "F5 Ausgang 8 zuordnen",
+            "fr": "Mapper F5 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2268,16 +3010,22 @@
           "bit": 5,
           "name": {
             "en": "Map F5 to Output 9",
-            "da": "Map F5 til Udgang 9"
+            "da": "Map F5 til Udgang 9",
+            "de": "F5 Ausgang 9 zuordnen",
+            "fr": "Mapper F5 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2285,16 +3033,22 @@
           "bit": 6,
           "name": {
             "en": "Map F5 to Output 10",
-            "da": "Map F5 til Udgang 10"
+            "da": "Map F5 til Udgang 10",
+            "de": "F5 Ausgang 10 zuordnen",
+            "fr": "Mapper F5 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2302,16 +3056,22 @@
           "bit": 7,
           "name": {
             "en": "Map F5 to Output 11",
-            "da": "Map F5 til Udgang 11"
+            "da": "Map F5 til Udgang 11",
+            "de": "F5 Ausgang 11 zuordnen",
+            "fr": "Mapper F5 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2322,23 +3082,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F6 to outputs",
-        "da": "Mapning af F6 til udgange"
+        "da": "Mapning af F6 til udgange",
+        "de": "Zuordnung von F6 zu Ausgängen",
+        "fr": "Mappage de F6 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F6 to Output 4",
-            "da": "Map F6 til Udgang 4"
+            "da": "Map F6 til Udgang 4",
+            "de": "F6 Ausgang 4 zuordnen",
+            "fr": "Mapper F6 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2346,16 +3114,22 @@
           "bit": 1,
           "name": {
             "en": "Map F6 to Output 5",
-            "da": "Map F6 til Udgang 5"
+            "da": "Map F6 til Udgang 5",
+            "de": "F6 Ausgang 5 zuordnen",
+            "fr": "Mapper F6 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2363,16 +3137,22 @@
           "bit": 2,
           "name": {
             "en": "Map F6 to Output 6",
-            "da": "Map F6 til Udgang 6"
+            "da": "Map F6 til Udgang 6",
+            "de": "F6 Ausgang 6 zuordnen",
+            "fr": "Mapper F6 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2380,16 +3160,22 @@
           "bit": 3,
           "name": {
             "en": "Map F6 to Output 7",
-            "da": "Map F6 til Udgang 7"
+            "da": "Map F6 til Udgang 7",
+            "de": "F6 Ausgang 7 zuordnen",
+            "fr": "Mapper F6 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2397,16 +3183,22 @@
           "bit": 4,
           "name": {
             "en": "Map F6 to Output 8",
-            "da": "Map F6 til Udgang 8"
+            "da": "Map F6 til Udgang 8",
+            "de": "F6 Ausgang 8 zuordnen",
+            "fr": "Mapper F6 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2414,16 +3206,22 @@
           "bit": 5,
           "name": {
             "en": "Map F6 to Output 9",
-            "da": "Map F6 til Udgang 9"
+            "da": "Map F6 til Udgang 9",
+            "de": "F6 Ausgang 9 zuordnen",
+            "fr": "Mapper F6 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2431,16 +3229,22 @@
           "bit": 6,
           "name": {
             "en": "Map F6 to Output 10",
-            "da": "Map F6 til Udgang 10"
+            "da": "Map F6 til Udgang 10",
+            "de": "F6 Ausgang 10 zuordnen",
+            "fr": "Mapper F6 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2448,16 +3252,22 @@
           "bit": 7,
           "name": {
             "en": "Map F6 to Output 11",
-            "da": "Map F6 til Udgang 11"
+            "da": "Map F6 til Udgang 11",
+            "de": "F6 Ausgang 11 zuordnen",
+            "fr": "Mapper F6 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2468,23 +3278,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F7 to outputs",
-        "da": "Mapning af F7 til udgange"
+        "da": "Mapning af F7 til udgange",
+        "de": "Zuordnung von F7 zu Ausgängen",
+        "fr": "Mappage de F7 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F7 to Output 4",
-            "da": "Map F7 til Udgang 4"
+            "da": "Map F7 til Udgang 4",
+            "de": "F7 Ausgang 4 zuordnen",
+            "fr": "Mapper F7 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2492,16 +3310,22 @@
           "bit": 1,
           "name": {
             "en": "Map F7 to Output 5",
-            "da": "Map F7 til Udgang 5"
+            "da": "Map F7 til Udgang 5",
+            "de": "F7 Ausgang 5 zuordnen",
+            "fr": "Mapper F7 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2509,16 +3333,22 @@
           "bit": 2,
           "name": {
             "en": "Map F7 to Output 6",
-            "da": "Map F7 til Udgang 6"
+            "da": "Map F7 til Udgang 6",
+            "de": "F7 Ausgang 6 zuordnen",
+            "fr": "Mapper F7 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2526,16 +3356,22 @@
           "bit": 3,
           "name": {
             "en": "Map F7 to Output 7",
-            "da": "Map F7 til Udgang 7"
+            "da": "Map F7 til Udgang 7",
+            "de": "F7 Ausgang 7 zuordnen",
+            "fr": "Mapper F7 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2543,16 +3379,22 @@
           "bit": 4,
           "name": {
             "en": "Map F7 to Output 8",
-            "da": "Map F7 til Udgang 8"
+            "da": "Map F7 til Udgang 8",
+            "de": "F7 Ausgang 8 zuordnen",
+            "fr": "Mapper F7 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2560,16 +3402,22 @@
           "bit": 5,
           "name": {
             "en": "Map F7 to Output 9",
-            "da": "Map F7 til Udgang 9"
+            "da": "Map F7 til Udgang 9",
+            "de": "F7 Ausgang 9 zuordnen",
+            "fr": "Mapper F7 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2577,16 +3425,22 @@
           "bit": 6,
           "name": {
             "en": "Map F7 to Output 10",
-            "da": "Map F7 til Udgang 10"
+            "da": "Map F7 til Udgang 10",
+            "de": "F7 Ausgang 10 zuordnen",
+            "fr": "Mapper F7 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2594,16 +3448,22 @@
           "bit": 7,
           "name": {
             "en": "Map F7 to Output 11",
-            "da": "Map F7 til Udgang 11"
+            "da": "Map F7 til Udgang 11",
+            "de": "F7 Ausgang 11 zuordnen",
+            "fr": "Mapper F7 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2614,23 +3474,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F8 to outputs",
-        "da": "Mapning af F8 til udgange"
+        "da": "Mapning af F8 til udgange",
+        "de": "Zuordnung von F8 zu Ausgängen",
+        "fr": "Mappage de F8 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F8 to Output 4",
-            "da": "Map F8 til Udgang 4"
+            "da": "Map F8 til Udgang 4",
+            "de": "F8 Ausgang 4 zuordnen",
+            "fr": "Mapper F8 sur la sortie 4"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2638,16 +3506,22 @@
           "bit": 1,
           "name": {
             "en": "Map F8 to Output 5",
-            "da": "Map F8 til Udgang 5"
+            "da": "Map F8 til Udgang 5",
+            "de": "F8 Ausgang 5 zuordnen",
+            "fr": "Mapper F8 sur la sortie 5"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2655,16 +3529,22 @@
           "bit": 2,
           "name": {
             "en": "Map F8 to Output 6",
-            "da": "Map F8 til Udgang 6"
+            "da": "Map F8 til Udgang 6",
+            "de": "F8 Ausgang 6 zuordnen",
+            "fr": "Mapper F8 sur la sortie 6"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2672,16 +3552,22 @@
           "bit": 3,
           "name": {
             "en": "Map F8 to Output 7",
-            "da": "Map F8 til Udgang 7"
+            "da": "Map F8 til Udgang 7",
+            "de": "F8 Ausgang 7 zuordnen",
+            "fr": "Mapper F8 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2689,16 +3575,22 @@
           "bit": 4,
           "name": {
             "en": "Map F8 to Output 8",
-            "da": "Map F8 til Udgang 8"
+            "da": "Map F8 til Udgang 8",
+            "de": "F8 Ausgang 8 zuordnen",
+            "fr": "Mapper F8 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2706,16 +3598,22 @@
           "bit": 5,
           "name": {
             "en": "Map F8 to Output 9",
-            "da": "Map F8 til Udgang 9"
+            "da": "Map F8 til Udgang 9",
+            "de": "F8 Ausgang 9 zuordnen",
+            "fr": "Mapper F8 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2723,16 +3621,22 @@
           "bit": 6,
           "name": {
             "en": "Map F8 to Output 10",
-            "da": "Map F8 til Udgang 10"
+            "da": "Map F8 til Udgang 10",
+            "de": "F8 Ausgang 10 zuordnen",
+            "fr": "Mapper F8 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2740,16 +3644,22 @@
           "bit": 7,
           "name": {
             "en": "Map F8 to Output 11",
-            "da": "Map F8 til Udgang 11"
+            "da": "Map F8 til Udgang 11",
+            "de": "F8 Ausgang 11 zuordnen",
+            "fr": "Mapper F8 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2760,23 +3670,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F9 to outputs",
-        "da": "Mapning af F9 til udgange"
+        "da": "Mapning af F9 til udgange",
+        "de": "Zuordnung von F9 zu Ausgängen",
+        "fr": "Mappage de F9 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F9 to Output 7",
-            "da": "Map F9 til Udgang 7"
+            "da": "Map F9 til Udgang 7",
+            "de": "F9 Ausgang 7 zuordnen",
+            "fr": "Mapper F9 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2784,16 +3702,22 @@
           "bit": 1,
           "name": {
             "en": "Map F9 to Output 8",
-            "da": "Map F9 til Udgang 8"
+            "da": "Map F9 til Udgang 8",
+            "de": "F9 Ausgang 8 zuordnen",
+            "fr": "Mapper F9 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2801,16 +3725,22 @@
           "bit": 2,
           "name": {
             "en": "Map F9 to Output 9",
-            "da": "Map F9 til Udgang 9"
+            "da": "Map F9 til Udgang 9",
+            "de": "F9 Ausgang 9 zuordnen",
+            "fr": "Mapper F9 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2818,16 +3748,22 @@
           "bit": 3,
           "name": {
             "en": "Map F9 to Output 10",
-            "da": "Map F9 til Udgang 10"
+            "da": "Map F9 til Udgang 10",
+            "de": "F9 Ausgang 10 zuordnen",
+            "fr": "Mapper F9 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2835,16 +3771,22 @@
           "bit": 4,
           "name": {
             "en": "Map F9 to Output 11",
-            "da": "Map F9 til Udgang 11"
+            "da": "Map F9 til Udgang 11",
+            "de": "F9 Ausgang 11 zuordnen",
+            "fr": "Mapper F9 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2852,16 +3794,22 @@
           "bit": 5,
           "name": {
             "en": "Map F9 to Output 12",
-            "da": "Map F9 til Udgang 12"
+            "da": "Map F9 til Udgang 12",
+            "de": "F9 Ausgang 12 zuordnen",
+            "fr": "Mapper F9 sur la sortie 12"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2869,16 +3817,22 @@
           "bit": 6,
           "name": {
             "en": "Map F9 to Output 13",
-            "da": "Map F9 til Udgang 13"
+            "da": "Map F9 til Udgang 13",
+            "de": "F9 Ausgang 13 zuordnen",
+            "fr": "Mapper F9 sur la sortie 13"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2886,16 +3840,22 @@
           "bit": 7,
           "name": {
             "en": "Map F9 to Output 14",
-            "da": "Map F9 til Udgang 14"
+            "da": "Map F9 til Udgang 14",
+            "de": "F9 Ausgang 14 zuordnen",
+            "fr": "Mapper F9 sur la sortie 14"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -2906,23 +3866,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F10 to outputs",
-        "da": "Mapning af F10 til udgange"
+        "da": "Mapning af F10 til udgange",
+        "de": "Zuordnung von F10 zu Ausgängen",
+        "fr": "Mappage de F10 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F10 to Output 7",
-            "da": "Map F10 til Udgang 7"
+            "da": "Map F10 til Udgang 7",
+            "de": "F10 Ausgang 7 zuordnen",
+            "fr": "Mapper F10 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2930,16 +3898,22 @@
           "bit": 1,
           "name": {
             "en": "Map F10 to Output 8",
-            "da": "Map F10 til Udgang 8"
+            "da": "Map F10 til Udgang 8",
+            "de": "F10 Ausgang 8 zuordnen",
+            "fr": "Mapper F10 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2947,16 +3921,22 @@
           "bit": 2,
           "name": {
             "en": "Map F10 to Output 9",
-            "da": "Map F10 til Udgang 9"
+            "da": "Map F10 til Udgang 9",
+            "de": "F10 Ausgang 9 zuordnen",
+            "fr": "Mapper F10 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2964,16 +3944,22 @@
           "bit": 3,
           "name": {
             "en": "Map F10 to Output 10",
-            "da": "Map F10 til Udgang 10"
+            "da": "Map F10 til Udgang 10",
+            "de": "F10 Ausgang 10 zuordnen",
+            "fr": "Mapper F10 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2981,16 +3967,22 @@
           "bit": 4,
           "name": {
             "en": "Map F10 to Output 11",
-            "da": "Map F10 til Udgang 11"
+            "da": "Map F10 til Udgang 11",
+            "de": "F10 Ausgang 11 zuordnen",
+            "fr": "Mapper F10 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -2998,16 +3990,22 @@
           "bit": 5,
           "name": {
             "en": "Map F10 to Output 12",
-            "da": "Map F10 til Udgang 12"
+            "da": "Map F10 til Udgang 12",
+            "de": "F10 Ausgang 12 zuordnen",
+            "fr": "Mapper F10 sur la sortie 12"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3015,16 +4013,22 @@
           "bit": 6,
           "name": {
             "en": "Map F10 to Output 13",
-            "da": "Map F10 til Udgang 13"
+            "da": "Map F10 til Udgang 13",
+            "de": "F10 Ausgang 13 zuordnen",
+            "fr": "Mapper F10 sur la sortie 13"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3032,16 +4036,22 @@
           "bit": 7,
           "name": {
             "en": "Map F10 to Output 14",
-            "da": "Map F10 til Udgang 14"
+            "da": "Map F10 til Udgang 14",
+            "de": "F10 Ausgang 14 zuordnen",
+            "fr": "Mapper F10 sur la sortie 14"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -3052,23 +4062,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F11 to outputs",
-        "da": "Mapning af F11 til udgange"
+        "da": "Mapning af F11 til udgange",
+        "de": "Zuordnung von F11 zu Ausgängen",
+        "fr": "Mappage de F11 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F11 to Output 7",
-            "da": "Map F11 til Udgang 7"
+            "da": "Map F11 til Udgang 7",
+            "de": "F11 Ausgang 7 zuordnen",
+            "fr": "Mapper F11 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3076,16 +4094,22 @@
           "bit": 1,
           "name": {
             "en": "Map F11 to Output 8",
-            "da": "Map F11 til Udgang 8"
+            "da": "Map F11 til Udgang 8",
+            "de": "F11 Ausgang 8 zuordnen",
+            "fr": "Mapper F11 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3093,16 +4117,22 @@
           "bit": 2,
           "name": {
             "en": "Map F11 to Output 9",
-            "da": "Map F11 til Udgang 9"
+            "da": "Map F11 til Udgang 9",
+            "de": "F11 Ausgang 9 zuordnen",
+            "fr": "Mapper F11 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3110,16 +4140,22 @@
           "bit": 3,
           "name": {
             "en": "Map F11 to Output 10",
-            "da": "Map F11 til Udgang 10"
+            "da": "Map F11 til Udgang 10",
+            "de": "F11 Ausgang 10 zuordnen",
+            "fr": "Mapper F11 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3127,16 +4163,22 @@
           "bit": 4,
           "name": {
             "en": "Map F11 to Output 11",
-            "da": "Map F11 til Udgang 11"
+            "da": "Map F11 til Udgang 11",
+            "de": "F11 Ausgang 11 zuordnen",
+            "fr": "Mapper F11 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3144,16 +4186,22 @@
           "bit": 5,
           "name": {
             "en": "Map F11 to Output 12",
-            "da": "Map F11 til Udgang 12"
+            "da": "Map F11 til Udgang 12",
+            "de": "F11 Ausgang 12 zuordnen",
+            "fr": "Mapper F11 sur la sortie 12"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3161,16 +4209,22 @@
           "bit": 6,
           "name": {
             "en": "Map F11 to Output 13",
-            "da": "Map F11 til Udgang 13"
+            "da": "Map F11 til Udgang 13",
+            "de": "F11 Ausgang 13 zuordnen",
+            "fr": "Mapper F11 sur la sortie 13"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3178,16 +4232,22 @@
           "bit": 7,
           "name": {
             "en": "Map F11 to Output 14",
-            "da": "Map F11 til Udgang 14"
+            "da": "Map F11 til Udgang 14",
+            "de": "F11 Ausgang 14 zuordnen",
+            "fr": "Mapper F11 sur la sortie 14"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -3198,23 +4258,31 @@
       "status": "optional",
       "name": {
         "en": "Mapping of F12 to outputs",
-        "da": "Mapning af F12 til udgange"
+        "da": "Mapning af F12 til udgange",
+        "de": "Zuordnung von F12 zu Ausgängen",
+        "fr": "Mappage de F12 vers les sorties"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
             "en": "Map F12 to Output 7",
-            "da": "Map F12 til Udgang 7"
+            "da": "Map F12 til Udgang 7",
+            "de": "F12 Ausgang 7 zuordnen",
+            "fr": "Mapper F12 sur la sortie 7"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3222,16 +4290,22 @@
           "bit": 1,
           "name": {
             "en": "Map F12 to Output 8",
-            "da": "Map F12 til Udgang 8"
+            "da": "Map F12 til Udgang 8",
+            "de": "F12 Ausgang 8 zuordnen",
+            "fr": "Mapper F12 sur la sortie 8"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3239,16 +4313,22 @@
           "bit": 2,
           "name": {
             "en": "Map F12 to Output 9",
-            "da": "Map F12 til Udgang 9"
+            "da": "Map F12 til Udgang 9",
+            "de": "F12 Ausgang 9 zuordnen",
+            "fr": "Mapper F12 sur la sortie 9"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3256,16 +4336,22 @@
           "bit": 3,
           "name": {
             "en": "Map F12 to Output 10",
-            "da": "Map F12 til Udgang 10"
+            "da": "Map F12 til Udgang 10",
+            "de": "F12 Ausgang 10 zuordnen",
+            "fr": "Mapper F12 sur la sortie 10"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3273,16 +4359,22 @@
           "bit": 4,
           "name": {
             "en": "Map F12 to Output 11",
-            "da": "Map F12 til Udgang 11"
+            "da": "Map F12 til Udgang 11",
+            "de": "F12 Ausgang 11 zuordnen",
+            "fr": "Mapper F12 sur la sortie 11"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3290,16 +4382,22 @@
           "bit": 5,
           "name": {
             "en": "Map F12 to Output 12",
-            "da": "Map F12 til Udgang 12"
+            "da": "Map F12 til Udgang 12",
+            "de": "F12 Ausgang 12 zuordnen",
+            "fr": "Mapper F12 sur la sortie 12"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3307,16 +4405,22 @@
           "bit": 6,
           "name": {
             "en": "Map F12 to Output 13",
-            "da": "Map F12 til Udgang 13"
+            "da": "Map F12 til Udgang 13",
+            "de": "F12 Ausgang 13 zuordnen",
+            "fr": "Mapper F12 sur la sortie 13"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         },
@@ -3324,16 +4428,22 @@
           "bit": 7,
           "name": {
             "en": "Map F12 to Output 14",
-            "da": "Map F12 til Udgang 14"
+            "da": "Map F12 til Udgang 14",
+            "de": "F12 Ausgang 14 zuordnen",
+            "fr": "Mapper F12 sur la sortie 14"
           },
           "values": {
             "0": {
               "en": "Not mapped",
-              "da": "Ikke mappet"
+              "da": "Ikke mappet",
+              "de": "Nicht zugeordnet",
+              "fr": "Non mappé"
             },
             "1": {
               "en": "Mapped",
-              "da": "Mappet"
+              "da": "Mappet",
+              "de": "Zugeordnet",
+              "fr": "Mappé"
             }
           }
         }
@@ -3347,7 +4457,9 @@
       "status": "manufacturer",
       "name": {
         "en": "Manufacturer Specific CVs",
-        "da": "Producent-specifikke CV’er"
+        "da": "Producent-specifikke CV’er",
+        "de": "Herstellerspezifische CVs",
+        "fr": "CVs spécifiques au fabricant"
       }
     },
     {
@@ -3355,7 +4467,9 @@
       "status": "recommended",
       "name": {
         "en": "Kick Start",
-        "da": "Kick start"
+        "da": "Kick start",
+        "de": "Anfahr-Kick",
+        "fr": "Démarrage par impulsion"
       },
       "value_bits": {
         "min": 0,
@@ -3367,7 +4481,9 @@
       "status": "recommended",
       "name": {
         "en": "Forward Trim",
-        "da": "Forlæns trim"
+        "da": "Forlæns trim",
+        "de": "Vorwärts-Trimmung",
+        "fr": "Réglage avant"
       },
       "value_bits": {
         "min": 0,
@@ -3382,7 +4498,9 @@
       "status": "optional",
       "name": {
         "en": "Speed Table",
-        "da": "Hastighedstabel (28 punkter)"
+        "da": "Hastighedstabel (28 punkter)",
+        "de": "Geschwindigkeitstabelle",
+        "fr": "Table de vitesse"
       },
       "structure": "table",
       "table_length": 28
@@ -3392,7 +4510,9 @@
       "status": "recommended",
       "name": {
         "en": "Reverse Trim",
-        "da": "Baglæns trim"
+        "da": "Baglæns trim",
+        "de": "Rückwärts-Trimmung",
+        "fr": "Réglage arrière"
       },
       "value_bits": {
         "min": 0,
@@ -3407,7 +4527,9 @@
       "status": "reserved",
       "name": {
         "en": "Reserved by NMRA for future use",
-        "da": "Reserveret af NMRA til fremtidig brug"
+        "da": "Reserveret af NMRA til fremtidig brug",
+        "de": "Von NMRA für zukünftige Verwendung reserviert",
+        "fr": "Réservé par la NMRA pour une utilisation future"
       }
     },
     {
@@ -3415,7 +4537,9 @@
       "status": "optional",
       "name": {
         "en": "User identifier #1",
-        "da": "Brugeridentifikation 1"
+        "da": "Brugeridentifikation 1",
+        "de": "Benutzerkennung #1",
+        "fr": "Identifiant utilisateur #1"
       },
       "value_bits": {
         "min": 0,
@@ -3427,7 +4551,9 @@
       "status": "optional",
       "name": {
         "en": "User identifier #2",
-        "da": "Brugeridentifikation 2"
+        "da": "Brugeridentifikation 2",
+        "de": "Benutzerkennung #2",
+        "fr": "Identifiant utilisateur #2"
       },
       "value_bits": {
         "min": 0,
@@ -3442,7 +4568,9 @@
       "status": "reserved",
       "name": {
         "en": "Reserved by NMRA for future use",
-        "da": "Reserveret af NMRA til fremtidig brug"
+        "da": "Reserveret af NMRA til fremtidig brug",
+        "de": "Von NMRA für zukünftige Verwendung reserviert",
+        "fr": "Réservé par la NMRA pour une utilisation future"
       }
     },
     {
@@ -3453,7 +4581,9 @@
       "status": "manufacturer",
       "name": {
         "en": "Manufacturer Specific CVs",
-        "da": "Producent-specifikke CV’er"
+        "da": "Producent-specifikke CV’er",
+        "de": "Herstellerspezifische CVs",
+        "fr": "CVs spécifiques au fabricant"
       }
     },
     {
@@ -3464,7 +4594,9 @@
       "status": "indexed",
       "name": {
         "en": "Indexed CV Data Window",
-        "da": "Indekseret CV-datavindue"
+        "da": "Indekseret CV-datavindue",
+        "de": "Indiziertes CV-Datenfenster",
+        "fr": "Fenêtre de données CV indexées"
       }
     },
     {
@@ -3475,7 +4607,9 @@
       "status": "reserved",
       "name": {
         "en": "Reserved by NMRA for future use",
-        "da": "Reserveret af NMRA til fremtidig brug"
+        "da": "Reserveret af NMRA til fremtidig brug",
+        "de": "Von NMRA für zukünftige Verwendung reserviert",
+        "fr": "Réservé par la NMRA pour une utilisation future"
       }
     },
     {
@@ -3483,7 +4617,9 @@
       "status": "optional",
       "name": {
         "en": "Decoder Load",
-        "da": "Dekoder belastning"
+        "da": "Dekoder belastning",
+        "de": "Decoder-Auslastung",
+        "fr": "Charge du décodeur"
       },
       "value_bits": {
         "min": 0,
@@ -3495,7 +4631,9 @@
       "status": "optional",
       "name": {
         "en": "Dynamic Flags",
-        "da": "Dynamiske indstillinger"
+        "da": "Dynamiske indstillinger",
+        "de": "Dynamische Flags",
+        "fr": "Indicateurs dynamiques"
       },
       "value_bits": {
         "min": 0,
@@ -3507,7 +4645,9 @@
       "status": "optional",
       "name": {
         "en": "Fuel/Coal",
-        "da": "Brændstof/kul"
+        "da": "Brændstof/kul",
+        "de": "Brennstoff/Kohle",
+        "fr": "Carburant/Charbon"
       },
       "value_bits": {
         "min": 0,
@@ -3519,7 +4659,9 @@
       "status": "optional",
       "name": {
         "en": "Water",
-        "da": "Vand"
+        "da": "Vand",
+        "de": "Wasser",
+        "fr": "Eau"
       },
       "value_bits": {
         "min": 0,
@@ -3534,7 +4676,9 @@
       "status": "optional",
       "name": {
         "en": "SUSI Sound and Function Modules",
-        "da": "SUSI lyd- og funktionsmoduler"
+        "da": "SUSI lyd- og funktionsmoduler",
+        "de": "SUSI Sound- und Funktionsmodule",
+        "fr": "Modules sonores et fonctionnels SUSI"
       }
     }
   ]

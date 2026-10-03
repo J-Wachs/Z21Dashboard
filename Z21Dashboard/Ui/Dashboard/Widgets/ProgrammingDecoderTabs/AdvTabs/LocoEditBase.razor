@@ -1,0 +1,136 @@
+@*
+    LocoEditBase.razor
+    Allows user to edit basic information about a locomotive.
+*@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Locomotives.Models
+@inject IStringLocalizer<LocoEditBaseResources> Localizer
+
+<EditForm EditContext="_editContext" OnValidSubmit="@(async () => await OnValidSubmitAsync())">
+    <DataAnnotationsValidator />
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Name"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.Name"
+                       class="form-control form-control-sm" /> 
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Name)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["ShortName"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.ShortName"
+                       class="form-control form-control-sm"
+                       maxlength="20" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.ShortName)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Manufacturer"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.Manufacturer"
+                       class="form-control form-control-sm"
+                       maxlength="20" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Manufacturer)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["CatalogueNumber"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.CatalogueNumber"
+                       class="form-control form-control-sm"
+                       maxlength="20" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.CatalogueNumber)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["Class"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.Class"
+                       class="form-control form-control-sm"
+                       maxlength="20" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.Class)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2 align-items-center">
+        <div class="col-5">
+            <label>@Localizer["UnitNumber"]:</label>
+        </div>
+        <div class="col-7">
+            <InputText @bind-Value="@LocomotiveSettings.LocomotiveMeta.UnitNumber"
+                       class="form-control form-control-sm"
+                       maxlength="20" />
+        </div>
+        <div class="row mb-2">
+            <div class="col-5"></div>
+            <div class="col-7">
+                <ValidationMessage For="@(() => LocomotiveSettings.LocomotiveMeta.UnitNumber)" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public required LocomotiveSettings LocomotiveSettings { get; set; }
+
+    private EditContext? _editContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _editContext = new EditContext(LocomotiveSettings.LocomotiveMeta);
+    }
+
+    /// <summary>
+    /// Dummy method for EditForm.
+    /// The method is actually not used.
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnValidSubmitAsync()
+    {
+    }
+}

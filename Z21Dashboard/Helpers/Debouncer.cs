@@ -4,19 +4,14 @@
 /// A utility class to debounce an action, meaning it will only be executed
 /// after a certain amount of time has passed without the action being triggered again.
 /// </summary>
-public class Debouncer
+/// <remarks>
+/// Initializes a new instance of the <see cref="Debouncer"/> class.
+/// </remarks>
+/// <param name="delay">The time to wait before executing the action.</param>
+public class Debouncer(TimeSpan _delay)
 {
-    private readonly TimeSpan _delay;
+    private readonly TimeSpan _delay = _delay;
     private Timer? _timer;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Debouncer"/> class.
-    /// </summary>
-    /// <param name="delay">The time to wait before executing the action.</param>
-    public Debouncer(TimeSpan delay)
-    {
-        _delay = delay;
-    }
 
     /// <summary>
     /// Debounces the specified action. Each time this is called, the internal timer is reset.

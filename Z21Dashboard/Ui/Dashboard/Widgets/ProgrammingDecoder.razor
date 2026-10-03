@@ -1,0 +1,63 @@
+@*
+    ProgrammingDecoder.razor
+    Component that display three sets of screens to allow the user to
+    program decoders and create and maintain locomotives.
+*@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.LocomotiveDecoders.Interfaces
+@using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.Locomotives.Models
+@using Z21Dashboard.Ui.Components
+@using Z21Dashboard.Ui.Dashboard.Components
+@using Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs
+@using Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs
+@inject IStringLocalizer<ProgrammingDecoderResources> Localizer
+@inject IDecoderProgService DecoderProgService
+
+<DashboardWidget HeaderTitle="@Localizer["Title"]"
+                 OnHeaderMouseDown="OnHeaderMouseDown"
+                 OnBringToFront="OnBringToFront">
+    <Content>
+        <div class="h-100" style="overflow-y: auto;">
+            <TabControl @ref="_tabControl">
+                <TabPage Title="@Localizer["SimpleCVProg"]">
+                    <Simple />
+                </TabPage>
+                <TabPage Title="@Localizer["Locomotives"]">
+                    <Locomotives LocomotiveSettings="_locomotiveSettings"/>
+                </TabPage>
+                <TabPage Title="@Localizer["LocoDecoders"]">
+                    <LocoDecoders DecoderSettings="_decoderSettings" />
+                </TabPage>
+            </TabControl>
+        </div>
+    </Content>
+</DashboardWidget>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnHeaderMouseDown { get; set; }
+
+    [Parameter]
+    public EventCallback OnBringToFront { get; set; }
+
+
+    private TabControl? _tabControl;
+    private LocomotiveSettings _locomotiveSettings = new()
+    {
+        LocomotiveMeta = new()
+        {
+            Name = string.Empty
+        },
+        DecoderSettings = new()
+    };
+    private DecoderSettings _decoderSettings = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        // Because the initial creation of the class marks it as changed, the change flag must be reset.
+        _locomotiveSettings.ClearChanged();
+    }
+}
