@@ -1,3 +1,15 @@
+Version 1.21 of 2026-10-03
+--------------------------
+Technical changes:
+* Updated Z21Client to version of 2026-09-20
+
+Bug fixes:
+* When turning the track voltage off, the operation time kept counting. Now to opration time is
+  not counting when the track voltage is off
+* When the connection to a Z21 central station was disconnected and then re-connected, the
+  Z21Dashboard did not update the status of locomotives and turnouts. Now the status is updated
+  when the connection is re-established
+
 Version 1.20 of 2026-03-17
 --------------------------
 For users:

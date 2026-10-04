@@ -39,12 +39,12 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows10.0.26100.0|AnyCPU'">
       <ApplicationTitle>Z21Dashboard</ApplicationTitle>
-      <ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+      <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -66,11 +66,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.12" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.11" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.12" />
     </ItemGroup>
 
     <ItemGroup>

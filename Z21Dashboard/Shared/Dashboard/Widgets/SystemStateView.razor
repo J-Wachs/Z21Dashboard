@@ -134,7 +134,7 @@
         _systemState = e;
 
         _alertTemp = ((e.CentralStateEx & SystemState.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
-        _alertVolt = ((e.CentralState & SystemState.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
+        _alertVolt = e.CentralState.ShortCircuit ? "alertfield" : string.Empty;
 
         await InvokeAsync(StateHasChanged);
     }

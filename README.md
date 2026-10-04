@@ -19,28 +19,28 @@ Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
 
 ## Nyheder i denne version 
 
-Version 1.2:
+Version 1.2.1:
 
-For brugere:
-* Z21Dashboard Settings er omdøbt til Konfiguration
-* Konfiguration er opdelt i faner
-* Tilføjet en fane med indstillinger: temperaturskala og modeltogsskala
-* Ændringer i widgets System Status og System Status – Complete, så temperaturen vises i den valgte temperaturskala
-* Ny widget “Hastighedsmåling” til måling af modeltogets hastighed og konvertering til hastighed i fuld skala
-* Tilføjet knappen “Super Maximize” i titellinjen på dashboardets hovedvindue for at maksimere dashboardet til fuld skærm (på tværs af skærme)
-* Tilføjet en “Anerkendelser”-knap og dialog i "Om" widgetten til at anerkende brugen af tredjepartsbiblioteker og -værktøjer i udviklingen af Z21Dashboard
-* Tilføjet to ekstra lokomotivstyringer, så der i alt er fire lokomotivstyringer
+Tekniske ændringer:
 
-For udviklere:
-* DashboardStateService eksponerer nu en hændelse, som udløses, når indstillinger ændres
-* Ny Blazor-komponent DraggableModal.razor til oprettelse af modale dialoger, der kan trækkes. Komponenten anvendes nu i alle widgets med modale dialoger (LocoController, Settings, Speed Measure osv.)
-* Som en del af tilføjelsen af to ekstra lokomotivstyringer er koden for lokomotivstyringer blevet refaktoreret til at bruge ét sæt ressourcefiler
+* Opdateret Z21Client til versionen fra 20-09-2026
 
 Fejlrettelser:
-* RBus-widgetten anmodede ikke om RBus’ indledende tilstand
-* I "Lokomotivstyring" widgets blev pladsholderteksten for serviceinterval ikke vist korrekt, når værdien ikke var angivet
-* Ved opdatering af Z21Dashboard applikationen, blev de tidligere satte positioner og valg af widget nulstillet
-  og alle widgets vist
+
+* Når sporspændingen blev slået fra, fortsatte driftstiden med at tælle.
+  Driftstiden tælles nu ikke længere, når sporspændingen er slået fra.
+  Dette påvirker widgetten "Locomotives with Runtime".
+* Når forbindelsen til en Z21-centralstation blev afbrudt og derefter
+  genoprettet, opdaterede Z21Dashboard ikke status for lokomotiver og
+  sporskifter. Status opdateres nu, når forbindelsen genoprettes.
+
+For udviklere:
+
+* Overgangen til Z21Client fra 20-09-2026 har medført ændringer i
+  Z21Client, specifikt i den datatype, der anvendes til System Status
+  (SystemState-klassen). Hvis du har udviklet en widget, der anvender
+  SystemState, skal du opdatere din widget til at bruge den opdaterede
+  klasse.
 
 ## Målgruppe for applikationen
 
@@ -187,37 +187,26 @@ Z21Dashboard (and Z21Client) was developed using the "AI Pair Programming" metho
 
 ## What's New in This Version
 
-Version 1.2:
+Version 1.2.1:
 
-For users:
-* Z21Dashboard Settings has been renamed to Configuration
-* Configuration is divided into tabs
-* Added a tab with settings: temperature scale and model train scale
-* Changes in widgets System Status and System Status – Complete to display
-  temperature in the selected temperature scale
-* New widget “Speed Measurement” to measure model train speed and convert it
-  to full-scale speed
-* Added a “Super Maximize” button in the title bar of the main dashboard
-  window to maximize the dashboard across screens
-* Added an “Acknowledgements” button and dialog in the "About" widget to credit
-  third-party libraries and tools used in Z21Dashboard development
-* Added two additional locomotive controls, making a total of four
+Technical changes:
 
-For developers:
-* DashboardStateService now exposes an event triggered when settings change
-* New Blazor component DraggableModal.razor for creating draggable modal
-  dialogs. Now used in all widgets with modal dialogs (LocoController,
-  Settings, Speed Measure, etc.)
-* As part of the two new locomotive controls, the code for locomotive controls
-  was refactored to use a single set of resource files
+* Updated Z21Client to the version from 2026-09-20
 
 Bug fixes:
-* RBus widget did not request RBus initial state
-* In "Locomotive Control" widgets, the placeholder for service interval
-  did not display correctly when no value was set
-* When updating the Z21Dashboard application the previously positions and the
-  selected widget was reset and all widgets were shown
+* When turning the track voltage off, the operation time kept counting. The
+  operation time is now no longer counted when the track voltage is off. This
+  affects the "Locomotives with Runtime" widget.
+* When the connection to a Z21 central station was disconnected and then
+  re-established, the Z21Dashboard did not update the status of locomotives and
+  turnouts. The status is now updated when the connection is re-established.
 
+For developers:
+
+* The transition to Z21Client from 2026-09-20 has introduced changes to
+  Z21Client, specifically to the data type used for System Status (the
+  SystemState class). If you have developed a widget that uses SystemState, you
+  must update your widget to use the updated class.
 
 ## Target Audience for the Application
 
