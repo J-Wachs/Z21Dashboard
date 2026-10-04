@@ -44,11 +44,16 @@ public partial class LocoOperatingTimeService : ILocoOperatingTimeService, IDisp
     private readonly System.Timers.Timer _secondTimer;
     private readonly Lock _locosLock = new();
     private readonly Dictionary<ushort, LocoTimeTracker> _trackedLocos = [];
+    private TrackPowerState? _trackPowerState;
+
     private const string AppDataKey = "OperatingTimes";
 
     public event Action? OnDataUpdated;
 
-    public LocoOperatingTimeService(IZ21Client z21Client, IAppDataService appDataService)
+    public LocoOperatingTimeService(
+        IZ21Client z21Client,
+        IAppDataService appDataService
+        )
     {
         _z21Client = z21Client;
         _appDataService = appDataService;
@@ -56,6 +61,10 @@ public partial class LocoOperatingTimeService : ILocoOperatingTimeService, IDisp
         LoadDataAndRefresh();
 
         _z21Client.OnLocoInfoReceived += OnLocoInfoReceived;
+        _z21Client.OnTrackPowerInfoReceived += OnTrackPowerInfoReceived;
+        _z21Client.OnStatusChanged += OnStatusChanged;
+
+        _ = _z21Client.GetStatusAsync();
 
         _secondTimer = new System.Timers.Timer(1000);
         _secondTimer.Elapsed += OnTimerTick;
@@ -100,6 +109,28 @@ public partial class LocoOperatingTimeService : ILocoOperatingTimeService, IDisp
         OnDataUpdated?.Invoke();
     }
 
+    /// <summary>
+    /// Event handler triggered when the status changes, allowing the service to update its track power state.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void OnStatusChanged(object? sender, StatusChanged e)
+    {
+        _z21Client.OnStatusChanged -= OnStatusChanged;
+
+        _trackPowerState = e.TrackVoltageOff ? TrackPowerState.Off : TrackPowerState.On;
+    }
+
+    /// <summary>
+    /// Event handler triggered when track power information is received from the central station.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void OnTrackPowerInfoReceived(object? sender, TrackPowerInfo e)
+    {
+        _trackPowerState = e.State;
+    }
+
     private void OnLocoInfoReceived(object? sender, LocoInfo e)
     {
         lock (_locosLock)
@@ -130,7 +161,7 @@ public partial class LocoOperatingTimeService : ILocoOperatingTimeService, IDisp
         {
             foreach (var tracker in _trackedLocos.Values)
             {
-                if (tracker.CurrentSpeedStep > 0)
+                if (tracker.CurrentSpeedStep > 0 && _trackPowerState == TrackPowerState.On)
                 {
                     tracker.TotalOperatingSeconds++;
                     tracker.OperatingSecondsSinceService++;

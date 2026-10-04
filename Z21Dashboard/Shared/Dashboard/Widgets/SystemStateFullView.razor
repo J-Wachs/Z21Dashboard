@@ -99,7 +99,7 @@
                 </table>
             </div>
             <div class="col-md-3">
-                <h5>@Localizer["CentralStateFlags"] (@("0x" + _systemState?.CentralState.ToString("X2")))</h5>
+                <h5>@Localizer["CentralStateFlags"]</h5>
                 <pre>@if (_systemState is not null)
                 {
                      @DecodeCentralState(_systemState.CentralState)
@@ -161,7 +161,7 @@
     {
         _systemState = e;
 
-        _alertVolt = ((e.CentralState & SystemState.CentralStateShortCircuit) > 0) ? "alertfield" : string.Empty;
+        _alertVolt = e.CentralState.ShortCircuit ? "alertfield" : string.Empty;
         _alertTemp = ((e.CentralStateEx & SystemState.CentralStateExHighTemperature) > 0) ? "alertfield" : string.Empty;
 
         await InvokeAsync(StateHasChanged);
@@ -202,20 +202,20 @@
         return text;
     }
 
-    private string DecodeCentralState(byte state)
+    private string DecodeCentralState(StatusChanged state)
     {
         var sb = new StringBuilder();
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {((state & SystemState.CentralStateEmergencyStop) > 0 ? Localizer["On"] : Localizer["Off"])}"
+            $"{MakeFixedLengthString(Localizer["EmergencyStop"] + ":", 20)} {(state.EmergencyStop ? Localizer["On"] : Localizer["Off"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {((state & SystemState.CentralStateTrackVoltageOff) > 0 ? Localizer["Off"] : Localizer["On"])}"
+            $"{MakeFixedLengthString(Localizer["TrackVoltage"] + ":", 20)} {(state.TrackVoltageOff ? Localizer["Off"] : Localizer["On"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {((state & SystemState.CentralStateShortCircuit) > 0 ? Localizer["Yes"] : Localizer["No"])}"
+            $"{MakeFixedLengthString(Localizer["ShortCircuit"] + ":", 20)} {(state.ShortCircuit ? Localizer["Yes"] : Localizer["No"])}"
         );
         sb.AppendLine(
-            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {((state & SystemState.CentralStateProgrammingMode) > 0 ? Localizer["On"] : Localizer["Off"])}"
+            $"{MakeFixedLengthString(Localizer["ProgrammingMode"] + ":", 20)} {(state.ProgrammingModeActive ? Localizer["On"] : Localizer["Off"])}"
         );
         return sb.ToString();
     }
