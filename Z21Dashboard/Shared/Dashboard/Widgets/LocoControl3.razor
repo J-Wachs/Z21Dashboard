@@ -221,7 +221,7 @@
     private async void OnSystemStateChanged(object? sender, SystemState e)
     {
         Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
-        _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0 ? TrackPowerState.Off : TrackPowerState.On;
+        _trackPowerState = e.CentralState.TrackVoltageOff ? TrackPowerState.Off : TrackPowerState.On;
         await InvokeAsync(StateHasChanged);
     }
 

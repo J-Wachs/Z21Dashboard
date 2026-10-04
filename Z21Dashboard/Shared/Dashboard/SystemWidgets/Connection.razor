@@ -2,13 +2,11 @@
     Connection.razor
     Component for managing and displaying the connection status to a Z21 device.
 *@
-@using System.Net
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Localization
 @using Z21Client
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
-@using Z21Dashboard.Application.Models
 @using Z21Dashboard.Shared.Dashboard.Components
 @inject IAppDataService AppDataService
 @inject IStringLocalizer<ConnectionResources> Localizer
@@ -268,9 +266,7 @@
     {
         Z21Client.OnSystemStateChanged -= OnSystemStateChanged;
 
-        _trackPowerState = (e.CentralState & SystemState.CentralStateTrackVoltageOff) > 0
-            ? TrackPowerState.Off
-            : TrackPowerState.On;
+        _trackPowerState = e.CentralState.TrackVoltageOff ? TrackPowerState.Off : TrackPowerState.On;
 
         await InvokeAsync(StateHasChanged);
     }
