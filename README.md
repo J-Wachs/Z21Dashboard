@@ -22,11 +22,9 @@ Z21Dashboard (og Z21Client) er udvikler efter "AI Pair Programming" metoden.
 Version 1.2.1:
 
 Tekniske ændringer:
-
 * Opdateret Z21Client til versionen fra 20-09-2026
 
 Fejlrettelser:
-
 * Når sporspændingen blev slået fra, fortsatte driftstiden med at tælle.
   Driftstiden tælles nu ikke længere, når sporspændingen er slået fra.
   Dette påvirker widgetten "Locomotives with Runtime".
@@ -35,7 +33,6 @@ Fejlrettelser:
   sporskifter. Status opdateres nu, når forbindelsen genoprettes.
 
 For udviklere:
-
 * Overgangen til Z21Client fra 20-09-2026 har medført ændringer i
   Z21Client, specifikt i den datatype, der anvendes til System Status
   (SystemState-klassen). Hvis du har udviklet en widget, der anvender
@@ -190,7 +187,6 @@ Z21Dashboard (and Z21Client) was developed using the "AI Pair Programming" metho
 Version 1.2.1:
 
 Technical changes:
-
 * Updated Z21Client to the version from 2026-09-20
 
 Bug fixes:
@@ -202,7 +198,6 @@ Bug fixes:
   turnouts. The status is now updated when the connection is re-established.
 
 For developers:
-
 * The transition to Z21Client from 2026-09-20 has introduced changes to
   Z21Client, specifically to the data type used for System Status (the
   SystemState class). If you have developed a widget that uses SystemState, you
