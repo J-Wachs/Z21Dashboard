@@ -31,6 +31,8 @@
     *   [Vil Z21Dashboard fungere med Z21 START newGen?](#vil-z21dashboard-fungere-med-z21-start-newgen)
     *   [Kan jeg bruge Z21Dashboard med min Digikeijs DR5000?](#kan-jeg-bruge-z21dashboard-med-min-digikeijs-dr5000)
     *   [Min Digikeijs DR5000 vil ikke læse CV adresser på hovedsporet](#min-digikeijs-dr5000-vil-ikke-læse-cv-adresser-på-hovedsporet)
+    *   [Mit lokomotiv er udstyret med en Märklin mLD3/mSD3 dekoder, den kan ikke læses på hovedsporet](#mit-lokomotiv-er-udstyret-med-en-märklin-mld3msd3-dekoder-den-kan-ikke-læses-på-hovedsporet)
+    *   [Timoout fejl når jeg vil læse CVer fra mit lokomotiv med Märklin mLD3/mSD3 dekoder](#timoout-fejl-når-jeg-vil-læse-cver-fra-mit-lokomotiv-med-märklin-mld3msd3-dekoder)
     *   [Når jeg klikker på knappen for at søge vises min Z21 ikke](#når-jeg-klikker-på-knappen-for-at-søge-vises-min-z21-ikke)
     *   [Hvad betyder "Låst" (Locked)?](#hvad-betyder-låst-locked)
     *   [Kan navne og adresser fra min multiMAUS eller Z21 app overføres til Z21Dashboard?](#kan-navne-og-adresser-fra-min-multimaus-eller-z21-app-overføres-til-z21dashboard)
@@ -805,6 +807,19 @@ strækning som DR5088 leverer strøm til.
 
 Jeg har ikke en DR5088, og har derfor ikke haft mulighed for at teste om det rent faktisk kan lade sig gøre.
 Der er flere videoer på YouTube der viser hvordan DR5000 og DR5088 sættes sammen, så man kan læse CV adresser.
+
+## Mit lokomotiv er udstyret med en Märklin mLD3/mSD3 dekoder, den kan ikke læses på hovedsporet
+
+Märklins dekodere mLD3 og mSD3 kan ikke læses på hovedsporet, da de ikke understøtter RailCom. Du skal placere
+lokomotivet på programmeringssporet for at kunne læse CV adresserne. Vælg herefter "Programmeringsspor" i
+Z21Dashboard, inden du klikker på knappen "Læs fra lokomotivdekoder".
+
+## Timoout fejl når jeg vil læse CVer fra mit lokomotiv med Märklin mLD3/mSD3 dekoder
+
+Der kan være et timing problem mellem Z21 centralstationen og Märklin mLD3/mSD3 dekoderen. Det kan hjælpe at
+ændre på timingen i Roco's "Maintenance Tool" applikation. I "Maintenance Tool" skal du vælge "Settings"
+og herefter "Advanced settings". Her kan du ændre på "ACK threshold". Dette er beskrevet i Roco's manual for
+"Maintenance Tool" applikationen.
 
 ## Når jeg klikker på knappen for at søge vises min Z21 ikke
 

@@ -24,6 +24,8 @@
   * [Z21Dashboard fonctionne-t-il avec Z21 START newGen ?](#z21-start-newgen)
   * [Puis-je utiliser Z21Dashboard avec mon Digikeijs DR5000 ?](#dr5000)
   * [Mon DR5000 ne lit pas les CV sur la voie principale](#dr5000-cv)
+  * [Ma locomotive est équipée d'un décodeur Märklin mLD3/mSD3 et ne peut pas être lue sur la voie principale](#ma-locomotive-est-équipée-dun-décodeur-märklin-mld3msd3-et-ne-peut-pas-être-lue-sur-la-voie-principale)
+  * [Erreur de délai d'attente lors de la lecture des CV de ma locomotive équipée d'un décodeur Märklin mLD3/mSD3](#erreur-de-délai-dattente-lors-de-la-lecture-des-cv-de-ma-locomotive-équipée-dun-décodeur-märklin-mld3msd3)
   * [Ma Z21 n’apparaît pas lors de la recherche](#z21-napparaît-pas)
   * [Que signifie « Locked » ?](#locked)
   * [Les noms et adresses peuvent-ils être transférés ?](#transfert)
@@ -1362,6 +1364,23 @@ si cela fonctionne réellement.
 
 Plusieurs vidéos YouTube montrent comment connecter le DR5000 et le
 DR5088 afin de permettre la lecture des CV.
+
+## Ma locomotive est équipée d'un décodeur Märklin mLD3/mSD3 et ne peut pas être lue sur la voie principale
+
+Les décodeurs Märklin mLD3 et mSD3 ne peuvent pas être lus sur la voie principale,
+car ils ne prennent pas en charge RailCom. Vous devez placer la locomotive sur la voie
+de programmation afin de pouvoir lire les adresses CV. Sélectionnez ensuite
+« Voie de programmation » dans Z21Dashboard avant de cliquer sur le bouton
+« Lire depuis le décodeur de locomotive ».
+
+
+## Erreur de délai d'attente lors de la lecture des CV de ma locomotive équipée d'un décodeur Märklin mLD3/mSD3
+
+Il peut y avoir un problème de synchronisation entre la centrale Z21 et le décodeur
+Märklin mLD3/mSD3. Il peut être utile de modifier le réglage de synchronisation dans
+l'application Roco « Maintenance Tool ». Dans « Maintenance Tool », sélectionnez
+« Settings », puis « Advanced settings ». Vous pouvez alors modifier le « ACK threshold ».
+Cette procédure est décrite dans le manuel Roco de l'application « Maintenance Tool ».
 
 ## Lorsque je clique sur le bouton de recherche, ma Z21 n’apparaît pas
 

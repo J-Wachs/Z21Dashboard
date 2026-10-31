@@ -31,6 +31,8 @@
     *   [Funktioniert Z21Dashboard mit Z21 START newGen?](#funktioniert-z21dashboard-mit-z21-start-newgen)
     *   [Kann ich Z21Dashboard mit meiner Digikeijs DR5000 verwenden?](#kann-ich-z21dashboard-mit-meiner-digikeijs-dr5000-verwenden)
     *   [Meine Digikeijs DR5000 kann CV-Adressen auf dem Hauptgleis nicht lesen](#meine-digikeijs-dr5000-kann-cv-adressen-auf-dem-hauptgleis-nicht-lesen)
+    *   [Meine Lokomotive ist mit einem Märklin mLD3/mSD3-Decoder ausgestattet und kann auf dem Hauptgleis nicht ausgelesen werden](#meine-lokomotive-ist-mit-einem-märklin-mld3-msd3-decoder-ausgestattet-und-kann-auf-dem-hauptgleis-nicht-ausgelesen-werden)
+    *   [Timeout-Fehler beim Auslesen von CVs meiner Lokomotive mit einem Märklin mLD3/mSD3-Decoder](#timeout-fehler-beim-auslesen-von-cvs-meiner-lokomotive-mit-einem-märklin-mld3-msd3-decoder)
     *   [Meine Z21 wird nicht angezeigt, wenn ich auf die Suchschaltfläche klicke](#meine-z21-wird-nicht-angezeigt-wenn-ich-auf-die-suchschaltfläche-klicke)
     *   [Was bedeutet „Gesperrt“ (Locked)?](#was-bedeutet-gesperrt-locked)
     *   [Können Namen und Adressen von meiner multiMAUS oder der Z21-App auf Z21Dashboard übertragen werden?](#können-namen-und-adressen-von-meiner-multimaus-oder-der-z21-app-auf-z21dashboard-übertragen-werden)
@@ -941,6 +943,20 @@ Ich besitze keinen DR5088 und hatte daher keine Möglichkeit zu testen, ob dies 
 
 Auf YouTube gibt es mehrere Videos, die zeigen, wie DR5000 und DR5088 miteinander verbunden werden, damit CV-Adressen
 gelesen werden können.
+
+## Meine Lokomotive ist mit einem Märklin mLD3/mSD3-Decoder ausgestattet und kann auf dem Hauptgleis nicht ausgelesen werden
+
+Die mLD3- und mSD3-Decoder von Märklin können auf dem Hauptgleis nicht ausgelesen werden, da sie
+RailCom nicht unterstützen. Sie müssen die Lokomotive auf das Programmiergleis stellen, um die CV-Adressen
+auslesen zu können. Wählen Sie anschließend im Z21Dashboard "Programmiergleis", bevor Sie auf die Schaltfläche
+"Aus Lokdecoder lesen" klicken.
+
+## Timeout-Fehler beim Auslesen von CVs meiner Lokomotive mit einem Märklin mLD3/mSD3-Decoder
+
+Möglicherweise gibt es ein Timing-Problem zwischen der Z21-Zentrale und dem Märklin mLD3/mSD3-Decoder.
+Es kann helfen, das Timing in der Roco-Anwendung "Maintenance Tool" anzupassen. Wählen Sie im "Maintenance
+Tool" zunächst "Settings" und anschließend "Advanced settings". Hier können Sie den "ACK threshold" anpassen.
+Dies wird im Handbuch von Roco für die Anwendung "Maintenance Tool" beschrieben.
 
 ## Meine Z21 wird nicht angezeigt, wenn ich auf die Suchschaltfläche klicke
 

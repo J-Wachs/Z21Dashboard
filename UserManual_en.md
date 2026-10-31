@@ -23,6 +23,8 @@
     *   [Will Z21Dashboard work with Z21 START newGen?](#will-z21dashboard-work-with-z21-start-newgen)
     *   [Can I use Z21Dashboard with my Digikeijs DR5000?](#can-i-use-z21dashboard-with-my-digikeijs-dr5000)
     *   [My Digikeijs DR5000 will not read CV addresses on the main track](#my-digikeijs-dr5000-will-not-read-cv-addresses-on-the-main-track)
+    *   [My locomotive is equipped with a Märklin mLD3/mSD3 decoder and cannot be read on the main track](#my-locomotive-is-equipped-with-a-märklin-mld3-msd3-decoder-and-cannot-be-read-on-the-main-track)
+    *   [Timeout error when I try to read CVs from my locomotive with a Märklin mLD3/mSD3 decoder](#timeout-error-when-i-try-to-read-cvs-from-my-locomotive-with-a-märklin-mld3-msd3-decoder)
     *   [When I click the button to search, my Z21 is not shown](#when-i-click-the-button-to-search-my-z21-is-not-shown)
     *   [What does 'Locked' mean?](#what-does-locked-mean)
     *   [Can names and addresses from my multiMAUS or Z21 app be transferred to Z21Dashboard?](#can-names-and-addresses-from-my-multimaus-or-z21-app-be-transferred-to-z21dashboard)
@@ -817,6 +819,21 @@ that your locomotive is on a section that the DR5088 supplies power to.
 
 I do not have a DR5088, and have therefore not had the opportunity to test whether it actually works.
 There are several videos on YouTube showing how the DR5000 and DR5088 are connected so that CV addresses can be read.
+
+My locomotive is equipped with a Märklin mLD3/mSD3 decoder and cannot be read on the main track
+Timeout error when I try to read CVs from my locomotive with a Märklin mLD3/mSD3 decoder
+## My locomotive is equipped with a Märklin mLD3/mSD3 decoder and cannot be read on the main track
+
+Märklin's mLD3 and mSD3 decoders cannot be read on the main track because they do not support RailCom.
+You must place the locomotive on the programming track to read the CV addresses. Then select "Programming
+Track" in Z21Dashboard before clicking the "Read from locomotive decoder" button.
+
+## Timeout error when I try to read CVs from my locomotive with a Märklin mLD3/mSD3 decoder
+
+There may be a timing issue between the Z21 central station and the Märklin mLD3/mSD3 decoder. It may help
+to adjust the timing in Roco's "Maintenance Tool" application. In "Maintenance Tool", select "Settings"
+and then "Advanced settings". Here you can adjust the "ACK threshold". This is described in Roco's manual
+for the "Maintenance Tool" application.
 
 ## When I click the button to search, my Z21 is not shown
 
