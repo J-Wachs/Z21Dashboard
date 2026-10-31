@@ -28,9 +28,6 @@ public static class SuperMaximizeForWindows
     private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
 
     private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
-    private const int SM_CXSIZEFRAME = 32;
-    private const int SM_CXPADDEDBORDER = 92;
-    
     private static nint _windowHandle;
     private static AppWindow? _appWindow;
     private static RectInt32 _originalBounds;
