@@ -17,13 +17,24 @@
 
 <div class="row mb-3 align-items-center">
     <div class="col-auto">
+        @Localizer["SelectCurve"]:
+    </div>
+    <div class="col-auto">
         <select class="form-select" style="min-width: 180px"
-                value="@_selectedCurveType.ToString()"
-                @onchange="OnCurveTypeChanged">
+                @bind="_selectedCurveType"
+                @bind:after="ApplyCurve">
             <option value="Linear">@Localizer["Linear"]</option>
             <option value="Exponential">@Localizer["Exponential"]</option>
             <option value="Logarithmic">@Localizer["Logarithmic"]</option>
+            <option value="LinearEndpoints">@Localizer["LinearEndpoints"]</option>
+            <option value="ExponentialEndpoints">@Localizer["ExponentialEndpoints"]</option>
+            <option value="LogarithmicEndpoints">@Localizer["LogarithmicEndpoints"]</option>
         </select>
+    </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-outline-primary btn-sm" @onclick="ApplyCurve">
+            @Localizer["Apply"]
+        </button>
     </div>
 </div>
 
@@ -211,7 +222,7 @@
     private int _dragIndex = -1;
 
     // Dropdown
-    public enum SpeedCurveType { Linear, Exponential, Logarithmic }
+    public enum SpeedCurveType { Linear, Exponential, Logarithmic, LinearEndpoints, ExponentialEndpoints, LogarithmicEndpoints }
     private SpeedCurveType _selectedCurveType = SpeedCurveType.Linear;
 
     /// <summary>
@@ -292,16 +303,6 @@
         }
     }
 
-    // --- Dropdown ---
-    private void OnCurveTypeChanged(ChangeEventArgs e)
-    {
-        if (Enum.TryParse<SpeedCurveType>(e.Value?.ToString(), out var selected))
-        {
-            _selectedCurveType = selected;
-            ApplyCurve();
-        }
-    }
-
     private void ReadCurve()
     {
         const int pointCount = 28;
@@ -315,23 +316,38 @@
     private void ApplyCurve()
     {
         const int pointCount = 28;
+
+        bool useEndpoints = _selectedCurveType is SpeedCurveType.LinearEndpoints
+            or SpeedCurveType.ExponentialEndpoints
+            or SpeedCurveType.LogarithmicEndpoints;
+
+        byte startValue = 0;
+        byte endValue = 255;
+        if (useEndpoints)
+        {
+            var currentPoints = GetCurrentDataPoints();
+            startValue = currentPoints[0];
+            endValue = currentPoints[^1];
+        }
+
         for (int i = 0; i < pointCount; i++)
         {
             double t = pointCount == 1 ? 1.0 : (double)i / (pointCount - 1);
-            byte value = _selectedCurveType switch
+            double curveFactor = _selectedCurveType switch
             {
-                SpeedCurveType.Linear => LinearCurve(t),
-                SpeedCurveType.Exponential => ExponentialCurve(t),
-                SpeedCurveType.Logarithmic => LogarithmicCurve(t),
-                _ => LinearCurve(t)
+                SpeedCurveType.Linear or SpeedCurveType.LinearEndpoints => LinearFactor(t),
+                SpeedCurveType.Exponential or SpeedCurveType.ExponentialEndpoints => ExponentialFactor(t),
+                SpeedCurveType.Logarithmic or SpeedCurveType.LogarithmicEndpoints => LogarithmicFactor(t),
+                _ => LinearFactor(t)
             };
+            byte value = (byte)Math.Round(startValue + (endValue - startValue) * curveFactor);
             UpdateDataPoint(i, value);
         }
     }
 
-    private byte LinearCurve(double t) => (byte)Math.Round(255 * t);
-    private byte ExponentialCurve(double t) => (byte)Math.Round(255 * Math.Pow(t, 2.5));
-    private byte LogarithmicCurve(double t) => (byte)Math.Round(255 * (Math.Log10(1 + t * 8) / Math.Log10(9)));
+    private static double LinearFactor(double t) => t;
+    private static double ExponentialFactor(double t) => Math.Pow(t, 2.5);
+    private static double LogarithmicFactor(double t) => Math.Log10(1 + t * 8) / Math.Log10(9);
 
     // --- Mouse ---
     private int MapValueToY(byte value)

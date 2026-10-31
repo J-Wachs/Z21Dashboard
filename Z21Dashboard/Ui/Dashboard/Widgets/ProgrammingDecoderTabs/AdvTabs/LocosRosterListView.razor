@@ -24,6 +24,7 @@
 @inject IDecoderUIPageBuilder DecoderUIPageBuilder
 @inject IDecoderDefinitionService DecoderDefinitionService
 @inject IDecoderProgHelperService DecoderProgHelperService
+@inject IDecoderTabsManagement DecoderTabsManagement
 @inject IFileAndFolderService FileAndFolderService
 @inject IJSRuntime JSRuntime
 @inject ILocoDefinitionService LocoDefinitionService
@@ -417,6 +418,12 @@
             WorkingMessage = Localizer["Loading"];
             await WorkingMessageChanged.InvokeAsync(WorkingMessage);
             StateHasChanged();
+
+            // Decoder tabs cleanup needed.
+            DecoderTabsManagement.RemoveDecoderTabs(
+                Parent,
+                LocomotiveSettings.DecoderSettings
+            );
 
             // Load the locomotive data from the file
             var result = await LocoDefinitionService.GetLocomotiveAndSetInfoIntoSettingsAsync(

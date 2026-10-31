@@ -143,6 +143,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ESU decoder model.
+        /// </summary>
+        internal static string ESUDecoderModel {
+            get {
+                return ResourceManager.GetString("ESUDecoderModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         internal static string FileCopy {
@@ -157,15 +166,6 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         internal static string Manufacturer {
             get {
                 return ResourceManager.GetString("Manufacturer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Manufacturer code.
-        /// </summary>
-        internal static string ManufacturerCode {
-            get {
-                return ResourceManager.GetString("ManufacturerCode", resourceCulture);
             }
         }
         
@@ -269,6 +269,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown decoder {0}.
+        /// </summary>
+        internal static string UnknownZimoDecoder {
+            get {
+                return ResourceManager.GetString("UnknownZimoDecoder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User defined.
         /// </summary>
         internal static string UserDef {
@@ -301,6 +310,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         internal static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ZIMO decoder model.
+        /// </summary>
+        internal static string ZIMODecoderModel {
+            get {
+                return ResourceManager.GetString("ZIMODecoderModel", resourceCulture);
             }
         }
     }

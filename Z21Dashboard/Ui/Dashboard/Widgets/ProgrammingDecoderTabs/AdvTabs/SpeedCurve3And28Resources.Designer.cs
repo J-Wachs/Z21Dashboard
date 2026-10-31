@@ -71,6 +71,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        internal static string Apply {
+            get {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content for the page is missing.
         /// </summary>
         internal static string ContentMissing {
@@ -134,6 +143,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exponential (endpoints).
+        /// </summary>
+        internal static string ExponentialEndpoints {
+            get {
+                return ResourceManager.GetString("ExponentialEndpoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forward trim.
         /// </summary>
         internal static string ForwardTrim {
@@ -152,11 +170,29 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linear (endpoints).
+        /// </summary>
+        internal static string LinearEndpoints {
+            get {
+                return ResourceManager.GetString("LinearEndpoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logarithmic.
         /// </summary>
         internal static string Logarithmic {
             get {
                 return ResourceManager.GetString("Logarithmic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logarithmic (endpoints).
+        /// </summary>
+        internal static string LogarithmicEndpoints {
+            get {
+                return ResourceManager.GetString("LogarithmicEndpoints", resourceCulture);
             }
         }
         
@@ -175,6 +211,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         internal static string ReverseTrim {
             get {
                 return ResourceManager.GetString("ReverseTrim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select curve.
+        /// </summary>
+        internal static string SelectCurve {
+            get {
+                return ResourceManager.GetString("SelectCurve", resourceCulture);
             }
         }
         

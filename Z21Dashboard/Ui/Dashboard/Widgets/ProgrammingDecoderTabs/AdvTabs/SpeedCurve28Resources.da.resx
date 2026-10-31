@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apply" xml:space="preserve">
+    <value>Anvend</value>
+  </data>
   <data name="ContentMissing" xml:space="preserve">
     <value>Indhold til siden mangler</value>
   </data>
@@ -126,7 +129,7 @@
   <data name="CVReading" xml:space="preserve">
     <value>Læser CV-værdier fra dekoder</value>
   </data>
-  <data name="CVWrite" xml:space="preserve">
+  <data name="CVWriting" xml:space="preserve">
     <value>CV-værdier skrives til dekoder</value>
   </data>
   <data name="CVWritten" xml:space="preserve">
@@ -135,14 +138,23 @@
   <data name="Exponential" xml:space="preserve">
     <value>Exponential</value>
   </data>
+  <data name="ExponentialEndpoints" xml:space="preserve">
+    <value>Exponential (endepunkter)</value>
+  </data>
   <data name="ForwardTrim" xml:space="preserve">
     <value>Forlæns justering</value>
   </data>
   <data name="Linear" xml:space="preserve">
     <value>Linær</value>
   </data>
+  <data name="LinearEndpoints" xml:space="preserve">
+    <value>Linær (endepunkter)</value>
+  </data>
   <data name="Logarithmic" xml:space="preserve">
     <value>Logaritmisk</value>
+  </data>
+  <data name="LogarithmicEndpoints" xml:space="preserve">
+    <value>Logaritmisk (endepunkter)</value>
   </data>
   <data name="ReadFromLocoDecoder" xml:space="preserve">
     <value>Læs fra lok. dekoder</value>

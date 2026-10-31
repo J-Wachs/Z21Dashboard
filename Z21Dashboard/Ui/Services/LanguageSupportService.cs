@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
+using Z21Dashboard.Ui.Interfaces;
 
-namespace Z21Dashboard.Ui.Interfaces;
+namespace Z21Dashboard.Ui.Services;
 
 public class LanguageSupportService : ILanguageSupportService
 {

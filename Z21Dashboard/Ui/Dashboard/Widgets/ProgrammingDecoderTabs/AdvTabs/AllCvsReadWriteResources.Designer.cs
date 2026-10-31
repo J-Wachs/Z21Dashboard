@@ -62,6 +62,15 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When programming on the main track (POM), CVs related to the decoder&apos;s address are not written to the decoder. These CVs are CV1 (short address), CV17 (long address, high byte), CV18 (long address, low byte), and CV29 bit 5 (short/long address)..
+        /// </summary>
+        internal static string AddrCVsNotWritten {
+            get {
+                return ResourceManager.GetString("AddrCVsNotWritten", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All CVs read from decoder.
         /// </summary>
         internal static string AllCVsRead {

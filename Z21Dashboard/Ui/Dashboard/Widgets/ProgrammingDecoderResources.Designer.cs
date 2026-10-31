@@ -61,11 +61,29 @@ namespace Z21Dashboard.Ui.Dashboard.Widgets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decoder definition not saved.
+        /// </summary>
+        internal static string DecoderDefChanged {
+            get {
+                return ResourceManager.GetString("DecoderDefChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locomotive decoders.
         /// </summary>
         internal static string LocoDecoders {
             get {
                 return ResourceManager.GetString("LocoDecoders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locomotive definition not saved.
+        /// </summary>
+        internal static string LocomotiveDefChanged {
+            get {
+                return ResourceManager.GetString("LocomotiveDefChanged", resourceCulture);
             }
         }
         

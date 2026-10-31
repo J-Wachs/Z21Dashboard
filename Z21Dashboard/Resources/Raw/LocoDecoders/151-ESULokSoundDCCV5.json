@@ -3284,6 +3284,10 @@
             },
             {
               "type": "cv_single",
+              "cv": 249
+            },
+            {
+              "type": "cv_single",
               "cv": 250
             }
           ]
@@ -3323,10 +3327,6 @@
               "type": "cv_with_bit",
               "cv": 124,
               "bit": 4
-            },
-            {
-              "type": "cv_single",
-              "cv": 249
             }
           ]
         }

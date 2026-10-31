@@ -129,9 +129,6 @@
   <data name="Manufacturer" xml:space="preserve">
     <value>Hersteller</value>
   </data>
-  <data name="ManufacturerCode" xml:space="preserve">
-    <value>Herstellercode</value>
-  </data>
   <data name="VersionNumber" xml:space="preserve">
     <value>Versionsnummer</value>
   </data>
@@ -203,5 +200,8 @@
   </data>
   <data name="UnknownZimoDecoder" xml:space="preserve">
     <value>Unbekannter Dekoder {0}</value>
+  </data>
+  <data name="ESUDecoderModel" xml:space="preserve">
+    <value>ESU-Dekodermodell</value>
   </data>
 </root>

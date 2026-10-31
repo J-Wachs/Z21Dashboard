@@ -72,13 +72,9 @@
     },
     {
       "type": "cv_single",
-      "cv": 6,
-      "source": "nmra"
-    },
-    {
-      "type": "cv_single",
       "cv": 7,
-      "source": "nmra"
+      "source": "nmra",
+      "readonly": true
     },
     {
       "type": "cv_single",
@@ -2336,6 +2332,14 @@
               "type": "cv_with_bit",
               "cv": 124,
               "bit": 5
+            },
+            {
+              "type": "cv_single",
+              "cv": 2
+            },
+            {
+              "type": "cv_single",
+              "cv": 5
             }
           ]
         }
@@ -2343,7 +2347,7 @@
     },
     {
       "id": "page_speed curve",
-      "type": "speed_curve_graph_3and28",
+      "type": "speed_curve_graph_28",
       "title": {
         "en": "Speed curve",
         "da": "Hastighedskurve",
@@ -2354,18 +2358,6 @@
         {
           "type": "cvs_content",
           "content": [
-            {
-              "type": "cv_single",
-              "cv": 2
-            },
-            {
-              "type": "cv_single",
-              "cv": 5
-            },
-            {
-              "type": "cv_single",
-              "cv": 6
-            },
             {
               "type": "cv_with_bit",
               "cv": 29,

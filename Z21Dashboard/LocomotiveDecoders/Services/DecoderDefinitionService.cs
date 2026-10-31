@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using System.Text.Json;
 using Z21Client.Models;
 using Z21Dashboard.Helpers;
@@ -9,6 +8,7 @@ using Z21Dashboard.NmraDccStandard.Interfaces;
 using Z21Dashboard.Resources.Localization;
 using Z21Dashboard.Ui;
 using Z21Dashboard.Ui.Interfaces;
+using Z21Dashboard.Ui.Services;
 
 namespace Z21Dashboard.LocomotiveDecoders.Services;
 
@@ -343,7 +343,7 @@ internal class DecoderDefinitionService(
             string? desc = GetLocalizedText(cvDef!.Description);
             info.Description = desc;
 
-            info.ReadOnly = cvDef.ReadOnly;
+            info.ReadOnly = cvDef.ReadOnly ?? false;
 
             // 3: BIT DETAILS (Flag Bits)
             // We iterate over ALL bits (0 to 7) in order to ensure that we catch bits
@@ -406,7 +406,7 @@ internal class DecoderDefinitionService(
             string? desc = GetLocalizedText(specificDef?.Description);
             info.Description = desc;
 
-            info.ReadOnly = specificDef?.ReadOnly;
+            info.ReadOnly = specificDef?.ReadOnly ?? false;
 
             // 3. BIT DETAILS (Flag Bits)
             // We iterate over ALL bits (0 to 7) in order to ensure that we catch bits

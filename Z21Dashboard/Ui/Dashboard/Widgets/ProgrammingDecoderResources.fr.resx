@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DecoderDefChanged" xml:space="preserve">
+    <value>Définition du décodeur non enregistrée</value>
+  </data>
   <data name="LocoDecoders" xml:space="preserve">
     <value>Locomotive decoders</value>
+  </data>
+  <data name="LocomotiveDefChanged" xml:space="preserve">
+    <value>Définition de la locomotive non enregistrée</value>
   </data>
   <data name="Locomotives" xml:space="preserve">
     <value>Locomotives</value>

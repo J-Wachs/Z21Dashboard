@@ -43,7 +43,7 @@ internal class DecoderProgService(
         if (sysStateSuccess is false || trackState is null)
         {
             // "Failed to retrieve system state. Cannot proceed with POM CV reading"
-            return Result<List<CVValue>>.Failure(SharedResources.FailedToRetrieveSystemStatus); 
+            return Result<List<CVValue>>.Failure(SharedResources.FailedToRetrieveSystemStatus);
         }
 
         // When we come here, we need to check the configuration for RailCom is enabled.
@@ -116,7 +116,7 @@ internal class DecoderProgService(
                             // "Sync error: Requested CV {0}, received {1}"
                             return Result<List<CVValue>>.Failure(string.Format(SharedResources.CVSyncError, cvAddress, cvResult.Cv));
                         }
-                            
+
                         resultList.Add(cvResult);
                         break;
 
@@ -140,7 +140,7 @@ internal class DecoderProgService(
             }
             return Results.Success(resultList);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var errorMessage = string.Format(SharedResources.ErrorReadingFromDecoder, ex.Message);
             logger.LogError(ex, errorMessage);
@@ -153,6 +153,29 @@ internal class DecoderProgService(
                 await z21Client.SetTrackPowerOnAsync();
             }
         }
+    }
+
+    /// <inheritdoc />
+    public async Task<Result> WriteCVBitAddressesPOMAsync(
+        ushort locoAddress,
+        Queue<CVBitValue> cvBitsToWrite
+        )
+    {
+        if (locoAddress is 0 or > Limits.HighestLongAddress)
+        {
+            // "The locomotive address must have a value between 1 and {0} in order to communicate on the main track"
+            return Result.Failure(string.Format(SharedResources.LocoAddressOutOfRange, Limits.HighestLongAddress));
+        }
+
+        foreach (var item in cvBitsToWrite)
+        {
+            await z21Client.SetCVBitValueOnPOMAsync(locoAddress, new (item.Cv, item.Bit, item.Value));
+
+            // Status must be Success here
+            await Task.Delay(100);
+        }
+
+        return Result.Success();
     }
 
     /// <inheritdoc />
@@ -171,7 +194,7 @@ internal class DecoderProgService(
         {
             // For ProgTrack write, Z21 sends back the written value as confirmation (Success)
             // Or a NACK on failure.
-            await z21Client.SetCVValueOnPOMAsync(locoAddress, item.Cv, item.Value);
+            await z21Client.SetCVValueOnPOMAsync(locoAddress, new(item.Cv, item.Value));
 
             // Status must be Success here
             await Task.Delay(100);
@@ -190,7 +213,7 @@ internal class DecoderProgService(
                 // For ProgTrack write, Z21 sends back the written value as confirmation (Success)
                 // Or a NACK on failure.
                 var (status, cvResult, nackShortCircuit) = await AsyncEventHelper.ExecuteAndWaitWithFailureAsync<CVValue, bool>(
-                    triggerAction: async () => await z21Client.SetCVValueOnProgTrackAsync(item.Cv, item.Value),
+                    triggerAction: async () => await z21Client.SetCVValueOnProgTrackAsync(new(item.Cv, item.Value)),
                     subscribeSuccess: h => z21Client.OnCVValueReceived += h,
                     unsubscribeSuccess: h => z21Client.OnCVValueReceived -= h,
                     subscribeFailure: h => z21Client.OnCVNAckReceived += h,

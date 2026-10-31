@@ -16,6 +16,7 @@
 @using Microsoft.Extensions.Logging
 @using Microsoft.JSInterop
 @using Microsoft.Maui.Controls
+@using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Application.Models
 @using Z21Dashboard.Helpers
@@ -26,37 +27,26 @@
 @using Z21Dashboard.Ui.Dashboard.Components
 @using Z21Dashboard.Ui.Interfaces
 @using Z21Dashboard.Ui.Models
-@using GlobalConstants = Z21Dashboard.Constants;
 @inject IDashboardStateService DashboardStateService
 @inject IDecoderUIPageBuilder DecoderUIPageBuilder
 @inject IDecoderDefinitionService DecoderDefinitionService
 @inject IDecoderProgHelperService DecoderProgHelperService
+@inject IDecoderTabsManagement DecoderTabsManagement
 @inject IFileAndFolderService FileAndFolderService
 @inject IJSRuntime JSRuntime
 @inject ILogger<LocoDecoderList> Logger
 @inject IStringLocalizer<LocoDecoderListResources> Localizer
 
-@_decoderDoesNotSupportRailCom
-@if (_decoderDoesNotSupportRailCom)
-{
-    <div class="alert alert-info py-2 mb-3">@Localizer["DecoderNoRailCom"]</div>
-}
-
-<div class="row mb-2 align-items-center">
-    <div class="col-3">
-        <label>@Localizer["ManufacturerCode"]:</label>
-    </div>
-    <div class="col-9">
-        <div class="form-control form-control-sm">
-            @_manufacturerCode
-        </div>
-    </div>
-</div>
 <div class="row mb-2 align-items-center">
     <div class="col-3">
         <label>@Localizer["Manufacturer"]:</label>
     </div>
-    <div class="col-9">
+    <div class="col-2">
+        <div class="form-control form-control-sm">
+            @_manufacturerCode
+        </div>
+    </div>
+    <div class="col-7">
         <div class="form-control form-control-sm">
             @_manufacturerName
         </div>
@@ -88,6 +78,20 @@
     </div>
 }
 
+@if (_displayEsuDecoderModel)
+{
+    <div class="row mb-2 align-items-center">
+        <div class="col-3">
+            <label>@Localizer["ESUDecoderModel"]:</label>
+        </div>
+        <div class="col-9">
+            <div class="form-control form-control-sm">
+                @_esuDecoderModel
+            </div>
+        </div>
+    </div>
+}
+
 <div class="row mb-2">
     <div class="col-12 d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-primary" disabled="@_buttonsDisabled"
@@ -96,6 +100,13 @@
         </button>
     </div>
 </div>
+
+<hr />
+
+@if (_decoderDoesNotSupportRailCom)
+{
+    <div class="alert alert-info py-2 mb-3">@Localizer["DecoderNoRailCom"]</div>
+}
 
 <div class="row mb-2 align-text-top">
     <div class="col-3">
@@ -207,112 +218,187 @@
     private DashboardSettings _dashboardSettings = new();
     private bool _displayZimoDecoderModel = false;
     private string _zimoDecoderModel = string.Empty;
+    private bool _displayEsuDecoderModel = false;
+    private string _esuDecoderModel = string.Empty;
 
     private bool _displaySaveAs = false;
     private string _suggestedDecoderFilename = string.Empty;
     private bool _decoderDoesNotSupportRailCom = false;
 
-    private static readonly Dictionary<byte, string> ZimoDecoderModels = new()
+    private class DecoderId
     {
-        [130] = "MX630 (2022)",
-        [131] = "MX630 RevE",
-        [132] = "MX623 (2022)",
-        [133] = "MX633 (2020)",
-        [134] = "MX634 (2020)",
-        [135] = "MX635",
-        [136] = "MX636",
-        [137] = "MX637",
-        [138] = "MX622",
-        [142] = "MDS442",
-        [151] = "MX615 (2023)",
-        [152] = "MX152 Roco",
-        [158] = "MX685 RevE",
-        [160] = "MX660",
-        [161] = "MX616 (2023)",
-        [165] = "REE_DU65",
-        [166] = "MX600 (2021)",
-        [171] = "MX671",
-        [173] = "MX673",
-        [174] = "MX675",
-        [175] = "MX675",
-        [176] = "R72016",
-        [177] = "MX617",
-        [178] = "MX676",
-        [179] = "MXLIPL3 (380mm)",
-        [180] = "MX688 (2022)",
-        [181] = "MX618",
-        [182] = "MX682",
-        [183] = "MX689",
-        [184] = "MXLIPL1 160mm)",
-        [185] = "MX685 (2020)",
-        [186] = "MX605N",
-        [187] = "MX605FL",
-        [188] = "MX605SL",
-        [189] = "MX605",
-        [190] = "MX659",
-        [192] = "MX622 (2020)",
-        [193] = "MX638",
-        [194] = "MX615",
-        [195] = "MX616",
-        [196] = "MXKISS",
-        [197] = "MX617",
-        [198] = "FLM_E69",
-        [199] = "MX600",
-        [200] = "MX82",
-        [201] = "MX620",
-        [202] = "MX62",
-        [203] = "MX63",
-        [204] = "MX64",
-        [205] = "MX64H",
-        [206] = "MX64D",
-        [207] = "MX680",
-        [208] = "MX690",
-        [209] = "MX69",
-        [210] = "MX640",
-        [211] = "MX630-P2520",
-        [212] = "MX632",
-        [213] = "MX631",
-        [214] = "MX642",
-        [215] = "MX643",
-        [216] = "MX647",
-        [217] = "MX646",
-        [218] = "MX630 (2011)",
-        [219] = "MX631 (2011)",
-        [220] = "MX632 (2011)",
-        [221] = "MX645",
-        [222] = "MX644",
-        [223] = "MX621",
-        [224] = "MX695 RevB",
-        [225] = "MX648",
-        [226] = "MX685",
-        [227] = "MX695 RevC",
-        [228] = "MX681",
-        [229] = "MX695N",
-        [230] = "MX696",
-        [231] = "MX696N",
-        [232] = "MX686",
-        [233] = "MX622",
-        [234] = "MX623",
-        [235] = "MX687",
-        [236] = "MX621-FLM",
-        [237] = "MX633",
-        [238] = "MX820 RevA",
-        [240] = "MX634",
-        [241] = "MX686B",
-        [242] = "MX820 RevB",
-        [243] = "MX618",
-        [244] = "Roco NextG",
-        [245] = "MX697 RevA",
-        [246] = "MX658",
-        [247] = "MX688",
-        [248] = "MX821",
-        [249] = "MX648 RevC,D",
-        [250] = "MX699",
-        [251] = "Roco 2067",
-        [252] = "Roco ICE",
-        [253] = "MX649",
-        [254] = "MX697 RevB"
-    };
+        public string [] Ids { get; set; } = [];
+        public string Model { get; set; } = string.Empty;
+    }
+
+    private static readonly List<DecoderId> _zimoDecoderModels =
+    [
+        new DecoderId { Ids = ["130"], Model = "MX630 (2022)" },
+        new DecoderId { Ids = ["131"], Model = "MX630 RevE" },
+        new DecoderId { Ids = ["132"], Model = "MX623 (2022)" },
+        new DecoderId { Ids = ["133"], Model = "MX633 (2020)" },
+        new DecoderId { Ids = ["134"], Model = "MX634 (2020)" },
+        new DecoderId { Ids = ["135"], Model = "MX635" },
+        new DecoderId { Ids = ["136"], Model = "MX636" },
+        new DecoderId { Ids = ["137"], Model = "MX637" },
+        new DecoderId { Ids = ["138"], Model = "MX622" },
+        new DecoderId { Ids = ["142"], Model = "MDS442" },
+        new DecoderId { Ids = ["151"], Model = "MX615 (2023)" },
+        new DecoderId { Ids = ["152"], Model = "MX152 Roco" },
+        new DecoderId { Ids = ["158"], Model = "MX685 RevE" },
+        new DecoderId { Ids = ["160"], Model = "MX660" },
+        new DecoderId { Ids = ["161"], Model = "MX616 (2023)" },
+        new DecoderId { Ids = ["165"], Model = "REE_DU65" },
+        new DecoderId { Ids = ["166"], Model = "MX600 (2021)" },
+        new DecoderId { Ids = ["171"], Model = "MX671" },
+        new DecoderId { Ids = ["173"], Model = "MX673" },
+        new DecoderId { Ids = ["174"], Model = "MX675" },
+        new DecoderId { Ids = ["175"], Model = "MX675" },
+        new DecoderId { Ids = ["176"], Model = "R72016" },
+        new DecoderId { Ids = ["177"], Model = "MX617" },
+        new DecoderId { Ids = ["178"], Model = "MX676" },
+        new DecoderId { Ids = ["179"], Model = "MXLIPL3 (380mm)" },
+        new DecoderId { Ids = ["180"], Model = "MX688 (2022)" },
+        new DecoderId { Ids = ["181"], Model = "MX618" },
+        new DecoderId { Ids = ["182"], Model = "MX682" },
+        new DecoderId { Ids = ["183"], Model = "MX689" },
+        new DecoderId { Ids = ["184"], Model = "MXLIPL1 160mm)" },
+        new DecoderId { Ids = ["185"], Model = "MX685 (2020)" },
+        new DecoderId { Ids = ["186"], Model = "MX605N" },
+        new DecoderId { Ids = ["187"], Model = "MX605FL" },
+        new DecoderId { Ids = ["188"], Model = "MX605SL" },
+        new DecoderId { Ids = ["189"], Model = "MX605" },
+        new DecoderId { Ids = ["190"], Model = "MX659" },
+        new DecoderId { Ids = ["192"], Model = "MX622 (2020)" },
+        new DecoderId { Ids = ["193"], Model = "MX638" },
+        new DecoderId { Ids = ["194"], Model = "MX615" },
+        new DecoderId { Ids = ["195"], Model = "MX616" },
+        new DecoderId { Ids = ["196"], Model = "MXKISS" },
+        new DecoderId { Ids = ["197"], Model = "MX617" },
+        new DecoderId { Ids = ["198"], Model = "FLM_E69" },
+        new DecoderId { Ids = ["199"], Model = "MX600" },
+        new DecoderId { Ids = ["200"], Model = "MX82" },
+        new DecoderId { Ids = ["201"], Model = "MX620" },
+        new DecoderId { Ids = ["202"], Model = "MX62" },
+        new DecoderId { Ids = ["203"], Model = "MX63" },
+        new DecoderId { Ids = ["204"], Model = "MX64" },
+        new DecoderId { Ids = ["205"], Model = "MX64H" },
+        new DecoderId { Ids = ["206"], Model = "MX64D" },
+        new DecoderId { Ids = ["207"], Model = "MX680" },
+        new DecoderId { Ids = ["208"], Model = "MX690" },
+        new DecoderId { Ids = ["209"], Model = "MX69" },
+        new DecoderId { Ids = ["210"], Model = "MX640" },
+        new DecoderId { Ids = ["211"], Model = "MX630-P2520" },
+        new DecoderId { Ids = ["212"], Model = "MX632" },
+        new DecoderId { Ids = ["213"], Model = "MX631" },
+        new DecoderId { Ids = ["214"], Model = "MX642" },
+        new DecoderId { Ids = ["215"], Model = "MX643" },
+        new DecoderId { Ids = ["216"], Model = "MX647" },
+        new DecoderId { Ids = ["217"], Model = "MX646" },
+        new DecoderId { Ids = ["218"], Model = "MX630 (2011)" },
+        new DecoderId { Ids = ["219"], Model = "MX631 (2011)" },
+        new DecoderId { Ids = ["220"], Model = "MX632 (2011)" },
+        new DecoderId { Ids = ["221"], Model = "MX645" },
+        new DecoderId { Ids = ["222"], Model = "MX644" },
+        new DecoderId { Ids = ["223"], Model = "MX621" },
+        new DecoderId { Ids = ["224"], Model = "MX695 RevB" },
+        new DecoderId { Ids = ["225"], Model = "MX648" },
+        new DecoderId { Ids = ["226"], Model = "MX685" },
+        new DecoderId { Ids = ["227"], Model = "MX695 RevC" },
+        new DecoderId { Ids = ["228"], Model = "MX681" },
+        new DecoderId { Ids = ["229"], Model = "MX695N" },
+        new DecoderId { Ids = ["230"], Model = "MX696" },
+        new DecoderId { Ids = ["231"], Model = "MX696N" },
+        new DecoderId { Ids = ["232"], Model = "MX686" },
+        new DecoderId { Ids = ["233"], Model = "MX622" },
+        new DecoderId { Ids = ["234"], Model = "MX623" },
+        new DecoderId { Ids = ["235"], Model = "MX687" },
+        new DecoderId { Ids = ["236"], Model = "MX621-FLM" },
+        new DecoderId { Ids = ["237"], Model = "MX633" },
+        new DecoderId { Ids = ["238"], Model = "MX820 RevA" },
+        new DecoderId { Ids = ["240"], Model = "MX634" },
+        new DecoderId { Ids = ["241"], Model = "MX686B" },
+        new DecoderId { Ids = ["242"], Model = "MX820 RevB" },
+        new DecoderId { Ids = ["243"], Model = "MX618" },
+        new DecoderId { Ids = ["244"], Model = "Roco NextG" },
+        new DecoderId { Ids = ["245"], Model = "MX697 RevA" },
+        new DecoderId { Ids = ["246"], Model = "MX658" },
+        new DecoderId { Ids = ["247"], Model = "MX688" },
+        new DecoderId { Ids = ["248"], Model = "MX821" },
+        new DecoderId { Ids = ["249"], Model = "MX648 RevC,D" },
+        new DecoderId { Ids = ["250"], Model = "MX699" },
+        new DecoderId { Ids = ["251"], Model = "Roco 2067" },
+        new DecoderId { Ids = ["252"], Model = "Roco ICE" },
+        new DecoderId { Ids = ["253"], Model = "MX649" },
+        new DecoderId { Ids = ["254"], Model = "MX697 RevB" }
+
+    ];
+
+    private static readonly List<DecoderId> _esuDecoderModels =
+    [
+        new DecoderId { Ids = ["0100000D", "01000012", "01000017", "01000020"], Model = "LokSound V3.5" },
+        new DecoderId { Ids = ["01000019", "0100001E"], Model = "LokSound Micro V3.5" },
+        new DecoderId { Ids = ["0100000E", "01000014", "01000024"], Model = "LokSoundXL V3.5" },
+        new DecoderId { Ids = ["0100000D", "01000012", "01000017", "01000020"], Model = "LokSound Version 3.5" },
+        new DecoderId { Ids = ["0100000D", "01000012", "01000017", "01000020"], Model = "LokSound Version 3.5 (21 pin)" },
+
+        new DecoderId { Ids = ["0200003F", "02000084"], Model = "LokPilot V4.0" },
+        new DecoderId { Ids = ["02000042", "02000085"], Model = "LokPilot V4.0 DCC" },
+        new DecoderId { Ids = ["0200005B"], Model = "LokPilot V4.0 DCC PX" },
+        new DecoderId { Ids = ["02000043", "02000086"], Model = "LokPilot V4.0 M4" },
+        new DecoderId { Ids = ["0200008B"], Model = "LokPilot V4.0 M4 MKL" },
+        new DecoderId { Ids = ["02000040"], Model = "LokPilot Micro V4.0" },
+        new DecoderId { Ids = ["02000046"], Model = "LokPilot Micro V4.0 DCC" },
+        new DecoderId { Ids = ["0200008E"], Model = "LokPilot Micro SlideIn V4.0 DCC" },
+        new DecoderId { Ids = ["02000056"], Model = "LokPilot Fx V4.0" },
+        new DecoderId { Ids = ["02000055"], Model = "LokPilot XL V4.0" },
+
+        new DecoderId { Ids = ["0200003D", "02000047", "0200006A"], Model = "LokSound V4.0" },
+        new DecoderId { Ids = ["02000044", "02000068"], Model = "LokSound V4.0 M4" },
+        new DecoderId { Ids = ["02000059", "02000073"], Model = "LokSound V4.0 M4 OEM" },
+        new DecoderId { Ids = ["02000041", "02000078"], Model = "LokSound Micro V4.0" },
+        new DecoderId { Ids = ["02000070"], Model = "LokSound L V4.0" },
+        new DecoderId { Ids = ["0200004B", "0200006D"], Model = "LokSound XL V4.0" },
+
+        new DecoderId { Ids = ["020000A8", "020000CC"], Model = "LokPilot 5" },
+        new DecoderId { Ids = ["020000AA", "020000CE"], Model = "LokPilot 5 DCC" },
+        new DecoderId { Ids = ["010000AE"], Model = "LokPilot 5 micro" },
+        new DecoderId { Ids = ["010000AF"], Model = "LokPilot 5 micro DCC" },
+        new DecoderId { Ids = ["0100009A"], Model = "LokPilot 5 micro DCC Direct" },
+        new DecoderId { Ids = ["010000EB"], Model = "LokPilot 5 micro DCC Direct Atlas Legacy" },
+        new DecoderId { Ids = ["020000AC"], Model = "LokPilot 5 micro Next18" },
+        new DecoderId { Ids = ["020000AD"], Model = "LokPilot 5 micro Next18 DCC" },
+        new DecoderId { Ids = ["010000FC"], Model = "LokPilot 5 nano DCC" },
+        new DecoderId { Ids = ["020000B1", "020000CF", "020000F0"], Model = "LokPilot 5 L" },
+        new DecoderId { Ids = ["020000B2", "020000D0", "020000F1"], Model = "LokPilot 5 L DCC" },
+        new DecoderId { Ids = ["010000BE", "010000D1"], Model = "LokPilot 5 Fx" },
+        new DecoderId { Ids = ["010000BF", "010000D2"], Model = "LokPilot 5 Fx DCC" },
+        new DecoderId { Ids = ["020000B3"], Model = "LokPilot 5 Fx micro" },
+        new DecoderId { Ids = ["020000B4"], Model = "LokPilot 5 Fx micro DCC" },
+        new DecoderId { Ids = ["020000B8"], Model = "LokPilot 5 Fx micro Next18" },
+        new DecoderId { Ids = ["020000B9"], Model = "LokPilot 5 Fx micro Next18 DCC" },
+        new DecoderId { Ids = ["020000A9", "020000CD"], Model = "LokPilot 5 MKL" },
+        new DecoderId { Ids = ["020000B0", "020000D3"], Model = "LokPilot 5 MKL DCC" },
+        new DecoderId { Ids = ["010000EC"], Model = "LokPilot 5 micro KATO" },
+
+        new DecoderId { Ids = ["02000096", "020000F7", "020000DA"], Model = "LokSound 5" },
+        new DecoderId { Ids = ["0200009C", "020000F8", "020000DB"], Model = "LokSound 5 DCC" },
+        new DecoderId { Ids = ["0200009B"], Model = "LokSound 5 micro" },
+        new DecoderId { Ids = ["0200009E"], Model = "LokSound 5 micro DCC" },
+        new DecoderId { Ids = ["0100009A"], Model = "LokSound 5 micro DCC Direct" },
+        new DecoderId { Ids = ["010000D8"], Model = "LokSound 5 micro DCC Direct Atlas Legacy" },
+        new DecoderId { Ids = ["010000FB"], Model = "LokSound 5 micro DCC Direct Atlas S2" },
+        new DecoderId { Ids = ["010000BC"], Model = "LokSound 5 micro E24 DCC" },
+        new DecoderId { Ids = ["010000BC"], Model = "LokSound 5 nano DCC" },
+        new DecoderId { Ids = ["010000E4"], Model = "LokSound 5 nano DCC Next18" },
+        new DecoderId { Ids = ["0200009D", "010000E2", "020000DD"], Model = "LokSound 5 L" },
+        new DecoderId { Ids = ["020000A0", "010000E3", "020000DE"], Model = "LokSound 5 L DCC" },
+        new DecoderId { Ids = ["0200009F"], Model = "LokSound 5 XL" },
+        new DecoderId { Ids = ["020000C5"], Model = "LokSound 5 Fx" },
+        new DecoderId { Ids = ["020000C6"], Model = "LokSound 5 Fx DCC" },
+        new DecoderId { Ids = ["020000A6", "020000F9", "020000DC"], Model = "LokSound 5 MKL" },
+        new DecoderId { Ids = ["010000BD"], Model = "LokSound 5 micro KATO" }
+    ];
 
     protected override async Task OnInitializedAsync()
     {
@@ -472,14 +558,11 @@
     /// <returns></returns>
     private async Task<Result> ReadDecoderDefAsync(DecoderListItemDto decoder)
     {
-        // Remove tabs associated with the previous selected decoder:
-        _ = Parent.RemoveTabById(GlobalConstants.DecoderEditBasePageId);
-        _ = Parent.RemoveTabById(GlobalConstants.DecoderAddressPageId);
-        _ = Parent.RemoveTabById(GlobalConstants.AllCvsReadWritePageId);
-        foreach (var onePage in DecoderSettings.Pages)
-        {
-            _ = Parent.RemoveTabById(onePage.Id);
-        }
+        // Decoder tabs cleanup needed.
+        DecoderTabsManagement.RemoveDecoderTabs(
+            Parent,
+            DecoderSettings
+        );
 
         // Read the decoder definition file:
         var result = await DecoderDefinitionService.GetLocoDecoderDefAndSetCVsIntoSettingsAsync(
@@ -854,6 +937,13 @@
         _buttonsDisabled = true;
         _displayZimoDecoderModel = false;
         _zimoDecoderModel = string.Empty;
+        _displayEsuDecoderModel = false;
+        _esuDecoderModel = string.Empty;
+
+        _manufacturerCode = 0;
+        _manufacturerName = string.Empty;
+        _manufacturerVersionNbr = 0;
+
         WorkingMessage = Localizer["CVReading"];
         await WorkingMessageChanged.InvokeAsync(WorkingMessage);
         StateHasChanged();
@@ -871,7 +961,15 @@
 
             if (_manufacturerCode == 145)  // ZIMO
             {
-                if ((await ReadZimoDecoderModelAsync()).IsSuccess)
+                if ((await ReadZIMODecoderModelAsync()).IsSuccess)
+                {
+                    SuccessMessage = Localizer["CVRead"];
+                    await SuccessMessageChanged.InvokeAsync(SuccessMessage);
+                }
+            }
+            else if (_manufacturerCode == 151)  // ESU
+            {
+                if ((await ReadESUDecoderModelAsync()).IsSuccess)
                 {
                     SuccessMessage = Localizer["CVRead"];
                     await SuccessMessageChanged.InvokeAsync(SuccessMessage);
@@ -911,7 +1009,7 @@
     /// Reads CV 250 to identify the ZIMO decoder model.
     /// </summary>
     /// <returns></returns>
-    private async Task<Result> ReadZimoDecoderModelAsync()
+    private async Task<Result> ReadZIMODecoderModelAsync()
     {
         var queue = new Queue<ushort>();
         queue.Enqueue(Cvs.ZIMODecoderModel);
@@ -924,14 +1022,9 @@
         if (result.IsSuccess && result.Data is not null && result.Data.Count > 0)
         {
             var modelNumber = result.Data[0].Value;
-            if (ZimoDecoderModels.TryGetValue(modelNumber, out var modelName))
-            {
-                _zimoDecoderModel = modelName;
-            }
-            else
-            {
-                _zimoDecoderModel = string.Format(Localizer["UnknownZimoDecoder"], modelNumber);
-            }
+            var decoder = _esuDecoderModels
+                .FirstOrDefault(x => x.Ids.Contains(modelNumber.ToString()));
+            _zimoDecoderModel = decoder is not null ? decoder.Model : string.Format(Localizer["UnknownZimoDecoder"], modelNumber);
             _displayZimoDecoderModel = true;
             return Result.Success();
         }
@@ -956,6 +1049,118 @@
             }
         }
         return Result.Failure(string.Empty);
+    }
+
+    /// <summary>
+    /// Reads the decoder ID to identify the ESU decoder model.
+    /// </summary>
+    /// <returns></returns>
+    private async Task<Result> ReadESUDecoderModelAsync()
+    {
+        // TODO: Read the decoder ID from the ESU decoder and look up the model in _esuDecoderModels.
+        _displayEsuDecoderModel = true;
+
+        var readQueue = new Queue<ushort>();
+        readQueue.Enqueue(Cvs.IndexRegisterHighByte);
+        readQueue.Enqueue(Cvs.IndexRegisterLowByte);
+
+        var readResult = await DecoderProgHelperService.ReadCVValuesAsync(
+            ProgTargetAddr.ProgTarget,
+            (ushort?)ProgTargetAddr.LocoAddress,
+            readQueue);
+
+        if (readResult.IsSuccess)
+        {
+            // Store the CV index values for later restore
+            var tempStoreValues = readResult.Data;
+
+            var writeQueue = new Queue<CVValue>();
+            writeQueue.Enqueue(new CVValue(Cvs.IndexRegisterHighByte, 0));
+            writeQueue.Enqueue(new CVValue(Cvs.IndexRegisterLowByte, 255));
+
+            var writeResult = await DecoderProgHelperService.WriteCVValuesAsync(
+                ProgTargetAddr.ProgTarget,
+                (ushort?)ProgTargetAddr.LocoAddress,
+                writeQueue);
+            if (writeResult.IsSuccess)
+            {
+                readQueue = new Queue<ushort>();
+                readQueue.Enqueue(Cvs.ESUProdIdentifier1);
+                readQueue.Enqueue(Cvs.ESUProdIdentifier2);
+                readQueue.Enqueue(Cvs.ESUProdIdentifier3);
+                readQueue.Enqueue(Cvs.ESUProdIdentifier4);
+
+                readResult = await DecoderProgHelperService.ReadCVValuesAsync(
+                    ProgTargetAddr.ProgTarget,
+                    (ushort?)ProgTargetAddr.LocoAddress,
+                    readQueue);
+
+                if (readResult.IsSuccess)
+                {
+                    if (readResult.Data is not null && readResult.Data.Count == 4)
+                    {
+                        // Calculate value and look up model in _esuDecoderModels
+                        var proId = (readResult.Data[3].Value << 24) | (readResult.Data[2].Value << 16) | (readResult.Data[1].Value << 8) | readResult.Data[0].Value;
+
+                        var decoder = _esuDecoderModels
+                            .FirstOrDefault(x => x.Ids.Contains(proId.ToString("X8")));
+                        _esuDecoderModel = decoder is not null ? decoder.Model : string.Format(Localizer["UnknownEsuDecoder"], proId);
+                    }
+                    else
+                    {
+                        _esuDecoderModel = string.Format(Localizer["UnknownEsuDecoder"], "-");
+                    }
+                }
+                else
+                {
+                    await SetMessages(readResult.Messages);
+                }
+
+                if (tempStoreValues is not null)
+                {
+                    writeQueue = new Queue<CVValue>();
+                    writeQueue.Enqueue(new CVValue(Cvs.IndexRegisterHighByte, tempStoreValues[0].Value));
+                    writeQueue.Enqueue(new CVValue(Cvs.IndexRegisterLowByte, tempStoreValues[1].Value));
+
+                    writeResult = await DecoderProgHelperService.WriteCVValuesAsync(
+                        ProgTargetAddr.ProgTarget,
+                        (ushort?)ProgTargetAddr.LocoAddress,
+                        writeQueue);
+                }
+                // We don't care about the result of restoring the index register, so we don't check it.
+            }
+            else 
+            {
+                await SetMessages(writeResult.Messages);
+            }
+        }
+        else
+        {
+            await SetMessages(readResult.Messages);
+        }
+
+        return Result.Success();
+    }
+
+    private async Task SetMessages(List<ResultMessages> messages)
+    {
+            WorkingMessage = null;
+            await WorkingMessageChanged.InvokeAsync(WorkingMessage);
+
+            if (messages?.Count > 0)
+            {
+                foreach (var errorMessageForField in messages)
+                {
+                    foreach (var errorMessage in errorMessageForField.Messages)
+                    {
+                        if (string.IsNullOrEmpty(errorMessage) is false)
+                        {
+                            ErrorMessages.Add(errorMessage);
+                        }
+                    }
+                }
+                await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+            }
     }
 
     /// <summary>

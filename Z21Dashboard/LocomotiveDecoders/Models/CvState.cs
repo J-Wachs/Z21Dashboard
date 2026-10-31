@@ -128,7 +128,7 @@ public class CvState
     /// <returns></returns>
     public byte? PatchWithWholeValue(byte value)
     {
-        byte tempValue = (byte)value;
+        byte tempValue = value;
 
         for (int i = 0; i < 8; i++)
         {
@@ -304,6 +304,10 @@ public class CvState
             }
 
             // Place correctly in the array.
+            if (Bits[i] != bit)
+            {
+                IsChanged = true;
+            }
             Bits[i] = bit;
         }
     }

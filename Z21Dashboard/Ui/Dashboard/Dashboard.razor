@@ -47,8 +47,15 @@
         {
             @if (componentState.IsSystemComponent || _connectionState is ConnectionState.Connected)
             {
+                @*
+                    @onclick completes a deferred bring-to-front. A button 'click' inside the widget
+                    (e.g. Disconnect) bubbles up to this wrapper, so CompleteBringToFront runs after
+                    that button's click has been processed — never during the mousedown that precedes
+                    it. This keeps the first click on a button working while still persisting z-order.
+                *@
                 <div @key="componentState.Id" class="absolute-item @GetActiveClassIfTop(componentState.Id)"
-                     style="@GetAbsoluteItemStyle(componentState)">
+                     style="@GetAbsoluteItemStyle(componentState)"
+                     @onclick="CompleteBringToFront">
                     <DynamicComponent Type="@(componentState.ComponentType!)" Parameters="@componentState.Parameters" />
                 </div>
             }
@@ -76,6 +83,7 @@
     private bool _isDragging = false;
     private double _dragOffsetX = 0;
     private double _dragOffsetY = 0;
+    private bool _bringToFrontPending = false;
 
     private Guid _topGuid = Guid.Empty;
 
@@ -127,9 +135,51 @@
             return;
         }
 
+        // Update the z-order state only. Do NOT re-render or persist here: BringToFront runs
+        // during the widget's mousedown, and rendering now would rebuild the widget's
+        // parameters/DOM before the browser dispatches the pending 'click', swallowing it
+        // (this is why Disconnect needed two presses). The re-render and persist are deferred
+        // to CompleteBringToFront, which runs on the card's 'click' (after the button's click).
         _topGuid = component.Id;
         component.ZIndex = GetHighestZIndex() + 1;
+        _bringToFrontPending = true;
+    }
+
+    /// <summary>
+    /// Applies the deferred bring-to-front re-render and z-order persist. Wired to the card's
+    /// 'click' event so it runs after any button 'click' inside the widget (e.g. Disconnect).
+    /// </summary>
+    private async Task CompleteBringToFront()
+    {
+        if (!_bringToFrontPending)
+        {
+            return;
+        }
+
+        _bringToFrontPending = false;
         StateHasChanged();
+        await PersistZOrderAsync();
+    }
+
+    /// <summary>
+    /// Normalizes the z-order of the visible widgets, applies it to the service's
+    /// component list and persists it, so the top-most widget survives an app restart.
+    /// </summary>
+    private async Task PersistZOrderAsync()
+    {
+        NormalizeZIndexes();
+        var allComponents = DashboardStateService.GetComponentStates();
+        foreach (var widget in _widgets)
+        {
+            var stored = allComponents.FirstOrDefault(c => c.Id == widget.Id);
+            if (stored is not null)
+            {
+                stored.PositionX = widget.PositionX;
+                stored.PositionY = widget.PositionY;
+                stored.ZIndex = widget.ZIndex;
+            }
+        }
+        await DashboardStateService.UpdateLayoutAsync(allComponents);
     }
 
     private void HandleMouseMove(MouseEventArgs args)
@@ -145,16 +195,10 @@
     private async void HandleMouseUp()
     {
         if (!_isDragging || _draggedComponent == null) return;
-        NormalizeZIndexes();
-        var allComponents = DashboardStateService.GetComponentStates();
-        var componentToUpdate = allComponents.FirstOrDefault(c => c.Id == _draggedComponent.Id);
-        if (componentToUpdate != null)
-        {
-            componentToUpdate.PositionX = _draggedComponent.PositionX;
-            componentToUpdate.PositionY = _draggedComponent.PositionY;
-            componentToUpdate.ZIndex = _draggedComponent.ZIndex;
-        }
-        await DashboardStateService.UpdateLayoutAsync(allComponents);
+        // The drag already brought the widget to front and PersistZOrderAsync re-renders, so
+        // clear any deferred bring-to-front to avoid a stale pending render on a later click.
+        _bringToFrontPending = false;
+        await PersistZOrderAsync();
         _isDragging = false;
         _draggedComponent = null;
     }

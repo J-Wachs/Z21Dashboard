@@ -198,4 +198,7 @@
   <data name="Continue" xml:space="preserve">
     <value>Fortsæt</value>
   </data>
+  <data name="AddrCVsNotWritten" xml:space="preserve">
+    <value>Da du programmerer på hovedsporet (POM), bliver CVere der har med dekoderens adresse at gøre, ikke skrevet til dekoderen. Disse CVere er CV1 (kort adresse), CV17 (lang adresse, høj byte), CV18 (lang adresse, lav byte) og CV29 bit 5 (kort/lang adresse).</value>
+  </data>
 </root>

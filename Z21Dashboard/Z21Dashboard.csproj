@@ -113,6 +113,11 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
       </Compile>
+      <Compile Update="Components\Layout\MainLayoutResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>MainLayoutResources.resx</DependentUpon>
+      </Compile>
       <Compile Update="Ui\Components\FileSaveAsDialogResources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -352,6 +357,10 @@
       <EmbeddedResource Update="Resources\Localization\ValidationErrorMessages.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ValidationErrorMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Components\Layout\MainLayoutResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>MainLayoutResources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Ui\Components\FileSaveAsDialogResources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

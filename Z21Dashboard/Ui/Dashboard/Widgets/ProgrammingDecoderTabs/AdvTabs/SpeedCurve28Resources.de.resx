@@ -117,14 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Advanced28Point" xml:space="preserve">
-    <value>Erweitert 28-Punkt</value>
+  <data name="Apply" xml:space="preserve">
+    <value>Anwenden</value>
   </data>
   <data name="ContentMissing" xml:space="preserve">
     <value>Inhalt für die Seite fehlt</value>
-  </data>
-  <data name="CurveType" xml:space="preserve">
-    <value>Kurventyp</value>
   </data>
   <data name="CVRead" xml:space="preserve">
     <value>CV-Werte vom Dekoder gelesen</value>
@@ -132,7 +129,7 @@
   <data name="CVReading" xml:space="preserve">
     <value>CV-Werte werden vom Dekoder gelesen</value>
   </data>
-  <data name="CVWrite" xml:space="preserve">
+  <data name="CVWriting" xml:space="preserve">
     <value>CV-Werte werden auf den Dekoder geschrieben</value>
   </data>
   <data name="CVWritten" xml:space="preserve">
@@ -141,26 +138,29 @@
   <data name="Exponential" xml:space="preserve">
     <value>Exponential</value>
   </data>
+  <data name="ExponentialEndpoints" xml:space="preserve">
+    <value>Exponential (Endpunkte)</value>
+  </data>
   <data name="ForwardTrim" xml:space="preserve">
     <value>Vorwärts-Trimmung</value>
   </data>
   <data name="Linear" xml:space="preserve">
     <value>Linear</value>
   </data>
+  <data name="LinearEndpoints" xml:space="preserve">
+    <value>Linear (Endpunkte)</value>
+  </data>
   <data name="Logarithmic" xml:space="preserve">
     <value>Logarithmisch</value>
+  </data>
+  <data name="LogarithmicEndpoints" xml:space="preserve">
+    <value>Logarithmisch (Endpunkte)</value>
   </data>
   <data name="ReadFromLocoDecoder" xml:space="preserve">
     <value>Vom Lokdekoder lesen</value>
   </data>
   <data name="ReverseTrim" xml:space="preserve">
     <value>Rückwärts-Trimmung</value>
-  </data>
-  <data name="Simple3Point" xml:space="preserve">
-    <value>Einfach 3-Punkt</value>
-  </data>
-  <data name="SpeedCurveInfo" xml:space="preserve">
-    <value>Wählen Sie zwischen 3- oder 28-Punkt-Kurve</value>
   </data>
   <data name="WriteToLocoDecoder" xml:space="preserve">
     <value>Auf Lokdekoder schreiben</value>

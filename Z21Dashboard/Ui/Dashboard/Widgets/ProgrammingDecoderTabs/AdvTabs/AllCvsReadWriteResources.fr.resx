@@ -198,4 +198,7 @@
   <data name="Continue" xml:space="preserve">
     <value>Continuer</value>
   </data>
+  <data name="AddrCVsNotWritten" xml:space="preserve">
+    <value>Lorsque vous programmez sur la voie principale (POM), les CV liés à l’adresse du décodeur ne sont pas écrits dans le décodeur. Ces CV sont CV1 (adresse courte), CV17 (adresse longue, octet de poids fort), CV18 (adresse longue, octet de poids faible) et le bit 5 de CV29 (adresse courte/longue).</value>
+  </data>
 </root>

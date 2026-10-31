@@ -8,6 +8,8 @@
 @using Z21Client.Models
 @using Z21Dashboard.Application.Interfaces
 @using Z21Dashboard.Ui.Dashboard.Components
+@using Z21Dashboard.Ui.Interfaces
+@inject IAppCloseCoordinator AppCloseCoordinator
 @inject IAppDataService AppDataService
 @inject IStringLocalizer<ConnectionResources> Localizer
 @inject IZ21Client Z21Client
@@ -171,6 +173,8 @@
 
     protected override void OnInitialized()
     {
+        AppCloseCoordinator.ForceDisconnectRequested += OnForceDisconnectRequested;
+
         var savedIp = AppDataService.GetData<string>(Z21IpAddressKey);
 
         if (!string.IsNullOrWhiteSpace(savedIp))
@@ -221,8 +225,44 @@
 
     private async Task Disconnect()
     {
-        await OnDisconnect.InvokeAsync();
-        UnsubscribeFromEvents();
+        // Ask all components if disconnecting is OK. If nobody vetoes,
+        // every component runs its cleanup via the DisconnectApproved event.
+        var (canDisconnect, _) = await AppCloseCoordinator.RequestDisconnectAsync();
+        if (canDisconnect)
+        {
+            await OnDisconnect.InvokeAsync();
+            UnsubscribeFromEvents();
+        }
+        // Vetoed: the central dialog lets the user pick "disconnect anyway", which raises
+        // ForceDisconnectRequested. This component (the original requester) retries then.
+    }
+
+    /// <summary>
+    /// The user chose "disconnect anyway" after a veto. Components have already discarded
+    /// their state (DisconnectApproved) and the force flag is set, so the retried request
+    /// is approved without voting. Retry the disconnect that was vetoed earlier.
+    /// </summary>
+    private async void OnForceDisconnectRequested(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (ConnectionState is ConnectionState.Disconnected)
+            {
+                return;
+            }
+
+            // Force flag is set, so this is approved without voting and runs cleanup.
+            var (canDisconnect, _) = await AppCloseCoordinator.RequestDisconnectAsync();
+            if (canDisconnect)
+            {
+                await OnDisconnect.InvokeAsync();
+                UnsubscribeFromEvents();
+            }
+        }
+        finally
+        {
+            AppCloseCoordinator.ResetDisconnectForce();
+        }
     }
 
     private async Task SetTrackPowerOn() => await Z21Client.SetTrackPowerOnAsync();
@@ -302,6 +342,7 @@
 
     public void Dispose()
     {
+        AppCloseCoordinator.ForceDisconnectRequested -= OnForceDisconnectRequested;
         UnsubscribeFromEvents();
     }
 }

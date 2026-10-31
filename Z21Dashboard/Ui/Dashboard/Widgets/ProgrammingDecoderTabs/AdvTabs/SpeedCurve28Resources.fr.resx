@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apply" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
   <data name="ContentMissing" xml:space="preserve">
     <value>Le contenu de la page est manquant</value>
   </data>
@@ -126,7 +129,7 @@
   <data name="CVReading" xml:space="preserve">
     <value>Lecture des valeurs CV depuis le décodeur</value>
   </data>
-  <data name="CVWrite" xml:space="preserve">
+  <data name="CVWriting" xml:space="preserve">
     <value>Écriture des valeurs CV vers le décodeur</value>
   </data>
   <data name="CVWritten" xml:space="preserve">
@@ -135,14 +138,23 @@
   <data name="Exponential" xml:space="preserve">
     <value>Exponentiel</value>
   </data>
+  <data name="ExponentialEndpoints" xml:space="preserve">
+    <value>Exponentiel (extrémités)</value>
+  </data>
   <data name="ForwardTrim" xml:space="preserve">
     <value>Compensation avant</value>
   </data>
   <data name="Linear" xml:space="preserve">
     <value>Linéaire</value>
   </data>
+  <data name="LinearEndpoints" xml:space="preserve">
+    <value>Linéaire (extrémités)</value>
+  </data>
   <data name="Logarithmic" xml:space="preserve">
     <value>Logarithmique</value>
+  </data>
+  <data name="LogarithmicEndpoints" xml:space="preserve">
+    <value>Logarithmique (extrémités)</value>
   </data>
   <data name="ReadFromLocoDecoder" xml:space="preserve">
     <value>Lire depuis le décodeur</value>

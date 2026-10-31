@@ -12,8 +12,12 @@
 @using Z21Dashboard.Ui.Dashboard.Components
 @using Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs
 @using Z21Dashboard.Ui.Dashboard.Widgets.ProgrammingDecoderTabs.AdvTabs
+@using Z21Dashboard.Ui.Interfaces
+@using Z21Dashboard.Ui.Models
+@implements IDisposable
 @inject IStringLocalizer<ProgrammingDecoderResources> Localizer
 @inject IDecoderProgService DecoderProgService
+@inject IAppCloseCoordinator CloseCoordinator
 
 <DashboardWidget HeaderTitle="@Localizer["Title"]"
                  OnHeaderMouseDown="OnHeaderMouseDown"
@@ -54,10 +58,68 @@
     };
     private DecoderSettings _decoderSettings = new();
 
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         // Because the initial creation of the class marks it as changed, the change flag must be reset.
         _locomotiveSettings.ClearChanged();
+
+        CloseCoordinator.CloseRequested += OnCloseRequested;
+        CloseCoordinator.DisconnectRequested += OnCloseRequested;
+        CloseCoordinator.DisconnectApproved += OnDisconnectApproved;
+    }
+
+    /// <summary>
+    /// Handle that the user is attempting to close the application (or disconnect from
+    /// the central station). If there are unsaved changes, the user will be prompted to
+    /// confirm that they want to proceed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="context"></param>
+    private void OnCloseRequested(
+        object? sender,
+        CloseVetoContext context
+    )
+    {
+        List<string> reasons = [];
+        if (_locomotiveSettings.IsChanged())
+        {
+            reasons.Add(Localizer["LocomotiveDefChanged"]);
+        }
+
+        if (_decoderSettings.IsChanged())
+        {
+            reasons.Add(Localizer["DecoderDefChanged"]);
+        }
+
+        context.ReportVote(
+            canClose: reasons.Count == 0,
+            reason: reasons.Count > 0 ? string.Join("; ", reasons) : null);
+    }
+
+    /// <summary>
+    /// All components approved the disconnect — reset this widget's dirty state.
+    /// </summary>
+    private async void OnDisconnectApproved(
+        object? sender,
+        EventArgs e
+    )
+    {
+        await InvokeAsync(() =>
+        {
+            _locomotiveSettings.ClearChanged();
+            _decoderSettings.ClearChanged();
+            StateHasChanged();
+        });
+    }
+
+
+    public void Dispose()
+    {
+        CloseCoordinator.CloseRequested -= OnCloseRequested;
+        CloseCoordinator.DisconnectRequested -= OnCloseRequested;
+        CloseCoordinator.DisconnectApproved -= OnDisconnectApproved;
+        GC.SuppressFinalize(this);
     }
 }

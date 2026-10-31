@@ -10,17 +10,24 @@ internal static class Cvs
     internal const ushort VMid = 6;
     internal const ushort ManufacturerVersionNbr = 7;
     internal const ushort Manufacturer = 8;
-    internal const ushort ZIMODecoderModel = 250;
     internal const ushort PWMPeriod = 9;
     internal const ushort LongAddressHighByte = 17;
     internal const ushort LongAddressLowByte = 18;
     internal const ushort RailComConfiguration = 28;
     internal const ushort ConfigurationData1 = 29;
+    internal const ushort IndexRegisterHighByte = 31;
+    internal const ushort IndexRegisterLowByte = 32;
     internal const ushort KickStart = 65;
     internal const ushort ForwardTrim = 66;
     internal const ushort SpeedTableStart = 67; // First step
     internal const ushort SpeedTableEnd = 94;   // Last step (28)
     internal const ushort ReverseTrim = 95;
+    internal const ushort ZIMODecoderModel = 250;
+    internal const ushort ESUProdIdentifier1 = 261;
+    internal const ushort ESUProdIdentifier2 = 262;
+    internal const ushort ESUProdIdentifier3 = 263;
+    internal const ushort ESUProdIdentifier4 = 264;
+
 
     internal const byte CV28_Bit0_Channel1Broadcast = 0b00000001;       // Decimal   1
     internal const byte CV28_Bit1_DataTransmissionAllowed = 0b00000010; // Decimal   2

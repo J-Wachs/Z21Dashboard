@@ -198,4 +198,7 @@
   <data name="Continue" xml:space="preserve">
     <value>Continue</value>
   </data>
+  <data name="AddrCVsNotWritten" xml:space="preserve">
+    <value>When programming on the main track (POM), CVs related to the decoder's address are not written to the decoder. These CVs are CV1 (short address), CV17 (long address, high byte), CV18 (long address, low byte), and CV29 bit 5 (short/long address).</value>
+  </data>
 </root>

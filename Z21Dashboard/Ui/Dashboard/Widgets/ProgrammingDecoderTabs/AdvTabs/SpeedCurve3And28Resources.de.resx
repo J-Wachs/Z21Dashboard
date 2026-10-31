@@ -120,6 +120,9 @@
   <data name="Advanced28Point" xml:space="preserve">
     <value>Erweitert 28-Punkt</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Anwenden</value>
+  </data>
   <data name="ContentMissing" xml:space="preserve">
     <value>Inhalt für die Seite fehlt</value>
   </data>
@@ -141,20 +144,32 @@
   <data name="Exponential" xml:space="preserve">
     <value>Exponential</value>
   </data>
+  <data name="ExponentialEndpoints" xml:space="preserve">
+    <value>Exponential (Endpunkte)</value>
+  </data>
   <data name="ForwardTrim" xml:space="preserve">
     <value>Vorwärts-Trimmung</value>
   </data>
   <data name="Linear" xml:space="preserve">
     <value>Linear</value>
   </data>
+  <data name="LinearEndpoints" xml:space="preserve">
+    <value>Linear (Endpunkte)</value>
+  </data>
   <data name="Logarithmic" xml:space="preserve">
     <value>Logarithmisch</value>
+  </data>
+  <data name="LogarithmicEndpoints" xml:space="preserve">
+    <value>Logarithmisch (Endpunkte)</value>
   </data>
   <data name="ReadFromLocoDecoder" xml:space="preserve">
     <value>Vom Lokdekoder lesen</value>
   </data>
   <data name="ReverseTrim" xml:space="preserve">
     <value>Rückwärts-Trimmung</value>
+  </data>
+  <data name="SelectCurve" xml:space="preserve">
+    <value>Kurve auswählen</value>
   </data>
   <data name="Simple3Point" xml:space="preserve">
     <value>Einfach 3-Punkt</value>

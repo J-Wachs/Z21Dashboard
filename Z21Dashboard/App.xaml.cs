@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Z21Client;
 using Z21Dashboard.Locomotives.Interfaces;
+using Z21Dashboard.Ui.Interfaces;
 using Z21Dashboard.Ui.Services;
 
 namespace Z21Dashboard;
@@ -53,6 +54,9 @@ public partial class App : Microsoft.Maui.Controls.Application
                     throw new InvalidOperationException("Failed to get native window for Super Maximize initialization.");
                 }
             };
+
+            // Hook the cancelable WinUI Closing event so Blazor can veto closing.
+            window.Created += OnWindowCreatedHookClose;
 #else
             window = new Window(new MainPage()) { Title = winTitle };
 #endif
@@ -67,16 +71,89 @@ public partial class App : Microsoft.Maui.Controls.Application
         return window;
     }
 
+#if WINDOWS
+    private bool _closeApproved;
+    private Microsoft.UI.Dispatching.DispatcherQueue? _dispatcherQueue;
+    private Microsoft.UI.Xaml.Window? _nativeWindow;
+
+    /// <summary>
+    /// Hooks the cancelable WinUI <see cref="Microsoft.UI.Windowing.AppWindow.Closing"/> event,
+    /// which (unlike MAUI's Destroying) lets us cancel the close and ask Blazor first.
+    /// </summary>
+    private void OnWindowCreatedHookClose(
+        object? sender,
+        EventArgs e
+        )
+    {
+        if (((Window)sender!).Handler?.PlatformView is Microsoft.UI.Xaml.Window nativeWindow)
+        {
+            _nativeWindow = nativeWindow;
+            _dispatcherQueue = nativeWindow.DispatcherQueue;
+            nativeWindow.AppWindow.Closing += OnAppWindowClosing;
+
+            var coordinator = this.Handler?.MauiContext?.Services.GetService<IAppCloseCoordinator>();
+            coordinator?.ForceCloseRequested += OnForceCloseRequested;
+        }
+    }
+
+    private async void OnAppWindowClosing(
+        Microsoft.UI.Windowing.AppWindow sender,
+        Microsoft.UI.Windowing.AppWindowClosingEventArgs args
+        )
+    {
+        if (_closeApproved) // already confirmed — let it close
+        {
+            return;
+        }      
+        args.Cancel = true; // always cancel first; re-close programmatically if approved
+
+        var coordinator = this.Handler?.MauiContext?.Services.GetService<IAppCloseCoordinator>();
+        if (coordinator is null) 
+        {
+            _closeApproved = true;
+            return; 
+        }
+
+        var (canClose, _) = await coordinator.RequestCloseAsync();
+
+        if (canClose)
+        {
+            _closeApproved = true;
+            _nativeWindow?.Close();
+        }
+        // Vetoed: stay open. MainLayout's dialog (listening to CloseVetoed) shows the reasons.
+    }
+
+    /// <summary>
+    /// Called when the user chose "close anyway" in the Blazor dialog.
+    /// Marshals to the window's UI thread (the call originates from Blazor) and closes.
+    /// </summary>
+    private void OnForceCloseRequested(
+        object? sender,
+        EventArgs e
+        )
+    {
+        _closeApproved = true;
+        _dispatcherQueue?.TryEnqueue(() => _nativeWindow?.Close());
+    }
+#endif
+
     /// <summary>
     /// This method is called when the application window is about to be closed.
     /// It's the safe place to perform cleanup and save data using the correct service provider.
     /// </summary>
-    private void OnWindowDestroying(object? sender, EventArgs e)
+    private void OnWindowDestroying(
+        object? sender,
+        EventArgs e
+        )
     {
         // Get the app's running service provider from the handler's context.
         // This gives us the *correct* DI container with the live singleton instances.
         var services = this.Handler?.MauiContext?.Services;
-        if (services is null) return;
+        if (services is null)
+        {
+            return; 
+        }
 
         // --- MANUALLY DISPOSE SINGLETONS ON SHUTDOWN ---
 

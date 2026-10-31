@@ -78,7 +78,8 @@
     {
       "type": "cv_single",
       "cv": 7,
-      "source": "nmra"
+      "source": "nmra",
+      "readonly": true
     },
     {
       "type": "cv_single",

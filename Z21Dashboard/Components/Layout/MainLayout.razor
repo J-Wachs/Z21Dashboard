@@ -1,3 +1,101 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@using Microsoft.Extensions.Localization
+@using Z21Dashboard.Ui.Interfaces
+@inject IAppCloseCoordinator CloseCoordinator
+@inject IStringLocalizer<MainLayoutResources> Localizer
 
 @Body
+
+@if (_vetoReasons is not null)
+{
+    <div class="close-veto-backdrop">
+        <div class="close-veto-dialog">
+            <h4>@Localizer["UnsavedChanges"]</h4>
+            <p>@Localizer["CloseBlockedHeader"]</p>
+            <ul>
+                @foreach (var reason in _vetoReasons)
+                {
+                    <li>@reason</li>
+                }
+            </ul>
+            <div class="close-veto-actions">
+                <button class="btn btn-primary" @onclick="KeepWorking">@Localizer["KeepWorking"]</button>
+                <button class="btn btn-danger" @onclick="CloseAnyway">@Localizer["CloseAnyway"]</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (_disconnectVetoReasons is not null)
+{
+    <div class="close-veto-backdrop">
+        <div class="close-veto-dialog">
+            <h4>@Localizer["UnsavedChanges"]</h4>
+            <p>@Localizer["DisconnectBlockedHeader"]</p>
+            <ul>
+                @foreach (var reason in _disconnectVetoReasons)
+                {
+                    <li>@reason</li>
+                }
+            </ul>
+            <div class="close-veto-actions">
+                <button class="btn btn-primary" @onclick="KeepWorkingDisconnect">@Localizer["KeepWorking"]</button>
+                <button class="btn btn-danger" @onclick="DisconnectAnyway">@Localizer["DisconnectAnyway"]</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private IReadOnlyList<string>? _vetoReasons;
+    private IReadOnlyList<string>? _disconnectVetoReasons;
+
+    protected override void OnInitialized()
+    {
+        CloseCoordinator.CloseVetoed += OnCloseVetoed;
+        CloseCoordinator.DisconnectVetoed += OnDisconnectVetoed;
+    }
+
+    private async void OnCloseVetoed(
+        object? sender,
+        IReadOnlyList<string> reasons
+    )
+    {
+        _vetoReasons = reasons;
+        // The event can arrive on a background thread — marshal to Blazor's UI thread.
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnDisconnectVetoed(
+        object? sender,
+        IReadOnlyList<string> reasons
+    )
+    {
+        _disconnectVetoReasons = reasons;
+        // The event can arrive on a background thread — marshal to Blazor's UI thread.
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void KeepWorking() => _vetoReasons = null;
+
+    private void KeepWorkingDisconnect() => _disconnectVetoReasons = null;
+
+    private void DisconnectAnyway()
+    {
+        _disconnectVetoReasons = null;
+        CloseCoordinator.ForceDisconnect();
+    }
+
+    private void CloseAnyway()
+    {
+        _vetoReasons = null;
+        CloseCoordinator.ForceClose();
+    }
+
+    public void Dispose()
+    {
+        CloseCoordinator.CloseVetoed -= OnCloseVetoed;
+        CloseCoordinator.DisconnectVetoed -= OnDisconnectVetoed;
+    }
+}

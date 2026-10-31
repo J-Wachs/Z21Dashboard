@@ -135,7 +135,7 @@
     {
       "cv": 7,
       "status": "mandatory",
-      "read_only": true,
+      "readonly": true,
       "name": {
         "en": "Manufacturer Version Number",
         "da": "Producentens versionsnummer",
@@ -156,7 +156,7 @@
     {
       "cv": 8,
       "status": "mandatory",
-      "read_only": true,
+      "readonly": true,
       "name": {
         "en": "Manufacturer ID",
         "da": "Producent-ID",

@@ -9,66 +9,19 @@
 @using Z21Client.Models
 @using Z21Dashboard.LocomotiveDecoders.Interfaces
 @using Z21Dashboard.LocomotiveDecoders.Models
+@using Z21Dashboard.NmraDccStandard
+@using Z21Dashboard.Ui.Dashboard.Components
 @using Z21Dashboard.Ui.Models
 @inject IDecoderProgHelperService DecoderProgHelperService
 @inject IJSRuntime JSRuntime
 @inject IStringLocalizer<AllCvsReadWriteResources> Localizer
 
-<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
+@if (ProgTargetAddr.ProgTarget == ProgrammingTarget.POM)
+{
+    <div class="alert alert-warning py-2 mb-3">@Localizer["AddrCVsNotWritten"]</div>
+}
 
-<div class="row">
-    <div class="col-3">
-    </div>
-    <div class="col-6">
-        <div class="progress border border-secondary" style="height: 30px;">
-            <div class="progress-bar bg-primary"
-                 role="progressbar"
-                 style="@( $"width: {GetProgressPercentage():F0}%" )"
-                 aria-valuenow="@_currentProgress"
-                 aria-valuemin="0"
-                 aria-valuemax="@_maxProgress">
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-    </div>
-</div>
-<div class="row">
-    <div class="col-3">
-    </div>
-    <div class="col-6 w-100 text-center">
-        @if (_maxProgress > 0)
-        {
-            <text>@_currentProgress @Localizer[_actionText] / @_maxProgress @Localizer["CvsTotal"]</text>
-        }
-    </div>
-    <div class="col-3">
-    </div>
-</div>
-<div class="row">
-    <div class="col-3">
-    </div>
-    <div class="col-6 w-100 text-sm-center text-muted" style="font-size: 0.85rem;">
-        @GetEstimatedTimeRemaining()
-    </div>
-    <div class="col-3">
-    </div>
-</div>
-<div class="row">
-    <div class="col-3">
-    </div>
-    <div class="col-6 w-100 text-sm-center mt-2">
-        @if (_operationInProgress)
-        {
-            <button type="button" class="btn btn-sm btn-warning"
-                    @onclick="CancelOperation" aria-label="Cancel">
-                @Localizer["Cancel"]
-            </button>
-        }
-    </div>
-    <div class="col-3">
-    </div>
-</div>
+<div class="alert alert-info py-2 mb-3">@Localizer["InfoText"]</div>
 
 <div class="row" style="margin-top: 110px;">
     <div class="col-12 d-flex justify-content-end gap-2">
@@ -82,6 +35,62 @@
         </button>
     </div>
 </div>
+
+@if (_showProgDialog)
+{
+    <DraggableModal IsOpen="_showProgDialog"
+                    Title="@Localizer[progAction is  ProgAction.Reading ? "CVReading" : "CVWriting"]"
+                    Size="DraggableModal.ModalSize.Default"
+                    OnClose="() => ValidateClose()">
+        <Content>
+            <div class="row">
+                <div class="col-3">
+                </div>
+                <div class="col-6">
+                    <div class="progress border border-secondary" style="height: 30px;">
+                        <div class="progress-bar bg-primary"
+                             role="progressbar"
+                             style="@( $"width: {GetProgressPercentage():F0}%" )"
+                             aria-valuenow="@_currentProgress"
+                             aria-valuemin="0"
+                             aria-valuemax="@_maxProgress">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                </div>
+                <div class="col-6 w-100 text-center">
+                    @if (_maxProgress > 0)
+                    {
+                        <text>@_currentProgress @Localizer[_actionText] / @_maxProgress @Localizer["CvsTotal"]</text>
+                    }
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                </div>
+                <div class="col-6 w-100 text-sm-center text-muted" style="font-size: 0.85rem;">
+                    @GetEstimatedTimeRemaining()
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+        </Content>
+        <FooterContent>
+            <button type="button" class="btn btn-sm btn-warning"
+                    @onclick="CancelOperation" aria-label="Cancel">
+                @Localizer["Cancel"]
+            </button>
+        </FooterContent>
+    </DraggableModal>
+}
 
 @code {
     [CascadingParameter]
@@ -115,12 +124,29 @@
     private string _actionText = string.Empty;
     private DateTime? _operationStartTime;
     private double? _averageSecondsPerCv;
+    private bool _showProgDialog;
+    private enum ProgAction
+    {
+        Idle,
+        Reading,
+        Writing
+    }
+    private ProgAction progAction = ProgAction.Idle;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         await BlankMessagesAsync();
+    }
+
+    private void ValidateClose()
+    {
+        if (_operationInProgress)
+        {
+            return;
+        }
+        _showProgDialog = false;
     }
 
     /// <summary>
@@ -153,6 +179,7 @@
         var cvKeys = DecoderSettings.CvValues.Keys;
         var index = 0;
         var lastCV = cvKeys.LastOrDefault();
+
         foreach (var cv in cvKeys)
         {
             if (_operationInProgress is false)
@@ -282,7 +309,11 @@
 
         if (confirm)
         {
+            progAction = ProgAction.Reading;
+            _showProgDialog = true;
             await ReadCVsAsync();
+            _showProgDialog = false;
+            progAction = ProgAction.Idle;
         }
     }
 
@@ -344,7 +375,11 @@
 
         if (confirm)
         {
+            progAction = ProgAction.Writing;
+            _showProgDialog = true;
             await WriteCVsAsync();
+            _showProgDialog = false;
+            progAction = ProgAction.Idle;
         }
     }
 
@@ -363,19 +398,22 @@
             return;
         }
 
-        var cvCount = DecoderSettings.CvValues.Count;
         _operationStartTime = DateTime.Now;
         _averageSecondsPerCv = null;
         _operationInProgress = true;
-        InitializeProgress(cvCount);
 
+        var batchSize = 1;
+        // The 'rec.Value.ReadOnly is not true' is due to the fact that ReadOnly has three states: null, false and true.
+        // In this case, false and null means the CV is writable, while true means it is read-only.
+        var cvKeys = DecoderSettings.CvMetadata.Where(rec => rec.Value.ReadOnly is not true).Select(rec => rec.Key);
+        var cvCount = cvKeys.Count();
+
+        InitializeProgress(cvCount);
         _buttonsDisabled = true;
         WorkingMessage = Localizer["CVWriting"];
         await WorkingMessageChanged.InvokeAsync(WorkingMessage);
         StateHasChanged();
 
-        var batchSize = 5;
-        var cvKeys = DecoderSettings.CvMetadata.Where(rec => rec.Value.ReadOnly is false).Select(rec => rec.Key);
         var index = 0;
         foreach (var cv in cvKeys)
         {
@@ -384,8 +422,71 @@
                 break;
             }
 
-            var batch = cvKeys.Skip(index).Take(batchSize)
-                .Select(cv => new CVValue(cv, DecoderSettings.CvValues[cv].GetWholeValue() ?? 0));
+            IEnumerable<CVValue> batch;
+            if (ProgTargetAddr.ProgTarget is ProgrammingTarget.POM)
+            {
+                // Do not allow CVs involved in decoder address when we are in POM mode,
+                // And CV 29 must be handled carefully, so we will write each bit supported by the decoder, except
+                // the short/long address flag.
+                List<ushort> cvsNotAllowedInPOMMode = [Cvs.ShortAddress, Cvs.LongAddressHighByte, Cvs.LongAddressLowByte];
+
+                batch = cvKeys.Skip(index).Take(batchSize).Where(entry => ProgTargetAddr.ProgTarget is ProgrammingTarget.POM &&
+                    (cvsNotAllowedInPOMMode.Contains(entry) is false) ||
+                    ProgTargetAddr.ProgTarget is ProgrammingTarget.ProgTrack)
+                    .Select(cv => new CVValue(cv, DecoderSettings.CvValues[cv].GetWholeValue() ?? 0));
+
+                // Is CV 29 in the batch? Then special handling is needed to clear the short/long address bit (bit 5) for writing.
+                var cv29 = batch.FirstOrDefault(cv => cv.Cv == 29);
+                if (cv29 is not null)
+                {
+                    Queue<CVBitValue> cvBitQueue = [];
+
+                    // Loop over bits in CV 29 and send the ones that are not the short/long address bit (bit 5) to the decoder.
+                    foreach (var entry in DecoderSettings.CvMetadata[Cvs.ConfigurationData1].BitDetails)
+                    {
+                        if (entry.Key.Bit is not (int)Bits.Five)
+                        {
+                            var key = entry.Key.Bit;
+                            var bitToSet = new CVBitValue(
+                                Cvs.ConfigurationData1,
+                                (Bits)entry.Key.Bit,
+                                DecoderSettings.CvValues[cv29.Cv]!.Bits[key] ?? false
+                                );
+                            cvBitQueue.Enqueue(bitToSet);
+                        }
+                    }
+
+                    // Now, write the bits to the decoder.
+                    var resultWriteCVBitsValues = await DecoderProgHelperService.WriteCVBitsValuesAsync(
+                                                        (ushort)ProgTargetAddr.LocoAddress!,
+                                                        cvBitQueue
+                                                        );
+                    if (resultWriteCVBitsValues.IsFailure)
+                    {
+                        if (resultWriteCVBitsValues.Messages.Count > 0)
+                        {
+                            foreach (var fileMessages in resultWriteCVBitsValues.Messages)
+                            {
+                                ErrorMessages.AddRange(fileMessages.Messages);
+                            }
+                        }
+
+                        await ErrorMessagesChanged.InvokeAsync(ErrorMessages);
+                        break;
+                    }
+
+                    // Remove CV 29 from the batch.
+                    batch = batch.Where(cv => cv.Cv != 29);
+                    // As CV 29 has been removed from the batch, we need to decrement the count of CVs to be written for the progress bar.
+                    StateHasChanged();
+                }
+            }
+            else
+            {
+                batch = cvKeys.Skip(index).Take(batchSize)
+                    .Select(cv => new CVValue(cv, DecoderSettings.CvValues[cv].GetWholeValue() ?? 0));
+            }
+
             var queue = new Queue<CVValue>(batch);
 
             var result = await DecoderProgHelperService.WriteCVValuesAsync(

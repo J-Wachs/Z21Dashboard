@@ -198,4 +198,7 @@
   <data name="Continue" xml:space="preserve">
     <value>Fortfahren</value>
   </data>
+  <data name="AddrCVsNotWritten" xml:space="preserve">
+    <value>Wenn Sie auf dem Hauptgleis programmieren (POM), werden CVs, die sich auf die Adresse des Decoders beziehen, nicht in den Decoder geschrieben. Diese CVs sind CV1 (kurze Adresse), CV17 (lange Adresse, höherwertiges Byte), CV18 (lange Adresse, niederwertiges Byte) und CV29 Bit 5 (kurze/lange Adresse).</value>
+  </data>
 </root>

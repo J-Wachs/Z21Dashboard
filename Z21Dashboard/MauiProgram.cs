@@ -197,6 +197,11 @@ public static class MauiProgram
         builder.Services.AddScoped<INmraCvService, NmraCvService>();
         builder.Services.AddScoped<ISessionStorage, SimpleSessionStorage>();
         builder.Services.AddScoped<ILocoDefinitionService, LocoDefinitionService>();
+        builder.Services.AddScoped<IDecoderTabsManagement, DecoderTabsManagement>();
+
+        // Coordinates application shutdown between the native window and Blazor
+        // components that can veto closing (e.g. unsaved CV changes).
+        builder.Services.AddSingleton<IAppCloseCoordinator, AppCloseCoordinator>();
 
         // Register the TitleBarService for managing title bar text
         builder.Services.AddSingleton<ITitleBarService, TitleBarService>();

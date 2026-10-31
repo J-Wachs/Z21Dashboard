@@ -111,59 +111,94 @@ internal class DecoderProgHelperService(
         // This method build up a structure that contains the needed
         // information to be able to update the CV values in the decoder, by either setting a bit or a whole value, depending on the CV and bit information from the page content, and the current values in the decoder settings.
         var result = BuildCvValuesFromDecoderSettings(cvBitsInPage, decoderSettings);
-        if (result.IsSuccess is false)
+        if (result.IsFailure)
         {
             return Result.Failure(result.Messages);
         }
 
         var cvStates = result.Data!;
-        Queue<CVValue> cvValuesToWrite = [];
 
         // For each cv that has null bits (flags that are not set) read the value:
         foreach (var entry in cvStates)
         {
             if (entry.Value.AnyBitNotSet() is true)
             {
-                // When a bitwise CV has some flags set, and other not we need to read
-                // the current value from the decoder, patch it with the new bit values
-                // and write the whole value back.
+                if (progTarget is ProgrammingTarget.ProgTrack)
+                {
+                    // When a bitwise CV has some flags set, and other not we need to read
+                    // the current value from the decoder, patch it with the new bit values
+                    // and write the whole value back.
 
-                // Get the decoder value:
-                Queue<ushort> cvToRead = new([entry.Key]);
-                var resultReadCVValuesAsync = await ReadCVValuesAsync(progTarget, locoAddress, cvToRead);
-                if (resultReadCVValuesAsync.IsSuccess is false)
-                {
-                    if (resultReadCVValuesAsync.Messages is not null)
+                    // Get the decoder value:
+                    Queue<ushort> cvToRead = new([entry.Key]);
+                    var resultReadCVValuesAsync = await ReadCVValuesAsync(progTarget, locoAddress, cvToRead);
+                    if (resultReadCVValuesAsync.IsSuccess is false)
                     {
-                        return Result.Failure(resultReadCVValuesAsync.Messages);
+                        if (resultReadCVValuesAsync.Messages is not null)
+                        {
+                            return Result.Failure(resultReadCVValuesAsync.Messages);
+                        }
+                        return Result.Failure(string.Empty);
                     }
-                    return Result.Failure(string.Empty);
+                    var decoderValue = resultReadCVValuesAsync.Data!.First().Value;
+                    var patchedValue = entry.Value.PatchWithWholeValue(decoderValue);
+                    if (patchedValue is not null)
+                    {
+                        Queue<CVValue> cvValuesToWrite = [];
+                        cvValuesToWrite.Enqueue(new(entry.Key, (byte)patchedValue));
+                        var resultWriteCvValues = await WriteCVValuesAsync(progTarget, locoAddress, cvValuesToWrite);
+                        if (resultWriteCvValues.IsFailure)
+                        {
+                            return Result.Failure(resultWriteCvValues.Messages);
+                        }
+                    }
                 }
-                var decoderValue = resultReadCVValuesAsync.Data!.First().Value;
-                var patchedValue = entry.Value.PatchWithWholeValue(decoderValue);
-                if (patchedValue is not null)
+                else // POM
                 {
-                    cvValuesToWrite.Enqueue(new(entry.Key, (byte)patchedValue));
+                    // When a bitwise CV has some flags set, and other not we need to update
+                    // at bit level.
+                    Queue<CVBitValue> cvBitQueue = [];
+                    // Loop over each bit in the value and get the value to send to the decoder.
+                    foreach (var bit in Enum.GetValues<Bits>())
+                    {
+                        var bitValue = entry.Value.GetBit(bit);
+                        if (bitValue is not null)
+                        {
+                            var bitToSet = new CVBitValue(
+                                entry.Key,
+                                bit,
+                                bitValue.Value
+                                );
+                            cvBitQueue.Enqueue(bitToSet);
+                        }
+                    }
+                    // Update the local decoder settings with the new bit value:
+                    var resultSetBit = await WriteCVBitsValuesAsync((ushort)locoAddress!, cvBitQueue);
+                    if (resultSetBit.IsFailure)
+                    {
+                        return Result.Failure(resultSetBit.Messages);
+                    }
                 }
             }
             else
             {
                 // We either have a bitwise CV with all bits set, or a value CV,
-                // in both cases we can just write the whole value:
+                // in both cases we can just write the whole value to the decoder:
                 var wholeValue = entry.Value.GetWholeValue();
                 if (wholeValue is not null)
                 {
-                    cvValuesToWrite.Enqueue(new(entry.Key, (byte)wholeValue));
+                    var cvValueToWrite = new Queue<CVValue>();
+                    cvValueToWrite.Enqueue(new(entry.Key, (byte)wholeValue));
+                    var resultWriteCvValues = await WriteCVValuesAsync(progTarget, locoAddress, cvValueToWrite);
+                    if (resultWriteCvValues.IsFailure)
+                    {
+                        return Result.Failure(resultWriteCvValues.Messages);
+                    }
                 }
             }
         }
 
-        var resultWriteCvValues = await WriteCVValuesAsync(progTarget, locoAddress, cvValuesToWrite);
-
-        return resultWriteCvValues.Match(
-            onSuccess: () => Result.Success(),
-            onFailure: error => Result.Failure(error)
-            );
+        return Result.Success();
     }
 
     /// <inheritdoc />
@@ -277,7 +312,7 @@ internal class DecoderProgHelperService(
             onFailure: errorMessages => Result<ushort>.Failure(errorMessages)
             );
     }
-    
+
     /// <inheritdoc />
     public async Task<Result<DecoderManufacturerInfo>> ReadLocoDecoderManufacturerAsync(
         ProgrammingTarget progTarget,
@@ -309,6 +344,15 @@ internal class DecoderProgHelperService(
 
         return result.IsSuccess ? Results.Success(new DecoderManufacturerInfo(manufacturerCode, manufacturerName, manufacturerVersionNbr)) :
             Result<DecoderManufacturerInfo>.Failure(result.Messages);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result> WriteCVBitsValuesAsync(
+        ushort locoAddress,
+        Queue<CVBitValue> cvBitsToWrite
+        )
+    {
+        return await decoderProgService.WriteCVBitAddressesPOMAsync(locoAddress, cvBitsToWrite);
     }
 
     /// <inheritdoc />
@@ -579,7 +623,7 @@ internal class DecoderProgHelperService(
         }
 
         if (result.IsSuccess)
-        { 
+        {
             return Results.Success(cvStates);
         }
         else

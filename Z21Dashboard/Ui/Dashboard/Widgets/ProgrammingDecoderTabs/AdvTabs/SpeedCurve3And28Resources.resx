@@ -120,6 +120,9 @@
   <data name="Advanced28Point" xml:space="preserve">
     <value>Advanced 28 point</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
   <data name="ContentMissing" xml:space="preserve">
     <value>Content for the page is missing</value>
   </data>
@@ -141,20 +144,32 @@
   <data name="Exponential" xml:space="preserve">
     <value>Exponential</value>
   </data>
+  <data name="ExponentialEndpoints" xml:space="preserve">
+    <value>Exponential (endpoints)</value>
+  </data>
   <data name="ForwardTrim" xml:space="preserve">
     <value>Forward trim</value>
   </data>
   <data name="Linear" xml:space="preserve">
     <value>Linear</value>
   </data>
+  <data name="LinearEndpoints" xml:space="preserve">
+    <value>Linear (endpoints)</value>
+  </data>
   <data name="Logarithmic" xml:space="preserve">
     <value>Logarithmic</value>
+  </data>
+  <data name="LogarithmicEndpoints" xml:space="preserve">
+    <value>Logarithmic (endpoints)</value>
   </data>
   <data name="ReadFromLocoDecoder" xml:space="preserve">
     <value>Read from loco decoder</value>
   </data>
   <data name="ReverseTrim" xml:space="preserve">
     <value>Reserve trim</value>
+  </data>
+  <data name="SelectCurve" xml:space="preserve">
+    <value>Select curve</value>
   </data>
   <data name="Simple3Point" xml:space="preserve">
     <value>Simple 3 point</value>

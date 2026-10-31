@@ -4263,6 +4263,31 @@
       ]
     },
     {
+      "id": "page_miscellaneous",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Miscellaneous",
+        "da": "Diverse",
+        "de": "Sonstiges",
+        "fr": "Divers"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "page_braking",
       "type": "dynamic_list",
       "title": {
@@ -4302,31 +4327,6 @@
             {
               "type": "cv_single",
               "cv": 255
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "page_miscellaneous",
-      "type": "dynamic_list",
-      "title": {
-        "en": "Miscellaneous",
-        "da": "Diverse",
-        "de": "Sonstiges",
-        "fr": "Divers"
-      },
-      "page_content": [
-        {
-          "type": "cvs_content",
-          "content": [
-            {
-              "type": "cv_single",
-              "cv": 105
-            },
-            {
-              "type": "cv_single",
-              "cv": 106
             }
           ]
         }

@@ -85,6 +85,18 @@ internal interface IDecoderProgHelperService
         );
 
     /// <summary>
+    /// Asynchronously writes a sequence of configuration variable bit values for the specified locomotive address.
+    /// </summary>
+    /// <param name="locoAddress">The locomotive address to program.</param>
+    /// <param name="cvBitsToWrite">The queued configuration variable bit values to write, processed in queue order.</param>
+    /// <returns>A task that represents the asynchronous operation and yields a result indicating whether the write operation
+    /// succeeded.</returns>
+    Task<Result> WriteCVBitsValuesAsync(
+        ushort locoAddress,
+        Queue<CVBitValue> cvBitsToWrite
+        );
+
+    /// <summary>
     /// Writes a number of CVs to the locomotive. The CVs to write are passed in as
     /// a queue, and the method will write them in order.
     /// </summary>

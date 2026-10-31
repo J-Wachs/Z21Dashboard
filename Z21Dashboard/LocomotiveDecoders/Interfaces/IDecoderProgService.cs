@@ -35,7 +35,23 @@ public interface IDecoderProgService
     /// A <see cref="Result{T}"/> containing a list of <see cref="CVValue"/> entries for the
     /// requested CV addresses on success, or an error Result on failure.
     /// </returns>
-    Task<Result<List<CVValue>>> ReadCVAddressesProgTrackAsync(Queue<ushort> cvsToRead, bool turnOnTrackPowerAfterRead = true);
+    Task<Result<List<CVValue>>> ReadCVAddressesProgTrackAsync(
+        Queue<ushort> cvsToRead,
+        bool turnOnTrackPowerAfterRead = true
+        );
+
+
+    /// <summary>
+    /// Asynchronously writes a queue of configuration variable bit values to a locomotive using Programming on Main
+    /// (POM).
+    /// </summary>
+    /// <param name="locoAddress">The locomotive address to target for the write operation.</param>
+    /// <param name="cvBitsToWrite">The queued CV bit values to write in order.</param>
+    /// <returns>A task that represents the asynchronous operation and contains the write result.</returns>
+    Task<Result> WriteCVBitAddressesPOMAsync(
+        ushort locoAddress,
+        Queue<CVBitValue> cvBitsToWrite
+        );
 
     /// <summary>
     /// Writes a sequence of CV values to a locomotive using Programming on Main (POM).

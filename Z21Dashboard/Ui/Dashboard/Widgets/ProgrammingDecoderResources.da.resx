@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DecoderDefChanged" xml:space="preserve">
+    <value>Dekoderdefinition er ikke gemt</value>
+  </data>
   <data name="LocoDecoders" xml:space="preserve">
     <value>Lokomotivdekodere</value>
+  </data>
+  <data name="LocomotiveDefChanged" xml:space="preserve">
+    <value>Lokomotivdefinition er ikke gemt</value>
   </data>
   <data name="Locomotives" xml:space="preserve">
     <value>Lokomotiver</value>
