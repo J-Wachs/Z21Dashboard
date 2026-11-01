@@ -426,10 +426,16 @@
                     }
                 }
             }
+            else
+            {
+                // Reset IsChanged:
+                DecoderSettings.ClearChanged();
+            }
         }
         else
         {
             await SetupTabsAsync();
+
             StateHasChanged();
         }
     }
