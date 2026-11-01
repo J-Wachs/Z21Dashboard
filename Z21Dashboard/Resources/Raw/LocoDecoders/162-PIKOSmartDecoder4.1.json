@@ -22,7 +22,9 @@
       "source": "custom",
       "name": {
         "en": "Minimum speed",
-        "da": "Minimumshastighed"
+        "da": "Minimumshastighed",
+        "de": "Mindestgeschwindigkeit",
+        "fr": "Vitesse minimale"
       },
       "default_value": 1,
       "value_bits": {
@@ -50,7 +52,9 @@
       "source": "custom",
       "name": {
         "en": "Maximum speed",
-        "da": "Maksimumshastighed"
+        "da": "Maksimumshastighed",
+        "de": "Höchstgeschwindigkeit",
+        "fr": "Vitesse maximale"
       },
       "default_value": 48,
       "value_bits": {
@@ -66,7 +70,9 @@
       "source": "custom",
       "name": {
         "en": "Middle speed",
-        "da": "Mellemhastighed"
+        "da": "Mellemhastighed",
+        "de": "Mittlere Geschwindigkeit",
+        "fr": "Vitesse moyenne"
       },
       "default_value": 24,
       "value_bits": {
@@ -82,7 +88,9 @@
       "source": "custom",
       "name": {
         "en": "Software version",
-        "da": "Softwareversion"
+        "da": "Softwareversion",
+        "de": "Softwareversion",
+        "fr": "Version du logiciel"
       },
       "value_bits": {
         "min": 0,
@@ -102,8 +110,148 @@
     {
       "type": "cv_single",
       "cv": 12,
-      "source": "nmra",
-      "default_value": 0
+      "source": "custom",
+      "default_value": 63,
+      "flag_bits": [
+        {
+          "bit": 0,
+          "name": {
+            "en": "DC (analog operation, direct current)",
+            "da": "DC (analogdrift, jævnstrøm)",
+            "de": "DC (Analogbetrieb Gleichstrom",
+            "fr": "DC (mode analogique, courant continu)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 1,
+          "name": {
+            "en": "AC (analog operation, alternating current)",
+            "da": "AC (analogdrift, vekselstrøm)",
+            "de": "AC (Analogbetrieb Wechselstrom)",
+            "fr": "AC (mode analogique, courant alternatif)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 2,
+          "name": {
+            "en": "Data format DCC",
+            "da": "Dataformat DCC",
+            "de": "Datenformat DCC",
+            "fr": "Format de données DCC"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 3,
+          "name": {
+            "en": "Data format MM",
+            "da": "Dataformat MM",
+            "de": "Datenformat MM",
+            "fr": "Format de données MM"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 4,
+          "name": {
+            "en": "Data format Selectrix",
+            "da": "Dataformat Selectrix",
+            "de": "Datenformat Selectrix",
+            "fr": "Format de données Selectrix"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        },
+        {
+          "bit": 5,
+          "name": {
+            "en": "Data format mfx (mfx® variants only)",
+            "da": "Dataformat mfx (kun mfx®-varianter)",
+            "de": "Datenformat mfx (nur mfx® Varianten)",
+            "fr": "Format de données mfx (uniquement variantes mfx®)"
+          },
+          "values": {
+            "0": {
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
+            },
+            "1": {
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
+            }
+          }
+        }
+      ]
     },
     {
       "type": "cv_single",
@@ -111,7 +259,9 @@
       "source": "nmra",
       "name": {
         "en": "Analog functions F1-F8",
-        "da": "Analogfunktioner F1-F8"
+        "da": "Analogfunktioner F1-F8",
+        "de": "Analogfunktionen F1-F8",
+        "fr": "Fonctions analogiques F1-F8"
       },
       "default_value": 0
     },
@@ -121,7 +271,9 @@
       "source": "custom",
       "name": {
         "en": "Analog functions F0/F9-F12",
-        "da": "Analogfunktioner F0/F9-F12"
+        "da": "Analogfunktioner F0/F9-F12",
+        "de": "Analogfunktionen F0/F9-F12",
+        "fr": "Fonctions analogiques F0/F9-F12"
       },
       "default_value": 0,
       "flag_bits": [
@@ -129,7 +281,9 @@
           "bit": 0,
           "name": {
             "en": "At analog F0 is",
-            "da": "Ved analog er F0"
+            "da": "Ved analog er F0",
+            "de": "Bei Analogbetrieb ist F0",
+            "fr": "En mode analogique, F0 est"
           },
           "values": {
             "0": {
@@ -150,7 +304,9 @@
           "bit": 4,
           "name": {
             "en": "At analog F9 is",
-            "da": "Ved analog er F9"
+            "da": "Ved analog er F9",
+            "de": "Bei Analogbetrieb ist F9",
+            "fr": "En mode analogique, F9 est"
           },
           "values": {
             "0": {
@@ -171,7 +327,9 @@
           "bit": 5,
           "name": {
             "en": "At analog F10 is",
-            "da": "Ved analog er F10"
+            "da": "Ved analog er F10",
+            "de": "Bei Analogbetrieb ist F10",
+            "fr": "En mode analogique, F10 est"
           },
           "values": {
             "0": {
@@ -192,7 +350,9 @@
           "bit": 6,
           "name": {
             "en": "At analog F11 is",
-            "da": "Ved analog er F11"
+            "da": "Ved analog er F11",
+            "de": "Bei Analogbetrieb ist F11",
+            "fr": "En mode analogique, F11 est"
           },
           "values": {
             "0": {
@@ -213,7 +373,9 @@
           "bit": 7,
           "name": {
             "en": "At analog F12 is",
-            "da": "Ved analog er F12"
+            "da": "Ved analog er F12",
+            "de": "Bei Analogbetrieb ist F12",
+            "fr": "En mode analogique, F12 est"
           },
           "values": {
             "0": {
@@ -354,7 +516,9 @@
           "bit": 4,
           "name": {
             "en": "DC brake, opposite direction",
-            "da": "DC-bremse, modsat retning"
+            "da": "DC-bremse, modsat retning",
+            "de": "DC-Bremse, entgegengesetzte Richtung",
+            "fr": "Freinage CC, sens opposé"
           },
           "values": {
             "0": {
@@ -375,7 +539,9 @@
           "bit": 5,
           "name": {
             "en": "DC brake, same direction",
-            "da": "DC-bremse, samme retning"
+            "da": "DC-bremse, samme retning",
+            "de": "DC-Bremse, gleiche Richtung",
+            "fr": "Freinage CC, même sens"
           },
           "values": {
             "0": {
@@ -395,14 +561,23 @@
         {
           "bit": 7,
           "name": {
-            "en": "ABC direction when Bit 0 or 1 = 1"
+            "en": "ABC direction when Bit 0 or 1 = 1",
+            "da": "ABC-retning, når bit 0 eller 1 = 1",
+            "de": "ABC-Richtung, wenn Bit 0 oder 1 = 1",
+            "fr": "Sens ABC lorsque le bit 0 ou 1 = 1"
           },
           "values": {
             "0": {
-              "en": "Forward"
+              "en": "Forward",
+              "da": "Fremad",
+              "de": "Vorwärts",
+              "fr": "Avant"
             },
             "1": {
-              "en": "Reverse"
+              "en": "Reverse",
+              "da": "Baglæns",
+              "de": "Rückwärts",
+              "fr": "Arrière"
             }
           }
         }
@@ -414,7 +589,9 @@
       "source": "custom",
       "name": {
         "en": "RailCom configuration",
-        "da": "RailCom-konfiguration"
+        "da": "RailCom-konfiguration",
+        "de": "RailCom-Konfiguration",
+        "fr": "Configuration RailCom"
       },
       "default_value": 131,
       "flag_bits": [
@@ -422,7 +599,9 @@
           "bit": 0,
           "name": {
             "en": "RailCom channel 1",
-            "da": "RailCom kanal 1"
+            "da": "RailCom kanal 1",
+            "de": "RailCom-Kanal 1",
+            "fr": "Canal RailCom 1"
           },
           "values": {
             "0": {
@@ -443,7 +622,9 @@
           "bit": 1,
           "name": {
             "en": "RailCom channel 2",
-            "da": "RailCom kanal 2"
+            "da": "RailCom kanal 2",
+            "de": "RailCom-Kanal 2",
+            "fr": "Canal RailCom 2"
           },
           "values": {
             "0": {
@@ -464,7 +645,9 @@
           "bit": 7,
           "name": {
             "en": "RailCom Plus",
-            "da": "RailCom Plus"
+            "da": "RailCom Plus",
+            "de": "RailCom Plus",
+            "fr": "RailCom Plus"
           },
           "values": {
             "0": {
@@ -487,10 +670,6 @@
       "type": "cv_single",
       "cv": 29,
       "source": "nmra",
-      "name": {
-        "en": "Configuration CV29",
-        "da": "Konfiguration CV29"
-      },
       "default_value": 14
     },
     {
@@ -504,29 +683,58 @@
           "bit_to": 7,
           "name": {
             "en": "Error Information",
-            "da": "Fejlinformation"
+            "da": "Fejlinformation",
+            "de": "Fehlerinformation",
+            "fr": "Informations d’erreur"
           },
           "values": {
             "0": {
-              "de": "Kein Fehler"
+              "en": "No error",
+              "da": "Ingen fejl",
+              "de": "Kein Fehler",
+              "fr": "Aucune erreur"
             },
             "1": {
-              "de": "Fehler Fkt.-Ausgänge"
+              "en": "Function output error",
+              "da": "Fejl funk. Udgange",
+              "de": "Fehler Fkt.-Ausgänge",
+              "fr": "Erreur des sorties de fonctions"
             },
             "2": {
-              "de": "Fehler Motor"
+              "en": "Motor error",
+              "da": "Fejl motor",
+              "de": "Fehler Motor",
+              "fr": "Erreur moteur"
             },
             "3": {
-              "da": "Fejl funk. Udgange og motor"
+              "en": "Function output and motor error",
+              "da": "Fejl funk. Udgange og motor",
+              "de": "Fehler Fkt.-Ausgänge und Motor",
+              "fr": "Erreur des sorties de fonctions et du moteur"
             },
             "4": {
-              "de": "Temp.-überschreitung\n5=da:Fejl funk. Udgange og temperatur"
+              "en": "Overtemperature",
+              "da": "Temperaturoverskridelse",
+              "de": "Temp.-überschreitung",
+              "fr": "Dépassement de température"
+            },
+            "5": {
+              "en": "Function output and temperature error",
+              "da": "Fejl funk. Udgange og temperatur",
+              "de": "Fehler Fkt.-Ausgänge und Temperatur",
+              "fr": "Erreur des sorties de fonctions et de température"
             },
             "6": {
-              "da": "Fejl motor og temperatur"
+              "en": "Motor and temperature error",
+              "da": "Fejl motor og temperatur",
+              "de": "Fehler Motor und Temperatur",
+              "fr": "Erreur moteur et température"
             },
             "7": {
-              "da": "Fejl funk. Udgange, motor og temperatur"
+              "en": "Function output, motor and temperature error",
+              "da": "Fejl funk. Udgange, motor og temperatur",
+              "de": "Fehler Fkt.-Ausgänge, Motor und Temperatur",
+              "fr": "Erreur des sorties de fonctions, du moteur et de la température"
             }
           }
         }
@@ -548,7 +756,9 @@
       "source": "custom",
       "name": {
         "en": "F0 forward",
-        "da": "F0 fremad"
+        "da": "F0 fremad",
+        "de": "F0 vorwärts",
+        "fr": "F0 avant"
       },
       "default_value": 1,
       "flag_bits": [
@@ -556,7 +766,9 @@
           "bit": 0,
           "name": {
             "en": "F0 forward Front light",
-            "da": "F0 Fremad Frontlys"
+            "da": "F0 Fremad Frontlys",
+            "de": "F0 vorwärts Frontlicht",
+            "fr": "F0 avant feu avant"
           },
           "values": {
             "0": {
@@ -577,7 +789,9 @@
           "bit": 1,
           "name": {
             "en": "F0 forward Rear light",
-            "da": "F0 Fremad Baglys"
+            "da": "F0 Fremad Baglys",
+            "de": "F0 vorwärts Rücklicht",
+            "fr": "F0 avant feu arrière"
           },
           "values": {
             "0": {
@@ -598,7 +812,9 @@
           "bit": 2,
           "name": {
             "en": "F0 forward FO1",
-            "da": "F0 Fremad FO1"
+            "da": "F0 Fremad FO1",
+            "de": "F0 vorwärts FO1",
+            "fr": "F0 avant FO1"
           },
           "values": {
             "0": {
@@ -619,7 +835,9 @@
           "bit": 3,
           "name": {
             "en": "F0 forward FO2",
-            "da": "F0 Fremad FO2"
+            "da": "F0 Fremad FO2",
+            "de": "F0 vorwärts FO2",
+            "fr": "F0 avant FO2"
           },
           "values": {
             "0": {
@@ -640,7 +858,9 @@
           "bit": 4,
           "name": {
             "en": "F0 forward FO3",
-            "da": "F0 Fremad FO3"
+            "da": "F0 Fremad FO3",
+            "de": "F0 vorwärts FO3",
+            "fr": "F0 avant FO3"
           },
           "values": {
             "0": {
@@ -661,7 +881,9 @@
           "bit": 5,
           "name": {
             "en": "F0 forward FO4",
-            "da": "F0 Fremad FO4"
+            "da": "F0 Fremad FO4",
+            "de": "F0 vorwärts FO4",
+            "fr": "F0 avant FO4"
           },
           "values": {
             "0": {
@@ -682,7 +904,9 @@
           "bit": 6,
           "name": {
             "en": "F0 forward shunting speed",
-            "da": "F0 Fremad rangergang"
+            "da": "F0 Fremad rangergang",
+            "de": "F0 vorwärts Rangiergang",
+            "fr": "F0 avant vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -703,7 +927,9 @@
           "bit": 7,
           "name": {
             "en": "F0 forward start-/brakedelay",
-            "da": "F0 Fremad start-/bremseforsinkelse"
+            "da": "F0 Fremad start-/bremseforsinkelse",
+            "de": "F0 vorwärts Anfahr-/Bremsverzögerung",
+            "fr": "F0 avant temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -728,7 +954,9 @@
       "source": "custom",
       "name": {
         "en": "F0 reverse",
-        "da": "F0 baglæns"
+        "da": "F0 baglæns",
+        "de": "F0 rückwärts",
+        "fr": "F0 arrière"
       },
       "default_value": 2,
       "flag_bits": [
@@ -736,7 +964,9 @@
           "bit": 0,
           "name": {
             "en": "F0 reverse Front light",
-            "da": "F0 Baglæns Frontlys"
+            "da": "F0 Baglæns Frontlys",
+            "de": "F0 rückwärts Frontlicht",
+            "fr": "F0 arrière feu avant"
           },
           "values": {
             "0": {
@@ -757,7 +987,9 @@
           "bit": 1,
           "name": {
             "en": "F0 reverse Rear light",
-            "da": "F0 Baglæns Baglys"
+            "da": "F0 Baglæns Baglys",
+            "de": "F0 rückwärts Rücklicht",
+            "fr": "F0 arrière feu arrière"
           },
           "values": {
             "0": {
@@ -778,7 +1010,9 @@
           "bit": 2,
           "name": {
             "en": "F0 reverse FO1",
-            "da": "F0 Baglæns FO1"
+            "da": "F0 Baglæns FO1",
+            "de": "F0 rückwärts FO1",
+            "fr": "F0 arrière FO1"
           },
           "values": {
             "0": {
@@ -799,7 +1033,9 @@
           "bit": 3,
           "name": {
             "en": "F0 reverse FO2",
-            "da": "F0 Baglæns FO2"
+            "da": "F0 Baglæns FO2",
+            "de": "F0 rückwärts FO2",
+            "fr": "F0 arrière FO2"
           },
           "values": {
             "0": {
@@ -820,7 +1056,9 @@
           "bit": 4,
           "name": {
             "en": "F0 reverse FO3",
-            "da": "F0 Baglæns FO3"
+            "da": "F0 Baglæns FO3",
+            "de": "F0 rückwärts FO3",
+            "fr": "F0 arrière FO3"
           },
           "values": {
             "0": {
@@ -841,7 +1079,9 @@
           "bit": 5,
           "name": {
             "en": "F0 reverse FO4",
-            "da": "F0 Baglæns FO4"
+            "da": "F0 Baglæns FO4",
+            "de": "F0 rückwärts FO4",
+            "fr": "F0 arrière FO4"
           },
           "values": {
             "0": {
@@ -862,7 +1102,9 @@
           "bit": 6,
           "name": {
             "en": "F0 reverse shunting speed",
-            "da": "F0 Baglæns rangergang"
+            "da": "F0 Baglæns rangergang",
+            "de": "F0 rückwärts Rangiergang",
+            "fr": "F0 arrière vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -883,7 +1125,9 @@
           "bit": 7,
           "name": {
             "en": "F0 reverse start-/brakedelay",
-            "da": "F0 Baglæns start-/bremseforsinkelse"
+            "da": "F0 Baglæns start-/bremseforsinkelse",
+            "de": "F0 rückwärts Anfahr-/Bremsverzögerung",
+            "fr": "F0 arrière temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -908,7 +1152,9 @@
       "source": "custom",
       "name": {
         "en": "F1",
-        "da": "F1"
+        "da": "F1",
+        "de": "F1",
+        "fr": "F1"
       },
       "default_value": 4,
       "flag_bits": [
@@ -916,7 +1162,9 @@
           "bit": 0,
           "name": {
             "en": "F1 Front light",
-            "da": "F1 Frontlys"
+            "da": "F1 Frontlys",
+            "de": "F1 Frontlicht",
+            "fr": "F1 feu avant"
           },
           "values": {
             "0": {
@@ -937,7 +1185,9 @@
           "bit": 1,
           "name": {
             "en": "F1 Rear light",
-            "da": "F1 Baglys"
+            "da": "F1 Baglys",
+            "de": "F1 Rücklicht",
+            "fr": "F1 feu arrière"
           },
           "values": {
             "0": {
@@ -958,7 +1208,9 @@
           "bit": 2,
           "name": {
             "en": "F1 FO1",
-            "da": "F1 FO1"
+            "da": "F1 FO1",
+            "de": "F1 FO1",
+            "fr": "F1 FO1"
           },
           "values": {
             "0": {
@@ -979,7 +1231,9 @@
           "bit": 3,
           "name": {
             "en": "F1 FO2",
-            "da": "F1 FO2"
+            "da": "F1 FO2",
+            "de": "F1 FO2",
+            "fr": "F1 FO2"
           },
           "values": {
             "0": {
@@ -1000,7 +1254,9 @@
           "bit": 4,
           "name": {
             "en": "F1 FO3",
-            "da": "F1 FO3"
+            "da": "F1 FO3",
+            "de": "F1 FO3",
+            "fr": "F1 FO3"
           },
           "values": {
             "0": {
@@ -1021,7 +1277,9 @@
           "bit": 5,
           "name": {
             "en": "F1 FO4",
-            "da": "F1 FO4"
+            "da": "F1 FO4",
+            "de": "F1 FO4",
+            "fr": "F1 FO4"
           },
           "values": {
             "0": {
@@ -1042,7 +1300,9 @@
           "bit": 6,
           "name": {
             "en": "F1 shunting speed",
-            "da": "F1 rangergang"
+            "da": "F1 rangergang",
+            "de": "F1 Rangiergang",
+            "fr": "F1 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1063,7 +1323,9 @@
           "bit": 7,
           "name": {
             "en": "F1 start-/brake delay",
-            "da": "F1 start-/bremseforsinkelse"
+            "da": "F1 start-/bremseforsinkelse",
+            "de": "F1 Anfahr-/Bremsverzögerung",
+            "fr": "F1 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1088,7 +1350,9 @@
       "source": "custom",
       "name": {
         "en": "F2",
-        "da": "F2"
+        "da": "F2",
+        "de": "F2",
+        "fr": "F2"
       },
       "default_value": 8,
       "flag_bits": [
@@ -1096,7 +1360,9 @@
           "bit": 0,
           "name": {
             "en": "F2 Front light",
-            "da": "F2 Frontlys"
+            "da": "F2 Frontlys",
+            "de": "F2 Frontlicht",
+            "fr": "F2 feu avant"
           },
           "values": {
             "0": {
@@ -1117,7 +1383,9 @@
           "bit": 1,
           "name": {
             "en": "F2 Rear light",
-            "da": "F2 Baglys"
+            "da": "F2 Baglys",
+            "de": "F2 Rücklicht",
+            "fr": "F2 feu arrière"
           },
           "values": {
             "0": {
@@ -1138,7 +1406,9 @@
           "bit": 2,
           "name": {
             "en": "F2 FO1",
-            "da": "F2 FO1"
+            "da": "F2 FO1",
+            "de": "F2 FO1",
+            "fr": "F2 FO1"
           },
           "values": {
             "0": {
@@ -1159,7 +1429,9 @@
           "bit": 3,
           "name": {
             "en": "F2 FO2",
-            "da": "F2 FO2"
+            "da": "F2 FO2",
+            "de": "F2 FO2",
+            "fr": "F2 FO2"
           },
           "values": {
             "0": {
@@ -1180,7 +1452,9 @@
           "bit": 4,
           "name": {
             "en": "F2 FO3",
-            "da": "F2 FO3"
+            "da": "F2 FO3",
+            "de": "F2 FO3",
+            "fr": "F2 FO3"
           },
           "values": {
             "0": {
@@ -1201,7 +1475,9 @@
           "bit": 5,
           "name": {
             "en": "F2 FO4",
-            "da": "F2 FO4"
+            "da": "F2 FO4",
+            "de": "F2 FO4",
+            "fr": "F2 FO4"
           },
           "values": {
             "0": {
@@ -1222,7 +1498,9 @@
           "bit": 6,
           "name": {
             "en": "F2 shunting speed",
-            "da": "F2 rangergang"
+            "da": "F2 rangergang",
+            "de": "F2 Rangiergang",
+            "fr": "F2 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1243,7 +1521,9 @@
           "bit": 7,
           "name": {
             "en": "F2 start-/brake delay",
-            "da": "F2 start-/bremseforsinkelse"
+            "da": "F2 start-/bremseforsinkelse",
+            "de": "F2 Anfahr-/Bremsverzögerung",
+            "fr": "F2 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1268,7 +1548,9 @@
       "source": "custom",
       "name": {
         "en": "F3",
-        "da": "F3"
+        "da": "F3",
+        "de": "F3",
+        "fr": "F3"
       },
       "default_value": 16,
       "flag_bits": [
@@ -1276,7 +1558,9 @@
           "bit": 0,
           "name": {
             "en": "F3 Front light",
-            "da": "F3 Frontlys"
+            "da": "F3 Frontlys",
+            "de": "F3 Frontlicht",
+            "fr": "F3 feu avant"
           },
           "values": {
             "0": {
@@ -1297,7 +1581,9 @@
           "bit": 1,
           "name": {
             "en": "F3 Rear light",
-            "da": "F3 Baglys"
+            "da": "F3 Baglys",
+            "de": "F3 Rücklicht",
+            "fr": "F3 feu arrière"
           },
           "values": {
             "0": {
@@ -1318,7 +1604,9 @@
           "bit": 2,
           "name": {
             "en": "F3 FO1",
-            "da": "F3 FO1"
+            "da": "F3 FO1",
+            "de": "F3 FO1",
+            "fr": "F3 FO1"
           },
           "values": {
             "0": {
@@ -1339,7 +1627,9 @@
           "bit": 3,
           "name": {
             "en": "F3 FO2",
-            "da": "F3 FO2"
+            "da": "F3 FO2",
+            "de": "F3 FO2",
+            "fr": "F3 FO2"
           },
           "values": {
             "0": {
@@ -1360,7 +1650,9 @@
           "bit": 4,
           "name": {
             "en": "F3 FO3",
-            "da": "F3 FO3"
+            "da": "F3 FO3",
+            "de": "F3 FO3",
+            "fr": "F3 FO3"
           },
           "values": {
             "0": {
@@ -1381,7 +1673,9 @@
           "bit": 5,
           "name": {
             "en": "F3 FO4",
-            "da": "F3 FO4"
+            "da": "F3 FO4",
+            "de": "F3 FO4",
+            "fr": "F3 FO4"
           },
           "values": {
             "0": {
@@ -1402,7 +1696,9 @@
           "bit": 6,
           "name": {
             "en": "F3 shunting speed",
-            "da": "F3 rangergang"
+            "da": "F3 rangergang",
+            "de": "F3 Rangiergang",
+            "fr": "F3 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1423,7 +1719,9 @@
           "bit": 7,
           "name": {
             "en": "F3 start-/brake delay",
-            "da": "F3 start-/bremseforsinkelse"
+            "da": "F3 start-/bremseforsinkelse",
+            "de": "F3 Anfahr-/Bremsverzögerung",
+            "fr": "F3 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1448,7 +1746,9 @@
       "source": "custom",
       "name": {
         "en": "F4",
-        "da": "F4"
+        "da": "F4",
+        "de": "F4",
+        "fr": "F4"
       },
       "default_value": 4,
       "flag_bits": [
@@ -1456,7 +1756,9 @@
           "bit": 0,
           "name": {
             "en": "F4 Front light",
-            "da": "F4 Frontlys"
+            "da": "F4 Frontlys",
+            "de": "F4 Frontlicht",
+            "fr": "F4 feu avant"
           },
           "values": {
             "0": {
@@ -1477,7 +1779,9 @@
           "bit": 1,
           "name": {
             "en": "F4 Rear light",
-            "da": "F4 Baglys"
+            "da": "F4 Baglys",
+            "de": "F4 Rücklicht",
+            "fr": "F4 feu arrière"
           },
           "values": {
             "0": {
@@ -1498,7 +1802,9 @@
           "bit": 2,
           "name": {
             "en": "F4 FO1",
-            "da": "F4 FO1"
+            "da": "F4 FO1",
+            "de": "F4 FO1",
+            "fr": "F4 FO1"
           },
           "values": {
             "0": {
@@ -1519,7 +1825,9 @@
           "bit": 3,
           "name": {
             "en": "F4 FO2",
-            "da": "F4 FO2"
+            "da": "F4 FO2",
+            "de": "F4 FO2",
+            "fr": "F4 FO2"
           },
           "values": {
             "0": {
@@ -1540,7 +1848,9 @@
           "bit": 4,
           "name": {
             "en": "F4 FO3",
-            "da": "F4 FO3"
+            "da": "F4 FO3",
+            "de": "F4 FO3",
+            "fr": "F4 FO3"
           },
           "values": {
             "0": {
@@ -1561,7 +1871,9 @@
           "bit": 5,
           "name": {
             "en": "F4 FO4",
-            "da": "F4 FO4"
+            "da": "F4 FO4",
+            "de": "F4 FO4",
+            "fr": "F4 FO4"
           },
           "values": {
             "0": {
@@ -1582,7 +1894,9 @@
           "bit": 6,
           "name": {
             "en": "F4 shunting speed",
-            "da": "F4 rangergang"
+            "da": "F4 rangergang",
+            "de": "F4 Rangiergang",
+            "fr": "F4 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1603,7 +1917,9 @@
           "bit": 7,
           "name": {
             "en": "F4 start-/brake delay",
-            "da": "F4 start-/bremseforsinkelse"
+            "da": "F4 start-/bremseforsinkelse",
+            "de": "F4 Anfahr-/Bremsverzögerung",
+            "fr": "F4 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1628,7 +1944,9 @@
       "source": "custom",
       "name": {
         "en": "F5",
-        "da": "F5"
+        "da": "F5",
+        "de": "F5",
+        "fr": "F5"
       },
       "default_value": 8,
       "flag_bits": [
@@ -1636,7 +1954,9 @@
           "bit": 0,
           "name": {
             "en": "F5 Front light",
-            "da": "F5 Frontlys"
+            "da": "F5 Frontlys",
+            "de": "F5 Frontlicht",
+            "fr": "F5 feu avant"
           },
           "values": {
             "0": {
@@ -1657,7 +1977,9 @@
           "bit": 1,
           "name": {
             "en": "F5 Rear light",
-            "da": "F5 Baglys"
+            "da": "F5 Baglys",
+            "de": "F5 Rücklicht",
+            "fr": "F5 feu arrière"
           },
           "values": {
             "0": {
@@ -1678,7 +2000,9 @@
           "bit": 2,
           "name": {
             "en": "F5 FO1",
-            "da": "F5 FO1"
+            "da": "F5 FO1",
+            "de": "F5 FO1",
+            "fr": "F5 FO1"
           },
           "values": {
             "0": {
@@ -1699,7 +2023,9 @@
           "bit": 3,
           "name": {
             "en": "F5 FO2",
-            "da": "F5 FO2"
+            "da": "F5 FO2",
+            "de": "F5 FO2",
+            "fr": "F5 FO2"
           },
           "values": {
             "0": {
@@ -1720,7 +2046,9 @@
           "bit": 4,
           "name": {
             "en": "F5 FO3",
-            "da": "F5 FO3"
+            "da": "F5 FO3",
+            "de": "F5 FO3",
+            "fr": "F5 FO3"
           },
           "values": {
             "0": {
@@ -1741,7 +2069,9 @@
           "bit": 5,
           "name": {
             "en": "F5 FO4",
-            "da": "F5 FO4"
+            "da": "F5 FO4",
+            "de": "F5 FO4",
+            "fr": "F5 FO4"
           },
           "values": {
             "0": {
@@ -1762,7 +2092,9 @@
           "bit": 6,
           "name": {
             "en": "F5 shunting speed",
-            "da": "F5 rangergang"
+            "da": "F5 rangergang",
+            "de": "F5 Rangiergang",
+            "fr": "F5 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1783,7 +2115,9 @@
           "bit": 7,
           "name": {
             "en": "F5 start-/brake delay",
-            "da": "F5 start-/bremseforsinkelse"
+            "da": "F5 start-/bremseforsinkelse",
+            "de": "F5 Anfahr-/Bremsverzögerung",
+            "fr": "F5 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1808,7 +2142,9 @@
       "source": "custom",
       "name": {
         "en": "F6",
-        "da": "F6"
+        "da": "F6",
+        "de": "F6",
+        "fr": "F6"
       },
       "default_value": 16,
       "flag_bits": [
@@ -1816,7 +2152,9 @@
           "bit": 0,
           "name": {
             "en": "F6 Front light",
-            "da": "F6 Frontlys"
+            "da": "F6 Frontlys",
+            "de": "F6 Frontlicht",
+            "fr": "F6 feu avant"
           },
           "values": {
             "0": {
@@ -1837,7 +2175,9 @@
           "bit": 1,
           "name": {
             "en": "F6 Rear light",
-            "da": "F6 Baglys"
+            "da": "F6 Baglys",
+            "de": "F6 Rücklicht",
+            "fr": "F6 feu arrière"
           },
           "values": {
             "0": {
@@ -1858,7 +2198,9 @@
           "bit": 2,
           "name": {
             "en": "F6 FO1",
-            "da": "F6 FO1"
+            "da": "F6 FO1",
+            "de": "F6 FO1",
+            "fr": "F6 FO1"
           },
           "values": {
             "0": {
@@ -1879,7 +2221,9 @@
           "bit": 3,
           "name": {
             "en": "F6 FO2",
-            "da": "F6 FO2"
+            "da": "F6 FO2",
+            "de": "F6 FO2",
+            "fr": "F6 FO2"
           },
           "values": {
             "0": {
@@ -1900,7 +2244,9 @@
           "bit": 4,
           "name": {
             "en": "F6 FO3",
-            "da": "F6 FO3"
+            "da": "F6 FO3",
+            "de": "F6 FO3",
+            "fr": "F6 FO3"
           },
           "values": {
             "0": {
@@ -1921,7 +2267,9 @@
           "bit": 5,
           "name": {
             "en": "F6 FO4",
-            "da": "F6 FO4"
+            "da": "F6 FO4",
+            "de": "F6 FO4",
+            "fr": "F6 FO4"
           },
           "values": {
             "0": {
@@ -1942,7 +2290,9 @@
           "bit": 6,
           "name": {
             "en": "F6 shunting speed",
-            "da": "F6 rangergang"
+            "da": "F6 rangergang",
+            "de": "F6 Rangiergang",
+            "fr": "F6 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -1963,7 +2313,9 @@
           "bit": 7,
           "name": {
             "en": "F6 start-/brake delay",
-            "da": "F6 start-/bremseforsinkelse"
+            "da": "F6 start-/bremseforsinkelse",
+            "de": "F6 Anfahr-/Bremsverzögerung",
+            "fr": "F6 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -1988,7 +2340,9 @@
       "source": "custom",
       "name": {
         "en": "F7",
-        "da": "F7"
+        "da": "F7",
+        "de": "F7",
+        "fr": "F7"
       },
       "default_value": 32,
       "flag_bits": [
@@ -1996,7 +2350,9 @@
           "bit": 0,
           "name": {
             "en": "F7 Front light",
-            "da": "F7 Frontlys"
+            "da": "F7 Frontlys",
+            "de": "F7 Frontlicht",
+            "fr": "F7 feu avant"
           },
           "values": {
             "0": {
@@ -2017,7 +2373,9 @@
           "bit": 1,
           "name": {
             "en": "F7 Rear light",
-            "da": "F7 Baglys"
+            "da": "F7 Baglys",
+            "de": "F7 Rücklicht",
+            "fr": "F7 feu arrière"
           },
           "values": {
             "0": {
@@ -2038,7 +2396,9 @@
           "bit": 2,
           "name": {
             "en": "F7 FO1",
-            "da": "F7 FO1"
+            "da": "F7 FO1",
+            "de": "F7 FO1",
+            "fr": "F7 FO1"
           },
           "values": {
             "0": {
@@ -2059,7 +2419,9 @@
           "bit": 3,
           "name": {
             "en": "F7 FO2",
-            "da": "F7 FO2"
+            "da": "F7 FO2",
+            "de": "F7 FO2",
+            "fr": "F7 FO2"
           },
           "values": {
             "0": {
@@ -2080,7 +2442,9 @@
           "bit": 4,
           "name": {
             "en": "F7 FO3",
-            "da": "F7 FO3"
+            "da": "F7 FO3",
+            "de": "F7 FO3",
+            "fr": "F7 FO3"
           },
           "values": {
             "0": {
@@ -2101,7 +2465,9 @@
           "bit": 5,
           "name": {
             "en": "F7 FO4",
-            "da": "F7 FO4"
+            "da": "F7 FO4",
+            "de": "F7 FO4",
+            "fr": "F7 FO4"
           },
           "values": {
             "0": {
@@ -2122,7 +2488,9 @@
           "bit": 6,
           "name": {
             "en": "F7 shunting speed",
-            "da": "F7 rangergang"
+            "da": "F7 rangergang",
+            "de": "F7 Rangiergang",
+            "fr": "F7 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -2143,7 +2511,9 @@
           "bit": 7,
           "name": {
             "en": "F7 start-/brake delay",
-            "da": "F7 start-/bremseforsinkelse"
+            "da": "F7 start-/bremseforsinkelse",
+            "de": "F7 Anfahr-/Bremsverzögerung",
+            "fr": "F7 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -2168,7 +2538,9 @@
       "source": "custom",
       "name": {
         "en": "F8",
-        "da": "F8"
+        "da": "F8",
+        "de": "F8",
+        "fr": "F8"
       },
       "default_value": 64,
       "flag_bits": [
@@ -2176,7 +2548,9 @@
           "bit": 0,
           "name": {
             "en": "F8 Front light",
-            "da": "F8 Frontlys"
+            "da": "F8 Frontlys",
+            "de": "F8 Frontlicht",
+            "fr": "F8 feu avant"
           },
           "values": {
             "0": {
@@ -2197,7 +2571,9 @@
           "bit": 1,
           "name": {
             "en": "F8 Rear light",
-            "da": "F8 Baglys"
+            "da": "F8 Baglys",
+            "de": "F8 Rücklicht",
+            "fr": "F8 feu arrière"
           },
           "values": {
             "0": {
@@ -2218,7 +2594,9 @@
           "bit": 2,
           "name": {
             "en": "F8 FO1",
-            "da": "F8 FO1"
+            "da": "F8 FO1",
+            "de": "F8 FO1",
+            "fr": "F8 FO1"
           },
           "values": {
             "0": {
@@ -2239,7 +2617,9 @@
           "bit": 3,
           "name": {
             "en": "F8 FO2",
-            "da": "F8 FO2"
+            "da": "F8 FO2",
+            "de": "F8 FO2",
+            "fr": "F8 FO2"
           },
           "values": {
             "0": {
@@ -2260,7 +2640,9 @@
           "bit": 4,
           "name": {
             "en": "F8 FO3",
-            "da": "F8 FO3"
+            "da": "F8 FO3",
+            "de": "F8 FO3",
+            "fr": "F8 FO3"
           },
           "values": {
             "0": {
@@ -2281,7 +2663,9 @@
           "bit": 5,
           "name": {
             "en": "F8 FO4",
-            "da": "F8 FO4"
+            "da": "F8 FO4",
+            "de": "F8 FO4",
+            "fr": "F8 FO4"
           },
           "values": {
             "0": {
@@ -2302,7 +2686,9 @@
           "bit": 6,
           "name": {
             "en": "F8 shunting speed",
-            "da": "F8 rangergang"
+            "da": "F8 rangergang",
+            "de": "F8 Rangiergang",
+            "fr": "F8 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -2323,7 +2709,9 @@
           "bit": 7,
           "name": {
             "en": "F8 start-/brake delay",
-            "da": "F8 start-/bremseforsinkelse"
+            "da": "F8 start-/bremseforsinkelse",
+            "de": "F8 Anfahr-/Bremsverzögerung",
+            "fr": "F8 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -2348,7 +2736,9 @@
       "source": "custom",
       "name": {
         "en": "F9",
-        "da": "F9"
+        "da": "F9",
+        "de": "F9",
+        "fr": "F9"
       },
       "default_value": 16,
       "flag_bits": [
@@ -2356,7 +2746,9 @@
           "bit": 0,
           "name": {
             "en": "F9 Front light",
-            "da": "F9 Frontlys"
+            "da": "F9 Frontlys",
+            "de": "F9 Frontlicht",
+            "fr": "F9 feu avant"
           },
           "values": {
             "0": {
@@ -2377,7 +2769,9 @@
           "bit": 1,
           "name": {
             "en": "F9 Rear light",
-            "da": "F9 Baglys"
+            "da": "F9 Baglys",
+            "de": "F9 Rücklicht",
+            "fr": "F9 feu arrière"
           },
           "values": {
             "0": {
@@ -2398,7 +2792,9 @@
           "bit": 2,
           "name": {
             "en": "F9 FO1",
-            "da": "F9 FO1"
+            "da": "F9 FO1",
+            "de": "F9 FO1",
+            "fr": "F9 FO1"
           },
           "values": {
             "0": {
@@ -2419,7 +2815,9 @@
           "bit": 3,
           "name": {
             "en": "F9 FO2",
-            "da": "F9 FO2"
+            "da": "F9 FO2",
+            "de": "F9 FO2",
+            "fr": "F9 FO2"
           },
           "values": {
             "0": {
@@ -2440,7 +2838,9 @@
           "bit": 4,
           "name": {
             "en": "F9 FO3",
-            "da": "F9 FO3"
+            "da": "F9 FO3",
+            "de": "F9 FO3",
+            "fr": "F9 FO3"
           },
           "values": {
             "0": {
@@ -2461,7 +2861,9 @@
           "bit": 5,
           "name": {
             "en": "F9 FO4",
-            "da": "F9 FO4"
+            "da": "F9 FO4",
+            "de": "F9 FO4",
+            "fr": "F9 FO4"
           },
           "values": {
             "0": {
@@ -2482,7 +2884,9 @@
           "bit": 6,
           "name": {
             "en": "F9 shunting speed",
-            "da": "F9 rangergang"
+            "da": "F9 rangergang",
+            "de": "F9 Rangiergang",
+            "fr": "F9 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -2503,7 +2907,9 @@
           "bit": 7,
           "name": {
             "en": "F9 start-/brake delay",
-            "da": "F9 start-/bremseforsinkelse"
+            "da": "F9 start-/bremseforsinkelse",
+            "de": "F9 Anfahr-/Bremsverzögerung",
+            "fr": "F9 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -2528,7 +2934,9 @@
       "source": "custom",
       "name": {
         "en": "F10",
-        "da": "F10"
+        "da": "F10",
+        "de": "F10",
+        "fr": "F10"
       },
       "default_value": 32,
       "flag_bits": [
@@ -2536,7 +2944,9 @@
           "bit": 0,
           "name": {
             "en": "F10 Front light",
-            "da": "F10 Frontlys"
+            "da": "F10 Frontlys",
+            "de": "F10 Frontlicht",
+            "fr": "F10 feu avant"
           },
           "values": {
             "0": {
@@ -2557,7 +2967,9 @@
           "bit": 1,
           "name": {
             "en": "F10 Rear light",
-            "da": "F10 Baglys"
+            "da": "F10 Baglys",
+            "de": "F10 Rücklicht",
+            "fr": "F10 feu arrière"
           },
           "values": {
             "0": {
@@ -2578,7 +2990,9 @@
           "bit": 2,
           "name": {
             "en": "F10 FO1",
-            "da": "F10 FO1"
+            "da": "F10 FO1",
+            "de": "F10 FO1",
+            "fr": "F10 FO1"
           },
           "values": {
             "0": {
@@ -2599,7 +3013,9 @@
           "bit": 3,
           "name": {
             "en": "F10 FO2",
-            "da": "F10 FO2"
+            "da": "F10 FO2",
+            "de": "F10 FO2",
+            "fr": "F10 FO2"
           },
           "values": {
             "0": {
@@ -2620,7 +3036,9 @@
           "bit": 4,
           "name": {
             "en": "F10 FO3",
-            "da": "F10 FO3"
+            "da": "F10 FO3",
+            "de": "F10 FO3",
+            "fr": "F10 FO3"
           },
           "values": {
             "0": {
@@ -2641,7 +3059,9 @@
           "bit": 5,
           "name": {
             "en": "F10 FO4",
-            "da": "F10 FO4"
+            "da": "F10 FO4",
+            "de": "F10 FO4",
+            "fr": "F10 FO4"
           },
           "values": {
             "0": {
@@ -2662,7 +3082,9 @@
           "bit": 6,
           "name": {
             "en": "F10 shunting speed",
-            "da": "F10 rangergang"
+            "da": "F10 rangergang",
+            "de": "F10 Rangiergang",
+            "fr": "F10 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -2683,7 +3105,9 @@
           "bit": 7,
           "name": {
             "en": "F10 start-/brake delay",
-            "da": "F10 start-/bremseforsinkelse"
+            "da": "F10 start-/bremseforsinkelse",
+            "de": "F10 Anfahr-/Bremsverzögerung",
+            "fr": "F10 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -2708,7 +3132,9 @@
       "source": "custom",
       "name": {
         "en": "F11",
-        "da": "F11"
+        "da": "F11",
+        "de": "F11",
+        "fr": "F11"
       },
       "default_value": 64,
       "flag_bits": [
@@ -2716,7 +3142,9 @@
           "bit": 0,
           "name": {
             "en": "F11 Front light",
-            "da": "F11 Frontlys"
+            "da": "F11 Frontlys",
+            "de": "F11 Frontlicht",
+            "fr": "F11 feu avant"
           },
           "values": {
             "0": {
@@ -2737,7 +3165,9 @@
           "bit": 1,
           "name": {
             "en": "F11 Rear light",
-            "da": "F11 Baglys"
+            "da": "F11 Baglys",
+            "de": "F11 Rücklicht",
+            "fr": "F11 feu arrière"
           },
           "values": {
             "0": {
@@ -2758,7 +3188,9 @@
           "bit": 2,
           "name": {
             "en": "F11 FO1",
-            "da": "F11 FO1"
+            "da": "F11 FO1",
+            "de": "F11 FO1",
+            "fr": "F11 FO1"
           },
           "values": {
             "0": {
@@ -2779,7 +3211,9 @@
           "bit": 3,
           "name": {
             "en": "F11 FO2",
-            "da": "F11 FO2"
+            "da": "F11 FO2",
+            "de": "F11 FO2",
+            "fr": "F11 FO2"
           },
           "values": {
             "0": {
@@ -2800,7 +3234,9 @@
           "bit": 4,
           "name": {
             "en": "F11 FO3",
-            "da": "F11 FO3"
+            "da": "F11 FO3",
+            "de": "F11 FO3",
+            "fr": "F11 FO3"
           },
           "values": {
             "0": {
@@ -2821,7 +3257,9 @@
           "bit": 5,
           "name": {
             "en": "F11 FO4",
-            "da": "F11 FO4"
+            "da": "F11 FO4",
+            "de": "F11 FO4",
+            "fr": "F11 FO4"
           },
           "values": {
             "0": {
@@ -2842,7 +3280,9 @@
           "bit": 6,
           "name": {
             "en": "F11 shunting speed",
-            "da": "F11 rangergang"
+            "da": "F11 rangergang",
+            "de": "F11 Rangiergang",
+            "fr": "F11 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -2863,7 +3303,9 @@
           "bit": 7,
           "name": {
             "en": "F11 start-/brake delay",
-            "da": "F11 start-/bremseforsinkelse"
+            "da": "F11 start-/bremseforsinkelse",
+            "de": "F11 Anfahr-/Bremsverzögerung",
+            "fr": "F11 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -2888,7 +3330,9 @@
       "source": "custom",
       "name": {
         "en": "F12",
-        "da": "F12"
+        "da": "F12",
+        "de": "F12",
+        "fr": "F12"
       },
       "default_value": 128,
       "flag_bits": [
@@ -2896,7 +3340,9 @@
           "bit": 0,
           "name": {
             "en": "F12 Front light",
-            "da": "F12 Frontlys"
+            "da": "F12 Frontlys",
+            "de": "F12 Frontlicht",
+            "fr": "F12 feu avant"
           },
           "values": {
             "0": {
@@ -2917,7 +3363,9 @@
           "bit": 1,
           "name": {
             "en": "F12 Rear light",
-            "da": "F12 Baglys"
+            "da": "F12 Baglys",
+            "de": "F12 Rücklicht",
+            "fr": "F12 feu arrière"
           },
           "values": {
             "0": {
@@ -2938,7 +3386,9 @@
           "bit": 2,
           "name": {
             "en": "F12 FO1",
-            "da": "F12 FO1"
+            "da": "F12 FO1",
+            "de": "F12 FO1",
+            "fr": "F12 FO1"
           },
           "values": {
             "0": {
@@ -2959,7 +3409,9 @@
           "bit": 3,
           "name": {
             "en": "F12 FO2",
-            "da": "F12 FO2"
+            "da": "F12 FO2",
+            "de": "F12 FO2",
+            "fr": "F12 FO2"
           },
           "values": {
             "0": {
@@ -2980,7 +3432,9 @@
           "bit": 4,
           "name": {
             "en": "F12 FO3",
-            "da": "F12 FO3"
+            "da": "F12 FO3",
+            "de": "F12 FO3",
+            "fr": "F12 FO3"
           },
           "values": {
             "0": {
@@ -3001,7 +3455,9 @@
           "bit": 5,
           "name": {
             "en": "F12 FO4",
-            "da": "F12 FO4"
+            "da": "F12 FO4",
+            "de": "F12 FO4",
+            "fr": "F12 FO4"
           },
           "values": {
             "0": {
@@ -3022,7 +3478,9 @@
           "bit": 6,
           "name": {
             "en": "F12 shunting speed",
-            "da": "F12 rangergang"
+            "da": "F12 rangergang",
+            "de": "F12 Rangiergang",
+            "fr": "F12 vitesse de manœuvre"
           },
           "values": {
             "0": {
@@ -3043,7 +3501,9 @@
           "bit": 7,
           "name": {
             "en": "F12 start-/brake delay",
-            "da": "F12 start-/bremseforsinkelse"
+            "da": "F12 start-/bremseforsinkelse",
+            "de": "F12 Anfahr-/Bremsverzögerung",
+            "fr": "F12 temporisation de démarrage/freinage"
           },
           "values": {
             "0": {
@@ -3067,7 +3527,10 @@
       "cv": 47,
       "source": "custom",
       "name": {
-        "de": "Mororola 1. trinäre Adresse"
+        "en": "Motorola 1st trinary address",
+        "da": "Motorola 1. trinære adresse",
+        "de": "Mororola 1. trinäre Adresse",
+        "fr": "Adresse trinaire Motorola 1"
       },
       "default_value": 12,
       "value_bits": {
@@ -3082,7 +3545,10 @@
       "cv": 48,
       "source": "custom",
       "name": {
-        "de": "Mororola 2. trinäre Adresse"
+        "en": "Motorola 2nd trinary address",
+        "da": "Motorola 2. trinære adresse",
+        "de": "Mororola 2. trinäre Adresse",
+        "fr": "Adresse trinaire Motorola 2"
       },
       "default_value": 0,
       "value_bits": {
@@ -3097,7 +3563,10 @@
       "cv": 49,
       "source": "custom",
       "name": {
-        "de": "Mororola 3. trinäre Adresse"
+        "en": "Motorola 3rd trinary address",
+        "da": "Motorola 3. trinære adresse",
+        "de": "Mororola 3. trinäre Adresse",
+        "fr": "Adresse trinaire Motorola 3"
       },
       "default_value": 0,
       "value_bits": {
@@ -3113,77 +3582,124 @@
       "source": "custom",
       "name": {
         "en": "Configuration 1",
-        "da": "Konfiguration 1"
+        "da": "Konfiguration 1",
+        "de": "Konfiguration 1",
+        "fr": "Configuration 1"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Motorola 2. Adresse"
+            "en": "Motorola 2nd address",
+            "da": "Motorola 2. adresse",
+            "de": "Motorola 2. Adresse",
+            "fr": "Adresse Motorola 2"
           },
           "values": {
             "0": {
-              "de": "Nicht benutzen"
+              "en": "Do not use",
+              "da": "Må ikke bruges",
+              "de": "Nicht benutzen",
+              "fr": "Ne pas utiliser"
             },
             "1": {
-              "de": "Benutzen"
+              "en": "Use",
+              "da": "Brug",
+              "de": "Benutzen",
+              "fr": "Utiliser"
             }
           }
         },
         {
           "bit": 1,
           "name": {
-            "de": "Motorola 3. Adresse"
+            "en": "Motorola 3rd address",
+            "da": "Motorola 3. adresse",
+            "de": "Motorola 3. Adresse",
+            "fr": "Adresse Motorola 3"
           },
           "values": {
             "0": {
-              "de": "Nicht benutzen"
+              "en": "Do not use",
+              "da": "Må ikke bruges",
+              "de": "Nicht benutzen",
+              "fr": "Ne pas utiliser"
             },
             "1": {
-              "de": "Benutzen"
+              "en": "Use",
+              "da": "Brug",
+              "de": "Benutzen",
+              "fr": "Utiliser"
             }
           }
         },
         {
           "bit": 2,
           "name": {
-            "de": "Lichtausgänge"
+            "en": "Light outputs",
+            "da": "Lysudgange",
+            "de": "Lichtausgänge",
+            "fr": "Sorties d'éclairage"
           },
           "values": {
             "0": {
-              "de": "Nicht tauschen"
+              "en": "Do not swap",
+              "da": "Ombyt ikke",
+              "de": "Nicht tauschen",
+              "fr": "Ne pas permuter"
             },
             "1": {
-              "de": "Tauschen"
+              "en": "Swap",
+              "da": "Ombyt",
+              "de": "Tauschen",
+              "fr": "Permuter"
             }
           }
         },
         {
           "bit": 3,
           "name": {
-            "de": "Frequenz Licht, A1 bis A7"
+            "en": "Light frequency, A1 to A7",
+            "da": "Lysfrekvens, A1 til A7",
+            "de": "Frequenz Licht, A1 bis A7",
+            "fr": "Fréquence d'éclairage, A1 à A7"
           },
           "values": {
             "0": {
-              "de": "156 Hz"
+              "en": "156 Hz",
+              "da": "156 Hz",
+              "de": "156 Hz",
+              "fr": "156 Hz"
             },
             "1": {
-              "en": "24 KHz"
+              "en": "24 kHz",
+              "da": "24 kHz",
+              "de": "24 KHz",
+              "fr": "24 kHz"
             }
           }
         },
         {
           "bit": 4,
           "name": {
-            "de": "SUSI/ausgang"
+            "en": "SUSI/output",
+            "da": "SUSI/udgang",
+            "de": "SUSI/ausgang",
+            "fr": "SUSI/sortie"
           },
           "values": {
             "0": {
-              "de": "SUSI"
+              "en": "SUSI",
+              "da": "SUSI",
+              "de": "SUSI",
+              "fr": "SUSI"
             },
             "1": {
-              "de": "A3/A4"
+              "en": "A3/A4",
+              "da": "A3/A4",
+              "de": "A3/A4",
+              "fr": "A3/A4"
             }
           }
         }
@@ -3195,14 +3711,19 @@
       "source": "custom",
       "name": {
         "en": "Configuration 2",
-        "da": "Konfiguration 2"
+        "da": "Konfiguration 2",
+        "de": "Konfiguration 2",
+        "fr": "Configuration 2"
       },
       "default_value": 3,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Motorregelung"
+            "en": "Motor control",
+            "da": "Motorregulering",
+            "de": "Motorregelung",
+            "fr": "Régulation du moteur"
           },
           "values": {
             "0": {
@@ -3222,21 +3743,33 @@
         {
           "bit": 1,
           "name": {
-            "de": "Motorregelung"
+            "en": "Motor control",
+            "da": "Motorregulering",
+            "de": "Motorregelung",
+            "fr": "Régulation du moteur"
           },
           "values": {
             "0": {
-              "de": "PID regler"
+              "en": "PID controller",
+              "da": "PID-regulator",
+              "de": "PID regler",
+              "fr": "Régulateur PID"
             },
             "1": {
-              "de": "SX regler"
+              "en": "SX controller",
+              "da": "SX-regulator",
+              "de": "SX regler",
+              "fr": "Régulateur SX"
             }
           }
         },
         {
           "bit": 2,
           "name": {
-            "de": "Dynamische Periodendauer der Motorregelung"
+            "en": "Dynamic period of the motor control",
+            "da": "Dynamisk periodetid for motorreguleringen",
+            "de": "Dynamische Periodendauer der Motorregelung",
+            "fr": "Période dynamique de la régulation du moteur"
           },
           "values": {
             "0": {
@@ -3260,7 +3793,10 @@
       "cv": 53,
       "source": "custom",
       "name": {
-        "de": "Periodendauer der Motorregelung in 100μs Schritten"
+        "en": "Period of the motor control in 100 μs steps",
+        "da": "Periodetid for motorreguleringen i trin på 100 μs",
+        "de": "Periodendauer der Motorregelung in 100μs Schritten",
+        "fr": "Période de la régulation du moteur par pas de 100 μs"
       },
       "default_value": 40,
       "value_bits": {
@@ -3275,7 +3811,10 @@
       "cv": 54,
       "source": "custom",
       "name": {
-        "de": "Motorregelung P-Konstante des PID Reglers"
+        "en": "Motor control P constant of the PID controller",
+        "da": "Motorregulering P-konstant for PID-regulatoren",
+        "de": "Motorregelung P-Konstante des PID Reglers",
+        "fr": "Régulation du moteur, constante P du régulateur PID"
       },
       "default_value": 100,
       "value_bits": {
@@ -3290,7 +3829,10 @@
       "cv": 55,
       "source": "custom",
       "name": {
-        "de": "Motorregelung I-Konstante des PID Reglers"
+        "en": "Motor control I constant of the PID controller",
+        "da": "Motorregulering I-konstant for PID-regulatoren",
+        "de": "Motorregelung I-Konstante des PID Reglers",
+        "fr": "Régulation du moteur, constante I du régulateur PID"
       },
       "default_value": 40,
       "value_bits": {
@@ -3305,7 +3847,10 @@
       "cv": 56,
       "source": "custom",
       "name": {
-        "de": "Motorregelung D-Konstante des PID Reglers"
+        "en": "Motor control D constant of the PID controller",
+        "da": "Motorregulering D-konstant for PID-regulatoren",
+        "de": "Motorregelung D-Konstante des PID Reglers",
+        "fr": "Régulation du moteur, constante D du régulateur PID"
       },
       "default_value": 32,
       "value_bits": {
@@ -3320,7 +3865,10 @@
       "cv": 57,
       "source": "custom",
       "name": {
-        "de": "Regler Offset"
+        "en": "Controller offset",
+        "da": "Regulator-offset",
+        "de": "Regler Offset",
+        "fr": "Décalage du régulateur"
       },
       "default_value": 6,
       "value_bits": {
@@ -3335,7 +3883,10 @@
       "cv": 58,
       "source": "custom",
       "name": {
-        "de": "Messlücke zur EMK-Messung in 100μs Schritten"
+        "en": "Measurement gap for BEMF measurement in 100 μs steps",
+        "da": "Målepause til BEMF-måling i trin på 100 μs",
+        "de": "Messlücke zur EMK-Messung in 100μs Schritten",
+        "fr": "Intervalle de mesure pour la mesure de la FEM inverse par pas de 100 μs"
       },
       "default_value": 8,
       "value_bits": {
@@ -3347,43 +3898,13 @@
     },
     {
       "type": "cv_single",
-      "cv": 59,
-      "source": "custom",
-      "name": {
-        "en": "Factory reset",
-        "da": "Fabriksnulstilling"
-      },
-      "default_value": 0,
-      "flag_bits": [
-        {
-          "bit": 0,
-          "bit_to": 7,
-          "name": {
-            "de": "Reset auf die Werkseinstellung"
-          },
-          "values": {
-            "1": {
-              "de": "CV 0 - 256, sowie CV257 - 512 (RailCom® Bank 7)"
-            },
-            "2": {
-              "de": "CV 257 - 512 (RailCom Plus® Banken 5 & 6)"
-            },
-            "3": {
-              "de": "CV 257 - 512 (erweitertes Function Mapping Banken 1 & 2)"
-            },
-            "4": {
-              "de": "CV 257 - 512 (PWM-Modulation Funktionsausgänge Banken 3 & 4)"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "cv_single",
       "cv": 60,
       "source": "custom",
       "name": {
-        "de": "Kurzschlussüberwachung Motor-, Funktionsausgänge, Temperaturüberwachung Eingeschaltet"
+        "en": "Short-circuit monitoring of motor and function outputs, temperature monitoring enabled",
+        "da": "Kortslutningsovervågning af motor- og funktionsudgange, temperaturovervågning aktiveret",
+        "de": "Kurzschlussüberwachung Motor-, Funktionsausgänge, Temperaturüberwachung Eingeschaltet",
+        "fr": "Surveillance des courts-circuits des sorties moteur et fonctions, surveillance de la température activée"
       },
       "default_value": 0,
       "value_bits": {
@@ -3399,7 +3920,10 @@
       "cv": 61,
       "source": "custom",
       "name": {
-        "de": "Konstante für die Temperaturabschaltung"
+        "en": "Constant for temperature shutdown",
+        "da": "Konstant for temperaturafbrydelse",
+        "de": "Konstante für die Temperaturabschaltung",
+        "fr": "Constante pour l'arrêt thermique"
       },
       "default_value": 0,
       "value_bits": {
@@ -3415,7 +3939,10 @@
       "cv": 62,
       "source": "custom",
       "name": {
-        "de": "Konstante der Kurzschlusserkennung der Fkt.-Ausgänge"
+        "en": "Constant for short-circuit detection of the function outputs",
+        "da": "Konstant for kortslutningsdetektering af funktionsudgangene",
+        "de": "Konstante der Kurzschlusserkennung der Fkt.-Ausgänge",
+        "fr": "Constante de détection des courts-circuits des sorties de fonctions"
       },
       "default_value": 0,
       "value_bits": {
@@ -3431,7 +3958,10 @@
       "cv": 63,
       "source": "custom",
       "name": {
-        "de": "Konstante der Kurzschlusserkennung des Motorausgangs"
+        "en": "Constant for short-circuit detection of the motor output",
+        "da": "Konstant for kortslutningsdetektering af motorudgangen",
+        "de": "Konstante der Kurzschlusserkennung des Motorausgangs",
+        "fr": "Constante de détection des courts-circuits de la sortie moteur"
       },
       "default_value": 0,
       "value_bits": {
@@ -3471,7 +4001,10 @@
       "cv": 97,
       "source": "custom",
       "name": {
-        "de": "Spannungsdifferenz für Diodenstrecke ist ca. CV-Wert * 0,12V"
+        "en": "Voltage difference for diode section is approx. CV value * 0.12V",
+        "da": "Spændingsforskel for diodestrækning er ca. CV-værdi * 0,12V",
+        "de": "Spannungsdifferenz für Diodenstrecke ist ca. CV-Wert * 0,12V",
+        "fr": "La différence de tension pour la section à diodes est d'environ valeur CV * 0,12V"
       },
       "default_value": 8,
       "value_bits": {
@@ -3486,7 +4019,10 @@
       "cv": 98,
       "source": "custom",
       "name": {
-        "de": "Geschwindigkeit in der ABC-Langsamfahrstrecke"
+        "en": "Speed in the ABC slow-speed section",
+        "da": "Hastighed i ABC-langsomkørselsstrækningen",
+        "de": "Geschwindigkeit in der ABC-Langsamfahrstrecke",
+        "fr": "Vitesse dans la section de ralentissement ABC"
       },
       "default_value": 30,
       "value_bits": {
@@ -3501,14 +4037,20 @@
       "cv": 100,
       "source": "custom",
       "name": {
-        "de": "Funtion Mapping Shift (F0 - F4)"
+        "en": "Function mapping shift (F0 - F4)",
+        "da": "Funktionsmapping-skift (F0 - F4)",
+        "de": "Funtion Mapping Shift (F0 - F4)",
+        "fr": "Décalage du mappage des fonctions (F0 - F4)"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Änderung der Zuordnung in CV35 (F1)"
+            "en": "Change of assignment in CV35 (F1)",
+            "da": "Ændring af tildelingen i CV35 (F1)",
+            "de": "Änderung der Zuordnung in CV35 (F1)",
+            "fr": "Modification de l'affectation dans CV35 (F1)"
           },
           "values": {
             "0": {
@@ -3528,7 +4070,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Änderung der Zuordnung in CV36 (F2)"
+            "en": "Change of assignment in CV36 (F2)",
+            "da": "Ændring af tildelingen i CV36 (F2)",
+            "de": "Änderung der Zuordnung in CV36 (F2)",
+            "fr": "Modification de l'affectation dans CV36 (F2)"
           },
           "values": {
             "0": {
@@ -3548,7 +4093,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Änderung der Zuordnung in CV37 (F3)"
+            "en": "Change of assignment in CV37 (F3)",
+            "da": "Ændring af tildelingen i CV37 (F3)",
+            "de": "Änderung der Zuordnung in CV37 (F3)",
+            "fr": "Modification de l'affectation dans CV37 (F3)"
           },
           "values": {
             "0": {
@@ -3568,7 +4116,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Änderung der Zuordnung in CV38 (F4)"
+            "en": "Change of assignment in CV38 (F4)",
+            "da": "Ændring af tildelingen i CV38 (F4)",
+            "de": "Änderung der Zuordnung in CV38 (F4)",
+            "fr": "Modification de l'affectation dans CV38 (F4)"
           },
           "values": {
             "0": {
@@ -3588,7 +4139,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Änderung der Zuordnung in CV33 (F0 vorwarts)"
+            "en": "Change of assignment in CV33 (F0 forward)",
+            "da": "Ændring af tildelingen i CV33 (F0 fremad)",
+            "de": "Änderung der Zuordnung in CV33 (F0 vorwarts)",
+            "fr": "Modification de l'affectation dans CV33 (F0 avant)"
           },
           "values": {
             "0": {
@@ -3608,7 +4162,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Änderung der Zuordnung in CV34 (F0 rückwarts)"
+            "en": "Change of assignment in CV34 (F0 reverse)",
+            "da": "Ændring af tildelingen i CV34 (F0 baglæns)",
+            "de": "Änderung der Zuordnung in CV34 (F0 rückwarts)",
+            "fr": "Modification de l'affectation dans CV34 (F0 arrière)"
           },
           "values": {
             "0": {
@@ -3632,14 +4189,20 @@
       "cv": 101,
       "source": "custom",
       "name": {
-        "de": "Function Mapping Shift (F5 - F12)"
+        "en": "Function mapping shift (F5 - F12)",
+        "da": "Funktionsmapping-skift (F5 - F12)",
+        "de": "Function Mapping Shift (F5 - F12)",
+        "fr": "Décalage du mappage des fonctions (F5 - F12)"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Änderung der Zuordnung in CV39 (F5)"
+            "en": "Change of assignment in CV39 (F5)",
+            "da": "Ændring af tildelingen i CV39 (F5)",
+            "de": "Änderung der Zuordnung in CV39 (F5)",
+            "fr": "Modification de l'affectation dans CV39 (F5)"
           },
           "values": {
             "0": {
@@ -3659,7 +4222,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Änderung der Zuordnung in CV40 (F6)"
+            "en": "Change of assignment in CV40 (F6)",
+            "da": "Ændring af tildelingen i CV40 (F6)",
+            "de": "Änderung der Zuordnung in CV40 (F6)",
+            "fr": "Modification de l'affectation dans CV40 (F6)"
           },
           "values": {
             "0": {
@@ -3679,7 +4245,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Änderung der Zuordnung in CV41 (F7)"
+            "en": "Change of assignment in CV41 (F7)",
+            "da": "Ændring af tildelingen i CV41 (F7)",
+            "de": "Änderung der Zuordnung in CV41 (F7)",
+            "fr": "Modification de l'affectation dans CV41 (F7)"
           },
           "values": {
             "0": {
@@ -3699,7 +4268,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Änderung der Zuordnung in CV42 (F8)"
+            "en": "Change of assignment in CV42 (F8)",
+            "da": "Ændring af tildelingen i CV42 (F8)",
+            "de": "Änderung der Zuordnung in CV42 (F8)",
+            "fr": "Modification de l'affectation dans CV42 (F8)"
           },
           "values": {
             "0": {
@@ -3719,7 +4291,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Änderung der Zuordnung in CV43 (F9)"
+            "en": "Change of assignment in CV43 (F9)",
+            "da": "Ændring af tildelingen i CV43 (F9)",
+            "de": "Änderung der Zuordnung in CV43 (F9)",
+            "fr": "Modification de l'affectation dans CV43 (F9)"
           },
           "values": {
             "0": {
@@ -3739,7 +4314,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Änderung der Zuordnung in CV44 (F10)"
+            "en": "Change of assignment in CV44 (F10)",
+            "da": "Ændring af tildelingen i CV44 (F10)",
+            "de": "Änderung der Zuordnung in CV44 (F10)",
+            "fr": "Modification de l'affectation dans CV44 (F10)"
           },
           "values": {
             "0": {
@@ -3759,7 +4337,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Änderung der Zuordnung in CV45 (F11)"
+            "en": "Change of assignment in CV45 (F11)",
+            "da": "Ændring af tildelingen i CV45 (F11)",
+            "de": "Änderung der Zuordnung in CV45 (F11)",
+            "fr": "Modification de l'affectation dans CV45 (F11)"
           },
           "values": {
             "0": {
@@ -3779,7 +4360,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Änderung der Zuordnung in CV46 (F12)"
+            "en": "Change of assignment in CV46 (F12)",
+            "da": "Ændring af tildelingen i CV46 (F12)",
+            "de": "Änderung der Zuordnung in CV46 (F12)",
+            "fr": "Modification de l'affectation dans CV46 (F12)"
           },
           "values": {
             "0": {
@@ -3803,31 +4387,49 @@
       "cv": 102,
       "source": "custom",
       "name": {
-        "de": "Analogbetrieb Konfiguration"
+        "en": "Analog operation configuration",
+        "da": "Konfiguration af analogdrift",
+        "de": "Analogbetrieb Konfiguration",
+        "fr": "Configuration du mode analogique"
       },
       "flag_bits": [
         {
           "bit": 0,
           "bit_to": 1,
           "name": {
-            "de": "Geschwindigkeit"
+            "en": "Speed",
+            "da": "Hastighed",
+            "de": "Geschwindigkeit",
+            "fr": "Vitesse"
           },
           "values": {
             "0": {
-              "de": "Keine Regelung"
+              "en": "No regulation",
+              "da": "Ingen regulering",
+              "de": "Keine Regelung",
+              "fr": "Aucune régulation"
             },
             "1": {
-              "de": "Wie CV106"
+              "en": "Same as CV106",
+              "da": "Som CV106",
+              "de": "Wie CV106",
+              "fr": "Comme CV106"
             },
             "2": {
-              "de": "Trafospg. Messen und CV103 und CV104 benutzen"
+              "en": "Measure transformer voltage and use CV103 and CV104",
+              "da": "Mål trafospænding og brug CV103 og CV104",
+              "de": "Trafospg. Messen und CV103 und CV104 benutzen",
+              "fr": "Mesurer la tension du transformateur et utiliser CV103 et CV104"
             }
           }
         },
         {
           "bit": 2,
           "name": {
-            "de": "Analogbetrieb Regler"
+            "en": "Analog operation controller",
+            "da": "Regulator til analogdrift",
+            "de": "Analogbetrieb Regler",
+            "fr": "Régulateur du mode analogique"
           },
           "values": {
             "0": {
@@ -3847,28 +4449,46 @@
         {
           "bit": 3,
           "name": {
-            "de": "Analogbetrieb Regler Typ"
+            "en": "Analog operation controller type",
+            "da": "Regulatortype til analogdrift",
+            "de": "Analogbetrieb Regler Typ",
+            "fr": "Type de régulateur du mode analogique"
           },
           "values": {
             "0": {
-              "de": "PID"
+              "en": "PID",
+              "da": "PID",
+              "de": "PID",
+              "fr": "PID"
             },
             "1": {
-              "de": "SX"
+              "en": "SX",
+              "da": "SX",
+              "de": "SX",
+              "fr": "SX"
             }
           }
         },
         {
           "bit": 4,
           "name": {
-            "de": "Analogbetrieb Dynamische Wiederholrate"
+            "en": "Analog operation dynamic repetition rate",
+            "da": "Dynamisk gentagelsesrate i analogdrift",
+            "de": "Analogbetrieb Dynamische Wiederholrate",
+            "fr": "Taux de répétition dynamique du mode analogique"
           },
           "values": {
             "0": {
-              "de": "Aus"
+              "en": "Off",
+              "da": "Fra",
+              "de": "Aus",
+              "fr": "Éteint"
             },
             "1": {
-              "de": "Ein"
+              "en": "On",
+              "da": "Til",
+              "de": "Ein",
+              "fr": "Allumé"
             }
           }
         }
@@ -3879,7 +4499,10 @@
       "cv": 103,
       "source": "custom",
       "name": {
-        "de": "Analogbetrieb Mindest Trafospannung für Vsoll = 0"
+        "en": "Analog operation minimum transformer voltage for Vtarget = 0",
+        "da": "Minimum transformerspænding i analogdrift for Vmål = 0",
+        "de": "Analogbetrieb Mindest Trafospannung für Vsoll = 0",
+        "fr": "Tension minimale du transformateur en mode analogique pour Vconsigne = 0"
       },
       "default_value": 150,
       "value_bits": {
@@ -3894,7 +4517,10 @@
       "cv": 104,
       "source": "custom",
       "name": {
-        "de": "Analogbetrieb Maximale Trafospannung für Vsoll = Vmax"
+        "en": "Analog operation maximum transformer voltage for Vtarget = Vmax",
+        "da": "Maksimal transformerspænding i analogdrift for Vmål = Vmax",
+        "de": "Analogbetrieb Maximale Trafospannung für Vsoll = Vmax",
+        "fr": "Tension maximale du transformateur en mode analogique pour Vconsigne = Vmax"
       },
       "default_value": 180,
       "value_bits": {
@@ -3909,7 +4535,10 @@
       "cv": 105,
       "source": "custom",
       "name": {
-        "de": "Analogbetrieb Hysterese"
+        "en": "Analog operation hysteresis",
+        "da": "Hysterese i analogdrift",
+        "de": "Analogbetrieb Hysterese",
+        "fr": "Hystérésis du mode analogique"
       },
       "default_value": 30,
       "value_bits": {
@@ -3924,7 +4553,10 @@
       "cv": 106,
       "source": "custom",
       "name": {
-        "de": "Analogbetrieb Vmax"
+        "en": "Analog operation Vmax",
+        "da": "Vmax i analogdrift",
+        "de": "Analogbetrieb Vmax",
+        "fr": "Vmax du mode analogique"
       },
       "default_value": 200,
       "value_bits": {
@@ -3939,7 +4571,10 @@
       "cv": 107,
       "source": "custom",
       "name": {
-        "de": "Beleuchtung vorne abschalten"
+        "en": "Switch off front lighting",
+        "da": "Sluk frontbelysning",
+        "de": "Beleuchtung vorne abschalten",
+        "fr": "Désactiver l'éclairage avant"
       },
       "default_value": 0,
       "value_bits": {
@@ -3954,7 +4589,10 @@
       "cv": 108,
       "source": "custom",
       "name": {
-        "de": "Beleuchtung hinten abschalten"
+        "en": "Switch off rear lighting",
+        "da": "Sluk baglys",
+        "de": "Beleuchtung hinten abschalten",
+        "fr": "Désactiver l'éclairage arrière"
       },
       "default_value": 0,
       "value_bits": {
@@ -3970,7 +4608,9 @@
       "source": "custom",
       "name": {
         "en": "Blink generator assignment",
-        "da": "Tildeling af blinkgenerator"
+        "da": "Tildeling af blinkgenerator",
+        "de": "Zuordnung des Blinkgenerators",
+        "fr": "Affectation du générateur de clignotement"
       },
       "value_bits": {
         "min": 0,
@@ -3985,7 +4625,9 @@
       "source": "custom",
       "name": {
         "en": "Blink generator, 180° phase",
-        "da": "Blinkgenerator, 180° fase"
+        "da": "Blinkgenerator, 180° fase",
+        "de": "Blinkgenerator, 180°-Phase",
+        "fr": "Générateur de clignotement, phase 180°"
       },
       "value_bits": {
         "min": 0,
@@ -4000,7 +4642,9 @@
       "source": "custom",
       "name": {
         "en": "Blink on-time",
-        "da": "Blink-tændtid"
+        "da": "Blink-tændtid",
+        "de": "Blink-Einschaltzeit",
+        "fr": "Durée d'allumage du clignotement"
       },
       "value_bits": {
         "min": 0,
@@ -4015,7 +4659,9 @@
       "source": "custom",
       "name": {
         "en": "Blink off-time",
-        "da": "Blink-sluktid"
+        "da": "Blink-sluktid",
+        "de": "Blink-Ausschaltzeit",
+        "fr": "Durée d'extinction du clignotement"
       },
       "value_bits": {
         "min": 0,
@@ -4029,14 +4675,20 @@
       "cv": 113,
       "source": "custom",
       "name": {
-        "de": "Ausschalten der Funktionsausgänge A1 - A7 in Fahrtrichtung vorwärts"
+        "en": "Switching off function outputs A1 - A7 in forward direction",
+        "da": "Slukning af funktionsudgangene A1 - A7 i fremadgående retning",
+        "de": "Ausschalten der Funktionsausgänge A1 - A7 in Fahrtrichtung vorwärts",
+        "fr": "Désactivation des sorties de fonctions A1 - A7 en marche avant"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "en": "Set marked output A1 - A7  to"
+            "en": "Set marked output A1 - A7  to",
+            "da": "Sæt markeret udgang A1 - A7 til",
+            "de": "Markierten Ausgang A1 - A7 setzen auf",
+            "fr": "Mettre la sortie marquée A1 - A7 sur"
           },
           "values": {
             "0": {
@@ -4056,7 +4708,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Ausgang A1, vorwärts"
+            "en": "Output A1, forward",
+            "da": "Udgang A1, fremad",
+            "de": "Ausgang A1, vorwärts",
+            "fr": "Sortie A1, avant"
           },
           "values": {
             "0": {
@@ -4076,7 +4731,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Ausgang A2, vorwärts"
+            "en": "Output A2, forward",
+            "da": "Udgang A2, fremad",
+            "de": "Ausgang A2, vorwärts",
+            "fr": "Sortie A2, avant"
           },
           "values": {
             "0": {
@@ -4096,7 +4754,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Ausgang A3, vorwärts"
+            "en": "Output A3, forward",
+            "da": "Udgang A3, fremad",
+            "de": "Ausgang A3, vorwärts",
+            "fr": "Sortie A3, avant"
           },
           "values": {
             "0": {
@@ -4116,7 +4777,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Ausgang A4, vorwärts"
+            "en": "Output A4, forward",
+            "da": "Udgang A4, fremad",
+            "de": "Ausgang A4, vorwärts",
+            "fr": "Sortie A4, avant"
           },
           "values": {
             "0": {
@@ -4136,7 +4800,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Ausgang A5, vorwärts"
+            "en": "Output A5, forward",
+            "da": "Udgang A5, fremad",
+            "de": "Ausgang A5, vorwärts",
+            "fr": "Sortie A5, avant"
           },
           "values": {
             "0": {
@@ -4156,7 +4823,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Ausgang A6, vorwärts"
+            "en": "Output A6, forward",
+            "da": "Udgang A6, fremad",
+            "de": "Ausgang A6, vorwärts",
+            "fr": "Sortie A6, avant"
           },
           "values": {
             "0": {
@@ -4176,7 +4846,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Ausgang A7, vorwärts"
+            "en": "Output A7, forward",
+            "da": "Udgang A7, fremad",
+            "de": "Ausgang A7, vorwärts",
+            "fr": "Sortie A7, avant"
           },
           "values": {
             "0": {
@@ -4203,7 +4876,10 @@
         {
           "bit": 0,
           "name": {
-            "en": "Set marked output A1 - A7  to"
+            "en": "Set marked output A1 - A7  to",
+            "da": "Sæt markeret udgang A1 - A7 til",
+            "de": "Markierten Ausgang A1 - A7 setzen auf",
+            "fr": "Mettre la sortie marquée A1 - A7 sur"
           },
           "values": {
             "0": {
@@ -4223,7 +4899,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Ausgang A1, rückwärts"
+            "en": "Output A1, reverse",
+            "da": "Udgang A1, baglæns",
+            "de": "Ausgang A1, rückwärts",
+            "fr": "Sortie A1, arrière"
           },
           "values": {
             "0": {
@@ -4243,7 +4922,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Ausgang A2, rückwärts"
+            "en": "Output A2, reverse",
+            "da": "Udgang A2, baglæns",
+            "de": "Ausgang A2, rückwärts",
+            "fr": "Sortie A2, arrière"
           },
           "values": {
             "0": {
@@ -4263,7 +4945,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Ausgang A3, rückwärts"
+            "en": "Output A3, reverse",
+            "da": "Udgang A3, baglæns",
+            "de": "Ausgang A3, rückwärts",
+            "fr": "Sortie A3, arrière"
           },
           "values": {
             "0": {
@@ -4283,7 +4968,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Ausgang A4, rückwärts"
+            "en": "Output A4, reverse",
+            "da": "Udgang A4, baglæns",
+            "de": "Ausgang A4, rückwärts",
+            "fr": "Sortie A4, arrière"
           },
           "values": {
             "0": {
@@ -4303,7 +4991,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Ausgang A5, rückwärts"
+            "en": "Output A5, reverse",
+            "da": "Udgang A5, baglæns",
+            "de": "Ausgang A5, rückwärts",
+            "fr": "Sortie A5, arrière"
           },
           "values": {
             "0": {
@@ -4323,7 +5014,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Ausgang A6, rückwärts"
+            "en": "Output A6, reverse",
+            "da": "Udgang A6, baglæns",
+            "de": "Ausgang A6, rückwärts",
+            "fr": "Sortie A6, arrière"
           },
           "values": {
             "0": {
@@ -4343,7 +5037,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Ausgang A7, rückwärts"
+            "en": "Output A7, reverse",
+            "da": "Udgang A7, baglæns",
+            "de": "Ausgang A7, rückwärts",
+            "fr": "Sortie A7, arrière"
           },
           "values": {
             "0": {
@@ -4368,7 +5065,9 @@
       "source": "custom",
       "name": {
         "en": "Light outputs dimming",
-        "da": "Dæmpning af lysudgange"
+        "da": "Dæmpning af lysudgange",
+        "de": "Dimmung der Lichtausgänge",
+        "fr": "Variation de luminosité des sorties d'éclairage"
       },
       "default_value": 63,
       "value_bits": {
@@ -4384,7 +5083,9 @@
       "source": "custom",
       "name": {
         "en": "Output 1 dimming",
-        "da": "Dæmpning af udgang 1"
+        "da": "Dæmpning af udgang 1",
+        "de": "Dimmung Ausgang 1",
+        "fr": "Variation de luminosité de la sortie 1"
       },
       "default_value": 63,
       "value_bits": {
@@ -4400,7 +5101,9 @@
       "source": "custom",
       "name": {
         "en": "Output 2 dimming",
-        "da": "Dæmpning af udgang 2"
+        "da": "Dæmpning af udgang 2",
+        "de": "Dimmung Ausgang 2",
+        "fr": "Variation de luminosité de la sortie 2"
       },
       "default_value": 63,
       "value_bits": {
@@ -4416,7 +5119,9 @@
       "source": "custom",
       "name": {
         "en": "Output 3 dimming",
-        "da": "Dæmpning af udgang 3"
+        "da": "Dæmpning af udgang 3",
+        "de": "Dimmung Ausgang 3",
+        "fr": "Variation de luminosité de la sortie 3"
       },
       "default_value": 63,
       "value_bits": {
@@ -4432,7 +5137,9 @@
       "source": "custom",
       "name": {
         "en": "Output 4 dimming",
-        "da": "Dæmpning af udgang 4"
+        "da": "Dæmpning af udgang 4",
+        "de": "Dimmung Ausgang 4",
+        "fr": "Variation de luminosité de la sortie 4"
       },
       "default_value": 63,
       "value_bits": {
@@ -4448,7 +5155,9 @@
       "source": "custom",
       "name": {
         "en": "Output 5 dimming",
-        "da": "Dæmpning af udgang 5"
+        "da": "Dæmpning af udgang 5",
+        "de": "Dimmung Ausgang 5",
+        "fr": "Variation de luminosité de la sortie 5"
       },
       "default_value": 63,
       "value_bits": {
@@ -4464,7 +5173,9 @@
       "source": "custom",
       "name": {
         "en": "Output 6 dimming",
-        "da": "Dæmpning af udgang 6"
+        "da": "Dæmpning af udgang 6",
+        "de": "Dimmung Ausgang 6",
+        "fr": "Variation de luminosité de la sortie 6"
       },
       "default_value": 63,
       "value_bits": {
@@ -4480,7 +5191,9 @@
       "source": "custom",
       "name": {
         "en": "Output 7 dimming",
-        "da": "Dæmpning af udgang 7"
+        "da": "Dæmpning af udgang 7",
+        "de": "Dimmung Ausgang 7",
+        "fr": "Variation de luminosité de la sortie 7"
       },
       "default_value": 63,
       "value_bits": {
@@ -4495,7 +5208,10 @@
       "cv": 124,
       "source": "custom",
       "name": {
-        "de": "Kupplungswiederholungen für elektrische Kupplungen an A1 - A7"
+        "en": "Coupler repetitions for electric couplers on A1 - A7",
+        "da": "Gentagelser af kobling for elektriske koblinger på A1 - A7",
+        "de": "Kupplungswiederholungen für elektrische Kupplungen an A1 - A7",
+        "fr": "Répétitions de dételage pour attelages électriques sur A1 - A7"
       },
       "default_value": 1,
       "value_bits": {
@@ -4510,7 +5226,10 @@
       "cv": 125,
       "source": "custom",
       "name": {
-        "de": "Einschaltzeit der Kupplung, Wert * 100ms"
+        "en": "Coupler on-time, value * 100ms",
+        "da": "Koblingens tændtid, værdi * 100ms",
+        "de": "Einschaltzeit der Kupplung, Wert * 100ms",
+        "fr": "Durée d'activation de l'attelage, valeur * 100ms"
       },
       "default_value": 10,
       "value_bits": {
@@ -4525,7 +5244,10 @@
       "cv": 126,
       "source": "custom",
       "name": {
-        "de": "Haltezeit der Kupplung, Wert * 100ms"
+        "en": "Coupler hold time, value * 100ms",
+        "da": "Koblingens holdetid, værdi * 100ms",
+        "de": "Haltezeit der Kupplung, Wert * 100ms",
+        "fr": "Durée de maintien de l'attelage, valeur * 100ms"
       },
       "default_value": 20,
       "value_bits": {
@@ -4540,7 +5262,10 @@
       "cv": 127,
       "source": "custom",
       "name": {
-        "de": "Pausenzeit der Kupplung, Wert * 100ms"
+        "en": "Coupler pause time, value * 100ms",
+        "da": "Koblingens pausetid, værdi * 100ms",
+        "de": "Pausenzeit der Kupplung, Wert * 100ms",
+        "fr": "Durée de pause de l'attelage, valeur * 100ms"
       },
       "default_value": 10,
       "value_bits": {
@@ -4555,7 +5280,10 @@
       "cv": 128,
       "source": "custom",
       "name": {
-        "de": "Halte- PWM"
+        "en": "Holding PWM",
+        "da": "Hold-PWM",
+        "de": "Halte- PWM",
+        "fr": "PWM de maintien"
       },
       "default_value": 30,
       "value_bits": {
@@ -4570,13 +5298,19 @@
       "cv": 129,
       "source": "custom",
       "name": {
-        "de": "Zuordnung der Ausgänge A1 - A7 elektrische Kupplungen"
+        "en": "Assignment of outputs A1 - A7 to electric couplers",
+        "da": "Tildeling af udgange A1 - A7 til elektriske koblinger",
+        "de": "Zuordnung der Ausgänge A1 - A7 elektrische Kupplungen",
+        "fr": "Affectation des sorties A1 - A7 aux attelages électriques"
       },
       "flag_bits": [
         {
           "bit": 1,
           "name": {
-            "en": "Output 1 connected to coupler"
+            "en": "Output 1 connected to coupler",
+            "da": "Udgang 1 tilsluttet kobling",
+            "de": "Ausgang 1 mit Kupplung verbunden",
+            "fr": "Sortie 1 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4596,7 +5330,10 @@
         {
           "bit": 2,
           "name": {
-            "en": "Output 2 connected to coupler"
+            "en": "Output 2 connected to coupler",
+            "da": "Udgang 2 tilsluttet kobling",
+            "de": "Ausgang 2 mit Kupplung verbunden",
+            "fr": "Sortie 2 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4616,7 +5353,10 @@
         {
           "bit": 3,
           "name": {
-            "en": "Output 3 connected to coupler"
+            "en": "Output 3 connected to coupler",
+            "da": "Udgang 3 tilsluttet kobling",
+            "de": "Ausgang 3 mit Kupplung verbunden",
+            "fr": "Sortie 3 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4636,7 +5376,10 @@
         {
           "bit": 4,
           "name": {
-            "en": "Output 4 connected to coupler"
+            "en": "Output 4 connected to coupler",
+            "da": "Udgang 4 tilsluttet kobling",
+            "de": "Ausgang 4 mit Kupplung verbunden",
+            "fr": "Sortie 4 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4656,7 +5399,10 @@
         {
           "bit": 5,
           "name": {
-            "en": "Output 5 connected to coupler"
+            "en": "Output 5 connected to coupler",
+            "da": "Udgang 5 tilsluttet kobling",
+            "de": "Ausgang 5 mit Kupplung verbunden",
+            "fr": "Sortie 5 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4676,7 +5422,10 @@
         {
           "bit": 6,
           "name": {
-            "en": "Output 6 connected to coupler"
+            "en": "Output 6 connected to coupler",
+            "da": "Udgang 6 tilsluttet kobling",
+            "de": "Ausgang 6 mit Kupplung verbunden",
+            "fr": "Sortie 6 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4696,7 +5445,10 @@
         {
           "bit": 7,
           "name": {
-            "en": "Output 7 connected to coupler"
+            "en": "Output 7 connected to coupler",
+            "da": "Udgang 7 tilsluttet kobling",
+            "de": "Ausgang 7 mit Kupplung verbunden",
+            "fr": "Sortie 7 connectée à l'attelage"
           },
           "values": {
             "0": {
@@ -4720,7 +5472,10 @@
       "cv": 130,
       "source": "custom",
       "name": {
-        "de": "Anfahrzeit = Wert * 200ms"
+        "en": "Start-up time = value * 200ms",
+        "da": "Opstartstid = værdi * 200ms",
+        "de": "Anfahrzeit = Wert * 200ms",
+        "fr": "Temps de démarrage = valeur * 200ms"
       },
       "default_value": 0,
       "value_bits": {
@@ -4734,32 +5489,59 @@
           "bit": 0,
           "bit_to": 3,
           "name": {
-            "en": "Output for smoke generator"
+            "en": "Output for smoke generator",
+            "da": "Udgang til røggenerator",
+            "de": "Ausgang für Rauchgenerator",
+            "fr": "Sortie pour générateur de fumée"
           },
           "values": {
             "0": {
-              "en": "No smoke generator connected"
+              "en": "No smoke generator connected",
+              "da": "Ingen røggenerator tilsluttet",
+              "de": "Kein Rauchgenerator angeschlossen",
+              "fr": "Aucun générateur de fumée raccordé"
             },
             "1": {
-              "en": "Output 1"
+              "en": "Output 1",
+              "da": "Udgang 1",
+              "de": "Ausgang 1",
+              "fr": "Sortie 1"
             },
             "2": {
-              "en": "Output 2"
+              "en": "Output 2",
+              "da": "Udgang 2",
+              "de": "Ausgang 2",
+              "fr": "Sortie 2"
             },
             "3": {
-              "en": "Output 3"
+              "en": "Output 3",
+              "da": "Udgang 3",
+              "de": "Ausgang 3",
+              "fr": "Sortie 3"
             },
             "4": {
-              "en": "Output 4"
+              "en": "Output 4",
+              "da": "Udgang 4",
+              "de": "Ausgang 4",
+              "fr": "Sortie 4"
             },
             "5": {
-              "en": "Ouput 5"
+              "en": "Ouput 5",
+              "da": "Udgang 5",
+              "de": "Ausgang 5",
+              "fr": "Sortie 5"
             },
             "6": {
-              "en": "Output 6"
+              "en": "Output 6",
+              "da": "Udgang 6",
+              "de": "Ausgang 6",
+              "fr": "Sortie 6"
             },
             "7": {
-              "en": "Output 7"
+              "en": "Output 7",
+              "da": "Udgang 7",
+              "de": "Ausgang 7",
+              "fr": "Sortie 7"
             }
           }
         }
@@ -4770,7 +5552,10 @@
       "cv": 131,
       "source": "custom",
       "name": {
-        "de": "Dynamische Rauchgeneratoransteuerung, Lastschwelle"
+        "en": "Dynamic smoke generator control, load threshold",
+        "da": "Dynamisk styring af røggenerator, belastningstærskel",
+        "de": "Dynamische Rauchgeneratoransteuerung, Lastschwelle",
+        "fr": "Commande dynamique du générateur de fumée, seuil de charge"
       },
       "default_value": 5,
       "value_bits": {
@@ -4785,7 +5570,10 @@
       "cv": 132,
       "source": "custom",
       "name": {
-        "en": "Dynamische Rauchgeneratoransteuerung, PWM-Normalbetrieb"
+        "en": "Dynamic smoke generator control, PWM normal operation",
+        "da": "Dynamisk styring af røggenerator, PWM normaldrift",
+        "de": "Dynamische Rauchgeneratoransteuerung, PWM-Normalbetrieb",
+        "fr": "Commande dynamique du générateur de fumée, PWM en fonctionnement normal"
       },
       "default_value": 16,
       "value_bits": {
@@ -4800,7 +5588,10 @@
       "cv": 133,
       "source": "custom",
       "name": {
-        "de": "Dynamische Rauchgeneratoransteuerung, PWM-Leerlauf (Stand)"
+        "en": "Dynamic smoke generator control, PWM idle (standstill)",
+        "da": "Dynamisk styring af røggenerator, PWM tomgang (stilstand)",
+        "de": "Dynamische Rauchgeneratoransteuerung, PWM-Leerlauf (Stand)",
+        "fr": "Commande dynamique du générateur de fumée, PWM au ralenti (à l'arrêt)"
       },
       "default_value": 2,
       "value_bits": {
@@ -4815,7 +5606,10 @@
       "cv": 134,
       "source": "custom",
       "name": {
-        "de": "Dynamische Rauchgeneratoransteuerung, Anfahrzeit in 100ms Schritten"
+        "en": "Dynamic smoke generator control, start-up time in 100ms steps",
+        "da": "Dynamisk styring af røggenerator, opstartstid i trin på 100ms",
+        "de": "Dynamische Rauchgeneratoransteuerung, Anfahrzeit in 100ms Schritten",
+        "fr": "Commande dynamique du générateur de fumée, temps de démarrage par pas de 100ms"
       },
       "default_value": 30,
       "value_bits": {
@@ -4830,7 +5624,10 @@
       "cv": 135,
       "source": "custom",
       "name": {
-        "de": "Rangiertango (automatische Entkupplungsfahrt)(0 = aus)"
+        "en": "Shunting tango (automatic uncoupling run) (0 = off)",
+        "da": "Rangertango (automatisk afkoblingskørsel) (0 = fra)",
+        "de": "Rangiertango (automatische Entkupplungsfahrt)(0 = aus)",
+        "fr": "Tango de manœuvre (course de dételage automatique) (0 = désactivé)"
       },
       "default_value": 0,
       "value_bits": {
@@ -4845,7 +5642,10 @@
       "cv": 136,
       "source": "custom",
       "name": {
-        "de": "Rangiertango, Andrückzeit T1 * 100ms"
+        "en": "Shunting tango, push-on time T1 * 100ms",
+        "da": "Rangertango, tryktid T1 * 100ms",
+        "de": "Rangiertango, Andrückzeit T1 * 100ms",
+        "fr": "Tango de manœuvre, durée de poussée T1 * 100ms"
       },
       "default_value": 10,
       "value_bits": {
@@ -4860,7 +5660,10 @@
       "cv": 137,
       "source": "custom",
       "name": {
-        "de": "Rangiertango, Abrückzeit T2 * 100ms"
+        "en": "Shunting tango, pull-away time T2 * 100ms",
+        "da": "Rangertango, afrykningstid T2 * 100ms",
+        "de": "Rangiertango, Abrückzeit T2 * 100ms",
+        "fr": "Tango de manœuvre, durée de retrait T2 * 100ms"
       },
       "default_value": 10,
       "value_bits": {
@@ -4876,7 +5679,9 @@
       "source": "custom",
       "name": {
         "en": "Constant braking threshold",
-        "da": "Tærskel for konstant bremselængde"
+        "da": "Tærskel for konstant bremselængde",
+        "de": "Schwelle für konstanten Bremsweg",
+        "fr": "Seuil de distance de freinage constante"
       },
       "default_value": 0,
       "value_bits": {
@@ -4892,7 +5697,9 @@
       "source": "custom",
       "name": {
         "en": "Constant braking distance",
-        "da": "Konstant bremselængde"
+        "da": "Konstant bremselængde",
+        "de": "Konstanter Bremsweg",
+        "fr": "Distance de freinage constante"
       },
       "default_value": 50,
       "value_bits": {
@@ -4908,7 +5715,9 @@
       "source": "custom",
       "name": {
         "en": "Alternative braking distance",
-        "da": "Alternativ bremselængde"
+        "da": "Alternativ bremselængde",
+        "de": "Alternativer Bremsweg",
+        "fr": "Distance de freinage alternative"
       },
       "default_value": 25,
       "value_bits": {
@@ -4924,7 +5733,9 @@
       "source": "custom",
       "name": {
         "en": "Model maximum speed",
-        "da": "Modellokomotivets maksimumshastighed"
+        "da": "Modellokomotivets maksimumshastighed",
+        "de": "Höchstgeschwindigkeit des Modells",
+        "fr": "Vitesse maximale du modèle"
       },
       "default_value": 40,
       "value_bits": {
@@ -4940,7 +5751,9 @@
       "source": "custom",
       "name": {
         "en": "High-speed correction",
-        "da": "Højhastighedskorrektion"
+        "da": "Højhastighedskorrektion",
+        "de": "Hochgeschwindigkeitskorrektur",
+        "fr": "Correction à haute vitesse"
       },
       "default_value": 0,
       "value_bits": {
@@ -4960,7 +5773,9 @@
           "bit": 0,
           "name": {
             "en": "Constant braking, speed step = 0",
-            "da": "Konstant bremselængde, hastighedstrin = 0"
+            "da": "Konstant bremselængde, hastighedstrin = 0",
+            "de": "Konstanter Bremsweg, Fahrstufe = 0",
+            "fr": "Distance de freinage constante, cran de vitesse = 0"
           },
           "values": {
             "0": {
@@ -4981,7 +5796,9 @@
           "bit": 1,
           "name": {
             "en": "Constant braking, ABC breaking",
-            "da": "Konstant bremselængde, ABC opbremsning"
+            "da": "Konstant bremselængde, ABC opbremsning",
+            "de": "Konstanter Bremsweg, ABC-Bremsung",
+            "fr": "Distance de freinage constante, freinage ABC"
           },
           "values": {
             "0": {
@@ -5002,7 +5819,9 @@
           "bit": 2,
           "name": {
             "en": "Constant braking, DC breaking",
-            "da": "Konstant bremselængde, DC opbremsning"
+            "da": "Konstant bremselængde, DC opbremsning",
+            "de": "Konstanter Bremsweg, DC-Bremsung",
+            "fr": "Distance de freinage constante, freinage CC"
           },
           "values": {
             "0": {
@@ -5023,7 +5842,9 @@
           "bit": 3,
           "name": {
             "en": "Constant braking, DCC break signal",
-            "da": "Konstant bremselængde, DCC bremsesignal"
+            "da": "Konstant bremselængde, DCC bremsesignal",
+            "de": "Konstanter Bremsweg, DCC-Bremssignal",
+            "fr": "Distance de freinage constante, signal de freinage DCC"
           },
           "values": {
             "0": {
@@ -5047,7 +5868,10 @@
       "cv": 144,
       "source": "custom",
       "name": {
-        "de": "Anfahrverzögerung 2 (als Ersatz für CV3)"
+        "en": "Acceleration delay 2 (replacement for CV3)",
+        "da": "Accelerationsforsinkelse 2 (erstatning for CV3)",
+        "de": "Anfahrverzögerung 2 (als Ersatz für CV3)",
+        "fr": "Temporisation d'accélération 2 (en remplacement de la CV3)"
       },
       "default_value": 12,
       "value_bits": {
@@ -5062,7 +5886,10 @@
       "cv": 145,
       "source": "custom",
       "name": {
-        "de": "Bremsverzögerung 2, (als Ersatz für CV4)"
+        "en": "Braking delay 2 (replacement for CV4)",
+        "da": "Bremseforsinkelse 2 (erstatning for CV4)",
+        "de": "Bremsverzögerung 2, (als Ersatz für CV4)",
+        "fr": "Temporisation de freinage 2 (en remplacement de la CV4)"
       },
       "default_value": 12,
       "value_bits": {
@@ -5077,7 +5904,10 @@
       "cv": 146,
       "source": "custom",
       "name": {
-        "de": "Anfahrverzögerung 3 (als Ersatz für CV3)"
+        "en": "Acceleration delay 3 (replacement for CV3)",
+        "da": "Accelerationsforsinkelse 3 (erstatning for CV3)",
+        "de": "Anfahrverzögerung 3 (als Ersatz für CV3)",
+        "fr": "Temporisation d'accélération 3 (en remplacement de la CV3)"
       },
       "default_value": 24,
       "value_bits": {
@@ -5092,7 +5922,10 @@
       "cv": 147,
       "source": "custom",
       "name": {
-        "de": "Bremsverzögerung 3, (als Ersatz für CV4)"
+        "en": "Braking delay 3 (replacement for CV4)",
+        "da": "Bremseforsinkelse 3 (erstatning for CV4)",
+        "de": "Bremsverzögerung 3, (als Ersatz für CV4)",
+        "fr": "Temporisation de freinage 3 (en remplacement de la CV4)"
       },
       "default_value": 24,
       "value_bits": {
@@ -5107,7 +5940,10 @@
       "cv": 148,
       "source": "custom",
       "name": {
-        "de": "Funktionstastennummer für ABV 2 (255=aus)"
+        "en": "Function key number for start-/brake delay 2 (255=off)",
+        "da": "Funktionstastnummer for start-/bremseforsinkelse 2 (255=fra)",
+        "de": "Funktionstastennummer für ABV 2 (255=aus)",
+        "fr": "Numéro de touche de fonction pour la temporisation de démarrage/freinage 2 (255=désactivé)"
       },
       "default_value": 255,
       "value_bits": {
@@ -5122,7 +5958,10 @@
       "cv": 149,
       "source": "custom",
       "name": {
-        "de": "Funktionstastennummer für ABV 3 (255=aus)"
+        "en": "Function key number for start-/brake delay 3 (255=off)",
+        "da": "Funktionstastnummer for start-/bremseforsinkelse 3 (255=fra)",
+        "de": "Funktionstastennummer für ABV 3 (255=aus)",
+        "fr": "Numéro de touche de fonction pour la temporisation de démarrage/freinage 3 (255=désactivé)"
       },
       "default_value": 255,
       "value_bits": {
@@ -5137,7 +5976,10 @@
       "cv": 150,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge Licht"
+        "en": "Second dimming of the light and function outputs, light",
+        "da": "Anden dæmpning af lys- og funktionsudgange, lys",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge Licht",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, éclairage"
       },
       "default_value": 10,
       "value_bits": {
@@ -5152,7 +5994,10 @@
       "cv": 151,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A1"
+        "en": "Second dimming of the light and function outputs, A1",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A1",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A1",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A1"
       },
       "default_value": 10,
       "value_bits": {
@@ -5167,7 +6012,10 @@
       "cv": 152,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A2"
+        "en": "Second dimming of the light and function outputs, A2",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A2",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A2",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A2"
       },
       "default_value": 10,
       "value_bits": {
@@ -5182,7 +6030,10 @@
       "cv": 153,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A3"
+        "en": "Second dimming of the light and function outputs, A3",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A3",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A3",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A3"
       },
       "default_value": 10,
       "value_bits": {
@@ -5197,7 +6048,10 @@
       "cv": 154,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A4"
+        "en": "Second dimming of the light and function outputs, A4",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A4",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A4",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A4"
       },
       "default_value": 10,
       "value_bits": {
@@ -5212,7 +6066,10 @@
       "cv": 155,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A5"
+        "en": "Second dimming of the light and function outputs, A5",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A5",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A5",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A5"
       },
       "default_value": 10,
       "value_bits": {
@@ -5227,7 +6084,10 @@
       "cv": 156,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A6"
+        "en": "Second dimming of the light and function outputs, A6",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A6",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A6",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A6"
       },
       "default_value": 10,
       "value_bits": {
@@ -5242,7 +6102,10 @@
       "cv": 157,
       "source": "custom",
       "name": {
-        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A7"
+        "en": "Second dimming of the light and function outputs, A7",
+        "da": "Anden dæmpning af lys- og funktionsudgange, A7",
+        "de": "Zweite Dimmung der Licht- und Funktionsausgänge A7",
+        "fr": "Deuxième variation de luminosité des sorties d'éclairage et de fonctions, A7"
       },
       "default_value": 10,
       "value_bits": {
@@ -5261,7 +6124,10 @@
         {
           "bit": 0,
           "name": {
-            "en": "F22 transfer to SUSI"
+            "en": "F22 transfer to SUSI",
+            "da": "F22 overført til SUSI",
+            "de": "F22 Übertragung an SUSI",
+            "fr": "Transfert de F22 vers SUSI"
           },
           "values": {
             "0": {
@@ -5281,7 +6147,10 @@
         {
           "bit": 1,
           "name": {
-            "en": "F23 transfer to SUSI"
+            "en": "F23 transfer to SUSI",
+            "da": "F23 overført til SUSI",
+            "de": "F23 Übertragung an SUSI",
+            "fr": "Transfert de F23 vers SUSI"
           },
           "values": {
             "0": {
@@ -5301,7 +6170,10 @@
         {
           "bit": 2,
           "name": {
-            "en": "F24 transfer to SUSI"
+            "en": "F24 transfer to SUSI",
+            "da": "F24 overført til SUSI",
+            "de": "F24 Übertragung an SUSI",
+            "fr": "Transfert de F24 vers SUSI"
           },
           "values": {
             "0": {
@@ -5321,7 +6193,10 @@
         {
           "bit": 3,
           "name": {
-            "en": "F25 transfer to SUSI"
+            "en": "F25 transfer to SUSI",
+            "da": "F25 overført til SUSI",
+            "de": "F25 Übertragung an SUSI",
+            "fr": "Transfert de F25 vers SUSI"
           },
           "values": {
             "0": {
@@ -5341,7 +6216,10 @@
         {
           "bit": 4,
           "name": {
-            "en": "F26 transfer to SUSI"
+            "en": "F26 transfer to SUSI",
+            "da": "F26 overført til SUSI",
+            "de": "F26 Übertragung an SUSI",
+            "fr": "Transfert de F26 vers SUSI"
           },
           "values": {
             "0": {
@@ -5361,7 +6239,10 @@
         {
           "bit": 5,
           "name": {
-            "en": "F27 transfer to SUSI"
+            "en": "F27 transfer to SUSI",
+            "da": "F27 overført til SUSI",
+            "de": "F27 Übertragung an SUSI",
+            "fr": "Transfert de F27 vers SUSI"
           },
           "values": {
             "0": {
@@ -5381,7 +6262,10 @@
         {
           "bit": 6,
           "name": {
-            "en": "F28 transfer to SUSI"
+            "en": "F28 transfer to SUSI",
+            "da": "F28 overført til SUSI",
+            "de": "F28 Übertragung an SUSI",
+            "fr": "Transfert de F28 vers SUSI"
           },
           "values": {
             "0": {
@@ -5405,7 +6289,10 @@
       "cv": 160,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 1 Stellung 1 (Funktionstaste aus)"
+        "en": "Servo control, servo 1 position 1 (function key off)",
+        "da": "Servostyring, servo 1 position 1 (funktionstast fra)",
+        "de": "Servosteuerung, Servo 1 Stellung 1 (Funktionstaste aus)",
+        "fr": "Commande de servo, servo 1 position 1 (touche de fonction désactivée)"
       },
       "default_value": 20,
       "value_bits": {
@@ -5420,7 +6307,10 @@
       "cv": 161,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 1 Stellung 2 (Funktionstaste ein)"
+        "en": "Servo control, servo 1 position 2 (function key on)",
+        "da": "Servostyring, servo 1 position 2 (funktionstast til)",
+        "de": "Servosteuerung, Servo 1 Stellung 2 (Funktionstaste ein)",
+        "fr": "Commande de servo, servo 1 position 2 (touche de fonction activée)"
       },
       "default_value": 200,
       "value_bits": {
@@ -5435,7 +6325,10 @@
       "cv": 162,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 1 Umlaufzeit in 100ms Schritten"
+        "en": "Servo control, servo 1 cycle time in 100ms steps",
+        "da": "Servostyring, servo 1 omløbstid i trin på 100ms",
+        "de": "Servosteuerung, Servo 1 Umlaufzeit in 100ms Schritten",
+        "fr": "Commande de servo, servo 1 temps de parcours par pas de 100ms"
       },
       "default_value": 30,
       "value_bits": {
@@ -5450,7 +6343,10 @@
       "cv": 163,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 2 Stellung 1 (Funktionstaste aus)"
+        "en": "Servo control, servo 2 position 1 (function key off)",
+        "da": "Servostyring, servo 2 position 1 (funktionstast fra)",
+        "de": "Servosteuerung, Servo 2 Stellung 1 (Funktionstaste aus)",
+        "fr": "Commande de servo, servo 2 position 1 (touche de fonction désactivée)"
       },
       "default_value": 20,
       "value_bits": {
@@ -5465,7 +6361,10 @@
       "cv": 164,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 2 Stellung 2 (Funktionstaste ein)"
+        "en": "Servo control, servo 2 position 2 (function key on)",
+        "da": "Servostyring, servo 2 position 2 (funktionstast til)",
+        "de": "Servosteuerung, Servo 2 Stellung 2 (Funktionstaste ein)",
+        "fr": "Commande de servo, servo 2 position 2 (touche de fonction activée)"
       },
       "default_value": 200,
       "value_bits": {
@@ -5480,7 +6379,10 @@
       "cv": 165,
       "source": "custom",
       "name": {
-        "de": "Servosteuerung, Servo 2 Umlaufzeit in 100ms Schritten"
+        "en": "Servo control, servo 2 cycle time in 100ms steps",
+        "da": "Servostyring, servo 2 omløbstid i trin på 100ms",
+        "de": "Servosteuerung, Servo 2 Umlaufzeit in 100ms Schritten",
+        "fr": "Commande de servo, servo 2 temps de parcours par pas de 100ms"
       },
       "default_value": 30,
       "value_bits": {
@@ -5499,7 +6401,10 @@
         {
           "bit": 0,
           "name": {
-            "en": "Steering over SUSI"
+            "en": "Steering over SUSI",
+            "da": "Styring via SUSI",
+            "de": "Steuerung über SUSI",
+            "fr": "Commande via SUSI"
           },
           "values": {
             "0": {
@@ -5519,7 +6424,10 @@
         {
           "bit": 6,
           "name": {
-            "en": "Steering over output 6"
+            "en": "Steering over output 6",
+            "da": "Styring via udgang 6",
+            "de": "Steuerung über Ausgang 6",
+            "fr": "Commande via la sortie 6"
           },
           "values": {
             "0": {
@@ -5539,7 +6447,10 @@
         {
           "bit": 7,
           "name": {
-            "en": "Steering over output 7"
+            "en": "Steering over output 7",
+            "da": "Styring via udgang 7",
+            "de": "Steuerung über Ausgang 7",
+            "fr": "Commande via la sortie 7"
           },
           "values": {
             "0": {
@@ -5563,7 +6474,10 @@
       "cv": 167,
       "source": "custom",
       "name": {
-        "de": "Funktionstastennummer für Servo 1 an SUSI-CLK"
+        "en": "Function key number for servo 1 on SUSI-CLK",
+        "da": "Funktionstastnummer for servo 1 på SUSI-CLK",
+        "de": "Funktionstastennummer für Servo 1 an SUSI-CLK",
+        "fr": "Numéro de touche de fonction pour le servo 1 sur SUSI-CLK"
       },
       "default_value": 7,
       "value_bits": {
@@ -5578,7 +6492,10 @@
       "cv": 168,
       "source": "custom",
       "name": {
-        "de": "Funktionstastennummer für Servo 2 an SUSI-Data"
+        "en": "Function key number for servo 2 on SUSI-Data",
+        "da": "Funktionstastnummer for servo 2 på SUSI-Data",
+        "de": "Funktionstastennummer für Servo 2 an SUSI-Data",
+        "fr": "Numéro de touche de fonction pour le servo 2 sur SUSI-Data"
       },
       "default_value": 8,
       "value_bits": {
@@ -5593,7 +6510,10 @@
       "cv": 170,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Lichtausgang"
+        "en": "Assignment of PWM curve for light output",
+        "da": "Tildeling af PWM-forløb for lysudgang",
+        "de": "Zuordnung PWM-Verlauf für Lichtausgang",
+        "fr": "Affectation de la courbe PWM pour la sortie d'éclairage"
       },
       "default_value": 0,
       "value_bits": {
@@ -5606,7 +6526,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Lichtausgang"
+            "en": "Curve only active when CROSS output bit is set, light output",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, lysudgang",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Lichtausgang",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie d'éclairage"
           },
           "values": {
             "0": {
@@ -5630,7 +6553,10 @@
       "cv": 171,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 1"
+        "en": "Assignment of PWM curve for output 1",
+        "da": "Tildeling af PWM-forløb for udgang 1",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 1",
+        "fr": "Affectation de la courbe PWM pour la sortie 1"
       },
       "default_value": 0,
       "value_bits": {
@@ -5643,7 +6569,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 1"
+            "en": "Curve only active when CROSS output bit is set, output 1",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 1",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 1",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 1"
           },
           "values": {
             "0": {
@@ -5667,7 +6596,10 @@
       "cv": 172,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 2"
+        "en": "Assignment of PWM curve for output 2",
+        "da": "Tildeling af PWM-forløb for udgang 2",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 2",
+        "fr": "Affectation de la courbe PWM pour la sortie 2"
       },
       "default_value": 0,
       "value_bits": {
@@ -5680,7 +6612,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 2"
+            "en": "Curve only active when CROSS output bit is set, output 2",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 2",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 2",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 2"
           },
           "values": {
             "0": {
@@ -5704,7 +6639,10 @@
       "cv": 173,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 3"
+        "en": "Assignment of PWM curve for output 3",
+        "da": "Tildeling af PWM-forløb for udgang 3",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 3",
+        "fr": "Affectation de la courbe PWM pour la sortie 3"
       },
       "default_value": 0,
       "value_bits": {
@@ -5717,7 +6655,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 3"
+            "en": "Curve only active when CROSS output bit is set, output 3",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 3",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 3",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 3"
           },
           "values": {
             "0": {
@@ -5741,7 +6682,10 @@
       "cv": 174,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 4"
+        "en": "Assignment of PWM curve for output 4",
+        "da": "Tildeling af PWM-forløb for udgang 4",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 4",
+        "fr": "Affectation de la courbe PWM pour la sortie 4"
       },
       "default_value": 0,
       "value_bits": {
@@ -5754,7 +6698,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 4"
+            "en": "Curve only active when CROSS output bit is set, output 4",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 4",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 4",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 4"
           },
           "values": {
             "0": {
@@ -5778,7 +6725,10 @@
       "cv": 175,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 5"
+        "en": "Assignment of PWM curve for output 5",
+        "da": "Tildeling af PWM-forløb for udgang 5",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 5",
+        "fr": "Affectation de la courbe PWM pour la sortie 5"
       },
       "default_value": 0,
       "value_bits": {
@@ -5791,7 +6741,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 5"
+            "en": "Curve only active when CROSS output bit is set, output 5",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 5",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 5",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 5"
           },
           "values": {
             "0": {
@@ -5815,7 +6768,10 @@
       "cv": 176,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 6"
+        "en": "Assignment of PWM curve for output 6",
+        "da": "Tildeling af PWM-forløb for udgang 6",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 6",
+        "fr": "Affectation de la courbe PWM pour la sortie 6"
       },
       "default_value": 0,
       "value_bits": {
@@ -5828,7 +6784,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 6"
+            "en": "Curve only active when CROSS output bit is set, output 6",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 6",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 6",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 6"
           },
           "values": {
             "0": {
@@ -5852,7 +6811,10 @@
       "cv": 177,
       "source": "custom",
       "name": {
-        "de": "Zuordnung PWM-Verlauf für Ausgang 7"
+        "en": "Assignment of PWM curve for output 7",
+        "da": "Tildeling af PWM-forløb for udgang 7",
+        "de": "Zuordnung PWM-Verlauf für Ausgang 7",
+        "fr": "Affectation de la courbe PWM pour la sortie 7"
       },
       "default_value": 0,
       "value_bits": {
@@ -5865,7 +6827,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 7"
+            "en": "Curve only active when CROSS output bit is set, output 7",
+            "da": "Forløb kun aktivt, når CROSS-udgangsbitten er sat, udgang 7",
+            "de": "Verlauf nur aktiv, wenn CROSS-Ausgabebit gesetzt, Ausgang 7",
+            "fr": "Courbe active uniquement lorsque le bit de sortie CROSS est activé, sortie 7"
           },
           "values": {
             "0": {
@@ -5889,7 +6854,10 @@
       "cv": 178,
       "source": "custom",
       "name": {
-        "de": "PWM-Verlauf, Periodendauer der Wiedergabe (Wert * 64ms)"
+        "en": "PWM curve, playback period (value * 64ms)",
+        "da": "PWM-forløb, afspilningens periodetid (værdi * 64ms)",
+        "de": "PWM-Verlauf, Periodendauer der Wiedergabe (Wert * 64ms)",
+        "fr": "Courbe PWM, période de lecture (valeur * 64ms)"
       },
       "default_value": 15,
       "value_bits": {
@@ -5904,119 +6872,194 @@
       "cv": 179,
       "source": "custom",
       "name": {
-        "de": "PWM-Verlauf, Phasenlage der Ausgänge"
+        "en": "PWM curve, phase position of the outputs",
+        "da": "PWM-forløb, udgangenes faseposition",
+        "de": "PWM-Verlauf, Phasenlage der Ausgänge",
+        "fr": "Courbe PWM, position de phase des sorties"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Licht"
+            "en": "PWM curve, phase position light",
+            "da": "PWM-forløb, faseposition lys",
+            "de": "PWM-Verlauf, Phasenlage Licht",
+            "fr": "Courbe PWM, position de phase éclairage"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 1,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 1"
+            "en": "PWM curve, phase position output 1",
+            "da": "PWM-forløb, faseposition udgang 1",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 1",
+            "fr": "Courbe PWM, position de phase sortie 1"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 2,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 2"
+            "en": "PWM curve, phase position output 2",
+            "da": "PWM-forløb, faseposition udgang 2",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 2",
+            "fr": "Courbe PWM, position de phase sortie 2"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 3,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 3"
+            "en": "PWM curve, phase position output 3",
+            "da": "PWM-forløb, faseposition udgang 3",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 3",
+            "fr": "Courbe PWM, position de phase sortie 3"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 4,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 4"
+            "en": "PWM curve, phase position output 4",
+            "da": "PWM-forløb, faseposition udgang 4",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 4",
+            "fr": "Courbe PWM, position de phase sortie 4"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 5,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 5"
+            "en": "PWM curve, phase position output 5",
+            "da": "PWM-forløb, faseposition udgang 5",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 5",
+            "fr": "Courbe PWM, position de phase sortie 5"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 6,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 6"
+            "en": "PWM curve, phase position output 6",
+            "da": "PWM-forløb, faseposition udgang 6",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 6",
+            "fr": "Courbe PWM, position de phase sortie 6"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         },
         {
           "bit": 7,
           "name": {
-            "de": "PWM-Verlauf, Phasenlage Ausgang 7"
+            "en": "PWM curve, phase position output 7",
+            "da": "PWM-forløb, faseposition udgang 7",
+            "de": "PWM-Verlauf, Phasenlage Ausgang 7",
+            "fr": "Courbe PWM, position de phase sortie 7"
           },
           "values": {
             "0": {
-              "de": "Phasenlage 0°"
+              "en": "Phase position 0°",
+              "da": "Faseposition 0°",
+              "de": "Phasenlage 0°",
+              "fr": "Position de phase 0°"
             },
             "1": {
-              "de": "Phasenlage 180°"
+              "en": "Phase position 180°",
+              "da": "Faseposition 180°",
+              "de": "Phasenlage 180°",
+              "fr": "Position de phase 180°"
             }
           }
         }
@@ -6027,7 +7070,10 @@
       "cv": 180,
       "source": "custom",
       "name": {
-        "de": "PWM-Verlauf, Haltezeit, nach dem CROSS-Ausgabebit aus (Wert * 100ms)"
+        "en": "PWM curve, hold time after the CROSS output bit is off (value * 100ms)",
+        "da": "PWM-forløb, holdetid efter at CROSS-udgangsbitten er slukket (værdi * 100ms)",
+        "de": "PWM-Verlauf, Haltezeit, nach dem CROSS-Ausgabebit aus (Wert * 100ms)",
+        "fr": "Courbe PWM, durée de maintien après désactivation du bit de sortie CROSS (valeur * 100ms)"
       },
       "default_value": 0,
       "value_bits": {
@@ -6042,13 +7088,19 @@
       "cv": 181,
       "source": "custom",
       "name": {
-        "de": "Feuerbüchsenflackern der Licht- und Funktionsausgänge"
+        "en": "Firebox flicker of the light and function outputs",
+        "da": "Fyrkasseflimmer på lys- og funktionsudgange",
+        "de": "Feuerbüchsenflackern der Licht- und Funktionsausgänge",
+        "fr": "Scintillement du foyer des sorties d'éclairage et de fonctions"
       },
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Feuerbüchsenflackern Licht"
+            "en": "Firebox flicker light",
+            "da": "Fyrkasseflimmer lys",
+            "de": "Feuerbüchsenflackern Licht",
+            "fr": "Scintillement du foyer éclairage"
           },
           "values": {
             "0": {
@@ -6068,7 +7120,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 1"
+            "en": "Firebox flicker output 1",
+            "da": "Fyrkasseflimmer udgang 1",
+            "de": "Feuerbüchsenflackern Ausgang 1",
+            "fr": "Scintillement du foyer sortie 1"
           },
           "values": {
             "0": {
@@ -6088,7 +7143,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 2"
+            "en": "Firebox flicker output 2",
+            "da": "Fyrkasseflimmer udgang 2",
+            "de": "Feuerbüchsenflackern Ausgang 2",
+            "fr": "Scintillement du foyer sortie 2"
           },
           "values": {
             "0": {
@@ -6108,7 +7166,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 3"
+            "en": "Firebox flicker output 3",
+            "da": "Fyrkasseflimmer udgang 3",
+            "de": "Feuerbüchsenflackern Ausgang 3",
+            "fr": "Scintillement du foyer sortie 3"
           },
           "values": {
             "0": {
@@ -6128,7 +7189,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 4"
+            "en": "Firebox flicker output 4",
+            "da": "Fyrkasseflimmer udgang 4",
+            "de": "Feuerbüchsenflackern Ausgang 4",
+            "fr": "Scintillement du foyer sortie 4"
           },
           "values": {
             "0": {
@@ -6148,7 +7212,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 5"
+            "en": "Firebox flicker output 5",
+            "da": "Fyrkasseflimmer udgang 5",
+            "de": "Feuerbüchsenflackern Ausgang 5",
+            "fr": "Scintillement du foyer sortie 5"
           },
           "values": {
             "0": {
@@ -6168,7 +7235,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 6"
+            "en": "Firebox flicker output 6",
+            "da": "Fyrkasseflimmer udgang 6",
+            "de": "Feuerbüchsenflackern Ausgang 6",
+            "fr": "Scintillement du foyer sortie 6"
           },
           "values": {
             "0": {
@@ -6188,7 +7258,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Feuerbüchsenflackern Ausgang 7"
+            "en": "Firebox flicker output 7",
+            "da": "Fyrkasseflimmer udgang 7",
+            "de": "Feuerbüchsenflackern Ausgang 7",
+            "fr": "Scintillement du foyer sortie 7"
           },
           "values": {
             "0": {
@@ -6212,7 +7285,10 @@
       "cv": 182,
       "source": "custom",
       "name": {
-        "de": "Feuerbüchsenflackern, rythmus ändren"
+        "en": "Firebox flicker, change rhythm",
+        "da": "Fyrkasseflimmer, skift rytme",
+        "de": "Feuerbüchsenflackern, rythmus ändren",
+        "fr": "Scintillement du foyer, modifier le rythme"
       },
       "default_value": 0,
       "value_bits": {
@@ -6226,36 +7302,63 @@
           "bit": 4,
           "bit_to": 6,
           "name": {
-            "de": "Feuerbüchsenflackern, helligkeit"
+            "en": "Firebox flicker, brightness",
+            "da": "Fyrkasseflimmer, lysstyrke",
+            "de": "Feuerbüchsenflackern, helligkeit",
+            "fr": "Scintillement du foyer, luminosité"
           },
           "values": {
             "1": {
-              "en": "Level 1"
+              "en": "Level 1",
+              "da": "Niveau 1",
+              "de": "Stufe 1",
+              "fr": "Niveau 1"
             },
             "2": {
-              "en": "Level 2"
+              "en": "Level 2",
+              "da": "Niveau 2",
+              "de": "Stufe 2",
+              "fr": "Niveau 2"
             },
             "3": {
-              "en": "Level 3"
+              "en": "Level 3",
+              "da": "Niveau 3",
+              "de": "Stufe 3",
+              "fr": "Niveau 3"
             },
             "4": {
-              "en": "Level 4"
+              "en": "Level 4",
+              "da": "Niveau 4",
+              "de": "Stufe 4",
+              "fr": "Niveau 4"
             },
             "5": {
-              "en": "Level 5"
+              "en": "Level 5",
+              "da": "Niveau 5",
+              "de": "Stufe 5",
+              "fr": "Niveau 5"
             },
             "6": {
-              "en": "Level 6"
+              "en": "Level 6",
+              "da": "Niveau 6",
+              "de": "Stufe 6",
+              "fr": "Niveau 6"
             },
             "7": {
-              "en": "Level 7"
+              "en": "Level 7",
+              "da": "Niveau 7",
+              "de": "Stufe 7",
+              "fr": "Niveau 7"
             }
           }
         },
         {
           "bit": 7,
           "name": {
-            "de": "Feuerbüchsenflackern, immer hell"
+            "en": "Firebox flicker, always bright",
+            "da": "Fyrkasseflimmer, altid lys",
+            "de": "Feuerbüchsenflackern, immer hell",
+            "fr": "Scintillement du foyer, toujours lumineux"
           },
           "values": {
             "0": {
@@ -6280,14 +7383,19 @@
       "source": "custom",
       "name": {
         "en": "Energy-saving lamp effect",
-        "da": "Energisparepæreeffekt"
+        "da": "Energisparepæreeffekt",
+        "de": "Energiesparlampeneffekt",
+        "fr": "Effet d'ampoule à économie d'énergie"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Energiesparlampeneffekt, Licht"
+            "en": "Energy-saving lamp effect, light",
+            "da": "Energisparepæreeffekt, lys",
+            "de": "Energiesparlampeneffekt, Licht",
+            "fr": "Effet d'ampoule à économie d'énergie, éclairage"
           },
           "values": {
             "0": {
@@ -6307,7 +7415,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 1"
+            "en": "Energy-saving lamp effect, output 1",
+            "da": "Energisparepæreeffekt, udgang 1",
+            "de": "Energiesparlampeneffekt, Ausgang 1",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 1"
           },
           "values": {
             "0": {
@@ -6327,7 +7438,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 2"
+            "en": "Energy-saving lamp effect, output 2",
+            "da": "Energisparepæreeffekt, udgang 2",
+            "de": "Energiesparlampeneffekt, Ausgang 2",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 2"
           },
           "values": {
             "0": {
@@ -6347,7 +7461,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 3"
+            "en": "Energy-saving lamp effect, output 3",
+            "da": "Energisparepæreeffekt, udgang 3",
+            "de": "Energiesparlampeneffekt, Ausgang 3",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 3"
           },
           "values": {
             "0": {
@@ -6367,7 +7484,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 4"
+            "en": "Energy-saving lamp effect, output 4",
+            "da": "Energisparepæreeffekt, udgang 4",
+            "de": "Energiesparlampeneffekt, Ausgang 4",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 4"
           },
           "values": {
             "0": {
@@ -6387,7 +7507,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 5"
+            "en": "Energy-saving lamp effect, output 5",
+            "da": "Energisparepæreeffekt, udgang 5",
+            "de": "Energiesparlampeneffekt, Ausgang 5",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 5"
           },
           "values": {
             "0": {
@@ -6407,7 +7530,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 6"
+            "en": "Energy-saving lamp effect, output 6",
+            "da": "Energisparepæreeffekt, udgang 6",
+            "de": "Energiesparlampeneffekt, Ausgang 6",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 6"
           },
           "values": {
             "0": {
@@ -6427,7 +7553,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Energiesparlampeneffekt, Ausgang 7"
+            "en": "Energy-saving lamp effect, output 7",
+            "da": "Energisparepæreeffekt, udgang 7",
+            "de": "Energiesparlampeneffekt, Ausgang 7",
+            "fr": "Effet d'ampoule à économie d'énergie, sortie 7"
           },
           "values": {
             "0": {
@@ -6452,7 +7581,9 @@
       "source": "custom",
       "name": {
         "en": "Energy-saving lamp base brightness",
-        "da": "Energisparepærens grundlysstyrke"
+        "da": "Energisparepærens grundlysstyrke",
+        "de": "Grundhelligkeit der Energiesparlampe",
+        "fr": "Luminosité de base de l'ampoule à économie d'énergie"
       },
       "default_value": 10,
       "value_bits": {
@@ -6467,7 +7598,10 @@
       "cv": 185,
       "source": "custom",
       "name": {
-        "de": "Energiesparlampeneffekt, Zeit bis maximale Helligkeit erreicht ist (Wert * 5ms)"
+        "en": "Energy-saving lamp effect, time until maximum brightness is reached (value * 5ms)",
+        "da": "Energisparepæreeffekt, tid til maksimal lysstyrke er nået (værdi * 5ms)",
+        "de": "Energiesparlampeneffekt, Zeit bis maximale Helligkeit erreicht ist (Wert * 5ms)",
+        "fr": "Effet d'ampoule à économie d'énergie, temps jusqu'à la luminosité maximale (valeur * 5ms)"
       },
       "default_value": 100,
       "value_bits": {
@@ -6482,14 +7616,20 @@
       "cv": 186,
       "source": "custom",
       "name": {
-        "de": "Ein- und Ausblenden der Licht- und Funktionsausgänge"
+        "en": "Fading in and out of the light and function outputs",
+        "da": "Ind- og udtoning af lys- og funktionsudgange",
+        "de": "Ein- und Ausblenden der Licht- und Funktionsausgänge",
+        "fr": "Apparition et disparition progressives des sorties d'éclairage et de fonctions"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Ein- und Ausblenden, Licht"
+            "en": "Fading in and out, light",
+            "da": "Ind- og udtoning, lys",
+            "de": "Ein- und Ausblenden, Licht",
+            "fr": "Apparition et disparition progressives, éclairage"
           },
           "values": {
             "0": {
@@ -6509,7 +7649,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 1"
+            "en": "Fading in and out, output 1",
+            "da": "Ind- og udtoning, udgang 1",
+            "de": "Ein- und Ausblenden, Ausgang 1",
+            "fr": "Apparition et disparition progressives, sortie 1"
           },
           "values": {
             "0": {
@@ -6529,7 +7672,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 2"
+            "en": "Fading in and out, output 2",
+            "da": "Ind- og udtoning, udgang 2",
+            "de": "Ein- und Ausblenden, Ausgang 2",
+            "fr": "Apparition et disparition progressives, sortie 2"
           },
           "values": {
             "0": {
@@ -6549,7 +7695,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 3"
+            "en": "Fading in and out, output 3",
+            "da": "Ind- og udtoning, udgang 3",
+            "de": "Ein- und Ausblenden, Ausgang 3",
+            "fr": "Apparition et disparition progressives, sortie 3"
           },
           "values": {
             "0": {
@@ -6569,7 +7718,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 4"
+            "en": "Fading in and out, output 4",
+            "da": "Ind- og udtoning, udgang 4",
+            "de": "Ein- und Ausblenden, Ausgang 4",
+            "fr": "Apparition et disparition progressives, sortie 4"
           },
           "values": {
             "0": {
@@ -6589,7 +7741,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 5"
+            "en": "Fading in and out, output 5",
+            "da": "Ind- og udtoning, udgang 5",
+            "de": "Ein- und Ausblenden, Ausgang 5",
+            "fr": "Apparition et disparition progressives, sortie 5"
           },
           "values": {
             "0": {
@@ -6609,7 +7764,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 6"
+            "en": "Fading in and out, output 6",
+            "da": "Ind- og udtoning, udgang 6",
+            "de": "Ein- und Ausblenden, Ausgang 6",
+            "fr": "Apparition et disparition progressives, sortie 6"
           },
           "values": {
             "0": {
@@ -6629,7 +7787,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Ein- und Ausblenden, Ausgang 7"
+            "en": "Fading in and out, output 7",
+            "da": "Ind- og udtoning, udgang 7",
+            "de": "Ein- und Ausblenden, Ausgang 7",
+            "fr": "Apparition et disparition progressives, sortie 7"
           },
           "values": {
             "0": {
@@ -6653,10 +7814,10 @@
       "cv": 187,
       "source": "custom",
       "name": {
-        "en": "Ein- und Ausblenden, Blendzeit (Wert * 10ms)",
-        "da": "Ein- und Ausblenden, Blendzeit (Wert * 10ms)",
+        "en": "Fading in and out, fade time (value * 10ms)",
+        "da": "Ind- og udtoning, tonetid (værdi * 10ms)",
         "de": "Ein- und Ausblenden, Blendzeit (Wert * 10ms)",
-        "fr": "Ein- und Ausblenden, Blendzeit (Wert * 10ms)"
+        "fr": "Apparition et disparition progressives, durée de fondu (valeur * 10ms)"
       },
       "default_value": 30,
       "value_bits": {
@@ -6671,17 +7832,20 @@
       "cv": 188,
       "source": "custom",
       "name": {
-        "en": "Neonröhren Einschalteffekt der Licht- und Funktionsausgänge",
-        "da": "Neonröhren Einschalteffekt der Licht- und Funktionsausgänge",
+        "en": "Neon tube switch-on effect of the light and function outputs",
+        "da": "Neonrør-tændingseffekt for lys- og funktionsudgange",
         "de": "Neonröhren Einschalteffekt der Licht- und Funktionsausgänge",
-        "fr": "Neonröhren Einschalteffekt der Licht- und Funktionsausgänge"
+        "fr": "Effet d'allumage de tube néon des sorties d'éclairage et de fonctions"
       },
       "default_value": 0,
       "flag_bits": [
         {
           "bit": 0,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Licht"
+            "en": "Neon tube switch-on effect, light",
+            "da": "Neonrør-tændingseffekt, lys",
+            "de": "Neonröhren Einschalteffekt, Licht",
+            "fr": "Effet d'allumage de tube néon, éclairage"
           },
           "values": {
             "0": {
@@ -6701,7 +7865,10 @@
         {
           "bit": 1,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 1"
+            "en": "Neon tube switch-on effect, output 1",
+            "da": "Neonrør-tændingseffekt, udgang 1",
+            "de": "Neonröhren Einschalteffekt, Ausgang 1",
+            "fr": "Effet d'allumage de tube néon, sortie 1"
           },
           "values": {
             "0": {
@@ -6721,7 +7888,10 @@
         {
           "bit": 2,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 2"
+            "en": "Neon tube switch-on effect, output 2",
+            "da": "Neonrør-tændingseffekt, udgang 2",
+            "de": "Neonröhren Einschalteffekt, Ausgang 2",
+            "fr": "Effet d'allumage de tube néon, sortie 2"
           },
           "values": {
             "0": {
@@ -6741,7 +7911,10 @@
         {
           "bit": 3,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 3"
+            "en": "Neon tube switch-on effect, output 3",
+            "da": "Neonrør-tændingseffekt, udgang 3",
+            "de": "Neonröhren Einschalteffekt, Ausgang 3",
+            "fr": "Effet d'allumage de tube néon, sortie 3"
           },
           "values": {
             "0": {
@@ -6761,7 +7934,10 @@
         {
           "bit": 4,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 4"
+            "en": "Neon tube switch-on effect, output 4",
+            "da": "Neonrør-tændingseffekt, udgang 4",
+            "de": "Neonröhren Einschalteffekt, Ausgang 4",
+            "fr": "Effet d'allumage de tube néon, sortie 4"
           },
           "values": {
             "0": {
@@ -6781,7 +7957,10 @@
         {
           "bit": 5,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 5"
+            "en": "Neon tube switch-on effect, output 5",
+            "da": "Neonrør-tændingseffekt, udgang 5",
+            "de": "Neonröhren Einschalteffekt, Ausgang 5",
+            "fr": "Effet d'allumage de tube néon, sortie 5"
           },
           "values": {
             "0": {
@@ -6801,7 +7980,10 @@
         {
           "bit": 6,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang 6"
+            "en": "Neon tube switch-on effect, output 6",
+            "da": "Neonrør-tændingseffekt, udgang 6",
+            "de": "Neonröhren Einschalteffekt, Ausgang 6",
+            "fr": "Effet d'allumage de tube néon, sortie 6"
           },
           "values": {
             "0": {
@@ -6821,7 +8003,10 @@
         {
           "bit": 7,
           "name": {
-            "de": "Neonröhren Einschalteffekt, Ausgang7"
+            "en": "Neon tube switch-on effect, output 7",
+            "da": "Neonrør-tændingseffekt, udgang 7",
+            "de": "Neonröhren Einschalteffekt, Ausgang 7",
+            "fr": "Effet d'allumage de tube néon, sortie 7"
           },
           "values": {
             "0": {
@@ -6845,7 +8030,10 @@
       "cv": 189,
       "source": "custom",
       "name": {
-        "de": "Neonröhren Einschalteffekt, Blitzzeit (Wert * 5ms)"
+        "en": "Neon tube switch-on effect, flash time (value * 5ms)",
+        "da": "Neonrør-tændingseffekt, glimttid (værdi * 5ms)",
+        "de": "Neonröhren Einschalteffekt, Blitzzeit (Wert * 5ms)",
+        "fr": "Effet d'allumage de tube néon, durée d'éclair (valeur * 5ms)"
       },
       "default_value": 20,
       "value_bits": {
@@ -6860,7 +8048,10 @@
       "cv": 190,
       "source": "custom",
       "name": {
-        "de": "Neonröhren Einschalteffekt, maximale Blitzanzahl"
+        "en": "Neon tube switch-on effect, maximum number of flashes",
+        "da": "Neonrør-tændingseffekt, maksimalt antal glimt",
+        "de": "Neonröhren Einschalteffekt, maximale Blitzanzahl",
+        "fr": "Effet d'allumage de tube néon, nombre maximal d'éclairs"
       },
       "default_value": 20,
       "value_bits": {
@@ -6875,7 +8066,10 @@
       "cv": 200,
       "source": "custom",
       "name": {
-        "de": "Motorregelung, geschwindigkeitsabhängige Periode"
+        "en": "Motor control, speed-dependent period",
+        "da": "Motorregulering, hastighedsafhængig periode",
+        "de": "Motorregelung, geschwindigkeitsabhängige Periode",
+        "fr": "Régulation du moteur, période dépendante de la vitesse"
       },
       "default_value": 10,
       "value_bits": {
@@ -6890,7 +8084,10 @@
       "cv": 201,
       "source": "custom",
       "name": {
-        "de": "Maximale Fahrstufe ab der die Periodendauer = CV202 gesetzt wird"
+        "en": "Maximum speed step from which the period is set to CV202",
+        "da": "Maksimalt hastighedstrin, hvorfra perioden sættes til CV202",
+        "de": "Maximale Fahrstufe ab der die Periodendauer = CV202 gesetzt wird",
+        "fr": "Cran de vitesse maximal à partir duquel la période est fixée à CV202"
       },
       "default_value": 150,
       "value_bits": {
@@ -6905,7 +8102,10 @@
       "cv": 202,
       "source": "custom",
       "name": {
-        "de": "maximale Periodendauer in 100μs Schritten (min=CV53)"
+        "en": "Maximum period in 100 μs steps (min=CV53)",
+        "da": "Maksimal periodetid i trin på 100 μs (min=CV53)",
+        "de": "maximale Periodendauer in 100μs Schritten (min=CV53)",
+        "fr": "Période maximale par pas de 100 μs (min=CV53)"
       },
       "default_value": 250,
       "value_bits": {
@@ -6923,8 +8123,8 @@
       "title": {
         "en": "Decoder info",
         "da": "Dekoderinfo",
-        "de": "en:Decoder info|da:Dekoderinfo",
-        "fr": "en:Decoder info|da:Dekoderinfo"
+        "de": "Decoderinformationen",
+        "fr": "Informations du décodeur"
       },
       "page_content": [
         {
@@ -6956,8 +8156,31 @@
       "title": {
         "en": "Basic",
         "da": "Grundlæggende",
-        "de": "en:Basic|da:Grundlæggende",
-        "fr": "en:Basic|da:Grundlæggende"
+        "de": "Grundlagen",
+        "fr": "Général"
+      },
+      "page_content": [
+        {
+          "type": "cvs_content",
+          "content": [
+            {
+              "type": "cv_with_bit",
+              "cv": 30,
+              "bit": 0,
+              "bit_to": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_protocol",
+      "type": "dynamic_list",
+      "title": {
+        "en": "Protocol",
+        "da": "Protokol",
+        "de": "Protokoll",
+        "fr": "Protocole"
       },
       "page_content": [
         {
@@ -6992,18 +8215,6 @@
               "type": "cv_with_bit",
               "cv": 12,
               "bit": 5
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 59,
-              "bit": 0,
-              "bit_to": 7
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 30,
-              "bit": 0,
-              "bit_to": 7
             }
           ]
         }
@@ -7015,8 +8226,8 @@
       "title": {
         "en": "Märklin Motorola",
         "da": "Märklin Motorola",
-        "de": "en:Märklin Motorola|da:Märklin Motorola",
-        "fr": "en:Märklin Motorola|da:Märklin Motorola"
+        "de": "Märklin Motorola",
+        "fr": "Märklin Motorola"
       },
       "page_content": [
         {
@@ -7054,8 +8265,8 @@
       "title": {
         "en": "Analog",
         "da": "Analog",
-        "de": "en:Analog|da:Analog",
-        "fr": "en:Analog|da:Analog"
+        "de": "Analog",
+        "fr": "Analogique"
       },
       "page_content": [
         {
@@ -7147,8 +8358,8 @@
       "title": {
         "en": "Motor",
         "da": "Motor",
-        "de": "en:Motor|da:Motor",
-        "fr": "en:Motor|da:Motor"
+        "de": "Motor",
+        "fr": "Moteur"
       },
       "page_content": [
         {
@@ -7276,8 +8487,8 @@
       "title": {
         "en": "Speed curve",
         "da": "Hastighedskurve",
-        "de": "en:Speed curve|da:Hastighedskurve",
-        "fr": "en:Speed curve|da:Hastighedskurve"
+        "de": "Geschwindigkeitskennlinie",
+        "fr": "Courbe de vitesse"
       },
       "page_content": [
         {
@@ -7323,8 +8534,8 @@
       "title": {
         "en": "RailCom",
         "da": "RailCom",
-        "de": "en:RailCom|da:RailCom",
-        "fr": "en:RailCom|da:RailCom"
+        "de": "RailCom",
+        "fr": "RailCom"
       },
       "page_content": [
         {
@@ -7360,8 +8571,8 @@
       "title": {
         "en": "Consist",
         "da": "Multitraktion",
-        "de": "en:Consist|da:Multitraktion",
-        "fr": "en:Consist|da:Multitraktion"
+        "de": "Mehrfachtraktion",
+        "fr": "Traction multiple"
       },
       "page_content": [
         {
@@ -7386,8 +8597,8 @@
       "title": {
         "en": "Functions",
         "da": "Funktioner",
-        "de": "en:Functions|da:Funktioner",
-        "fr": "en:Functions|da:Funktioner"
+        "de": "Funktionen",
+        "fr": "Fonctions"
       },
       "page_content": [
         {
@@ -8033,8 +9244,8 @@
       "title": {
         "en": "Outputs",
         "da": "Udgange",
-        "de": "en:Outputs|da:Udgange",
-        "fr": "en:Outputs|da:Udgange"
+        "de": "Ausgänge",
+        "fr": "Sorties"
       },
       "page_content": [
         {
@@ -8509,8 +9720,8 @@
       "title": {
         "en": "Lighting",
         "da": "Lys",
-        "de": "en:Lighting|da:Lys",
-        "fr": "en:Lighting|da:Lys"
+        "de": "Beleuchtung",
+        "fr": "Éclairage"
       },
       "page_content": [
         {
@@ -8560,8 +9771,8 @@
       "title": {
         "en": "Smoke",
         "da": "Røg",
-        "de": "en:Smoke|da:Røg",
-        "fr": "en:Smoke|da:Røg"
+        "de": "Rauch",
+        "fr": "Fumée"
       },
       "page_content": [
         {
@@ -8603,8 +9814,8 @@
       "title": {
         "en": "Servo",
         "da": "Servo",
-        "de": "en:Servo|da:Servo",
-        "fr": "en:Servo|da:Servo"
+        "de": "Servo",
+        "fr": "Servo"
       },
       "page_content": [
         {
@@ -8667,8 +9878,8 @@
       "title": {
         "en": "Shunting",
         "da": "Ranger",
-        "de": "en:Shunting|da:Ranger",
-        "fr": "en:Shunting|da:Ranger"
+        "de": "Rangieren",
+        "fr": "Manœuvre"
       },
       "page_content": [
         {
@@ -8696,8 +9907,8 @@
       "title": {
         "en": "Braking",
         "da": "Bremse",
-        "de": "en:Braking|da:Bremse",
-        "fr": "en:Braking|da:Bremse"
+        "de": "Bremsen",
+        "fr": "Freinage"
       },
       "page_content": [
         {
@@ -8794,8 +10005,8 @@
       "title": {
         "en": "BEMF",
         "da": "BEMF",
-        "de": "en:BEMF|da:BEMF",
-        "fr": "en:BEMF|da:BEMF"
+        "de": "Gegen-EMK",
+        "fr": "FEM inverse"
       },
       "page_content": [
         {
@@ -8815,8 +10026,8 @@
       "title": {
         "en": "Coupling",
         "da": "Kobling",
-        "de": "en:Coupling|da:Kobling",
-        "fr": "en:Coupling|da:Kobling"
+        "de": "Kupplung",
+        "fr": "Attelage"
       },
       "page_content": [
         {
@@ -8887,8 +10098,8 @@
       "title": {
         "en": "SUSI",
         "da": "SUSI",
-        "de": "en:SUSI|da:SUSI",
-        "fr": "en:SUSI|da:SUSI"
+        "de": "SUSI",
+        "fr": "SUSI"
       },
       "page_content": [
         {
@@ -8944,8 +10155,8 @@
       "title": {
         "en": "Miscellaneous",
         "da": "Diverse",
-        "de": "en:Miscellaneous|da:Diverse",
-        "fr": "en:Miscellaneous|da:Diverse"
+        "de": "Sonstiges",
+        "fr": "Divers"
       },
       "page_content": [
         {
