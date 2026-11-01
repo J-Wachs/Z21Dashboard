@@ -131,8 +131,6 @@ internal class DecoderDefinitionService(
 
         decoderSettings.ClearChanged();
 
-        await Task.CompletedTask;
-
         return Result.Success();
     }
 
