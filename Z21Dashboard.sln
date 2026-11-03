@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		UserManual_fr.md = UserManual_fr.md
 		Versions.txt = Versions.txt
 		Z21Dashboard.iss = Z21Dashboard.iss
-		Z21Dashboard.png = Z21Dashboard.png
+		Z21Dashboard_en.png = Z21Dashboard_en.png
 		Z21Dashboard_da.png = Z21Dashboard_da.png
 	EndProjectSection
 EndProject

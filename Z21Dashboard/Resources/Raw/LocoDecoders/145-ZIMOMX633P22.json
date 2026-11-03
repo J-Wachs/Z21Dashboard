@@ -4332,11 +4332,508 @@
       "default_value": 0
     },
     {
-      "type": "cv_range",
-      "cv_start": 67,
-      "cv_end": 94,
-      "source": "nmra",
-      "default_value": 0
+      "type": "cv_single",
+      "cv": 67,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 1",
+        "da": "Hastighedstrin 1",
+        "de": "Fahrstufe 1",
+        "fr": "Cran de vitesse 1"
+      },
+      "default_value": 5,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 68,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 2",
+        "da": "Hastighedstrin 2",
+        "de": "Fahrstufe 2",
+        "fr": "Cran de vitesse 2"
+      },
+      "default_value": 3,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 69,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 3",
+        "da": "Hastighedstrin 3",
+        "de": "Fahrstufe 3",
+        "fr": "Cran de vitesse 3"
+      },
+      "default_value": 7,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 70,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 4",
+        "da": "Hastighedstrin 4",
+        "de": "Fahrstufe 4",
+        "fr": "Cran de vitesse 4"
+      },
+      "default_value": 10,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 71,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 5",
+        "da": "Hastighedstrin 5",
+        "de": "Fahrstufe 5",
+        "fr": "Cran de vitesse 5"
+      },
+      "default_value": 14,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 72,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 6",
+        "da": "Hastighedstrin 6",
+        "de": "Fahrstufe 6",
+        "fr": "Cran de vitesse 6"
+      },
+      "default_value": 18,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 73,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 7",
+        "da": "Hastighedstrin 7",
+        "de": "Fahrstufe 7",
+        "fr": "Cran de vitesse 7"
+      },
+      "default_value": 23,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 74,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 8",
+        "da": "Hastighedstrin 8",
+        "de": "Fahrstufe 8",
+        "fr": "Cran de vitesse 8"
+      },
+      "default_value": 29,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 75,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 9",
+        "da": "Hastighedstrin 9",
+        "de": "Fahrstufe 9",
+        "fr": "Cran de vitesse 9"
+      },
+      "default_value": 36,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 76,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 10",
+        "da": "Hastighedstrin 10",
+        "de": "Fahrstufe 10",
+        "fr": "Cran de vitesse 10"
+      },
+      "default_value": 43,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 77,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 11",
+        "da": "Hastighedstrin 11",
+        "de": "Fahrstufe 11",
+        "fr": "Cran de vitesse 11"
+      },
+      "default_value": 50,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 78,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 12",
+        "da": "Hastighedstrin 12",
+        "de": "Fahrstufe 12",
+        "fr": "Cran de vitesse 12"
+      },
+      "default_value": 59,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 79,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 13",
+        "da": "Hastighedstrin 13",
+        "de": "Fahrstufe 13",
+        "fr": "Cran de vitesse 13"
+      },
+      "default_value": 69,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 80,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 14",
+        "da": "Hastighedstrin 14",
+        "de": "Fahrstufe 14",
+        "fr": "Cran de vitesse 14"
+      },
+      "default_value": 79,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 81,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 15",
+        "da": "Hastighedstrin 15",
+        "de": "Fahrstufe 15",
+        "fr": "Cran de vitesse 15"
+      },
+      "default_value": 89,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 82,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 16",
+        "da": "Hastighedstrin 16",
+        "de": "Fahrstufe 16",
+        "fr": "Cran de vitesse 16"
+      },
+      "default_value": 100,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 83,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 17",
+        "da": "Hastighedstrin 17",
+        "de": "Fahrstufe 17",
+        "fr": "Cran de vitesse 17"
+      },
+      "default_value": 111,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 84,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 18",
+        "da": "Hastighedstrin 18",
+        "de": "Fahrstufe 18",
+        "fr": "Cran de vitesse 18"
+      },
+      "default_value": 122,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 85,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 19",
+        "da": "Hastighedstrin 19",
+        "de": "Fahrstufe 19",
+        "fr": "Cran de vitesse 19"
+      },
+      "default_value": 133,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 86,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 20",
+        "da": "Hastighedstrin 20",
+        "de": "Fahrstufe 20",
+        "fr": "Cran de vitesse 20"
+      },
+      "default_value": 146,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 87,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 21",
+        "da": "Hastighedstrin 21",
+        "de": "Fahrstufe 21",
+        "fr": "Cran de vitesse 21"
+      },
+      "default_value": 159,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 88,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 22",
+        "da": "Hastighedstrin 22",
+        "de": "Fahrstufe 22",
+        "fr": "Cran de vitesse 22"
+      },
+      "default_value": 172,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 89,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 23",
+        "da": "Hastighedstrin 23",
+        "de": "Fahrstufe 23",
+        "fr": "Cran de vitesse 23"
+      },
+      "default_value": 186,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 90,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 24",
+        "da": "Hastighedstrin 24",
+        "de": "Fahrstufe 24",
+        "fr": "Cran de vitesse 24"
+      },
+      "default_value": 198,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 91,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 25",
+        "da": "Hastighedstrin 25",
+        "de": "Fahrstufe 25",
+        "fr": "Cran de vitesse 25"
+      },
+      "default_value": 212,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 92,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 26",
+        "da": "Hastighedstrin 26",
+        "de": "Fahrstufe 26",
+        "fr": "Cran de vitesse 26"
+      },
+      "default_value": 225,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 93,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 27",
+        "da": "Hastighedstrin 27",
+        "de": "Fahrstufe 27",
+        "fr": "Cran de vitesse 27"
+      },
+      "default_value": 240,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
+    },
+    {
+      "type": "cv_single",
+      "cv": 94,
+      "source": "custom",
+      "name": {
+        "en": "Speed step 28",
+        "da": "Hastighedstrin 28",
+        "de": "Fahrstufe 28",
+        "fr": "Cran de vitesse 28"
+      },
+      "default_value": 255,
+      "value_bits": {
+        "min": 1,
+        "max": 255,
+        "from_bit": 0,
+        "to_bit": 7
+      }
     },
     {
       "type": "cv_single",
@@ -9378,9 +9875,116 @@
               "cv": 66
             },
             {
-              "type": "cv_range",
-              "cv_start": 67,
-              "cv_end": 94
+              "type": "cv_single",
+              "cv": 67
+            },
+            {
+              "type": "cv_single",
+              "cv": 68
+            },
+            {
+              "type": "cv_single",
+              "cv": 69
+            },
+            {
+              "type": "cv_single",
+              "cv": 70
+            },
+            {
+              "type": "cv_single",
+              "cv": 71
+            },
+            {
+              "type": "cv_single",
+              "cv": 72
+            },
+            {
+              "type": "cv_single",
+              "cv": 73
+            },
+            {
+              "type": "cv_single",
+              "cv": 74
+            },
+            {
+              "type": "cv_single",
+              "cv": 75
+            },
+            {
+              "type": "cv_single",
+              "cv": 76
+            },
+            {
+              "type": "cv_single",
+              "cv": 77
+            },
+            {
+              "type": "cv_single",
+              "cv": 78
+            },
+            {
+              "type": "cv_single",
+              "cv": 79
+            },
+            {
+              "type": "cv_single",
+              "cv": 80
+            },
+            {
+              "type": "cv_single",
+              "cv": 81
+            },
+            {
+              "type": "cv_single",
+              "cv": 82
+            },
+            {
+              "type": "cv_single",
+              "cv": 83
+            },
+            {
+              "type": "cv_single",
+              "cv": 84
+            },
+            {
+              "type": "cv_single",
+              "cv": 85
+            },
+            {
+              "type": "cv_single",
+              "cv": 86
+            },
+            {
+              "type": "cv_single",
+              "cv": 87
+            },
+            {
+              "type": "cv_single",
+              "cv": 88
+            },
+            {
+              "type": "cv_single",
+              "cv": 89
+            },
+            {
+              "type": "cv_single",
+              "cv": 90
+            },
+            {
+              "type": "cv_single",
+              "cv": 91
+            },
+            {
+              "type": "cv_single",
+              "cv": 92
+            },
+            {
+              "type": "cv_single",
+              "cv": 93
+            },
+            {
+              "type": "cv_single",
+              "cv": 94
             },
             {
               "type": "cv_single",

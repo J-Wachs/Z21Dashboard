@@ -394,7 +394,7 @@ else
         }
         @if (CvValuesProxy.TryGetValue(cv, out var currentCvState))
         {
-            <div class="row mb-2 align-items-center" @key="uniqueKey">
+            <div class="row mb-2 align-items-start" @key="uniqueKey">
                 <div class="col-5">
                     <label title="CV @cv">@label:</label>
                 </div>
@@ -450,7 +450,7 @@ else
         }
         @if (CvValuesProxy.TryGetValue(cwbi.Cv, out var currentCvState))
         {
-            <div class="row mb-2 align-items-center" @key="uniqueKey">
+            <div class="row mb-2 align-items-start" @key="uniqueKey">
                 <div class="col-5">
                     <label title="@title">@label:</label>
                 </div>

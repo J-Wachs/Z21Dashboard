@@ -14,61 +14,31 @@
       "type": "cv_single",
       "cv": 1,
       "source": "nmra",
-      "default_value": 3,
-      "value_bits": {
-        "min": 1,
-        "max": 127,
-        "from_bit": 0,
-        "to_bit": 7
-      }
+      "default_value": 3
     },
     {
       "type": "cv_single",
       "cv": 2,
       "source": "nmra",
-      "default_value": 3,
-      "value_bits": {
-        "min": 1,
-        "max": 255,
-        "from_bit": 0,
-        "to_bit": 7
-      }
+      "default_value": 3
     },
     {
       "type": "cv_single",
       "cv": 3,
       "source": "nmra",
-      "default_value": 28,
-      "value_bits": {
-        "min": 0,
-        "max": 255,
-        "from_bit": 0,
-        "to_bit": 7
-      }
+      "default_value": 28
     },
     {
       "type": "cv_single",
       "cv": 4,
       "source": "nmra",
-      "default_value": 21,
-      "value_bits": {
-        "min": 0,
-        "max": 255,
-        "from_bit": 0,
-        "to_bit": 7
-      }
+      "default_value": 21
     },
     {
       "type": "cv_single",
       "cv": 5,
       "source": "nmra",
-      "default_value": 255,
-      "value_bits": {
-        "min": 0,
-        "max": 255,
-        "from_bit": 0,
-        "to_bit": 7
-      }
+      "default_value": 255
     },
     {
       "type": "cv_single",
@@ -941,7 +911,7 @@
       },
       "default_value": 3,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -959,7 +929,7 @@
       },
       "default_value": 3,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -977,7 +947,7 @@
       },
       "default_value": 5,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -995,7 +965,7 @@
       },
       "default_value": 8,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1013,7 +983,7 @@
       },
       "default_value": 11,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1031,7 +1001,7 @@
       },
       "default_value": 15,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1049,7 +1019,7 @@
       },
       "default_value": 19,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1067,7 +1037,7 @@
       },
       "default_value": 24,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1085,7 +1055,7 @@
       },
       "default_value": 29,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1103,7 +1073,7 @@
       },
       "default_value": 35,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1121,7 +1091,7 @@
       },
       "default_value": 41,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1139,7 +1109,7 @@
       },
       "default_value": 48,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1157,7 +1127,7 @@
       },
       "default_value": 55,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1175,7 +1145,7 @@
       },
       "default_value": 63,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1193,7 +1163,7 @@
       },
       "default_value": 71,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1211,7 +1181,7 @@
       },
       "default_value": 80,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1229,7 +1199,7 @@
       },
       "default_value": 89,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1247,7 +1217,7 @@
       },
       "default_value": 99,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1265,7 +1235,7 @@
       },
       "default_value": 109,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1283,7 +1253,7 @@
       },
       "default_value": 121,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1301,7 +1271,7 @@
       },
       "default_value": 133,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1319,7 +1289,7 @@
       },
       "default_value": 147,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1337,7 +1307,7 @@
       },
       "default_value": 162,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1355,7 +1325,7 @@
       },
       "default_value": 178,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1373,7 +1343,7 @@
       },
       "default_value": 195,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1391,7 +1361,7 @@
       },
       "default_value": 213,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1409,7 +1379,7 @@
       },
       "default_value": 233,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7
@@ -1427,7 +1397,7 @@
       },
       "default_value": 255,
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255,
         "from_bit": 0,
         "to_bit": 7

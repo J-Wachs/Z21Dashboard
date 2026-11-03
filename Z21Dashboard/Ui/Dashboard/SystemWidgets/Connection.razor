@@ -44,7 +44,7 @@
     <Content>
         <div class="row g-2">
             @* Left Column *@
-            <div class="col-6">
+            <div class="col-5">
                 <div class="input-group mb-2 position-relative">
                     <input class="form-control"
                            value="@_ipAddress"
@@ -118,7 +118,7 @@
             </div>
 
             @* Right Column *@
-            <div class="col-6">
+            <div class="col-7">
                 <div class="btn-group w-100 mb-2" role="group">
                     <button class="btn @(_trackPowerState == TrackPowerState.On ? "btn-success" : "btn-outline-success")"
                             @onclick="SetTrackPowerOn" disabled="@(ConnectionState != ConnectionState.Connected)">

@@ -48,7 +48,7 @@
         "fr": "Tension appliquée au cran de vitesse 1."
       },
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255
       }
     },
@@ -108,7 +108,7 @@
         "fr": "Tension à vitesse maximale."
       },
       "value_bits": {
-        "min": 0,
+        "min": 1,
         "max": 255
       }
     },
@@ -4501,9 +4501,7 @@
         "da": "Hastighedstabel (28 punkter)",
         "de": "Geschwindigkeitstabelle",
         "fr": "Table de vitesse"
-      },
-      "structure": "table",
-      "table_length": 28
+      }
     },
     {
       "cv": 95,

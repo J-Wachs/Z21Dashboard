@@ -89,19 +89,39 @@
 
                 @if (_isDragging && _dragIndex == index)
                 {
-                    @if (yTop < 25)
+                    if (_dragIndex < 10)
                     {
-                        @* Blazor wrapper *@
-                        <text>
-                            @* SVG text *@
-                            <text x="@(xCenter + 10)" y="@(yTop + 15)" font-size="14" fill="black">@val</text>
-                        </text>
+                        if (yTop < 25)
+                        {
+                            @* Blazor wrapper *@
+                            <text>
+                                @* SVG text *@
+                                <text x="@(xCenter + 10)" y="@(yTop + 35)" font-size="14" fill="black">@val</text>
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                <text x="@(xCenter + 10)" y="@(yTop - 20)" font-size="14" fill="black">@val</text>
+                            </text>
+                        }
                     }
                     else
                     {
-                        <text>
-                            <text x="@(xCenter + 10)" y="@(yTop - 10)" font-size="14" fill="black">@val</text>
-                        </text>
+                        if (yTop < 25)
+                        {
+                            @* Blazor wrapper *@
+                            <text>
+                                @* SVG text *@
+                                <text x="@(xCenter - 10)" y="@(yTop + 35)" font-size="14" fill="black">@val</text>
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                <text x="@(xCenter - 10)" y="@(yTop - 20)" font-size="14" fill="black">@val</text>
+                            </text>
+                        }
                     }
                 }
             }
@@ -321,7 +341,7 @@
             or SpeedCurveType.ExponentialEndpoints
             or SpeedCurveType.LogarithmicEndpoints;
 
-        byte startValue = 0;
+        byte startValue = 1;
         byte endValue = 255;
         if (useEndpoints)
         {
