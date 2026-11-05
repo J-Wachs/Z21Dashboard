@@ -136,7 +136,7 @@ internal class DecoderProgService(
                         return Result<List<CVValue>>.Failure(string.Format(SharedResources.TimeoutDuringReadProgTrack, cvAddress));
                 }
 
-                await Task.Delay(100);
+                await Task.Delay(500);
             }
             return Results.Success(resultList);
         }
@@ -172,7 +172,7 @@ internal class DecoderProgService(
             await z21Client.SetCVBitValueOnPOMAsync(locoAddress, new (item.Cv, item.Bit, item.Value));
 
             // Status must be Success here
-            await Task.Delay(100);
+            await Task.Delay(500);
         }
 
         return Result.Success();

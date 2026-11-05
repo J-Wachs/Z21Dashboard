@@ -358,8 +358,8 @@ else
         else
         {
             return [DecoderSettings.GetCvValue(Cvs.VStart) ?? 0,
-                    DecoderSettings.GetCvValue(Cvs.VMid) ?? 126,
-                    DecoderSettings.GetCvValue(Cvs.VHigh) ?? 255];
+                    DecoderSettings.GetCvValue(Cvs.VMid) ?? 0,
+                    DecoderSettings.GetCvValue(Cvs.VHigh) ?? 0];
         }
     }
 
@@ -389,11 +389,22 @@ else
 
     private void ReadCurve()
     {
-        const int pointCount = 28;
-        for (int i = 0; i < pointCount; i++)
+        if (_useSpeedTable is true)
         {
-            var speedValue = DecoderSettings.GetCvValue((ushort)(Cvs.SpeedTableStart + i)) ?? 0;
-            UpdateDataPoint(i, speedValue);
+            for (int i = 0; i < 28; i++)
+            {
+                var speedValue = DecoderSettings.GetCvValue((ushort)(Cvs.SpeedTableStart + i)) ?? 0;
+                UpdateDataPoint(i, speedValue);
+            }
+        }
+        else
+        {
+            var speedValue = DecoderSettings.GetCvValue(Cvs.VStart) ?? 0;
+            UpdateDataPoint(0, speedValue);
+            speedValue = DecoderSettings.GetCvValue(Cvs.VMid) ?? 0;
+            UpdateDataPoint(1, speedValue);
+            speedValue = DecoderSettings.GetCvValue(Cvs.VHigh) ?? 0;
+            UpdateDataPoint(2, speedValue);
         }
     }
 
@@ -453,7 +464,8 @@ else
 
     private void OnMouseDown(MouseEventArgs e, int index)
     {
-        _isDragging = true; _dragIndex = index;
+        _isDragging = true;
+        _dragIndex = index;
     }
 
     private void OnMouseUp(MouseEventArgs e)

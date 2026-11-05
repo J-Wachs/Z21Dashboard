@@ -8842,6 +8842,37 @@
             {
               "type": "cv_with_bit",
               "cv": 102,
+              "bit": 2
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 102,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 102,
+              "bit": 4
+            },
+            {
+              "type": "cv_single",
+              "cv": 103
+            },
+            {
+              "type": "cv_single",
+              "cv": 104
+            },
+            {
+              "type": "cv_single",
+              "cv": 105
+            },
+            {
+              "type": "cv_single",
+              "cv": 106
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 102,
               "bit": 0,
               "bit_to": 1
             }
@@ -8942,37 +8973,6 @@
             {
               "type": "cv_single",
               "cv": 202
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 102,
-              "bit": 2
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 102,
-              "bit": 3
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 102,
-              "bit": 4
-            },
-            {
-              "type": "cv_single",
-              "cv": 103
-            },
-            {
-              "type": "cv_single",
-              "cv": 104
-            },
-            {
-              "type": "cv_single",
-              "cv": 105
-            },
-            {
-              "type": "cv_single",
-              "cv": 106
             }
           ]
         }
@@ -9147,6 +9147,11 @@
           "content": [
             {
               "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 3
+            },
+            {
+              "type": "cv_with_bit",
               "cv": 28,
               "bit": 0
             },
@@ -9159,11 +9164,6 @@
               "type": "cv_with_bit",
               "cv": 28,
               "bit": 7
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 29,
-              "bit": 3
             }
           ]
         }

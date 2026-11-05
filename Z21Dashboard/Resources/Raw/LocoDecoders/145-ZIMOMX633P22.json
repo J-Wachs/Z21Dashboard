@@ -62,7 +62,7 @@
         "de": "Höchstgeschwindigkeit",
         "fr": "Vitesse maximale"
       },
-      "default_value": 1,
+      "default_value": 130,
       "value_bits": {
         "min": 0,
         "max": 255,
@@ -9746,6 +9746,16 @@
           "type": "cvs_content",
           "content": [
             {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 0
+            },
+            {
+              "type": "cv_with_bit",
+              "cv": 29,
+              "bit": 1
+            },
+            {
               "type": "cv_single",
               "cv": 3
             },
@@ -9768,16 +9778,6 @@
             {
               "type": "cv_single",
               "cv": 24
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 29,
-              "bit": 0
-            },
-            {
-              "type": "cv_with_bit",
-              "cv": 29,
-              "bit": 1
             },
             {
               "type": "cv_with_bit",

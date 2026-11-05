@@ -62,7 +62,7 @@
         "de": "Höchstgeschwindigkeit",
         "fr": "Vitesse maximale"
       },
-      "default_value": 1,
+      "default_value": 130,
       "value_bits": {
         "min": 0,
         "max": 255,

@@ -600,24 +600,29 @@ internal class DecoderProgHelperService(
         Dictionary<ushort, CvState> cvStates = [];
         foreach (var entry in cvBitsInPage)
         {
-            if (cvStates.ContainsKey(entry.Cv) is false)
+            if (decoderSettings.CvMetadata[entry.Cv].ReadOnly is not true) // As ReadOnly can be one of three values (true, false, null)
+                                                                           // we need to check for "is not true", as null and false means
+                                                                           // writeable.
             {
-                cvStates[entry.Cv] = new CvState(decoderSettings.CvMetadata[entry.Cv]);
-            }
-
-            if (entry.FromBit is null)
-            {
-                result = cvStates[entry.Cv].SetValue(decoderSettings.GetCvValue(entry.Cv));
-            }
-            else if (entry.ToBit is null || entry.FromBit == entry.ToBit)
-            {
-                result = cvStates[entry.Cv].SetBit((Bits)entry.FromBit, decoderSettings.GetCvBit(entry.Cv, (Bits)entry.FromBit));
-            }
-            else
-            {
-                for (var i = (int)entry.FromBit; i <= (int)entry.ToBit; i++)
+                if (cvStates.ContainsKey(entry.Cv) is false)
                 {
-                    result = cvStates[entry.Cv].SetBit((Bits)i, decoderSettings.GetCvBit(entry.Cv, (Bits)i));
+                    cvStates[entry.Cv] = new CvState(decoderSettings.CvMetadata[entry.Cv]);
+                }
+
+                if (entry.FromBit is null)
+                {
+                    result = cvStates[entry.Cv].SetValue(decoderSettings.GetCvValue(entry.Cv));
+                }
+                else if (entry.ToBit is null || entry.FromBit == entry.ToBit)
+                {
+                    result = cvStates[entry.Cv].SetBit((Bits)entry.FromBit, decoderSettings.GetCvBit(entry.Cv, (Bits)entry.FromBit));
+                }
+                else
+                {
+                    for (var i = (int)entry.FromBit; i <= (int)entry.ToBit; i++)
+                    {
+                        result = cvStates[entry.Cv].SetBit((Bits)i, decoderSettings.GetCvBit(entry.Cv, (Bits)i));
+                    }
                 }
             }
         }
